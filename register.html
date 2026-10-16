@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block title %}{{ _("Kayıt Ol") }} - Atahorse{% endblock %}
+
+{% block content %}
+<div class="auth-container">
+    <div class="auth-card">
+        <div class="auth-header">
+            <i class="fas fa-brain auth-logo"></i>
+            <h2>{{ _("Atahorse'a Kayıt Ol") }}</h2>
+            <p>{{ _("Kişiselleştirilmiş eğitim deneyimine başla") }}</p>
+        </div>
+        <form method="POST" action="{{ url_for('register') }}" class="auth-form">
+            <div class="form-group">
+                <label for="full_name"><i class="fas fa-id-card"></i> {{ _("Ad Soyad") }}</label>
+                <input type="text" id="full_name" name="full_name" placeholder="{{ _("Adınız ve soyadınız") }}" class="form-input">
+            </div>
+            <div class="form-group">
+                <label for="username"><i class="fas fa-user"></i> {{ _("Kullanıcı Adı") }} *</label>
+                <input type="text" id="username" name="username" required placeholder="{{ _("Benzersiz kullanıcı adı") }}" class="form-input">
+            </div>
+            <div class="form-group">
+                <label for="email"><i class="fas fa-envelope"></i> {{ _("E-posta") }} *</label>
+                <input type="email" id="email" name="email" required placeholder="ornek@email.com" class="form-input">
+            </div>
+            <div class="form-group">
+                <label for="password"><i class="fas fa-lock"></i> {{ _("Şifre") }} *</label>
+                <input type="password" id="password" name="password" required placeholder="{{ _("En az 6 karakter") }}" class="form-input" minlength="6">
+            </div>
+            <button type="submit" class="btn btn-primary btn-block">
+                <i class="fas fa-user-plus"></i> {{ _("Kayıt Ol") }}
+            </button>
+        </form>
+        <div class="auth-footer">
+            <p>{{ _("Zaten hesabın var mı?") }} <a href="{{ url_for('login') }}">{{ _("Giriş Yap") }}</a></p>
+        </div>
+    </div>
+</div>
+{% endblock %}

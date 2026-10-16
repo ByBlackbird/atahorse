@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block title %}{{ _("Giriş") }} - Atahorse{% endblock %}
+
+{% block content %}
+<div class="auth-container">
+    <div class="auth-card">
+        <div class="auth-header">
+            <i class="fas fa-brain auth-logo"></i>
+            <h2>{{ _("Atahorse'a Giriş Yap") }}</h2>
+            <p>{{ _("Eğitim yolculuğuna devam et") }}</p>
+        </div>
+        <form method="POST" action="{{ url_for('login') }}" class="auth-form">
+            <div class="form-group">
+                <label for="username"><i class="fas fa-user"></i> {{ _("Kullanıcı Adı") }}</label>
+                <input type="text" id="username" name="username" required placeholder="{{ _("Kullanıcı adınız") }}" class="form-input">
+            </div>
+            <div class="form-group">
+                <label for="password"><i class="fas fa-lock"></i> {{ _("Şifre") }}</label>
+                <input type="password" id="password" name="password" required placeholder="{{ _("Şifreniz") }}" class="form-input">
+            </div>
+            <button type="submit" class="btn btn-primary btn-block">
+                <i class="fas fa-sign-in-alt"></i> {{ _("Giriş Yap") }}
+            </button>
+        </form>
+        <div class="auth-footer">
+            <p>{{ _("Hesabın yok mu?") }} <a href="{{ url_for('register') }}">{{ _("Kayıt Ol") }}</a></p>
+        </div>
+    </div>
+</div>
+{% endblock %}

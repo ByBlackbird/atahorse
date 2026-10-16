@@ -667,6 +667,32 @@ def admin_toggle_plan(user_id):
 os.makedirs(os.path.dirname(DB_PATH), exist_ok=True)
 init_db()
 
+@app.route("/admin/change-password", methods=["GET", "POST"])
+@login_required
+@admin_required
+def admin_change_password():
+    if request.method == "POST":
+        current_pw = request.form.get("current_password", "")
+        new_pw = request.form.get("new_password", "")
+        confirm_pw = request.form.get("confirm_password", "")
+        conn = get_db(); c = conn.cursor()
+        row = conn.execute("SELECT password_hash FROM users WHERE id=?", (current_user.id,)).fetchone()
+        if not row or not check_password_hash(row["password_hash"], current_pw):
+            flash("Mevcut şifre hatalı.", "danger")
+        elif len(new_pw) < 8:
+            flash("Yeni şifre en az 8 karakter olmalı.", "danger")
+        elif new_pw != confirm_pw:
+            flash("Yeni şifre tekrarı eşleşmiyor.", "danger")
+        elif new_pw == current_pw:
+            flash("Yeni şifre mevcut şifreden farklı olmalı.", "danger")
+        else:
+            c.execute("UPDATE users SET password_hash=? WHERE id=?", (generate_password_hash(new_pw), current_user.id))
+            conn.commit()
+            flash("Şifre güncellendi. Yeni şifrenle giriş yapabilirsin.", "success")
+        conn.close()
+        return redirect(url_for("admin_dashboard"))
+    return render_template("admin/change_password.html")
+
 if __name__ == "__main__":
     print("🚀 Atahorse v3 başlatılıyor...")
     print("📍 http://localhost:5000")

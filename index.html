@@ -1,0 +1,144 @@
+{% extends "base.html" %}
+{% block content %}
+
+<!-- HERO -->
+<section class="hero v3">
+    <div class="hero-content">
+        <img src="{{ url_for('static', filename='img/brand-logo.png') }}" alt="Atahorse" class="hero-brand-logo">
+        <span class="hero-badge"><i class="fas fa-sparkles"></i> {{ _("AI destekli kişisel eğitim") }}</span>
+        <h1 class="hero-title">{{ _("Beynin için") }}<br><span class="gradient-text">{{ _("özel müfredat") }}</span></h1>
+        <p class="hero-subtitle">{{ _("Atahorse; tüm güvenilir kaynakları tarar, öğrenme stiline göre yapılandırır ve senin anlayacağın dille öğretir. Araştırma yükünü alır, seni yetkinleştirir.") }}</p>
+        <div class="hero-buttons">
+            {% if current_user.is_authenticated %}
+            <a href="{{ url_for('dashboard') }}" class="btn btn-primary btn-lg"><i class="fas fa-rocket"></i> {{ _("Öğrenmeye Devam Et") }}</a>
+            {% else %}
+            <a href="{{ url_for('register') }}" class="btn btn-primary btn-lg"><i class="fas fa-rocket"></i> {{ _("Ücretsiz Başla") }}</a>
+            {% endif %}
+            <a href="#how" class="btn btn-outline btn-lg"><i class="fas fa-play-circle"></i> {{ _("Nasıl Çalışır?") }}</a>
+        </div>
+        <div class="hero-stats">
+            <div><strong>{{ stats.learners }}+</strong><span>{{ _("öğrenci") }}</span></div>
+            <div><strong>{{ stats.courses }}+</strong><span>{{ _("kurs") }}</span></div>
+            <div><strong>{{ stats.certificates }}+</strong><span>{{ _("sertifika") }}</span></div>
+        </div>
+    </div>
+    <div class="hero-visual">
+        <div class="brain-orbit">
+            <div class="orbit-core"><i class="fas fa-brain"></i></div>
+            <div class="orbit-chip c1"><i class="fas fa-search"></i></div>
+            <div class="orbit-chip c2"><i class="fas fa-book"></i></div>
+            <div class="orbit-chip c3"><i class="fas fa-certificate"></i></div>
+            <div class="orbit-chip c4"><i class="fas fa-chart-line"></i></div>
+        </div>
+    </div>
+</section>
+
+<!-- İNTERAKTİF DEMO: anlık kurs provası -->
+<section class="demo-section">
+    <div class="section-header">
+        <h2>{{ _("Hemen Dene — Yaz, AI Hazırlasın") }}</h2>
+        <p>{{ _("Kayıt olmadan önce Atahorse'ın nasıl çalıştığını hisset") }}</p>
+    </div>
+    <div class="demo-box">
+        <div class="demo-input-row">
+            <i class="fas fa-lightbulb demo-icon"></i>
+            <input id="demoTopic" class="demo-input" placeholder="{{ _("Örn: Kuantum Fiziği, Dijital Pazarlama, Osmanlı Tarihi...") }}" maxlength="60">
+            <button class="btn btn-primary" onclick="runDemo()"><i class="fas fa-magic"></i> {{ _("Kursumu Tasarla") }}</button>
+        </div>
+        <div id="demoResult" class="demo-result" style="display:none">
+            <div class="demo-loading" id="demoLoading">
+                <div class="scan-line"></div>
+                <p id="demoStatus">{{ _("Güvenilir kaynaklar taranıyor...") }}</p>
+            </div>
+            <div id="demoOutput" style="display:none">
+                <div class="demo-mod-title" id="demoTitle"></div>
+                <div class="demo-modules" id="demoModules"></div>
+                <a href="{{ url_for('register') }}" class="btn btn-primary btn-block" style="margin-top:1rem">{{ _("Tamamını Öğrenmek İçin Ücretsiz Kayıt Ol") }} →</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- NASIL ÇALIŞIR (detaylı) -->
+<section class="features" id="how">
+    <div class="section-header"><h2>{{ _("Nasıl Çalışır?") }}</h2><p>{{ _("4 adımda kişiselleştirilmiş öğrenme") }}</p></div>
+    <div="timeline">
+    <div class="features-grid">
+        <div class="feature-card"><div class="feature-icon"><i class="fas fa-brain"></i></div>
+            <span class="fc-num">01</span><h3>{{ _("Zihin Analizi") }}</h3>
+            <p>{{ _("8 soruluk analizle beyninin hangi lobuyla öğrendiğini keşfet. Görsel, işitsel veya kinestetik — her profile özel içerik.") }}</p></div>
+        <div class="feature-card"><div class="feature-icon" style="background:#dbeafe;color:#2563eb"><i class="fas fa-search"></i></div>
+            <span class="fc-num">02</span><h3>{{ _("Kaynak Tarama") }}</h3>
+            <p>{{ _("Atahorse internetteki akademik makaleleri, resmi belgeleri ve güvenilir kaynakları tarar, hepsini tek bir müfredatta birleştirir.") }}</p></div>
+        <div class="feature-card"><div class="feature-icon" style="background:#dcfce7;color:#16a34a"><i class="fas fa-magic"></i></div>
+            <span class="fc-num">03</span><h3>{{ _("Kişisel Kurs") }}</h3>
+            <p>{{ _("Senin zihin yapına, seviyene ve hızına göre modüller, görevler ve slaytlar oluşturulur. Kaynakça her zaman şeffaf.") }}</p></div>
+        <div class="feature-card"><div class="feature-icon" style="background:#fef3c7;color:#d97706"><i class="fas fa-certificate"></i></div>
+            <span class="fc-num">04</span><h3>{{ _("Sertifika") }}</h3>
+            <p>{{ _("Kursu tamamla, Atahorse imzalı PDF sertifikanı indir. Öğrendiğini belgele, kariyerinde kullan.") }}</p></div>
+    </div>
+    </div>
+</section>
+
+<!-- POPÜLER KURSLAR -->
+<section class="features" style="background:linear-gradient(180deg,#f8fafc,#eef2ff)">
+    <div class="section-header"><h2>{{ tr('popular_courses') }}</h2><p>{{ _("Topluluğun tamamlayıp sertifikalaştırdığı kurslar") }}</p></div>
+    {% if popular %}
+    <div class="courses-grid">
+        {% for c in popular %}
+        <div class="course-card">
+            <div class="course-header"><h3>{{ c.title }}</h3><span class="course-level">{{ c.level.upper() }}</span></div>
+            <div class="course-meta"><span><i class="fas fa-user"></i> {{ c.author or "Atahorse" }}</span>
+                {% if c.completed %}<span><i class="fas fa-check-circle" style="color:var(--success)"></i> {{ tr('certified_learners') }}</span>{% endif %}</div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="empty-state"><i class="fas fa-seedling"></i><h3>{{ tr('no_data') }}</h3><p>{{ _("İlk sertifikayı sen al!") }}</p></div>
+    {% endif %}
+</section>
+
+<!-- AMAÇ / FELSEFE -->
+<section class="features">
+    <div class="section-header"><h2>{{ _("Neden Atahorse?") }}</h2><p>{{ _("Arama motoru değil, kişisel araştırmacın") }}</p></div>
+    <div class="features-grid">
+        <div class="feature-card"><div class="feature-icon" style="background:#ede9fe;color:#7c3aed"><i class="fas fa-bullseye"></i></div>
+            <h3>{{ _("Tek Kaynak, Tam Resim") }}</h3><p>{{ _("Wikipedia'dan akademik makalelere, resmi evraklardan uzman bloglarına — her şey tek entegre müfredatta.") }}</p></div>
+        <div class="feature-card"><div class="feature-icon" style="background:#fce7f3;color:#db2777"><i class="fas fa-language"></i></div>
+            <h3>{{ _("Senin Dilin") }}</h3><p>{{ _("İster teknik ister sade dille. AI karmaşık konuları senin seviyene indirger, anladığın dille anlatır.") }}</p></div>
+        <div class="feature-card"><div class="feature-icon" style="background:#cffafe;color:#0891b2"><i class="fas fa-layer-group"></i></div>
+            <h3>{{ _("Çoklu Format") }}</h3><p>{{ _("Okuma modu, slayt gösterisi, görev listeleri. Görsel zekâya sahipsen slaytlar, okuyarak öğreniyorsan detaylı metinler.") }}</p></div>
+        <div class="feature-card"><div class="feature-icon" style="background:#fee2e2;color:#dc2626"><i class="fas fa-shield-alt"></i></div>
+            <h3>{{ _("Şeffaf Kaynakça") }}</h3><p>{{ _("Her kursun sonunda taranan tüm kaynaklar listelenir. Bilginin nereden geldiğini her zaman bilirsin.") }}</p></div>
+    </div>
+    <div style="text-align:center;margin-top:2.5rem">
+        <a href="{{ url_for('register') }}" class="btn btn-primary btn-lg"><i class="fas fa-rocket"></i> {{ _("Aramıza Katıl") }}</a>
+    </div>
+</section>
+
+<script>
+const demoTemplates = {
+    tr: (t)=>{const topics=["Temel Kavramlar ve Tanımlar","Derinlemesine Analiz","Pratik Uygulama ve Örnekler","İleri Seviye Teknikler","Değerlendirme ve Sertifika"];return {title:t+" — Kişisel Yol Haritan",mods:topics}},
+    en: (t)=>{const topics=["Fundamentals & Definitions","Deep Analysis","Practical Application & Examples","Advanced Techniques","Assessment & Certification"];return {title:t+" — Your Personal Roadmap",mods:topics}},
+    ru: (t)=>{const topics=["Основы и Определения","Глубокий Анализ","Практическое Применение","Продвинутые Техники","Оценка и Сертификация"];return {title:t+" — Твой Персональный Путь",mods:topics}}
+};
+const lang = "{{ get_locale() }}";
+const steps = ["{{ _("Güvenilir kaynaklar taranıyor...") }}","{{ _("Akademik makaleler analiz ediliyor...") }}","{{ _("Müfredat kişiselleştiriliyor...") }}","{{ _("Slaytlar hazırlanıyor...") }}"];
+function runDemo(){
+    const topic=document.getElementById('demoTopic').value.trim();
+    if(!topic){document.getElementById('demoTopic').focus();return;}
+    const res=document.getElementById('demoResult'),load=document.getElementById('demoLoading'),out=document.getElementById('demoOutput');
+    res.style.display='block';load.style.display='block';out.style.display='none';
+    let i=0;const status=document.getElementById('demoStatus');
+    const iv=setInterval(()=>{status.textContent=steps[i%steps.length];i++;},700);
+    setTimeout(()=>{
+        clearInterval(iv);load.style.display='none';out.style.display='block';
+        const tpl=(demoTemplates[lang]||demoTemplates.tr)(topic);
+        document.getElementById('demoTitle').innerHTML='<i class="fas fa-route"></i> '+tpl.title;
+        document.getElementById('demoModules').innerHTML=tpl.mods.map((m,idx)=>
+            `<div class="demo-mod"><span class="dm-num">${idx+1}</span><span>${m}</span><i class="fas fa-check" style="color:var(--success);margin-left:auto"></i></div>`).join('');
+    },3200);
+}
+document.getElementById('demoTopic').addEventListener('keydown',e=>{if(e.key==='Enter')runDemo();});
+</script>
+{% endblock %}

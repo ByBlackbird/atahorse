@@ -1,0 +1,262 @@
+{% extends "base.html" %}
+
+{% block title %}{{ course.title }} - Atahorse{% endblock %}
+
+{% block content %}
+<div class="course-view">
+    <div class="course-view-header">
+        <div class="course-view-info">
+            <div style="display:flex;gap:.5rem;margin-bottom:.75rem">
+                <button class="btn btn-sm btn-primary" onclick="toggleMode('read')" id="btnRead"><i class="fas fa-book-open"></i> {{ tr('reading_mode') }}</button>
+                <button class="btn btn-sm btn-outline" onclick="toggleMode('slides')" id="btnSlides"><i class="fas fa-tv"></i> {{ tr('slideshow') }}</button>
+            </div>
+            <span class="course-badge">{{ course.level.upper() }}</span>
+            <h1>{{ course.title }}</h1>
+            <p class="course-desc">{{ course.content }}</p>
+            <div class="course-meta-row">
+                <span><i class="fas fa-tag"></i> {{ course.topic }}</span>
+                <span><i class="fas fa-brain"></i> {{ current_user.learning_style.upper() }} {{ _("Stili") }}</span>
+                <span><i class="fas fa-calendar"></i> {{ course.created_at[:10] }}</span>
+            </div>
+        </div>
+        <div class="course-progress-circle">
+            <div class="progress-ring">
+                <svg viewBox="0 0 100 100">
+                    <circle class="progress-ring-bg" cx="50" cy="50" r="45"/>
+                    <circle class="progress-ring-fill" cx="50" cy="50" r="45" 
+                            stroke-dasharray="283" 
+                            stroke-dashoffset="{{ 283 - (283 * course.progress / 100) }}"/>
+                </svg>
+                <div class="progress-text-circle">%{{ course.progress }}</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="course-content-wrapper">
+        <div class="modules-sidebar">
+            <h3><i class="fas fa-list"></i> {{ _("Modüller") }}</h3>
+            <div class="modules-list">
+                {% for module in modules %}
+                <button class="module-tab {% if loop.index0 == 0 %}active{% endif %}" 
+                        onclick="showModule({{ loop.index0 }})" data-index="{{ loop.index0 }}">
+                    <span class="module-num">{{ loop.index }}</span>
+                    <div class="module-tab-info">
+                        <span class="module-tab-title">{{ module.title }}</span>
+                        <span class="module-tab-duration"><i class="fas fa-clock"></i> {{ module.duration }}</span>
+                    </div>
+                </button>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="module-content">
+            {% for module in modules %}
+            <div class="module-panel {% if loop.index0 == 0 %}active{% endif %}" data-index="{{ loop.index0 }}">
+                <div class="module-panel-header">
+                    <h2>{{ module.title }}</h2>
+                    <span class="module-duration"><i class="fas fa-clock"></i> {{ module.duration }}</span>
+                </div>
+
+                <div class="module-body">
+                    <div class="module-text">
+                        {{ module.content | replace("\n", "<br>") | safe }}
+                    </div>
+
+                    {% if module.tasks %}
+                    <div class="tasks-section">
+                        <h3><i class="fas fa-tasks"></i> {{ _("Görevler") }}</h3>
+                        <ul class="tasks-list">
+                            {% for task in module.tasks %}
+                            <li class="task-item">
+                                <label class="task-checkbox">
+                                    <input type="checkbox" class="task-check" onchange="updateTaskProgress()">
+                                    <span class="task-text">{{ task }}</span>
+                                </label>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    {% endif %}
+                </div>
+
+                <div class="slideshow" id="slideshow" style="display:none">
+                    <div class="slide-stage" id="slideStage"></div>
+                    <div class="slide-controls">
+                        <button class="btn btn-outline btn-sm" onclick="prevSlide()"><i class="fas fa-chevron-left"></i></button>
+                        <span class="slide-counter"><span id="slideNow">1</span> / <span id="slideTotal">1</span> {{ tr('slides_of') }}</span>
+                        <button class="btn btn-outline btn-sm" onclick="nextSlide()"><i class="fas fa-chevron-right"></i></button>
+                    </div>
+                    <p class="slide-hint"><i class="fas fa-keyboard"></i> {{ tr('press_nav') }}</p>
+                </div>
+                <div class="module-nav">
+                    {% if not loop.first %}
+                    <button class="btn btn-outline" onclick="prevModule()">
+                        <i class="fas fa-arrow-left"></i> {{ _("Önceki") }}
+                    </button>
+                    {% else %}
+                    <div></div>
+                    {% endif %}
+
+                    {% if not loop.last %}
+                    <button class="btn btn-primary" onclick="nextModule()">
+                        {{ _("Sonraki") }} <i class="fas fa-arrow-right"></i>
+                    </button>
+                    {% else %}
+                    <button class="btn btn-success" onclick="completeCourse()">
+                        <i class="fas fa-check-circle"></i> {{ _("Kursu Tamamla") }}
+                    </button>
+                    {% endif %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    {% if sources %}
+    <div class="setup-section" style="margin-top:2rem">
+        <h2><i class="fas fa-link"></i> {{ tr('sources') }} ({{ sources|length }})</h2>
+        <p style="color:var(--gray-500);font-size:.9rem;margin-bottom:1rem">{{ _("Bu kurs hazırlanırken taranan güvenilir kaynaklar:") }}</p>
+        <ul class="sources-list">
+            {% for s in sources %}
+            <li><a href="{{ s.url }}" target="_blank" rel="noopener"><i class="fas fa-external-link-alt"></i> {{ s.title }}</a></li>
+            {% endfor %}
+        </ul>
+    </div>
+    {% endif %}
+
+    {% if course.completed %}
+    <div class="certificate-banner">
+        <i class="fas fa-trophy"></i>
+        <div>
+            <h3>{{ _("Tebrikler! Bu kursu tamamladın.") }}</h3>
+            <a href="{{ url_for('certificate', course_id=course.id) }}" class="btn btn-success">
+                <i class="fas fa-download"></i> {{ _("Sertifikamı İndir") }}
+            </a>
+        </div>
+    </div>
+    {% endif %}
+</div>
+
+<script>
+let currentModule = 0;
+const totalModules = {{ modules | length }};
+const courseId = {{ course.id }};
+
+function showModule(index) {
+    currentModule = index;
+    document.querySelectorAll('.slideshow').forEach(s => s.style.display = 'none');
+    document.querySelectorAll('.module-body').forEach(b => b.style.display = 'block');
+    document.querySelectorAll('.module-tab').forEach((tab, i) => {
+        tab.classList.toggle('active', i === index);
+    });
+    document.querySelectorAll('.module-panel').forEach((panel, i) => {
+        panel.classList.toggle('active', i === index);
+    });
+    updateProgress();
+}
+
+function nextModule() {
+    if (currentModule < totalModules - 1) showModule(currentModule + 1);
+}
+
+function prevModule() {
+    if (currentModule > 0) showModule(currentModule - 1);
+}
+
+function updateTaskProgress() {
+    updateProgress();
+}
+
+function updateProgress() {
+    const allTasks = document.querySelectorAll('.task-check');
+    const checkedTasks = document.querySelectorAll('.task-check:checked');
+    const moduleProgress = (currentModule / totalModules) * 100;
+    const taskProgress = allTasks.length > 0 ? (checkedTasks.length / allTasks.length) * 100 : 0;
+    const totalProgress = Math.round((moduleProgress * 0.6) + (taskProgress * 0.4));
+
+    document.querySelector('.progress-fill').style.width = totalProgress + '%';
+    document.querySelector('.progress-text-circle').textContent = '%' + totalProgress;
+    document.querySelector('.progress-ring-fill').style.strokeDashoffset = 283 - (283 * totalProgress / 100);
+
+    fetch(`/api/update-progress/${courseId}`, {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({progress: totalProgress, completed: 0})
+    });
+}
+
+function completeCourse() {
+    if (!confirm('{{ _("Kursu tamamlamak istediğine emin misin?") }}')) return;
+
+    fetch(`/api/update-progress/${courseId}`, {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({progress: 100, completed: 1})
+    }).then(() => {
+        window.location.reload();
+    });
+}
+
+// === SLAYT MODU ===
+let slides = [], curSlide = 0;
+
+function mdToSlides(md) {
+    const lines = md.split('\n');
+    const result = []; let title = '', bullets = [];
+    const push = () => { if (title || bullets.length) result.push({title, bullets}); title=''; bullets=[]; };
+    for (const line of lines) {
+        const h = line.match(/^#{1,3}\s+(.+)/);
+        const li = line.match(/^[-*]\s+(.+)/);
+        if (h) { push(); title = h[1]; }
+        else if (li) bullets.push(li[1]);
+        else if (line.trim()) bullets.push(line.trim());
+    }
+    push(); return result;
+}
+
+function toggleMode(mode) {
+    const body = document.querySelector('.module-panel.active .module-body');
+    const ss = document.querySelector('.module-panel.active .slideshow');
+    const bR = document.getElementById('btnRead'), bS = document.getElementById('btnSlides');
+    if (!body || !ss) return;
+    if (mode === 'slides') {
+        body.style.display = 'none'; ss.style.display = 'block';
+        bS.className = 'btn btn-sm btn-primary'; bR.className = 'btn btn-sm btn-outline';
+        const md = moduleData[currentModule].content || '';
+        slides = mdToSlides(md); curSlide = 0; renderSlide();
+    } else {
+        body.style.display = 'block'; ss.style.display = 'none';
+        bR.className = 'btn btn-sm btn-primary'; bS.className = 'btn btn-sm btn-outline';
+    }
+}
+
+function renderSlide() {
+    const stage = document.getElementById('slideStage');
+    if (!slides.length) { stage.innerHTML = '<div class="slide"><p>{{ _("İçerik yok") }}</p></div>'; return; }
+    const s = slides[Math.min(curSlide, slides.length-1)];
+    stage.innerHTML = `<div class="slide active-slide">
+        ${s.title ? `<h2>${s.title}</h2>` : ''}
+        ${s.bullets.length ? '<ul>' + s.bullets.slice(0,6).map(b=>`<li>${b}</li>`).join('') + '</ul>' : ''}
+    </div>`;
+    document.getElementById('slideNow').textContent = curSlide + 1;
+    document.getElementById('slideTotal').textContent = slides.length;
+}
+
+function nextSlide() { if (curSlide < slides.length - 1) { curSlide++; renderSlide(); } }
+function prevSlide() { if (curSlide > 0) { curSlide--; renderSlide(); } }
+
+document.addEventListener('keydown', e => {
+    const ss = document.querySelector('.module-panel.active .slideshow');
+    if (!ss || ss.style.display === 'none') return;
+    if (e.key === 'ArrowRight') nextSlide();
+    if (e.key === 'ArrowLeft') prevSlide();
+});
+
+// Modül verisi JS'e aktarılır
+const moduleData = {{ modules | tojson }};
+
+document.addEventListener('DOMContentLoaded', () => {
+    showModule(0);
+});
+</script>
+{% endblock %}
