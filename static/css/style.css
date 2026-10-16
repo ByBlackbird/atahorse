@@ -1625,3 +1625,6 @@ body{background:#FBFAFF}
 .free-quota a{margin-left:auto}
 
 @media(max-width:700px){.ob-cards{grid-template-columns:1fr}.hero-stats{gap:1.25rem}.pricing-grid{gap:2.5rem}.price-card.featured{transform:none}}
+
+/* Marka: hero uzun logo */
+.hero-brand-logo{width:min(420px,82%);height:auto;display:block;margin:0 auto 1.5rem}
