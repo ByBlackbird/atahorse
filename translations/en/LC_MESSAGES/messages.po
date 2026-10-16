@@ -247,3 +247,482 @@ msgstr "English"
 
 msgid "Русский"
 msgstr "Russian"
+
+# --- landing v2 + eksik çeviriler (otomatik tamamlama) ---
+
+msgid "4 adımda kişiselleştirilmiş öğrenme"
+msgstr "Personalized learning in 4 steps"
+
+msgid "8 soruluk analizle beyninin hangi lobuyla öğrendiğini keşfet. Görsel, işitsel veya kinestetik — her profile özel içerik."
+msgstr "Discover how your brain learns with an 8-question analysis. Visual, auditory or kinesthetic — content tailored to every profile."
+
+msgid "AI destekli kişisel eğitim"
+msgstr "AI-powered personal education"
+
+msgid "AI kursu"
+msgstr "AI course"
+
+msgid "Adım adım, kurallara uyarak ilerlerim"
+msgstr "I proceed step by step, following the rules"
+
+msgid "Adınız ve soyadınız"
+msgstr "Your first and last name"
+
+msgid "Akademik makaleler analiz ediliyor..."
+msgstr "Analyzing academic articles..."
+
+msgid "Analiz sonucu yalnızca kurslarını kişiselleştirmek için kullanılır."
+msgstr "The analysis result is used only to personalize your courses."
+
+msgid "Arama motoru değil, kişisel araştırmacın"
+msgstr "Not a search engine — your personal researcher"
+
+msgid "Atahorse internetteki akademik makaleleri, resmi belgeleri ve güvenilir kaynakları tarar, hepsini tek bir müfredatta birleştirir."
+msgstr "Atahorse scans academic articles, official documents and reliable sources on the internet, combining them all into a single curriculum."
+
+msgid "Atahorse; tüm güvenilir kaynakları tarar, öğrenme stiline göre yapılandırır ve senin anlayacağın dille öğretir. Araştırma yükünü alır, seni yetkinleştirir."
+msgstr "Atahorse scans all reliable sources, structures them around your learning style and teaches you in a language you understand. It takes the research burden off your shoulders and empowers you."
+
+msgid "Atla, daha sonra"
+msgstr "Skip for now"
+
+msgid "Aylık Premium"
+msgstr "Monthly Premium"
+
+msgid "Açıklama"
+msgstr "Description"
+
+msgid "Aşağıdaki soruları içgüdüsel olarak cevapla."
+msgstr "Answer the following questions instinctively."
+
+msgid "Başla"
+msgstr "Start"
+
+msgid "Benzersiz kullanıcı adı"
+msgstr "Unique username"
+
+msgid "Beynin için"
+msgstr "For your brain"
+
+msgid "Bu bir demo ödemesidir; kartınızdan ücret çekilmez."
+msgstr "This is a demo payment; no charge will be made to your card."
+
+msgid "Bu kurs hazırlanırken taranan güvenilir kaynaklar:"
+msgstr "Reliable sources scanned while preparing this course:"
+
+msgid "Bölüm 1: Öğrenme Stilin"
+msgstr "Part 1: Your Learning Style"
+
+msgid "Bölüm 2: Beyin Lobu Tercihin"
+msgstr "Part 2: Your Brain Lobe Preference"
+
+msgid "Bütünsel olarak, bağlantılar kurarak ilerlerim"
+msgstr "I think holistically, making connections"
+
+msgid "Canlı Demo"
+msgstr "Live Demo"
+
+msgid "Deneyim ve pratikle"
+msgstr "Through experience and practice"
+
+msgid "Detaylı liste, takvim ve sıralama yaparım"
+msgstr "I make detailed lists, schedules and prioritize"
+
+msgid "Devam ediyor"
+msgstr "In progress"
+
+msgid "Dilersen bu testi"
+msgstr "If you want, you can"
+
+msgid "Durum"
+msgstr "Status"
+
+msgid "Duyduğum sesleri, konuşmaları hatırlarım"
+msgstr "I remember sounds and conversations I hear"
+
+msgid "Ek Kurs Hakkı"
+msgstr "Extra Course Right"
+
+msgid "Ek kurs hakkı"
+msgstr "extra course right"
+
+msgid "En az 6 karakter"
+msgstr "At least 6 characters"
+
+msgid "Fark"
+msgstr "Difference"
+
+msgid "Fiyatlandırma"
+msgstr "Pricing"
+
+msgid "Fiziksel model, örnek veya canlandırma yaparım"
+msgstr "I build physical models, examples or simulations"
+
+msgid "Gelişmiş analizler"
+msgstr "Advanced analytics"
+
+msgid "Genel bir çerçeve çizer, esnek kalırım"
+msgstr "I draw a general framework and stay flexible"
+
+msgid "Grafik, diyagram ve görsel materyallerle"
+msgstr "With charts, diagrams and visual materials"
+
+msgid "Gördüğüm resimleri, yazıları hatırlarım"
+msgstr "I remember pictures and texts I see"
+
+msgid "Görsel"
+msgstr "Visual"
+
+msgid "Güvenilir Kaynaklar"
+msgstr "Reliable Sources"
+
+msgid "Güvenilir kaynaklar taranıyor..."
+msgstr "Scanning reliable sources..."
+
+msgid "Hangi düşünme tarzı sana daha yakın?"
+msgstr "Which thinking style is closer to you?"
+
+msgid "Hemen Dene — Yaz, AI Hazırlasın"
+msgstr "Try It Now — Type, AI Prepares"
+
+msgid "Her Dilde"
+msgstr "In Every Language"
+
+msgid "Her kursun sonunda taranan tüm kaynaklar listelenir. Bilginin nereden geldiğini her zaman bilirsin."
+msgstr "At the end of every course, all scanned sources are listed. You always know where your knowledge comes from."
+
+msgid "Kalıcı erişim"
+msgstr "Permanent access"
+
+msgid "Kart Numarası"
+msgstr "Card Number"
+
+msgid "Kaynak Tarama"
+msgstr "Source Scanning"
+
+msgid "Kayıt olmadan önce Atahorse'ın nasıl çalıştığını hisset"
+msgstr "Feel how Atahorse works before signing up"
+
+msgid "Kinestetik"
+msgstr "Kinesthetic"
+
+msgid "Kitap okurum, film izlerim, resim yaparım"
+msgstr "I read books, watch films, do painting"
+
+msgid "Kişisel Araştırmacı"
+msgstr "Personal Researcher"
+
+msgid "Kişisel Kurs"
+msgstr "Personal Course"
+
+msgid "Konuşma metni ve sesli notlar hazırlarım"
+msgstr "I prepare speech scripts and voice notes"
+
+msgid "Kullanıcı"
+msgstr "User"
+
+msgid "Kullanıcı adınız"
+msgstr "Your username"
+
+msgid "Kurs"
+msgstr "Course"
+
+msgid "Kurs Başı"
+msgstr "Per Course"
+
+msgid "Kursu tamamla, Atahorse imzalı PDF sertifikanı indir. Öğrendiğini belgele, kariyerinde kullan."
+msgstr "Complete the course and download your Atahorse-signed PDF certificate. Document what you learned and use it in your career."
+
+msgid "Kursu tamamlamak istediğine emin misin?"
+msgstr "Are you sure you want to complete the course?"
+
+msgid "Kursumu Tasarla"
+msgstr "Design My Course"
+
+msgid "Mantıksal adımlarla, analiz ederek çözerim"
+msgstr "I solve it with logical steps and analysis"
+
+msgid "Mevcut Planın"
+msgstr "Your Current Plan"
+
+msgid "Mevcut Tercihlerin"
+msgstr "Your Current Preferences"
+
+msgid "Mevcut Şifre"
+msgstr "Current Password"
+
+msgid "Müfredat kişiselleştiriliyor..."
+msgstr "Personalizing the curriculum..."
+
+msgid "Müzik dinlerim, sohbet ederim, podcast dinlerim"
+msgstr "I listen to music, chat, listen to podcasts"
+
+msgid "Neden Atahorse?"
+msgstr "Why Atahorse?"
+
+msgid "Okuma modu, slayt gösterisi, görev listeleri. Görsel zekâna sahipsen slaytlar, okuyarak öğreniyorsan detaylı metinler."
+msgstr "Reading mode, slideshows, task lists. Slides if you have visual intelligence, detailed texts if you learn by reading."
+
+msgid "Plan Seç"
+msgstr "Choose Plan"
+
+msgid "Popüler"
+msgstr "Popular"
+
+msgid "Pratik yaparak, deneyerek ve hareket ederek"
+msgstr "By practicing, experimenting and moving"
+
+msgid "Renkli şemalar, infografikler ve görseller kullanırım"
+msgstr "I use colorful schemas, infographics and visuals"
+
+msgid "Sana özel eğitim deneyimi için önce öğrenme profilini analiz ediyoruz. Beynin nasıl çalışıyor, hangi yöntemle daha hızlı öğreniyorsun?"
+msgstr "To create a personalized learning experience, we first analyze your learning profile. How does your brain work, and with which method do you learn faster?"
+
+msgid "Satın Al"
+msgstr "Buy"
+
+msgid "Senin Dilin"
+msgstr "Your Language"
+
+msgid "Senin zihin yapına, seviyene ve hızına göre modüller, görevler ve slaytlar oluşturulur. Kaynakça her zaman şeffaf."
+msgstr "Modules, tasks and slides are created according to your mindset, level and pace. Sources are always transparent."
+
+msgid "Sertifika dahil"
+msgstr "Certificate included"
+
+msgid "Sertifikalı Öğrenme"
+msgstr "Certified Learning"
+
+msgid "Ses ve anlatımla"
+msgstr "With sound and narration"
+
+msgid "Sesli anlatım, podcast veya tartışma ile"
+msgstr "Through audio narration, podcast or discussion"
+
+msgid "Seviye"
+msgstr "Level"
+
+msgid "Sezgisel olarak, farklı açılardan bakarak çözerim"
+msgstr "I solve it intuitively, looking from different angles"
+
+msgid "Slaytlar hazırlanıyor..."
+msgstr "Preparing slides..."
+
+msgid "Son 7 Gün Kayıtları"
+msgstr "Last 7 Days Registrations"
+
+msgid "Soru 1: Yeni bir konuyu öğrenirken en çok hangi yöntemi tercih edersin?"
+msgstr "Question 1: When learning a new topic, which method do you prefer most?"
+
+msgid "Soru 2: Bir sunum hazırlarken..."
+msgstr "Question 2: When preparing a presentation..."
+
+msgid "Soru 3: Bilgiyi hatırlarken..."
+msgstr "Question 3: When recalling information..."
+
+msgid "Soru 4: Boş zamanlarımda..."
+msgstr "Question 4: In my free time..."
+
+msgid "Soru 5: Bir problemle karşılaştığında..."
+msgstr "Question 5: When facing a problem..."
+
+msgid "Soru 6: Plan yaparken..."
+msgstr "Question 6: When making plans..."
+
+msgid "Soru 7: Yeni bir fikir değerlendirirken..."
+msgstr "Question 7: When evaluating a new idea..."
+
+msgid "Soru 8: Öğrenirken..."
+msgstr "Question 8: While learning..."
+
+msgid "Spor yaparım, el işiyle uğraşırım, gezerim"
+msgstr "I do sports, crafts, and go out walking"
+
+msgid "Stili"
+msgstr "Style"
+
+msgid "Süreç"
+msgstr "Process"
+
+msgid "Sınırsız AI kursu"
+msgstr "Unlimited AI courses"
+
+msgid "Sınırsız kurs"
+msgstr "Unlimited courses"
+
+msgid "Sınırsız kurs, tüm özellikler aktif"
+msgstr "Unlimited courses, all features active"
+
+msgid "Sınırsız öğrenme seni bekliyor"
+msgstr "Unlimited learning awaits you"
+
+msgid "Tamamlandı"
+msgstr "Completed"
+
+msgid "Tamamını Öğrenmek İçin Ücretsiz Kayıt Ol"
+msgstr "Sign Up Free to Learn It All"
+
+msgid "Tarih"
+msgstr "Date"
+
+msgid "Tek Kaynak, Tam Resim"
+msgstr "One Source, Full Picture"
+
+msgid "Temel sertifikalar"
+msgstr "Basic certificates"
+
+msgid "Topluluk"
+msgstr "Community"
+
+msgid "Topluluğun tamamlayıp sertifikalaştırdığı kurslar"
+msgstr "Courses completed and certified by the community"
+
+msgid "Tutar"
+msgstr "Amount"
+
+msgid "Tüm sertifika türleri"
+msgstr "All certificate types"
+
+msgid "Tür"
+msgstr "Type"
+
+msgid "Verilere, kanıtlara ve istatistiklere bakarım"
+msgstr "I look at data, evidence and statistics"
+
+msgid "Wikipedia'dan akademik makalelere, resmi evraklardan uzman bloglarına — her şey tek entegre müfredatta."
+msgstr "From Wikipedia to academic articles, from official documents to expert blogs — everything in one integrated curriculum."
+
+msgid "Yaptığım hareketleri, deneyimleri hatırlarım"
+msgstr "I remember the movements and experiences I make"
+
+msgid "Yeni Şifre"
+msgstr "New Password"
+
+msgid "Yeni Şifre (Tekrar)"
+msgstr "New Password (Repeat)"
+
+msgid "Yönetici Şifresini Değiştir"
+msgstr "Change Admin Password"
+
+msgid "Yıllık Premium"
+msgstr "Yearly Premium"
+
+msgid "Zihin Analizi"
+msgstr "Mind Analysis"
+
+msgid "Zihin analizi"
+msgstr "Mind analysis"
+
+msgid "Zihnini Tanıyalım"
+msgstr "Let's Get to Know Your Mind"
+
+msgid "atlayabilirsin"
+msgstr "skip it"
+
+msgid "ay"
+msgstr "mo"
+
+msgid "dakika"
+msgstr "min"
+
+msgid "demo"
+msgstr "demo"
+
+msgid "demo: simüle ödeme aktif"
+msgstr "demo: simulated payment active"
+
+msgid "indirim"
+msgstr "discount"
+
+msgid "kurs"
+msgstr "course"
+
+msgid "kursun bizden. Sınırsız öğrenmeye hazır olduğunda yükselt."
+msgstr "is on us. Upgrade when you are ready for unlimited learning."
+
+msgid "sertifika"
+msgstr "certificate"
+
+msgid "simülasyon"
+msgstr "simulation"
+
+msgid "tek kişisel araştırmacı."
+msgstr "one personal researcher."
+
+msgid "Çoklu Format"
+msgstr "Multiple Formats"
+
+msgid "Ödemeler güvenle işlenir. İstediğin zaman iptal et."
+msgstr "Payments are processed securely. Cancel anytime."
+
+msgid "Ödemeyi Tamamla"
+msgstr "Complete Payment"
+
+msgid "Öncelikli AI işleme"
+msgstr "Priority AI processing"
+
+msgid "Örn: Kuantum Fiziği, Dijital Pazarlama, Osmanlı Tarihi..."
+msgstr "E.g.: Quantum Physics, Digital Marketing, Ottoman History..."
+
+msgid "Örn: Python Programlama, Dijital Pazarlama, Fotoğrafçılık, Hukuk..."
+msgstr "E.g.: Python Programming, Digital Marketing, Photography, Law..."
+
+msgid "Öğrenci"
+msgstr "Student"
+
+msgid "Öğrenme Stili Testi"
+msgstr "Learning Style Test"
+
+msgid "Öğrenmeye Devam Et"
+msgstr "Continue Learning"
+
+msgid "Öğrenmeye Ücretsiz Başla"
+msgstr "Start Learning for Free"
+
+msgid "Ücretsiz Başla"
+msgstr "Start Free"
+
+msgid "özel müfredat"
+msgstr "custom curriculum"
+
+msgid "öğrenci"
+msgstr "student"
+
+msgid "İlerleme"
+msgstr "Progress"
+
+msgid "İlk"
+msgstr "First"
+
+msgid "İlk izlenimime, yaratıcılığıma güvenirim"
+msgstr "I trust my first impression and creativity"
+
+msgid "İlk sertifikayı sen al!"
+msgstr "Be the first to earn a certificate!"
+
+msgid "İster teknik ister sade dille. AI karmaşık konuları senin seviyene indirger, anladığın dille anlatır."
+msgstr "Technical or plain language — your choice. AI breaks down complex topics to your level and explains them in a language you understand."
+
+msgid "İçerik yok"
+msgstr "No content"
+
+msgid "İşitsel"
+msgstr "Auditory"
+
+msgid "Şeffaf Kaynakça"
+msgstr "Transparent Sources"
+
+msgid "Şemalar ve görsellerle"
+msgstr "With schemas and visuals"
+
+msgid "Şifre Değiştir"
+msgstr "Change Password"
+
+msgid "Şifreni kimseyle paylaşma. Kayıtlıysa not al. Kaybolursa veritabanından sıfırlanması gerekir."
+msgstr "Don't share your password with anyone. Write it down if needed. If lost, it must be reset from the database."
+
+msgid "Şifreniz"
+msgstr "Your password"
+
+msgid "Şifreyi Güncelle"
+msgstr "Update Password"

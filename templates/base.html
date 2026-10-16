@@ -14,9 +14,8 @@
     <nav class="navbar">
         <div class="nav-container">
             <a href="{{ url_for('index') }}" class="nav-logo">
-                <img src="{{ url_for('static', filename='img/logo.png') }}" alt="Atahorse" onerror="this.style.display='none';this.nextElementSibling.style.display='inline'">
+                <img src="{{ url_for('static', filename='img/brand-logo.png') }}" alt="Atahorse" class="nav-brand-img" onerror="this.style.display='none';this.nextElementSibling.style.display='inline'">
                 <i class="fas fa-horse" style="display:none"></i>
-                <span>Atahorse</span>
             </a>
             <div class="nav-links">
                 {% if current_user.is_authenticated and current_user.is_admin %}

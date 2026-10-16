@@ -247,3 +247,482 @@ msgstr "English"
 
 msgid "Русский"
 msgstr "Русский"
+
+# --- landing v2 + eksik çeviriler (otomatik tamamlama) ---
+
+msgid "4 adımda kişiselleştirilmiş öğrenme"
+msgstr "4 adımda kişiselleştirilmiş öğrenme"
+
+msgid "8 soruluk analizle beyninin hangi lobuyla öğrendiğini keşfet. Görsel, işitsel veya kinestetik — her profile özel içerik."
+msgstr "8 soruluk analizle beyninin hangi lobuyla öğrendiğini keşfet. Görsel, işitsel veya kinestetik — her profile özel içerik."
+
+msgid "AI destekli kişisel eğitim"
+msgstr "AI destekli kişisel eğitim"
+
+msgid "AI kursu"
+msgstr "AI kursu"
+
+msgid "Adım adım, kurallara uyarak ilerlerim"
+msgstr "Adım adım, kurallara uyarak ilerlerim"
+
+msgid "Adınız ve soyadınız"
+msgstr "Adınız ve soyadınız"
+
+msgid "Akademik makaleler analiz ediliyor..."
+msgstr "Akademik makaleler analiz ediliyor..."
+
+msgid "Analiz sonucu yalnızca kurslarını kişiselleştirmek için kullanılır."
+msgstr "Analiz sonucu yalnızca kurslarını kişiselleştirmek için kullanılır."
+
+msgid "Arama motoru değil, kişisel araştırmacın"
+msgstr "Arama motoru değil, kişisel araştırmacın"
+
+msgid "Atahorse internetteki akademik makaleleri, resmi belgeleri ve güvenilir kaynakları tarar, hepsini tek bir müfredatta birleştirir."
+msgstr "Atahorse internetteki akademik makaleleri, resmi belgeleri ve güvenilir kaynakları tarar, hepsini tek bir müfredatta birleştirir."
+
+msgid "Atahorse; tüm güvenilir kaynakları tarar, öğrenme stiline göre yapılandırır ve senin anlayacağın dille öğretir. Araştırma yükünü alır, seni yetkinleştirir."
+msgstr "Atahorse; tüm güvenilir kaynakları tarar, öğrenme stiline göre yapılandırır ve senin anlayacağın dille öğretir. Araştırma yükünü alır, seni yetkinleştirir."
+
+msgid "Atla, daha sonra"
+msgstr "Atla, daha sonra"
+
+msgid "Aylık Premium"
+msgstr "Aylık Premium"
+
+msgid "Açıklama"
+msgstr "Açıklama"
+
+msgid "Aşağıdaki soruları içgüdüsel olarak cevapla."
+msgstr "Aşağıdaki soruları içgüdüsel olarak cevapla."
+
+msgid "Başla"
+msgstr "Başla"
+
+msgid "Benzersiz kullanıcı adı"
+msgstr "Benzersiz kullanıcı adı"
+
+msgid "Beynin için"
+msgstr "Beynin için"
+
+msgid "Bu bir demo ödemesidir; kartınızdan ücret çekilmez."
+msgstr "Bu bir demo ödemesidir; kartınızdan ücret çekilmez."
+
+msgid "Bu kurs hazırlanırken taranan güvenilir kaynaklar:"
+msgstr "Bu kurs hazırlanırken taranan güvenilir kaynaklar:"
+
+msgid "Bölüm 1: Öğrenme Stilin"
+msgstr "Bölüm 1: Öğrenme Stilin"
+
+msgid "Bölüm 2: Beyin Lobu Tercihin"
+msgstr "Bölüm 2: Beyin Lobu Tercihin"
+
+msgid "Bütünsel olarak, bağlantılar kurarak ilerlerim"
+msgstr "Bütünsel olarak, bağlantılar kurarak ilerlerim"
+
+msgid "Canlı Demo"
+msgstr "Canlı Demo"
+
+msgid "Deneyim ve pratikle"
+msgstr "Deneyim ve pratikle"
+
+msgid "Detaylı liste, takvim ve sıralama yaparım"
+msgstr "Detaylı liste, takvim ve sıralama yaparım"
+
+msgid "Devam ediyor"
+msgstr "Devam ediyor"
+
+msgid "Dilersen bu testi"
+msgstr "Dilersen bu testi"
+
+msgid "Durum"
+msgstr "Durum"
+
+msgid "Duyduğum sesleri, konuşmaları hatırlarım"
+msgstr "Duyduğum sesleri, konuşmaları hatırlarım"
+
+msgid "Ek Kurs Hakkı"
+msgstr "Ek Kurs Hakkı"
+
+msgid "Ek kurs hakkı"
+msgstr "Ek kurs hakkı"
+
+msgid "En az 6 karakter"
+msgstr "En az 6 karakter"
+
+msgid "Fark"
+msgstr "Fark"
+
+msgid "Fiyatlandırma"
+msgstr "Fiyatlandırma"
+
+msgid "Fiziksel model, örnek veya canlandırma yaparım"
+msgstr "Fiziksel model, örnek veya canlandırma yaparım"
+
+msgid "Gelişmiş analizler"
+msgstr "Gelişmiş analizler"
+
+msgid "Genel bir çerçeve çizer, esnek kalırım"
+msgstr "Genel bir çerçeve çizer, esnek kalırım"
+
+msgid "Grafik, diyagram ve görsel materyallerle"
+msgstr "Grafik, diyagram ve görsel materyallerle"
+
+msgid "Gördüğüm resimleri, yazıları hatırlarım"
+msgstr "Gördüğüm resimleri, yazıları hatırlarım"
+
+msgid "Görsel"
+msgstr "Görsel"
+
+msgid "Güvenilir Kaynaklar"
+msgstr "Güvenilir Kaynaklar"
+
+msgid "Güvenilir kaynaklar taranıyor..."
+msgstr "Güvenilir kaynaklar taranıyor..."
+
+msgid "Hangi düşünme tarzı sana daha yakın?"
+msgstr "Hangi düşünme tarzı sana daha yakın?"
+
+msgid "Hemen Dene — Yaz, AI Hazırlasın"
+msgstr "Hemen Dene — Yaz, AI Hazırlasın"
+
+msgid "Her Dilde"
+msgstr "Her Dilde"
+
+msgid "Her kursun sonunda taranan tüm kaynaklar listelenir. Bilginin nereden geldiğini her zaman bilirsin."
+msgstr "Her kursun sonunda taranan tüm kaynaklar listelenir. Bilginin nereden geldiğini her zaman bilirsin."
+
+msgid "Kalıcı erişim"
+msgstr "Kalıcı erişim"
+
+msgid "Kart Numarası"
+msgstr "Kart Numarası"
+
+msgid "Kaynak Tarama"
+msgstr "Kaynak Tarama"
+
+msgid "Kayıt olmadan önce Atahorse'ın nasıl çalıştığını hisset"
+msgstr "Kayıt olmadan önce Atahorse'ın nasıl çalıştığını hisset"
+
+msgid "Kinestetik"
+msgstr "Kinestetik"
+
+msgid "Kitap okurum, film izlerim, resim yaparım"
+msgstr "Kitap okurum, film izlerim, resim yaparım"
+
+msgid "Kişisel Araştırmacı"
+msgstr "Kişisel Araştırmacı"
+
+msgid "Kişisel Kurs"
+msgstr "Kişisel Kurs"
+
+msgid "Konuşma metni ve sesli notlar hazırlarım"
+msgstr "Konuşma metni ve sesli notlar hazırlarım"
+
+msgid "Kullanıcı"
+msgstr "Kullanıcı"
+
+msgid "Kullanıcı adınız"
+msgstr "Kullanıcı adınız"
+
+msgid "Kurs"
+msgstr "Kurs"
+
+msgid "Kurs Başı"
+msgstr "Kurs Başı"
+
+msgid "Kursu tamamla, Atahorse imzalı PDF sertifikanı indir. Öğrendiğini belgele, kariyerinde kullan."
+msgstr "Kursu tamamla, Atahorse imzalı PDF sertifikanı indir. Öğrendiğini belgele, kariyerinde kullan."
+
+msgid "Kursu tamamlamak istediğine emin misin?"
+msgstr "Kursu tamamlamak istediğine emin misin?"
+
+msgid "Kursumu Tasarla"
+msgstr "Kursumu Tasarla"
+
+msgid "Mantıksal adımlarla, analiz ederek çözerim"
+msgstr "Mantıksal adımlarla, analiz ederek çözerim"
+
+msgid "Mevcut Planın"
+msgstr "Mevcut Planın"
+
+msgid "Mevcut Tercihlerin"
+msgstr "Mevcut Tercihlerin"
+
+msgid "Mevcut Şifre"
+msgstr "Mevcut Şifre"
+
+msgid "Müfredat kişiselleştiriliyor..."
+msgstr "Müfredat kişiselleştiriliyor..."
+
+msgid "Müzik dinlerim, sohbet ederim, podcast dinlerim"
+msgstr "Müzik dinlerim, sohbet ederim, podcast dinlerim"
+
+msgid "Neden Atahorse?"
+msgstr "Neden Atahorse?"
+
+msgid "Okuma modu, slayt gösterisi, görev listeleri. Görsel zekâna sahipsen slaytlar, okuyarak öğreniyorsan detaylı metinler."
+msgstr "Okuma modu, slayt gösterisi, görev listeleri. Görsel zekâna sahipsen slaytlar, okuyarak öğreniyorsan detaylı metinler."
+
+msgid "Plan Seç"
+msgstr "Plan Seç"
+
+msgid "Popüler"
+msgstr "Popüler"
+
+msgid "Pratik yaparak, deneyerek ve hareket ederek"
+msgstr "Pratik yaparak, deneyerek ve hareket ederek"
+
+msgid "Renkli şemalar, infografikler ve görseller kullanırım"
+msgstr "Renkli şemalar, infografikler ve görseller kullanırım"
+
+msgid "Sana özel eğitim deneyimi için önce öğrenme profilini analiz ediyoruz. Beynin nasıl çalışıyor, hangi yöntemle daha hızlı öğreniyorsun?"
+msgstr "Sana özel eğitim deneyimi için önce öğrenme profilini analiz ediyoruz. Beynin nasıl çalışıyor, hangi yöntemle daha hızlı öğreniyorsun?"
+
+msgid "Satın Al"
+msgstr "Satın Al"
+
+msgid "Senin Dilin"
+msgstr "Senin Dilin"
+
+msgid "Senin zihin yapına, seviyene ve hızına göre modüller, görevler ve slaytlar oluşturulur. Kaynakça her zaman şeffaf."
+msgstr "Senin zihin yapına, seviyene ve hızına göre modüller, görevler ve slaytlar oluşturulur. Kaynakça her zaman şeffaf."
+
+msgid "Sertifika dahil"
+msgstr "Sertifika dahil"
+
+msgid "Sertifikalı Öğrenme"
+msgstr "Sertifikalı Öğrenme"
+
+msgid "Ses ve anlatımla"
+msgstr "Ses ve anlatımla"
+
+msgid "Sesli anlatım, podcast veya tartışma ile"
+msgstr "Sesli anlatım, podcast veya tartışma ile"
+
+msgid "Seviye"
+msgstr "Seviye"
+
+msgid "Sezgisel olarak, farklı açılardan bakarak çözerim"
+msgstr "Sezgisel olarak, farklı açılardan bakarak çözerim"
+
+msgid "Slaytlar hazırlanıyor..."
+msgstr "Slaytlar hazırlanıyor..."
+
+msgid "Son 7 Gün Kayıtları"
+msgstr "Son 7 Gün Kayıtları"
+
+msgid "Soru 1: Yeni bir konuyu öğrenirken en çok hangi yöntemi tercih edersin?"
+msgstr "Soru 1: Yeni bir konuyu öğrenirken en çok hangi yöntemi tercih edersin?"
+
+msgid "Soru 2: Bir sunum hazırlarken..."
+msgstr "Soru 2: Bir sunum hazırlarken..."
+
+msgid "Soru 3: Bilgiyi hatırlarken..."
+msgstr "Soru 3: Bilgiyi hatırlarken..."
+
+msgid "Soru 4: Boş zamanlarımda..."
+msgstr "Soru 4: Boş zamanlarımda..."
+
+msgid "Soru 5: Bir problemle karşılaştığında..."
+msgstr "Soru 5: Bir problemle karşılaştığında..."
+
+msgid "Soru 6: Plan yaparken..."
+msgstr "Soru 6: Plan yaparken..."
+
+msgid "Soru 7: Yeni bir fikir değerlendirirken..."
+msgstr "Soru 7: Yeni bir fikir değerlendirirken..."
+
+msgid "Soru 8: Öğrenirken..."
+msgstr "Soru 8: Öğrenirken..."
+
+msgid "Spor yaparım, el işiyle uğraşırım, gezerim"
+msgstr "Spor yaparım, el işiyle uğraşırım, gezerim"
+
+msgid "Stili"
+msgstr "Stili"
+
+msgid "Süreç"
+msgstr "Süreç"
+
+msgid "Sınırsız AI kursu"
+msgstr "Sınırsız AI kursu"
+
+msgid "Sınırsız kurs"
+msgstr "Sınırsız kurs"
+
+msgid "Sınırsız kurs, tüm özellikler aktif"
+msgstr "Sınırsız kurs, tüm özellikler aktif"
+
+msgid "Sınırsız öğrenme seni bekliyor"
+msgstr "Sınırsız öğrenme seni bekliyor"
+
+msgid "Tamamlandı"
+msgstr "Tamamlandı"
+
+msgid "Tamamını Öğrenmek İçin Ücretsiz Kayıt Ol"
+msgstr "Tamamını Öğrenmek İçin Ücretsiz Kayıt Ol"
+
+msgid "Tarih"
+msgstr "Tarih"
+
+msgid "Tek Kaynak, Tam Resim"
+msgstr "Tek Kaynak, Tam Resim"
+
+msgid "Temel sertifikalar"
+msgstr "Temel sertifikalar"
+
+msgid "Topluluk"
+msgstr "Topluluk"
+
+msgid "Topluluğun tamamlayıp sertifikalaştırdığı kurslar"
+msgstr "Topluluğun tamamlayıp sertifikalaştırdığı kurslar"
+
+msgid "Tutar"
+msgstr "Tutar"
+
+msgid "Tüm sertifika türleri"
+msgstr "Tüm sertifika türleri"
+
+msgid "Tür"
+msgstr "Tür"
+
+msgid "Verilere, kanıtlara ve istatistiklere bakarım"
+msgstr "Verilere, kanıtlara ve istatistiklere bakarım"
+
+msgid "Wikipedia'dan akademik makalelere, resmi evraklardan uzman bloglarına — her şey tek entegre müfredatta."
+msgstr "Wikipedia'dan akademik makalelere, resmi evraklardan uzman bloglarına — her şey tek entegre müfredatta."
+
+msgid "Yaptığım hareketleri, deneyimleri hatırlarım"
+msgstr "Yaptığım hareketleri, deneyimleri hatırlarım"
+
+msgid "Yeni Şifre"
+msgstr "Yeni Şifre"
+
+msgid "Yeni Şifre (Tekrar)"
+msgstr "Yeni Şifre (Tekrar)"
+
+msgid "Yönetici Şifresini Değiştir"
+msgstr "Yönetici Şifresini Değiştir"
+
+msgid "Yıllık Premium"
+msgstr "Yıllık Premium"
+
+msgid "Zihin Analizi"
+msgstr "Zihin Analizi"
+
+msgid "Zihin analizi"
+msgstr "Zihin analizi"
+
+msgid "Zihnini Tanıyalım"
+msgstr "Zihnini Tanıyalım"
+
+msgid "atlayabilirsin"
+msgstr "atlayabilirsin"
+
+msgid "ay"
+msgstr "ay"
+
+msgid "dakika"
+msgstr "dakika"
+
+msgid "demo"
+msgstr "demo"
+
+msgid "demo: simüle ödeme aktif"
+msgstr "demo: simüle ödeme aktif"
+
+msgid "indirim"
+msgstr "indirim"
+
+msgid "kurs"
+msgstr "kurs"
+
+msgid "kursun bizden. Sınırsız öğrenmeye hazır olduğunda yükselt."
+msgstr "kursun bizden. Sınırsız öğrenmeye hazır olduğunda yükselt."
+
+msgid "sertifika"
+msgstr "sertifika"
+
+msgid "simülasyon"
+msgstr "simülasyon"
+
+msgid "tek kişisel araştırmacı."
+msgstr "tek kişisel araştırmacı."
+
+msgid "Çoklu Format"
+msgstr "Çoklu Format"
+
+msgid "Ödemeler güvenle işlenir. İstediğin zaman iptal et."
+msgstr "Ödemeler güvenle işlenir. İstediğin zaman iptal et."
+
+msgid "Ödemeyi Tamamla"
+msgstr "Ödemeyi Tamamla"
+
+msgid "Öncelikli AI işleme"
+msgstr "Öncelikli AI işleme"
+
+msgid "Örn: Kuantum Fiziği, Dijital Pazarlama, Osmanlı Tarihi..."
+msgstr "Örn: Kuantum Fiziği, Dijital Pazarlama, Osmanlı Tarihi..."
+
+msgid "Örn: Python Programlama, Dijital Pazarlama, Fotoğrafçılık, Hukuk..."
+msgstr "Örn: Python Programlama, Dijital Pazarlama, Fotoğrafçılık, Hukuk..."
+
+msgid "Öğrenci"
+msgstr "Öğrenci"
+
+msgid "Öğrenme Stili Testi"
+msgstr "Öğrenme Stili Testi"
+
+msgid "Öğrenmeye Devam Et"
+msgstr "Öğrenmeye Devam Et"
+
+msgid "Öğrenmeye Ücretsiz Başla"
+msgstr "Öğrenmeye Ücretsiz Başla"
+
+msgid "Ücretsiz Başla"
+msgstr "Ücretsiz Başla"
+
+msgid "özel müfredat"
+msgstr "özel müfredat"
+
+msgid "öğrenci"
+msgstr "öğrenci"
+
+msgid "İlerleme"
+msgstr "İlerleme"
+
+msgid "İlk"
+msgstr "İlk"
+
+msgid "İlk izlenimime, yaratıcılığıma güvenirim"
+msgstr "İlk izlenimime, yaratıcılığıma güvenirim"
+
+msgid "İlk sertifikayı sen al!"
+msgstr "İlk sertifikayı sen al!"
+
+msgid "İster teknik ister sade dille. AI karmaşık konuları senin seviyene indirger, anladığın dille anlatır."
+msgstr "İster teknik ister sade dille. AI karmaşık konuları senin seviyene indirger, anladığın dille anlatır."
+
+msgid "İçerik yok"
+msgstr "İçerik yok"
+
+msgid "İşitsel"
+msgstr "İşitsel"
+
+msgid "Şeffaf Kaynakça"
+msgstr "Şeffaf Kaynakça"
+
+msgid "Şemalar ve görsellerle"
+msgstr "Şemalar ve görsellerle"
+
+msgid "Şifre Değiştir"
+msgstr "Şifre Değiştir"
+
+msgid "Şifreni kimseyle paylaşma. Kayıtlıysa not al. Kaybolursa veritabanından sıfırlanması gerekir."
+msgstr "Şifreni kimseyle paylaşma. Kayıtlıysa not al. Kaybolursa veritabanından sıfırlanması gerekir."
+
+msgid "Şifreniz"
+msgstr "Şifreniz"
+
+msgid "Şifreyi Güncelle"
+msgstr "Şifreyi Güncelle"

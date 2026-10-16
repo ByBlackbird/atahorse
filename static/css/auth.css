@@ -1,0 +1,139 @@
+/* ============================================================
+   ATAHORSE — KOYU GİRİŞ/KAYIT SAYFALARI (sadece auth sayfalarında)
+   ============================================================ */
+
+body {
+    background:
+        radial-gradient(720px 520px at 50% 28%, rgba(30, 27, 75, 0.6), transparent 65%),
+        radial-gradient(520px 420px at 82% 82%, rgba(91, 45, 230, 0.16), transparent 60%),
+        radial-gradient(400px 300px at 12% 78%, rgba(245, 185, 66, 0.05), transparent 60%),
+        #07070f;
+    color: #e7e7ef;
+}
+
+/* --- Logo: lacivert daire zemine eriyerek amber at kalır --- */
+.auth-logo-wrap {
+    position: relative;
+    width: 128px;
+    height: 128px;
+    margin: 0 auto 1.4rem;
+}
+.auth-logo-wrap::before {
+    content: "";
+    position: absolute;
+    inset: -34%;
+    background: radial-gradient(circle, rgba(30, 27, 75, 0.95) 30%, rgba(30, 27, 75, 0.35) 55%, transparent 72%);
+    filter: blur(14px);
+}
+.auth-logo-img {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    filter: drop-shadow(0 0 26px rgba(245, 185, 66, 0.35)) drop-shadow(0 12px 30px rgba(0, 0, 0, 0.55));
+    /* daire sınırlarını yumuşat — arka planla kaynaşsın */
+    -webkit-mask-image: radial-gradient(circle, #000 60%, rgba(0,0,0,.6) 70%, transparent 82%);
+    mask-image: radial-gradient(circle, #000 60%, rgba(0,0,0,.6) 70%, transparent 82%);
+    animation: authLogoIn 0.9s cubic-bezier(0.2, 0.7, 0.3, 1) backwards;
+}
+@keyframes authLogoIn {
+    from { opacity: 0; transform: scale(0.85) translateY(10px); }
+    to { opacity: 1; transform: none; }
+}
+
+/* --- Kart --- */
+.auth-card {
+    background: rgba(16, 16, 26, 0.72);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 30px 80px rgba(0, 0, 0, 0.55);
+    backdrop-filter: blur(12px);
+    animation: authCardIn 0.7s 0.1s cubic-bezier(0.2, 0.7, 0.3, 1) backwards;
+}
+@keyframes authCardIn {
+    from { opacity: 0; transform: translateY(22px); }
+    to { opacity: 1; transform: none; }
+}
+.auth-header h2 { color: #fff; }
+.auth-header p { color: rgba(255, 255, 255, 0.5); }
+
+/* --- Form --- */
+.form-group label { color: rgba(255, 255, 255, 0.72); }
+.form-input {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    color: #fff;
+}
+.form-input::placeholder { color: rgba(255, 255, 255, 0.32); }
+.form-input:focus {
+    outline: none;
+    border-color: rgba(245, 185, 66, 0.7);
+    box-shadow: 0 0 0 3px rgba(245, 185, 66, 0.14);
+}
+
+/* --- Buton --- */
+.auth-card .btn-primary {
+    background: linear-gradient(135deg, #f5b942, #f59e0b);
+    color: #1a1206;
+    font-weight: 700;
+    border: none;
+    box-shadow: 0 8px 30px rgba(245, 185, 66, 0.26);
+}
+.auth-card .btn-primary:hover {
+    background: linear-gradient(135deg, #ffc95e, #f5b942);
+    transform: translateY(-2px);
+}
+
+/* --- Alt bilgi --- */
+.auth-footer {
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    color: rgba(255, 255, 255, 0.45);
+}
+.auth-footer a { color: #f5b942; }
+
+/* --- Navbar / footer koyu tema --- */
+.navbar {
+    background: rgba(6, 6, 12, 0.72);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(14px);
+}
+.nav-logo { color: #fff; }
+.nav-logo img { filter: drop-shadow(0 0 10px rgba(245, 185, 66, 0.35)); }
+.nav-link { color: rgba(255, 255, 255, 0.62); }
+.nav-link:hover { background: rgba(255, 255, 255, 0.08); color: #fff; }
+.nav-link-primary {
+    background: linear-gradient(135deg, #f5b942, #f59e0b);
+    color: #1a1206 !important;
+    font-weight: 700;
+}
+.nav-link-primary:hover { background: linear-gradient(135deg, #ffc95e, #f5b942); }
+.nav-link-danger { color: #f87171; }
+.nav-link-danger:hover { background: rgba(248, 113, 113, 0.12); }
+.lang-btn {
+    background: transparent;
+    border-color: rgba(255, 255, 255, 0.18);
+    color: rgba(255, 255, 255, 0.75);
+}
+.lang-btn:hover { border-color: rgba(245, 185, 66, 0.6); color: #fff; }
+.lang-menu {
+    background: #101018;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
+}
+.lang-option { color: rgba(255, 255, 255, 0.75); }
+.lang-option:hover { background: rgba(255, 255, 255, 0.06); color: #fff; }
+.footer {
+    background: transparent;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+.footer-content p { color: rgba(255, 255, 255, 0.75); }
+.footer-sub { color: rgba(255, 255, 255, 0.4) !important; }
+
+/* --- Flash mesajları (koyu zemin) --- */
+.flash { background: rgba(255, 255, 255, 0.06); color: #fff; border: 1px solid rgba(255, 255, 255, 0.12); }
+.flash-success { border-color: rgba(74, 222, 128, 0.4); }
+.flash-danger { border-color: rgba(248, 113, 113, 0.45); }
+.flash-warning { border-color: rgba(245, 185, 66, 0.45); }
+
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+}

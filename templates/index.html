@@ -138,18 +138,6 @@
     </div>
 </section>
 
-<!-- SON CTA -->
-<section class="landing-cta reveal">
-    <img src="{{ url_for('static', filename='img/landing/chrome-horse-small.png') }}" alt="Atahorse" class="cta-horse">
-    <h2>{{ _("Bilgiye") }} <span class="text-outline">{{ _("binmeye") }}</span><br>{{ _("hazır mısın?") }}</h2>
-    <p>{{ _("İlk kişisel kursunu 2 dakikada oluştur. Kredi kartı yok, taahhüt yok — sadece öğren.") }}</p>
-    {% if current_user.is_authenticated %}
-    <a href="{{ url_for('dashboard') }}" class="btn btn-primary btn-lg"><i class="fas fa-rocket"></i> {{ _("Paneline Git") }}</a>
-    {% else %}
-    <a href="{{ url_for('register') }}" class="btn btn-primary btn-lg"><i class="fas fa-rocket"></i> {{ _("Ücretsiz Başla") }}</a>
-    {% endif %}
-</section>
-
 <script>
 // Kayan şeridi iki kez çoğalt (kesintiz döngü)
 const track = document.getElementById('marqueeTrack');

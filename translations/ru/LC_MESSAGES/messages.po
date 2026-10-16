@@ -247,3 +247,482 @@ msgstr "Английский"
 
 msgid "Русский"
 msgstr "Русский"
+
+# --- landing v2 + eksik çeviriler (otomatik tamamlama) ---
+
+msgid "4 adımda kişiselleştirilmiş öğrenme"
+msgstr "Персонализированное обучение за 4 шага"
+
+msgid "8 soruluk analizle beyninin hangi lobuyla öğrendiğini keşfet. Görsel, işitsel veya kinestetik — her profile özel içerik."
+msgstr "Узнайте, как учится ваш мозг, с помощью анализа из 8 вопросов. Визуал, аудиал или кинестетик — контент для каждого профиля."
+
+msgid "AI destekli kişisel eğitim"
+msgstr "Персональное образование с ИИ"
+
+msgid "AI kursu"
+msgstr "Курс ИИ"
+
+msgid "Adım adım, kurallara uyarak ilerlerim"
+msgstr "Я действую шаг за шагом, следуя правилам"
+
+msgid "Adınız ve soyadınız"
+msgstr "Ваше имя и фамилия"
+
+msgid "Akademik makaleler analiz ediliyor..."
+msgstr "Анализируем академические статьи..."
+
+msgid "Analiz sonucu yalnızca kurslarını kişiselleştirmek için kullanılır."
+msgstr "Результат анализа используется только для персонализации ваших курсов."
+
+msgid "Arama motoru değil, kişisel araştırmacın"
+msgstr "Не поисковик — ваш личный исследователь"
+
+msgid "Atahorse internetteki akademik makaleleri, resmi belgeleri ve güvenilir kaynakları tarar, hepsini tek bir müfredatta birleştirir."
+msgstr "Atahorse сканирует академические статьи, официальные документы и надёжные источники в интернете, объединяя всё в одну учебную программу."
+
+msgid "Atahorse; tüm güvenilir kaynakları tarar, öğrenme stiline göre yapılandırır ve senin anlayacağın dille öğretir. Araştırma yükünü alır, seni yetkinleştirir."
+msgstr "Atahorse сканирует все надёжные источники, структурирует их под ваш стиль обучения и объясняет на понятном вам языке. Снимает с вас груз исследований и делает вас компетентным."
+
+msgid "Atla, daha sonra"
+msgstr "Пропустить"
+
+msgid "Aylık Premium"
+msgstr "Premium на месяц"
+
+msgid "Açıklama"
+msgstr "Описание"
+
+msgid "Aşağıdaki soruları içgüdüsel olarak cevapla."
+msgstr "Ответьте на следующие вопросы интуитивно."
+
+msgid "Başla"
+msgstr "Начать"
+
+msgid "Benzersiz kullanıcı adı"
+msgstr "Уникальное имя пользователя"
+
+msgid "Beynin için"
+msgstr "Для твоего мозга"
+
+msgid "Bu bir demo ödemesidir; kartınızdan ücret çekilmez."
+msgstr "Это демо-платёж; деньги с вашей карты не спишутся."
+
+msgid "Bu kurs hazırlanırken taranan güvenilir kaynaklar:"
+msgstr "Надёжные источники, просканированные при подготовке этого курса:"
+
+msgid "Bölüm 1: Öğrenme Stilin"
+msgstr "Часть 1: Ваш стиль обучения"
+
+msgid "Bölüm 2: Beyin Lobu Tercihin"
+msgstr "Часть 2: Предпочитаемая доля мозга"
+
+msgid "Bütünsel olarak, bağlantılar kurarak ilerlerim"
+msgstr "Я мыслю целостно, устанавливая связи"
+
+msgid "Canlı Demo"
+msgstr "Живое демо"
+
+msgid "Deneyim ve pratikle"
+msgstr "Через опыт и практику"
+
+msgid "Detaylı liste, takvim ve sıralama yaparım"
+msgstr "Я составляю подробные списки, расписания и приоритеты"
+
+msgid "Devam ediyor"
+msgstr "В процессе"
+
+msgid "Dilersen bu testi"
+msgstr "При желании вы можете"
+
+msgid "Durum"
+msgstr "Статус"
+
+msgid "Duyduğum sesleri, konuşmaları hatırlarım"
+msgstr "Я запоминаю звуки и разговоры"
+
+msgid "Ek Kurs Hakkı"
+msgstr "Дополнительный курс"
+
+msgid "Ek kurs hakkı"
+msgstr "дополнительный курс"
+
+msgid "En az 6 karakter"
+msgstr "Не менее 6 символов"
+
+msgid "Fark"
+msgstr "Отличие"
+
+msgid "Fiyatlandırma"
+msgstr "Цены"
+
+msgid "Fiziksel model, örnek veya canlandırma yaparım"
+msgstr "Я строю физические модели, примеры или имитации"
+
+msgid "Gelişmiş analizler"
+msgstr "Расширенная аналитика"
+
+msgid "Genel bir çerçeve çizer, esnek kalırım"
+msgstr "Я рисую общую рамку и остаюсь гибким"
+
+msgid "Grafik, diyagram ve görsel materyallerle"
+msgstr "С графиками, диаграммами и визуальными материалами"
+
+msgid "Gördüğüm resimleri, yazıları hatırlarım"
+msgstr "Я запоминаю увиденные картинки и тексты"
+
+msgid "Görsel"
+msgstr "Визуал"
+
+msgid "Güvenilir Kaynaklar"
+msgstr "Надёжные источники"
+
+msgid "Güvenilir kaynaklar taranıyor..."
+msgstr "Сканируем надёжные источники..."
+
+msgid "Hangi düşünme tarzı sana daha yakın?"
+msgstr "Какой стиль мышления вам ближе?"
+
+msgid "Hemen Dene — Yaz, AI Hazırlasın"
+msgstr "Попробуйте — напишите, ИИ подготовит"
+
+msgid "Her Dilde"
+msgstr "На любом языке"
+
+msgid "Her kursun sonunda taranan tüm kaynaklar listelenir. Bilginin nereden geldiğini her zaman bilirsin."
+msgstr "В конце каждого курса перечислены все просканированные источники. Вы всегда знаете, откуда берутся знания."
+
+msgid "Kalıcı erişim"
+msgstr "Постоянный доступ"
+
+msgid "Kart Numarası"
+msgstr "Номер карты"
+
+msgid "Kaynak Tarama"
+msgstr "Поиск источников"
+
+msgid "Kayıt olmadan önce Atahorse'ın nasıl çalıştığını hisset"
+msgstr "Почувствуйте, как работает Atahorse, до регистрации"
+
+msgid "Kinestetik"
+msgstr "Кинестетик"
+
+msgid "Kitap okurum, film izlerim, resim yaparım"
+msgstr "Я читаю книги, смотрю фильмы, рисую"
+
+msgid "Kişisel Araştırmacı"
+msgstr "Личный исследователь"
+
+msgid "Kişisel Kurs"
+msgstr "Персональный курс"
+
+msgid "Konuşma metni ve sesli notlar hazırlarım"
+msgstr "Я готовлю тексты выступлений и голосовые заметки"
+
+msgid "Kullanıcı"
+msgstr "Пользователь"
+
+msgid "Kullanıcı adınız"
+msgstr "Ваше имя пользователя"
+
+msgid "Kurs"
+msgstr "Курс"
+
+msgid "Kurs Başı"
+msgstr "За курс"
+
+msgid "Kursu tamamla, Atahorse imzalı PDF sertifikanı indir. Öğrendiğini belgele, kariyerinde kullan."
+msgstr "Завершите курс и скачайте PDF-сертификат с подписью Atahorse. Задокументируйте знания и используйте в карьере."
+
+msgid "Kursu tamamlamak istediğine emin misin?"
+msgstr "Вы уверены, что хотите завершить курс?"
+
+msgid "Kursumu Tasarla"
+msgstr "Спроектировать мой курс"
+
+msgid "Mantıksal adımlarla, analiz ederek çözerim"
+msgstr "Я решаю логическими шагами и анализом"
+
+msgid "Mevcut Planın"
+msgstr "Ваш текущий план"
+
+msgid "Mevcut Tercihlerin"
+msgstr "Ваши текущие предпочтения"
+
+msgid "Mevcut Şifre"
+msgstr "Текущий пароль"
+
+msgid "Müfredat kişiselleştiriliyor..."
+msgstr "Персонализация программы..."
+
+msgid "Müzik dinlerim, sohbet ederim, podcast dinlerim"
+msgstr "Я слушаю музыку, общаюсь, слушаю подкасты"
+
+msgid "Neden Atahorse?"
+msgstr "Почему Atahorse?"
+
+msgid "Okuma modu, slayt gösterisi, görev listeleri. Görsel zekâna sahipsen slaytlar, okuyarak öğreniyorsan detaylı metinler."
+msgstr "Режим чтения, слайд-шоу, списки задач. Слайды для визуалов, подробные тексты для тех, кто учится чтением."
+
+msgid "Plan Seç"
+msgstr "Выбрать план"
+
+msgid "Popüler"
+msgstr "Популярное"
+
+msgid "Pratik yaparak, deneyerek ve hareket ederek"
+msgstr "Практикуя, экспериментируя и действуя"
+
+msgid "Renkli şemalar, infografikler ve görseller kullanırım"
+msgstr "Я использую цветные схемы, инфографику и визуал"
+
+msgid "Sana özel eğitim deneyimi için önce öğrenme profilini analiz ediyoruz. Beynin nasıl çalışıyor, hangi yöntemle daha hızlı öğreniyorsun?"
+msgstr "Для персонального обучения мы сначала анализируем ваш профиль. Как работает ваш мозг и каким методом вы учитесь быстрее?"
+
+msgid "Satın Al"
+msgstr "Купить"
+
+msgid "Senin Dilin"
+msgstr "Твой язык"
+
+msgid "Senin zihin yapına, seviyene ve hızına göre modüller, görevler ve slaytlar oluşturulur. Kaynakça her zaman şeffaf."
+msgstr "Модули, задания и слайды создаются под ваше мышление, уровень и темп. Источники всегда прозрачны."
+
+msgid "Sertifika dahil"
+msgstr "Сертификат включён"
+
+msgid "Sertifikalı Öğrenme"
+msgstr "Сертифицированное обучение"
+
+msgid "Ses ve anlatımla"
+msgstr "Со звуком и рассказом"
+
+msgid "Sesli anlatım, podcast veya tartışma ile"
+msgstr "Через аудио, подкаст или обсуждение"
+
+msgid "Seviye"
+msgstr "Уровень"
+
+msgid "Sezgisel olarak, farklı açılardan bakarak çözerim"
+msgstr "Я решаю интуитивно, взглянув под разными углами"
+
+msgid "Slaytlar hazırlanıyor..."
+msgstr "Подготовка слайдов..."
+
+msgid "Son 7 Gün Kayıtları"
+msgstr "Регистрации за последние 7 дней"
+
+msgid "Soru 1: Yeni bir konuyu öğrenirken en çok hangi yöntemi tercih edersin?"
+msgstr "Вопрос 1: Какой метод вы предпочитаете при изучении новой темы?"
+
+msgid "Soru 2: Bir sunum hazırlarken..."
+msgstr "Вопрос 2: При подготовке презентации..."
+
+msgid "Soru 3: Bilgiyi hatırlarken..."
+msgstr "Вопрос 3: При воспоминании информации..."
+
+msgid "Soru 4: Boş zamanlarımda..."
+msgstr "Вопрос 4: В свободное время..."
+
+msgid "Soru 5: Bir problemle karşılaştığında..."
+msgstr "Вопрос 5: Столкнувшись с проблемой..."
+
+msgid "Soru 6: Plan yaparken..."
+msgstr "Вопрос 6: При составлении планов..."
+
+msgid "Soru 7: Yeni bir fikir değerlendirirken..."
+msgstr "Вопрос 7: Оценивая новую идею..."
+
+msgid "Soru 8: Öğrenirken..."
+msgstr "Вопрос 8: Во время обучения..."
+
+msgid "Spor yaparım, el işiyle uğraşırım, gezerim"
+msgstr "Я занимаюсь спортом, рукоделием, гуляю"
+
+msgid "Stili"
+msgstr "Стиль"
+
+msgid "Süreç"
+msgstr "Процесс"
+
+msgid "Sınırsız AI kursu"
+msgstr "Безлимитные курсы ИИ"
+
+msgid "Sınırsız kurs"
+msgstr "Безлимитные курсы"
+
+msgid "Sınırsız kurs, tüm özellikler aktif"
+msgstr "Безлимитные курсы, все функции активны"
+
+msgid "Sınırsız öğrenme seni bekliyor"
+msgstr "Безлимитное обучение ждёт тебя"
+
+msgid "Tamamlandı"
+msgstr "Завершено"
+
+msgid "Tamamını Öğrenmek İçin Ücretsiz Kayıt Ol"
+msgstr "Зарегистрируйтесь бесплатно, чтобы выучить всё"
+
+msgid "Tarih"
+msgstr "Дата"
+
+msgid "Tek Kaynak, Tam Resim"
+msgstr "Один источник, полная картина"
+
+msgid "Temel sertifikalar"
+msgstr "Базовые сертификаты"
+
+msgid "Topluluk"
+msgstr "Сообщество"
+
+msgid "Topluluğun tamamlayıp sertifikalaştırdığı kurslar"
+msgstr "Курсы, завершённые и сертифицированные сообществом"
+
+msgid "Tutar"
+msgstr "Сумма"
+
+msgid "Tüm sertifika türleri"
+msgstr "Все типы сертификатов"
+
+msgid "Tür"
+msgstr "Тип"
+
+msgid "Verilere, kanıtlara ve istatistiklere bakarım"
+msgstr "Я смотрю на данные, факты и статистику"
+
+msgid "Wikipedia'dan akademik makalelere, resmi evraklardan uzman bloglarına — her şey tek entegre müfredatta."
+msgstr "От Wikipedia до академических статей, от официальных документов до экспертных блогов — всё в одной программе."
+
+msgid "Yaptığım hareketleri, deneyimleri hatırlarım"
+msgstr "Я запоминаю движения и впечатления"
+
+msgid "Yeni Şifre"
+msgstr "Новый пароль"
+
+msgid "Yeni Şifre (Tekrar)"
+msgstr "Новый пароль (повтор)"
+
+msgid "Yönetici Şifresini Değiştir"
+msgstr "Сменить пароль администратора"
+
+msgid "Yıllık Premium"
+msgstr "Premium на год"
+
+msgid "Zihin Analizi"
+msgstr "Анализ разума"
+
+msgid "Zihin analizi"
+msgstr "Анализ разума"
+
+msgid "Zihnini Tanıyalım"
+msgstr "Узнаем твой разум"
+
+msgid "atlayabilirsin"
+msgstr "пропустить"
+
+msgid "ay"
+msgstr "мес"
+
+msgid "dakika"
+msgstr "мин"
+
+msgid "demo"
+msgstr "демо"
+
+msgid "demo: simüle ödeme aktif"
+msgstr "демо: имитация платежа активна"
+
+msgid "indirim"
+msgstr "скидка"
+
+msgid "kurs"
+msgstr "курс"
+
+msgid "kursun bizden. Sınırsız öğrenmeye hazır olduğunda yükselt."
+msgstr "за наш счёт. Перейдите на безлимит, когда будете готовы."
+
+msgid "sertifika"
+msgstr "сертификат"
+
+msgid "simülasyon"
+msgstr "имитация"
+
+msgid "tek kişisel araştırmacı."
+msgstr "единственный личный исследователь."
+
+msgid "Çoklu Format"
+msgstr "Несколько форматов"
+
+msgid "Ödemeler güvenle işlenir. İstediğin zaman iptal et."
+msgstr "Платежи обрабатываются безопасно. Отмена в любой момент."
+
+msgid "Ödemeyi Tamamla"
+msgstr "Завершить оплату"
+
+msgid "Öncelikli AI işleme"
+msgstr "Приоритетная обработка ИИ"
+
+msgid "Örn: Kuantum Fiziği, Dijital Pazarlama, Osmanlı Tarihi..."
+msgstr "Напр.: квантовая физика, digital-маркетинг, история Османской империи..."
+
+msgid "Örn: Python Programlama, Dijital Pazarlama, Fotoğrafçılık, Hukuk..."
+msgstr "Напр.: программирование на Python, digital-маркетинг, фотография, право..."
+
+msgid "Öğrenci"
+msgstr "Студент"
+
+msgid "Öğrenme Stili Testi"
+msgstr "Тест стиля обучения"
+
+msgid "Öğrenmeye Devam Et"
+msgstr "Продолжить обучение"
+
+msgid "Öğrenmeye Ücretsiz Başla"
+msgstr "Начать обучение бесплатно"
+
+msgid "Ücretsiz Başla"
+msgstr "Начать бесплатно"
+
+msgid "özel müfredat"
+msgstr "персональная программа"
+
+msgid "öğrenci"
+msgstr "студент"
+
+msgid "İlerleme"
+msgstr "Прогресс"
+
+msgid "İlk"
+msgstr "Первый"
+
+msgid "İlk izlenimime, yaratıcılığıma güvenirim"
+msgstr "Я доверяю первому впечатлению и творчеству"
+
+msgid "İlk sertifikayı sen al!"
+msgstr "Получи первый сертификат!"
+
+msgid "İster teknik ister sade dille. AI karmaşık konuları senin seviyene indirger, anladığın dille anlatır."
+msgstr "Технический или простой язык — как хотите. ИИ упрощает сложные темы до вашего уровня и объясняет понятно."
+
+msgid "İçerik yok"
+msgstr "Нет контента"
+
+msgid "İşitsel"
+msgstr "Аудиал"
+
+msgid "Şeffaf Kaynakça"
+msgstr "Прозрачные источники"
+
+msgid "Şemalar ve görsellerle"
+msgstr "Со схемами и визуалом"
+
+msgid "Şifre Değiştir"
+msgstr "Сменить пароль"
+
+msgid "Şifreni kimseyle paylaşma. Kayıtlıysa not al. Kaybolursa veritabanından sıfırlanması gerekir."
+msgstr "Никому не сообщайте пароль. Запишите его. При утере пароль нужно будет сбросить в базе данных."
+
+msgid "Şifreniz"
+msgstr "Ваш пароль"
+
+msgid "Şifreyi Güncelle"
+msgstr "Обновить пароль"

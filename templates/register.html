@@ -1,12 +1,13 @@
 {% extends "base.html" %}
 
 {% block title %}{{ _("Kayıt Ol") }} - Atahorse{% endblock %}
+{% block extra_css %}<link rel="stylesheet" href="{{ url_for('static', filename='css/auth.css') }}">{% endblock %}
 
 {% block content %}
 <div class="auth-container">
     <div class="auth-card">
         <div class="auth-header">
-            <i class="fas fa-brain auth-logo"></i>
+            <div class="auth-logo-wrap"><img src="{{ url_for('static', filename='img/logo.png') }}" alt="Atahorse" class="auth-logo-img"></div>
             <h2>{{ _("Atahorse'a Kayıt Ol") }}</h2>
             <p>{{ _("Kişiselleştirilmiş eğitim deneyimine başla") }}</p>
         </div>
