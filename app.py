@@ -663,8 +663,11 @@ def admin_toggle_plan(user_id):
         flash(f"Kullanıcı planı {new_plan} olarak güncellendi.", "success")
     return redirect(url_for("admin_dashboard"))
 
+# === PRODUCTION: gunicorn altinda da tablolari olustur ===
+os.makedirs(os.path.dirname(DB_PATH), exist_ok=True)
+init_db()
+
 if __name__ == "__main__":
-    init_db()
     print("🚀 Atahorse v3 başlatılıyor...")
     print("📍 http://localhost:5000")
     print("👤 Admin: kullanıcı=admin şifre=admin123")
