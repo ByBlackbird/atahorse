@@ -1,0 +1,249 @@
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=UTF-8\n"
+
+msgid "Atahorse - AI Eğitim Platformu"
+msgstr "Atahorse - AI Education Platform"
+
+msgid "Panel"
+msgstr "Dashboard"
+
+msgid "Kurs Oluştur"
+msgstr "Create Course"
+
+msgid "Çıkış"
+msgstr "Logout"
+
+msgid "Giriş"
+msgstr "Login"
+
+msgid "Kayıt Ol"
+msgstr "Sign Up"
+
+msgid "Atahorse ile Kişiselleştirilmiş Öğrenmeye Başla"
+msgstr "Start Personalized Learning with Atahorse"
+
+msgid "AI destekli, güvenilir kaynaklardan oluşturulmuş, öğrenme stiline özel eğitimler."
+msgstr "AI-powered, personalized education from reliable sources tailored to your learning style."
+
+msgid "Hemen Başla"
+msgstr "Get Started"
+
+msgid "Giriş Yap"
+msgstr "Sign In"
+
+msgid "Nasıl Çalışır?"
+msgstr "How It Works?"
+
+msgid "4 adımda kişiselleştirilmiş eğitim deneyimi"
+msgstr "Personalized learning experience in 4 steps"
+
+msgid "1. Kayıt Ol"
+msgstr "1. Sign Up"
+
+msgid "Platforma ücretsiz kaydol ve profilini oluştur."
+msgstr "Sign up for free and create your profile."
+
+msgid "2. Öğrenme Stilini Keşfet"
+msgstr "2. Discover Your Learning Style"
+
+msgid "Beyin lobu analizi ile en etkili öğrenme yöntemini belirle."
+msgstr "Determine the most effective learning method through brain lobe analysis."
+
+msgid "3. AI Kurs Oluştur"
+msgstr "3. Create AI Course"
+
+msgid "İstediğin konuyu ve seviyeyi seç, AI sana özel kurs hazırlasın."
+msgstr "Choose any topic and level, let AI prepare a course just for you."
+
+msgid "4. Sertifika Al"
+msgstr "4. Get Certified"
+
+msgid "Kursu tamamla, başarını sertifika ile taçlandır."
+msgstr "Complete the course and crown your achievement with a certificate."
+
+msgid "Atahorse'a Giriş Yap"
+msgstr "Sign In to Atahorse"
+
+msgid "Eğitim yolculuğuna devam et"
+msgstr "Continue your learning journey"
+
+msgid "Kullanıcı Adı"
+msgstr "Username"
+
+msgid "Şifre"
+msgstr "Password"
+
+msgid "Hesabın yok mu?"
+msgstr "Don't have an account?"
+
+msgid "Atahorse'a Kayıt Ol"
+msgstr "Sign Up for Atahorse"
+
+msgid "Kişiselleştirilmiş eğitim deneyimine başla"
+msgstr "Start your personalized learning experience"
+
+msgid "Ad Soyad"
+msgstr "Full Name"
+
+msgid "E-posta"
+msgstr "Email"
+
+msgid "Zaten hesabın var mı?"
+msgstr "Already have an account?"
+
+msgid "Hoş Geldin"
+msgstr "Welcome"
+
+msgid "Öğrenme yolculuğuna buradan devam edebilirsin."
+msgstr "You can continue your learning journey from here."
+
+msgid "Öğrenme Stili"
+msgstr "Learning Style"
+
+msgid "Beyin Lobu"
+msgstr "Brain Lobe"
+
+msgid "AI Durumu"
+msgstr "AI Status"
+
+msgid "Aktif"
+msgstr "Active"
+
+msgid "Pasif"
+msgstr "Inactive"
+
+msgid "Yeni Kurs Oluştur"
+msgstr "Create New Course"
+
+msgid "Öğrenme Testini Tekrarla"
+msgstr "Retake Learning Test"
+
+msgid "Kurslarım"
+msgstr "My Courses"
+
+msgid "Henüz kursun yok"
+msgstr "No courses yet"
+
+msgid "İlk kişiselleştirilmiş kursunu oluşturmak için yukarıdaki butona tıkla."
+msgstr "Click the button above to create your first personalized course."
+
+msgid "AI Kurs Oluşturucu"
+msgstr "AI Course Generator"
+
+msgid "Öğrenmek istediğin konuyu ve seviyeyi seç, AI sana özel bir kurs hazırlasın."
+msgstr "Choose the topic and level you want to learn, let AI prepare a special course for you."
+
+msgid "Ne Öğrenmek İstiyorsun?"
+msgstr "What Do You Want to Learn?"
+
+msgid "Hangi Seviyede?"
+msgstr "At What Level?"
+
+msgid "Başlangıç - Yeni başlıyorum"
+msgstr "Beginner - Just Starting"
+
+msgid "Orta - Biraz biliyorum, derinleşmek istiyorum"
+msgstr "Intermediate - Know a bit, want to deepen"
+
+msgid "İleri - Uzmanlaşmak istiyorum"
+msgstr "Advanced - Want to become an expert"
+
+msgid "Kursumu Oluştur"
+msgstr "Create My Course"
+
+msgid "Modüller"
+msgstr "Modules"
+
+msgid "Görevler"
+msgstr "Tasks"
+
+msgid "Önceki"
+msgstr "Previous"
+
+msgid "Sonraki"
+msgstr "Next"
+
+msgid "Kursu Tamamla"
+msgstr "Complete Course"
+
+msgid "Tebrikler! Bu kursu tamamladın."
+msgstr "Congratulations! You completed this course."
+
+msgid "Sertifikamı İndir"
+msgstr "Download My Certificate"
+
+msgid "Öğrenme Stili ve Beyin Lobu Analizi"
+msgstr "Learning Style and Brain Lobe Analysis"
+
+msgid "Sana en uygun öğrenme yöntemini belirlemek için bu kısa testi tamamla."
+msgstr "Complete this short test to determine the most suitable learning method for you."
+
+msgid "Testi Atla"
+msgstr "Skip Test"
+
+msgid "Testi Tamamla"
+msgstr "Complete Test"
+
+msgid "Atahorse - AI Destekli Kişiselleştirilmiş Eğitim Platformu"
+msgstr "Atahorse - AI-Powered Personalized Education Platform"
+
+msgid "Güvenilir kaynaklardan, kişiselleştirilmiş eğitim"
+msgstr "Personalized education from reliable sources"
+
+msgid "Tüm zorunlu alanları doldurun."
+msgstr "Please fill in all required fields."
+
+msgid "Bu kullanıcı adı veya e-posta zaten kullanılıyor."
+msgstr "This username or email is already in use."
+
+msgid "Kayıt başarılı! Şimdi giriş yapabilirsiniz."
+msgstr "Registration successful! You can now sign in."
+
+msgid "Kullanıcı adı veya şifre hatalı."
+msgstr "Incorrect username or password."
+
+msgid "Çıkış yapıldı."
+msgstr "Signed out."
+
+msgid "Lütfen önce giriş yapın."
+msgstr "Please sign in first."
+
+msgid "Öğrenme stiliniz belirlendi!"
+msgstr "Your learning style has been determined!"
+
+msgid "Test atlandı. Varsayılan ayarlar kullanılacak."
+msgstr "Test skipped. Default settings will be used."
+
+msgid "Lütfen bir konu girin."
+msgstr "Please enter a topic."
+
+msgid "AI kursunuzu oluşturuyor... Bu işlem birkaç dakika sürebilir."
+msgstr "Creating your AI course... This may take a few minutes."
+
+msgid "Kursunuz başarıyla oluşturuldu!"
+msgstr "Your course has been successfully created!"
+
+msgid "Kurs bulunamadı."
+msgstr "Course not found."
+
+msgid "Sertifika almak için kursu tamamlamanız gerekiyor."
+msgstr "You need to complete the course to get a certificate."
+
+msgid "Devam Et"
+msgstr "Continue"
+
+msgid "Sertifika"
+msgstr "Certificate"
+
+msgid "Dil Seçimi"
+msgstr "Language Selection"
+
+msgid "Türkçe"
+msgstr "Turkish"
+
+msgid "English"
+msgstr "English"
+
+msgid "Русский"
+msgstr "Russian"

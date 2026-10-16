@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% block title %}{{ _("Kurs Oluştur") }} - Atahorse{% endblock %}
+
+{% block content %}
+<div class="generator-container">
+    <div class="generator-header">
+        <h1><i class="fas fa-magic"></i> {{ _("AI Kurs Oluşturucu") }}</h1>
+        <p>{{ _("Öğrenmek istediğin konuyu ve seviyeyi seç, AI sana özel bir kurs hazırlasın.") }}</p>
+    </div>
+
+    <div class="generator-card">
+        <form method="POST" action="{{ url_for('generate_course') }}" class="generator-form">
+            <div class="form-group">
+                <label for="topic"><i class="fas fa-lightbulb"></i> {{ _("Ne Öğrenmek İstiyorsun?") }}</label>
+                <input type="text" id="topic" name="topic" required 
+                       placeholder="{{ _("Örn: Python Programlama, Dijital Pazarlama, Fotoğrafçılık, Hukuk...") }}"
+                       class="form-input form-input-lg">
+            </div>
+
+            <div class="form-group">
+                <label for="level"><i class="fas fa-signal"></i> {{ _("Hangi Seviyede?") }}</label>
+                <select id="level" name="level" class="form-input form-input-lg">
+                    <option value="baslangic">{{ _("Başlangıç - Yeni başlıyorum") }}</option>
+                    <option value="orta" selected>{{ _("Orta - Biraz biliyorum, derinleşmek istiyorum") }}</option>
+                    <option value="ileri">{{ _("İleri - Uzmanlaşmak istiyorum") }}</option>
+                </select>
+            </div>
+
+            <div class="user-preferences">
+                <h3><i class="fas fa-user-cog"></i> {{ _("Mevcut Tercihlerin") }}</h3>
+                <div class="pref-tags">
+                    <span class="pref-tag">
+                        <i class="fas fa-brain"></i> {{ _("Öğrenme Stili") }}: {{ current_user.learning_style.upper() }}
+                    </span>
+                    <span class="pref-tag">
+                        <i class="fas fa-microscope"></i> {{ _("Beyin Lobu") }}: {{ current_user.brain_lobe.upper() }}
+                    </span>
+                </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-lg btn-block">
+                <i class="fas fa-sparkles"></i> {{ _("Kursumu Oluştur") }}
+            </button>
+        </form>
+    </div>
+</div>
+{% endblock %}

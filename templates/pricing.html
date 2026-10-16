@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block title %}{{ _("Fiyatlandırma") }} - Atahorse{% endblock %}
+{% block content %}
+<div class="pricing-page">
+    <div class="section-header">
+        <h1>{{ _("Öğrenmeye Ücretsiz Başla") }}</h1>
+        <p>{{ _("İlk") }} 3 {{ _("kursun bizden. Sınırsız öğrenmeye hazır olduğunda yükselt.") }}</p>
+    </div>
+    <div class="pricing-grid">
+        <div class="price-card">
+            <h3>{{ tr('free_plan') }}</h3>
+            <div class="price">0 ₺<span>/{{ _("ay") }}</span></div>
+            <ul><li><i class="fas fa-check"></i> {{ _("Zihin analizi") }}</li><li><i class="fas fa-check"></i> 3 {{ _("AI kursu") }}</li><li><i class="fas fa-check"></i> {{ _("Temel sertifikalar") }}</li><li class="off"><i class="fas fa-times"></i> {{ _("Sınırsız kurs") }}</li></ul>
+            {% if current_user.is_authenticated %}<span class="btn btn-outline btn-block">{{ _("Mevcut Planın") }}</span>{% else %}<a href="{{ url_for('register') }}" class="btn btn-outline btn-block">{{ _("Başla") }}</a>{% endif %}
+        </div>
+        <div class="price-card featured">
+            <span class="ribbon">{{ _("Popüler") }}</span>
+            <h3>{{ tr('premium_plan') }}</h3>
+            <div class="price">199 ₺<span>/{{ _("ay") }}</span></div>
+            <ul><li><i class="fas fa-check"></i> {{ _("Sınırsız AI kursu") }}</li><li><i class="fas fa-check"></i> {{ _("Öncelikli AI işleme") }}</li><li><i class="fas fa-check"></i> {{ _("Gelişmiş analizler") }}</li><li><i class="fas fa-check"></i> {{ _("Tüm sertifika türleri") }}</li></ul>
+            {% if current_user.is_authenticated and current_user.plan == 'free' %}<a href="{{ url_for('upgrade') }}" class="btn btn-primary btn-block">{{ tr('upgrade') }}</a>{% else %}<a href="{{ url_for('register') }}" class="btn btn-primary btn-block">{{ _("Başla") }}</a>{% endif %}
+        </div>
+        <div class="price-card">
+            <h3>{{ _("Kurs Başı") }}</h3>
+            <div class="price">49 ₺<span>/{{ _("kurs") }}</span></div>
+            <ul><li><i class="fas fa-check"></i> {{ _("Ek kurs hakkı") }}</li><li><i class="fas fa-check"></i> {{ _("Kalıcı erişim") }}</li><li><i class="fas fa-check"></i> {{ _("Sertifika dahil") }}</li></ul>
+            {% if current_user.is_authenticated %}<form method="POST" action="{{ url_for('upgrade') }}"><input type="hidden" name="plan" value="course"><button class="btn btn-outline btn-block">{{ _("Satın Al") }}</button></form>{% else %}<a href="{{ url_for('register') }}" class="btn btn-outline btn-block">{{ _("Başla") }}</a>{% endif %}
+        </div>
+    </div>
+    <div class="pricing-note"><i class="fas fa-shield-alt"></i> {{ _("Ödemeler güvenle işlenir. İstediğin zaman iptal et.") }} — <em>{{ _("demo: simüle ödeme aktif") }}</em></div>
+</div>
+{% endblock %}

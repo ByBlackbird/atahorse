@@ -1,0 +1,249 @@
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=UTF-8\n"
+
+msgid "Atahorse - AI Eğitim Platformu"
+msgstr "Atahorse - Платформа AI Образования"
+
+msgid "Panel"
+msgstr "Панель"
+
+msgid "Kurs Oluştur"
+msgstr "Создать Курс"
+
+msgid "Çıkış"
+msgstr "Выход"
+
+msgid "Giriş"
+msgstr "Вход"
+
+msgid "Kayıt Ol"
+msgstr "Регистрация"
+
+msgid "Atahorse ile Kişiselleştirilmiş Öğrenmeye Başla"
+msgstr "Начни Персонализированное Обучение с Atahorse"
+
+msgid "AI destekli, güvenilir kaynaklardan oluşturulmuş, öğrenme stiline özel eğitimler."
+msgstr "Обучение с поддержкой ИИ из надежных источников, адаптированное под ваш стиль обучения."
+
+msgid "Hemen Başla"
+msgstr "Начать"
+
+msgid "Giriş Yap"
+msgstr "Войти"
+
+msgid "Nasıl Çalışır?"
+msgstr "Как Это Работает?"
+
+msgid "4 adımda kişiselleştirilmiş eğitim deneyimi"
+msgstr "Персонализированное обучение за 4 шага"
+
+msgid "1. Kayıt Ol"
+msgstr "1. Регистрация"
+
+msgid "Platforma ücretsiz kaydol ve profilini oluştur."
+msgstr "Бесплатно зарегистрируйся и создай профиль."
+
+msgid "2. Öğrenme Stilini Keşfet"
+msgstr "2. Открой Свой Стиль Обучения"
+
+msgid "Beyin lobu analizi ile en etkili öğrenme yöntemini belirle."
+msgstr "Определи наиболее эффективный метод обучения через анализ долей мозга."
+
+msgid "3. AI Kurs Oluştur"
+msgstr "3. Создать AI Курс"
+
+msgid "İstediğin konuyu ve seviyeyi seç, AI sana özel kurs hazırlasın."
+msgstr "Выбери любую тему и уровень, пусть AI подготовит курс специально для тебя."
+
+msgid "4. Sertifika Al"
+msgstr "4. Получить Сертификат"
+
+msgid "Kursu tamamla, başarını sertifika ile taçlandır."
+msgstr "Заверши курс и увенчай свой успех сертификатом."
+
+msgid "Atahorse'a Giriş Yap"
+msgstr "Войти в Atahorse"
+
+msgid "Eğitim yolculuğuna devam et"
+msgstr "Продолжи свое образовательное путешествие"
+
+msgid "Kullanıcı Adı"
+msgstr "Имя Пользователя"
+
+msgid "Şifre"
+msgstr "Пароль"
+
+msgid "Hesabın yok mu?"
+msgstr "Нет аккаунта?"
+
+msgid "Atahorse'a Kayıt Ol"
+msgstr "Зарегистрироваться в Atahorse"
+
+msgid "Kişiselleştirilmiş eğitim deneyimine başla"
+msgstr "Начни персонализированное образовательное путешествие"
+
+msgid "Ad Soyad"
+msgstr "Полное Имя"
+
+msgid "E-posta"
+msgstr "Электронная Почта"
+
+msgid "Zaten hesabın var mı?"
+msgstr "Уже есть аккаунт?"
+
+msgid "Hoş Geldin"
+msgstr "Добро Пожаловать"
+
+msgid "Öğrenme yolculuğuna buradan devam edebilirsin."
+msgstr "Ты можешь продолжить свое образовательное путешествие отсюда."
+
+msgid "Öğrenme Stili"
+msgstr "Стиль Обучения"
+
+msgid "Beyin Lobu"
+msgstr "Доля Мозга"
+
+msgid "AI Durumu"
+msgstr "Статус AI"
+
+msgid "Aktif"
+msgstr "Активен"
+
+msgid "Pasif"
+msgstr "Неактивен"
+
+msgid "Yeni Kurs Oluştur"
+msgstr "Создать Новый Курс"
+
+msgid "Öğrenme Testini Tekrarla"
+msgstr "Пройти Тест Обучения Заново"
+
+msgid "Kurslarım"
+msgstr "Мои Курсы"
+
+msgid "Henüz kursun yok"
+msgstr "Пока нет курсов"
+
+msgid "İlk kişiselleştirilmiş kursunu oluşturmak için yukarıdaki butona tıkla."
+msgstr "Нажми кнопку выше, чтобы создать свой первый персонализированный курс."
+
+msgid "AI Kurs Oluşturucu"
+msgstr "Генератор AI Курсов"
+
+msgid "Öğrenmek istediğin konuyu ve seviyeyi seç, AI sana özel bir kurs hazırlasın."
+msgstr "Выбери тему и уровень, которые хочешь изучить, пусть AI подготовит специальный курс для тебя."
+
+msgid "Ne Öğrenmek İstiyorsun?"
+msgstr "Что Ты Хочешь Изучить?"
+
+msgid "Hangi Seviyede?"
+msgstr "На Каком Уровне?"
+
+msgid "Başlangıç - Yeni başlıyorum"
+msgstr "Начинающий - Только Начинаю"
+
+msgid "Orta - Biraz biliyorum, derinleşmek istiyorum"
+msgstr "Средний - Знаю Немного, Хочу Углубиться"
+
+msgid "İleri - Uzmanlaşmak istiyorum"
+msgstr "Продвинутый - Хочу Стать Экспертом"
+
+msgid "Kursumu Oluştur"
+msgstr "Создать Мой Курс"
+
+msgid "Modüller"
+msgstr "Модули"
+
+msgid "Görevler"
+msgstr "Задания"
+
+msgid "Önceki"
+msgstr "Предыдущий"
+
+msgid "Sonraki"
+msgstr "Следующий"
+
+msgid "Kursu Tamamla"
+msgstr "Завершить Курс"
+
+msgid "Tebrikler! Bu kursu tamamladın."
+msgstr "Поздравляем! Ты завершил этот курс."
+
+msgid "Sertifikamı İndir"
+msgstr "Скачать Мой Сертификат"
+
+msgid "Öğrenme Stili ve Beyin Lobu Analizi"
+msgstr "Анализ Стиля Обучения и Долей Мозга"
+
+msgid "Sana en uygun öğrenme yöntemini belirlemek için bu kısa testi tamamla."
+msgstr "Пройди этот короткий тест, чтобы определить наиболее подходящий метод обучения для тебя."
+
+msgid "Testi Atla"
+msgstr "Пропустить Тест"
+
+msgid "Testi Tamamla"
+msgstr "Завершить Тест"
+
+msgid "Atahorse - AI Destekli Kişiselleştirilmiş Eğitim Platformu"
+msgstr "Atahorse - Платформа Персонализированного Образования с Поддержкой ИИ"
+
+msgid "Güvenilir kaynaklardan, kişiselleştirilmiş eğitim"
+msgstr "Персонализированное образование из надежных источников"
+
+msgid "Tüm zorunlu alanları doldurun."
+msgstr "Пожалуйста, заполните все обязательные поля."
+
+msgid "Bu kullanıcı adı veya e-posta zaten kullanılıyor."
+msgstr "Это имя пользователя или электронная почта уже используются."
+
+msgid "Kayıt başarılı! Şimdi giriş yapabilirsiniz."
+msgstr "Регистрация успешна! Теперь вы можете войти."
+
+msgid "Kullanıcı adı veya şifre hatalı."
+msgstr "Неверное имя пользователя или пароль."
+
+msgid "Çıkış yapıldı."
+msgstr "Выход выполнен."
+
+msgid "Lütfen önce giriş yapın."
+msgstr "Пожалуйста, сначала войдите."
+
+msgid "Öğrenme stiliniz belirlendi!"
+msgstr "Ваш стиль обучения определен!"
+
+msgid "Test atlandı. Varsayılan ayarlar kullanılacak."
+msgstr "Тест пропущен. Будут использованы настройки по умолчанию."
+
+msgid "Lütfen bir konu girin."
+msgstr "Пожалуйста, введите тему."
+
+msgid "AI kursunuzu oluşturuyor... Bu işlem birkaç dakika sürebilir."
+msgstr "Создание вашего AI курса... Это может занять несколько минут."
+
+msgid "Kursunuz başarıyla oluşturuldu!"
+msgstr "Ваш курс успешно создан!"
+
+msgid "Kurs bulunamadı."
+msgstr "Курс не найден."
+
+msgid "Sertifika almak için kursu tamamlamanız gerekiyor."
+msgstr "Для получения сертификата необходимо завершить курс."
+
+msgid "Devam Et"
+msgstr "Продолжить"
+
+msgid "Sertifika"
+msgstr "Сертификат"
+
+msgid "Dil Seçimi"
+msgstr "Выбор Языка"
+
+msgid "Türkçe"
+msgstr "Турецкий"
+
+msgid "English"
+msgstr "Английский"
+
+msgid "Русский"
+msgstr "Русский"

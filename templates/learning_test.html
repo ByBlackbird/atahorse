@@ -1,0 +1,161 @@
+{% extends "base.html" %}
+
+{% block title %}{{ _("Öğrenme Stili Testi") }} - Atahorse{% endblock %}
+
+{% block content %}
+<div class="test-container">
+    <div class="test-header">
+        <h1><i class="fas fa-brain"></i> {{ _("Öğrenme Stili ve Beyin Lobu Analizi") }}</h1>
+        <p>{{ _("Sana en uygun öğrenme yöntemini belirlemek için bu kısa testi tamamla.") }}</p>
+        <p class="test-note">{{ _("Dilersen bu testi") }} <a href="{{ url_for('skip_test') }}" class="skip-link">{{ _("atlayabilirsin") }}</a>.</p>
+    </div>
+
+    <form method="POST" action="{{ url_for('learning_test') }}" class="test-form">
+
+        <div class="test-section">
+            <h2><i class="fas fa-eye"></i> {{ _("Bölüm 1: Öğrenme Stilin") }}</h2>
+            <p class="section-desc">{{ _("Aşağıdaki soruları içgüdüsel olarak cevapla.") }}</p>
+
+            <div class="question-card">
+                <h3>{{ _("Soru 1: Yeni bir konuyu öğrenirken en çok hangi yöntemi tercih edersin?") }}</h3>
+                <div class="options">
+                    <label class="option">
+                        <input type="radio" name="q1" value="visual" required>
+                        <span class="option-text">{{ _("Grafik, diyagram ve görsel materyallerle") }}</span>
+                    </label>
+                    <label class="option">
+                        <input type="radio" name="q1" value="auditory">
+                        <span class="option-text">{{ _("Sesli anlatım, podcast veya tartışma ile") }}</span>
+                    </label>
+                    <label class="option">
+                        <input type="radio" name="q1" value="kinesthetic">
+                        <span class="option-text">{{ _("Pratik yaparak, deneyerek ve hareket ederek") }}</span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="question-card">
+                <h3>{{ _("Soru 2: Bir sunum hazırlarken...") }}</h3>
+                <div class="options">
+                    <label class="option">
+                        <input type="radio" name="q2" value="visual" required>
+                        <span class="option-text">{{ _("Renkli şemalar, infografikler ve görseller kullanırım") }}</span>
+                    </label>
+                    <label class="option">
+                        <input type="radio" name="q2" value="auditory">
+                        <span class="option-text">{{ _("Konuşma metni ve sesli notlar hazırlarım") }}</span>
+                    </label>
+                    <label class="option">
+                        <input type="radio" name="q2" value="kinesthetic">
+                        <span class="option-text">{{ _("Fiziksel model, örnek veya canlandırma yaparım") }}</span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="question-card">
+                <h3>{{ _("Soru 3: Bilgiyi hatırlarken...") }}</h3>
+                <div class="options">
+                    <label class="option">
+                        <input type="radio" name="q3" value="visual" required>
+                        <span class="option-text">{{ _("Gördüğüm resimleri, yazıları hatırlarım") }}</span>
+                    </label>
+                    <label class="option">
+                        <input type="radio" name="q3" value="auditory">
+                        <span class="option-text">{{ _("Duyduğum sesleri, konuşmaları hatırlarım") }}</span>
+                    </label>
+                    <label class="option">
+                        <input type="radio" name="q3" value="kinesthetic">
+                        <span class="option-text">{{ _("Yaptığım hareketleri, deneyimleri hatırlarım") }}</span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="question-card">
+                <h3>{{ _("Soru 4: Boş zamanlarımda...") }}</h3>
+                <div class="options">
+                    <label class="option">
+                        <input type="radio" name="q4" value="visual" required>
+                        <span class="option-text">{{ _("Kitap okurum, film izlerim, resim yaparım") }}</span>
+                    </label>
+                    <label class="option">
+                        <input type="radio" name="q4" value="auditory">
+                        <span class="option-text">{{ _("Müzik dinlerim, sohbet ederim, podcast dinlerim") }}</span>
+                    </label>
+                    <label class="option">
+                        <input type="radio" name="q4" value="kinesthetic">
+                        <span class="option-text">{{ _("Spor yaparım, el işiyle uğraşırım, gezerim") }}</span>
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <div class="test-section">
+            <h2><i class="fas fa-microscope"></i> {{ _("Bölüm 2: Beyin Lobu Tercihin") }}</h2>
+            <p class="section-desc">{{ _("Hangi düşünme tarzı sana daha yakın?") }}</p>
+
+            <div class="question-card">
+                <h3>{{ _("Soru 5: Bir problemle karşılaştığında...") }}</h3>
+                <div class="options">
+                    <label class="option">
+                        <input type="radio" name="b1" value="left" required>
+                        <span class="option-text">{{ _("Mantıksal adımlarla, analiz ederek çözerim") }}</span>
+                    </label>
+                    <label class="option">
+                        <input type="radio" name="b1" value="right">
+                        <span class="option-text">{{ _("Sezgisel olarak, farklı açılardan bakarak çözerim") }}</span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="question-card">
+                <h3>{{ _("Soru 6: Plan yaparken...") }}</h3>
+                <div class="options">
+                    <label class="option">
+                        <input type="radio" name="b2" value="left" required>
+                        <span class="option-text">{{ _("Detaylı liste, takvim ve sıralama yaparım") }}</span>
+                    </label>
+                    <label class="option">
+                        <input type="radio" name="b2" value="right">
+                        <span class="option-text">{{ _("Genel bir çerçeve çizer, esnek kalırım") }}</span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="question-card">
+                <h3>{{ _("Soru 7: Yeni bir fikir değerlendirirken...") }}</h3>
+                <div class="options">
+                    <label class="option">
+                        <input type="radio" name="b3" value="left" required>
+                        <span class="option-text">{{ _("Verilere, kanıtlara ve istatistiklere bakarım") }}</span>
+                    </label>
+                    <label class="option">
+                        <input type="radio" name="b3" value="right">
+                        <span class="option-text">{{ _("İlk izlenimime, yaratıcılığıma güvenirim") }}</span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="question-card">
+                <h3>{{ _("Soru 8: Öğrenirken...") }}</h3>
+                <div class="options">
+                    <label class="option">
+                        <input type="radio" name="b4" value="left" required>
+                        <span class="option-text">{{ _("Adım adım, kurallara uyarak ilerlerim") }}</span>
+                    </label>
+                    <label class="option">
+                        <input type="radio" name="b4" value="right">
+                        <span class="option-text">{{ _("Bütünsel olarak, bağlantılar kurarak ilerlerim") }}</span>
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <div class="test-actions">
+            <button type="submit" class="btn btn-primary btn-lg">
+                <i class="fas fa-check-circle"></i> {{ _("Testi Tamamla") }}
+            </button>
+            <a href="{{ url_for('skip_test') }}" class="btn btn-outline">{{ _("Testi Atla") }}</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

@@ -1,0 +1,249 @@
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=UTF-8\n"
+
+msgid "Atahorse - AI Eğitim Platformu"
+msgstr "Atahorse - AI Eğitim Platformu"
+
+msgid "Panel"
+msgstr "Panel"
+
+msgid "Kurs Oluştur"
+msgstr "Kurs Oluştur"
+
+msgid "Çıkış"
+msgstr "Çıkış"
+
+msgid "Giriş"
+msgstr "Giriş"
+
+msgid "Kayıt Ol"
+msgstr "Kayıt Ol"
+
+msgid "Atahorse ile Kişiselleştirilmiş Öğrenmeye Başla"
+msgstr "Atahorse ile Kişiselleştirilmiş Öğrenmeye Başla"
+
+msgid "AI destekli, güvenilir kaynaklardan oluşturulmuş, öğrenme stiline özel eğitimler."
+msgstr "AI destekli, güvenilir kaynaklardan oluşturulmuş, öğrenme stiline özel eğitimler."
+
+msgid "Hemen Başla"
+msgstr "Hemen Başla"
+
+msgid "Giriş Yap"
+msgstr "Giriş Yap"
+
+msgid "Nasıl Çalışır?"
+msgstr "Nasıl Çalışır?"
+
+msgid "4 adımda kişiselleştirilmiş eğitim deneyimi"
+msgstr "4 adımda kişiselleştirilmiş eğitim deneyimi"
+
+msgid "1. Kayıt Ol"
+msgstr "1. Kayıt Ol"
+
+msgid "Platforma ücretsiz kaydol ve profilini oluştur."
+msgstr "Platforma ücretsiz kaydol ve profilini oluştur."
+
+msgid "2. Öğrenme Stilini Keşfet"
+msgstr "2. Öğrenme Stilini Keşfet"
+
+msgid "Beyin lobu analizi ile en etkili öğrenme yöntemini belirle."
+msgstr "Beyin lobu analizi ile en etkili öğrenme yöntemini belirle."
+
+msgid "3. AI Kurs Oluştur"
+msgstr "3. AI Kurs Oluştur"
+
+msgid "İstediğin konuyu ve seviyeyi seç, AI sana özel kurs hazırlasın."
+msgstr "İstediğin konuyu ve seviyeyi seç, AI sana özel kurs hazırlasın."
+
+msgid "4. Sertifika Al"
+msgstr "4. Sertifika Al"
+
+msgid "Kursu tamamla, başarını sertifika ile taçlandır."
+msgstr "Kursu tamamla, başarını sertifika ile taçlandır."
+
+msgid "Atahorse'a Giriş Yap"
+msgstr "Atahorse'a Giriş Yap"
+
+msgid "Eğitim yolculuğuna devam et"
+msgstr "Eğitim yolculuğuna devam et"
+
+msgid "Kullanıcı Adı"
+msgstr "Kullanıcı Adı"
+
+msgid "Şifre"
+msgstr "Şifre"
+
+msgid "Hesabın yok mu?"
+msgstr "Hesabın yok mu?"
+
+msgid "Atahorse'a Kayıt Ol"
+msgstr "Atahorse'a Kayıt Ol"
+
+msgid "Kişiselleştirilmiş eğitim deneyimine başla"
+msgstr "Kişiselleştirilmiş eğitim deneyimine başla"
+
+msgid "Ad Soyad"
+msgstr "Ad Soyad"
+
+msgid "E-posta"
+msgstr "E-posta"
+
+msgid "Zaten hesabın var mı?"
+msgstr "Zaten hesabın var mı?"
+
+msgid "Hoş Geldin"
+msgstr "Hoş Geldin"
+
+msgid "Öğrenme yolculuğuna buradan devam edebilirsin."
+msgstr "Öğrenme yolculuğuna buradan devam edebilirsin."
+
+msgid "Öğrenme Stili"
+msgstr "Öğrenme Stili"
+
+msgid "Beyin Lobu"
+msgstr "Beyin Lobu"
+
+msgid "AI Durumu"
+msgstr "AI Durumu"
+
+msgid "Aktif"
+msgstr "Aktif"
+
+msgid "Pasif"
+msgstr "Pasif"
+
+msgid "Yeni Kurs Oluştur"
+msgstr "Yeni Kurs Oluştur"
+
+msgid "Öğrenme Testini Tekrarla"
+msgstr "Öğrenme Testini Tekrarla"
+
+msgid "Kurslarım"
+msgstr "Kurslarım"
+
+msgid "Henüz kursun yok"
+msgstr "Henüz kursun yok"
+
+msgid "İlk kişiselleştirilmiş kursunu oluşturmak için yukarıdaki butona tıkla."
+msgstr "İlk kişiselleştirilmiş kursunu oluşturmak için yukarıdaki butona tıkla."
+
+msgid "AI Kurs Oluşturucu"
+msgstr "AI Kurs Oluşturucu"
+
+msgid "Öğrenmek istediğin konuyu ve seviyeyi seç, AI sana özel bir kurs hazırlasın."
+msgstr "Öğrenmek istediğin konuyu ve seviyeyi seç, AI sana özel bir kurs hazırlasın."
+
+msgid "Ne Öğrenmek İstiyorsun?"
+msgstr "Ne Öğrenmek İstiyorsun?"
+
+msgid "Hangi Seviyede?"
+msgstr "Hangi Seviyede?"
+
+msgid "Başlangıç - Yeni başlıyorum"
+msgstr "Başlangıç - Yeni başlıyorum"
+
+msgid "Orta - Biraz biliyorum, derinleşmek istiyorum"
+msgstr "Orta - Biraz biliyorum, derinleşmek istiyorum"
+
+msgid "İleri - Uzmanlaşmak istiyorum"
+msgstr "İleri - Uzmanlaşmak istiyorum"
+
+msgid "Kursumu Oluştur"
+msgstr "Kursumu Oluştur"
+
+msgid "Modüller"
+msgstr "Modüller"
+
+msgid "Görevler"
+msgstr "Görevler"
+
+msgid "Önceki"
+msgstr "Önceki"
+
+msgid "Sonraki"
+msgstr "Sonraki"
+
+msgid "Kursu Tamamla"
+msgstr "Kursu Tamamla"
+
+msgid "Tebrikler! Bu kursu tamamladın."
+msgstr "Tebrikler! Bu kursu tamamladın."
+
+msgid "Sertifikamı İndir"
+msgstr "Sertifikamı İndir"
+
+msgid "Öğrenme Stili ve Beyin Lobu Analizi"
+msgstr "Öğrenme Stili ve Beyin Lobu Analizi"
+
+msgid "Sana en uygun öğrenme yöntemini belirlemek için bu kısa testi tamamla."
+msgstr "Sana en uygun öğrenme yöntemini belirlemek için bu kısa testi tamamla."
+
+msgid "Testi Atla"
+msgstr "Testi Atla"
+
+msgid "Testi Tamamla"
+msgstr "Testi Tamamla"
+
+msgid "Atahorse - AI Destekli Kişiselleştirilmiş Eğitim Platformu"
+msgstr "Atahorse - AI Destekli Kişiselleştirilmiş Eğitim Platformu"
+
+msgid "Güvenilir kaynaklardan, kişiselleştirilmiş eğitim"
+msgstr "Güvenilir kaynaklardan, kişiselleştirilmiş eğitim"
+
+msgid "Tüm zorunlu alanları doldurun."
+msgstr "Tüm zorunlu alanları doldurun."
+
+msgid "Bu kullanıcı adı veya e-posta zaten kullanılıyor."
+msgstr "Bu kullanıcı adı veya e-posta zaten kullanılıyor."
+
+msgid "Kayıt başarılı! Şimdi giriş yapabilirsiniz."
+msgstr "Kayıt başarılı! Şimdi giriş yapabilirsiniz."
+
+msgid "Kullanıcı adı veya şifre hatalı."
+msgstr "Kullanıcı adı veya şifre hatalı."
+
+msgid "Çıkış yapıldı."
+msgstr "Çıkış yapıldı."
+
+msgid "Lütfen önce giriş yapın."
+msgstr "Lütfen önce giriş yapın."
+
+msgid "Öğrenme stiliniz belirlendi!"
+msgstr "Öğrenme stiliniz belirlendi!"
+
+msgid "Test atlandı. Varsayılan ayarlar kullanılacak."
+msgstr "Test atlandı. Varsayılan ayarlar kullanılacak."
+
+msgid "Lütfen bir konu girin."
+msgstr "Lütfen bir konu girin."
+
+msgid "AI kursunuzu oluşturuyor... Bu işlem birkaç dakika sürebilir."
+msgstr "AI kursunuzu oluşturuyor... Bu işlem birkaç dakika sürebilir."
+
+msgid "Kursunuz başarıyla oluşturuldu!"
+msgstr "Kursunuz başarıyla oluşturuldu!"
+
+msgid "Kurs bulunamadı."
+msgstr "Kurs bulunamadı."
+
+msgid "Sertifika almak için kursu tamamlamanız gerekiyor."
+msgstr "Sertifika almak için kursu tamamlamanız gerekiyor."
+
+msgid "Devam Et"
+msgstr "Devam Et"
+
+msgid "Sertifika"
+msgstr "Sertifika"
+
+msgid "Dil Seçimi"
+msgstr "Dil Seçimi"
+
+msgid "Türkçe"
+msgstr "Türkçe"
+
+msgid "English"
+msgstr "English"
+
+msgid "Русский"
+msgstr "Русский"

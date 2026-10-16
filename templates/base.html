@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="{{ get_locale() }}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}{{ _("Atahorse - AI Eğitim Platformu") }}{% endblock %}</title>
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='img/favicon.png') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="{{ url_for('index') }}" class="nav-logo">
+                <img src="{{ url_for('static', filename='img/logo.png') }}" alt="Atahorse" onerror="this.style.display='none';this.nextElementSibling.style.display='inline'">
+                <i class="fas fa-brain" style="display:none"></i>
+                <span>Atahorse</span>
+            </a>
+            <div class="nav-links">
+                {% if current_user.is_authenticated and current_user.is_admin %}
+                    <a href="{{ url_for('admin_dashboard') }}" class="nav-link" style="color:var(--amber)">
+                        <i class="fas fa-crown"></i> {{ tr('admin_panel') }}
+                    </a>
+                {% endif %}
+                {% if current_user.is_authenticated %}
+                    <a href="{{ url_for('dashboard') }}" class="nav-link">
+                        <i class="fas fa-th-large"></i> {{ _("Panel") }}
+                    </a>
+                    <a href="{{ url_for('generate_course') }}" class="nav-link">
+                        <i class="fas fa-magic"></i> {{ _("Kurs Oluştur") }}
+                    </a>
+                    <a href="{{ url_for('logout') }}" class="nav-link nav-link-danger">
+                        <i class="fas fa-sign-out-alt"></i> {{ _("Çıkış") }}
+                    </a>
+                {% else %}
+                    <a href="{{ url_for('login') }}" class="nav-link">{{ _("Giriş") }}</a>
+                    <a href="{{ url_for('register') }}" class="nav-link nav-link-primary">{{ _("Kayıt Ol") }}</a>
+                {% endif %}
+
+                <!-- Dil Seçici -->
+                <div class="lang-selector">
+                    <button class="lang-btn" onclick="toggleLangMenu()">
+                        <i class="fas fa-globe"></i>
+                        <span>{{ get_locale().upper() }}</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <div class="lang-menu" id="langMenu">
+                        <a href="{{ url_for('set_language', lang='tr') }}" class="lang-option {% if get_locale() == 'tr' %}active{% endif %}">
+                            🇹🇷 {{ _("Türkçe") }}
+                        </a>
+                        <a href="{{ url_for('set_language', lang='en') }}" class="lang-option {% if get_locale() == 'en' %}active{% endif %}">
+                            🇬🇧 {{ _("English") }}
+                        </a>
+                        <a href="{{ url_for('set_language', lang='ru') }}" class="lang-option {% if get_locale() == 'ru' %}active{% endif %}">
+                            🇷🇺 {{ _("Русский") }}
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="main-content">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="flash-messages">
+                    {% for category, message in messages %}
+                        <div class="flash flash-{{ category }}">
+                            <i class="fas fa-{% if category == 'success' %}check-circle{% elif category == 'danger' %}exclamation-circle{% elif category == 'warning' %}exclamation-triangle{% else %}info-circle{% endif %}"></i>
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <p><i class="fas fa-brain"></i> {{ _("Atahorse - AI Destekli Kişiselleştirilmiş Eğitim Platformu") }}</p>
+            <p class="footer-sub">{{ _("Güvenilir kaynaklardan, kişiselleştirilmiş eğitim") }}</p>
+        </div>
+    </footer>
+
+    <script>
+        function toggleLangMenu() {
+            document.getElementById('langMenu').classList.toggle('show');
+        }
+        document.addEventListener('click', function(e) {
+            if (!e.target.closest('.lang-selector')) {
+                document.getElementById('langMenu').classList.remove('show');
+            }
+        });
+    </script>
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>
