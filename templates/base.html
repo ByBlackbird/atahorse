@@ -8,13 +8,14 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    {% block extra_css %}{% endblock %}
 </head>
 <body>
     <nav class="navbar">
         <div class="nav-container">
             <a href="{{ url_for('index') }}" class="nav-logo">
                 <img src="{{ url_for('static', filename='img/logo.png') }}" alt="Atahorse" onerror="this.style.display='none';this.nextElementSibling.style.display='inline'">
-                <i class="fas fa-brain" style="display:none"></i>
+                <i class="fas fa-horse" style="display:none"></i>
                 <span>Atahorse</span>
             </a>
             <div class="nav-links">
@@ -80,7 +81,7 @@
 
     <footer class="footer">
         <div class="footer-content">
-            <p><i class="fas fa-brain"></i> {{ _("Atahorse - AI Destekli Kişiselleştirilmiş Eğitim Platformu") }}</p>
+            <p><i class="fas fa-horse"></i> {{ _("Atahorse - AI Destekli Kişiselleştirilmiş Eğitim Platformu") }}</p>
             <p class="footer-sub">{{ _("Güvenilir kaynaklardan, kişiselleştirilmiş eğitim") }}</p>
         </div>
     </footer>
