@@ -72,14 +72,13 @@ body {
 
 /* --- Buton --- */
 .auth-card .btn-primary {
-    background: linear-gradient(135deg, #f5b942, #f59e0b);
-    color: #1a1206;
+    background: #d97706;
+    color: #fff;
     font-weight: 700;
     border: none;
-    box-shadow: 0 8px 30px rgba(245, 185, 66, 0.26);
 }
 .auth-card .btn-primary:hover {
-    background: linear-gradient(135deg, #ffc95e, #f5b942);
+    background: #b45309;
     transform: translateY(-2px);
 }
 
@@ -102,11 +101,11 @@ body {
 .nav-link { color: rgba(255, 255, 255, 0.62); }
 .nav-link:hover { background: rgba(255, 255, 255, 0.08); color: #fff; }
 .nav-link-primary {
-    background: linear-gradient(135deg, #f5b942, #f59e0b);
+    background: #d97706;
     color: #1a1206 !important;
     font-weight: 700;
 }
-.nav-link-primary:hover { background: linear-gradient(135deg, #ffc95e, #f5b942); }
+.nav-link-primary:hover { background: #b45309; }
 .nav-link-danger { color: #f87171; }
 .nav-link-danger:hover { background: rgba(248, 113, 113, 0.12); }
 .lang-btn {

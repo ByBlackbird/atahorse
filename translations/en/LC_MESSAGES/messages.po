@@ -1929,3 +1929,198 @@ msgstr "I re-listen to recordings and my own explanations at intervals (spaced r
 
 msgid "Farklı problem ve soru tiplerini karıştırarak çözerim (araya ekleme)"
 msgstr "I mix different problem and question types (interleaving)"
+
+msgid "Kapat"
+msgstr "Close"
+
+msgid "Dünyanın en büyük açık ansiklopedisi; milyonlarca maddelik güncel bilgi tabanı."
+msgstr "The world's largest open encyclopedia; millions of up-to-date articles."
+
+msgid "Kurs konusunun temel kavramları ve bağlamı buradan çıkarılır"
+msgstr "Core concepts and context of the course topic are drawn from here"
+
+msgid "Her modülün başında konuya giriş çerçevesi sağlar"
+msgstr "Provides an introductory frame at the start of each module"
+
+msgid "Kurs sonunda kullanılan maddeler kaynakçada listelenir"
+msgstr "Articles used are listed in the bibliography at the end of the course"
+
+msgid "Google'ın akademik arama motoru; hakemli makaleler, tezler ve atıf ağları."
+msgstr "Google's academic search engine; peer-reviewed papers, theses and citation networks."
+
+msgid "Derinlemesine modüller için hakemli kaynaklar taranır"
+msgstr "Peer-reviewed sources are scanned for in-depth modules"
+
+msgid "Saygın yayınlara yapılan atıflar içerik güvenilirliğini doğrular"
+msgstr "Citations to reputable publications verify content reliability"
+
+msgid "İleri düzey öğrenicilere akademik derinlik eklenir"
+msgstr "Academic depth is added for advanced learners"
+
+msgid "Fizikten biyolojiye en güncel araştırma ön baskılarının açık arşivi."
+msgstr "Open archive of the latest research preprints, from physics to biology."
+
+msgid "Güncel araştırma bulguları kurs içeriğine yansıtılır"
+msgstr "Current research findings are reflected in course content"
+
+msgid "Teknik ve bilimsel konularda birincil kaynak olarak kullanılır"
+msgstr "Used as a primary source for technical and scientific topics"
+
+msgid "Öğrenilen bilginin bilimsel dayanağı gösterilir"
+msgstr "Shows the scientific basis of what you learn"
+
+msgid "Tıp, biyoloji ve yaşam bilimlerinin saygın uluslararası literatür veri tabanı."
+msgstr "Reputable international literature database for medicine, biology and life sciences."
+
+msgid "Sağlık ve biyoloji kurslarında birincil kaynak görevi görür"
+msgstr "Serves as the primary source for health and biology courses"
+
+msgid "Klinik çalışmalar ve derlemeler özetlenerek sunulur"
+msgstr "Clinical studies and reviews are summarized for you"
+
+msgid "Tıbbi bilgiler güncel yayınlarla doğrulanır"
+msgstr "Medical information is verified against current publications"
+
+msgid "MIT'nin açık ders materyali platformu; üniversite düzeyinde müfredat ve notlar."
+msgstr "MIT's open courseware platform; university-level curriculum and notes."
+
+msgid "Ders yapısı üniversite kalitesinde modüllere göre kurgulanır"
+msgstr "Course structure is built to university-quality modules"
+
+msgid "Örnek problemler ve sınav sorularıyla desteklenir"
+msgstr "Supported by practice problems and exam questions"
+
+msgid "İleri öğreniciler için ek kaynak derinliği sağlar"
+msgstr "Provides extra source depth for advanced learners"
+
+msgid "Bedava dünya standartlarında eğitim misyonuyla hazırlanmış interaktif dersler."
+msgstr "Interactive lessons built with a free world-class education mission."
+
+msgid "Yeni başlayanlar için adım adım açıklama modeli alınır"
+msgstr "A step-by-step explanation model is adopted for beginners"
+
+msgid "Kavramlar örneklerle ve küçük adımlarla öğretilir"
+msgstr "Concepts are taught with examples and small steps"
+
+msgid "Alıştırma mantığı kurs görevlerine uyarlanır"
+msgstr "Practice logic is adapted into course tasks"
+
+msgid "Uluslararası kurumların ve devlet arşivlerinin doğrulanmış resmî belgeleri."
+msgstr "Verified official documents from international institutions and state archives."
+
+msgid "Tarih, coğrafya ve politika konularında birincil kaynak kullanılır"
+msgstr "Used as a primary source for history, geography and politics"
+
+msgid "İstatistik ve raporlar resmî verilerle desteklenir"
+msgstr "Statistics and reports are backed by official data"
+
+msgid "Bilginin resmî dayanağı kaynakçada belirtilir"
+msgstr "The official basis of information is cited in the bibliography"
+
+msgid "Uluslararası ajansların doğrulama süzgecinden geçmiş haber arşivleri."
+msgstr "News archives that have passed the verification filter of international agencies."
+
+msgid "Güncel olaylar ve gelişmeler kurs içeriğine bağlanır"
+msgstr "Current events and developments are tied into course content"
+
+msgid "Öğrenilen bilginin günümüzdeki yansıması gösterilir"
+msgstr "Shows how what you learn is reflected today"
+
+msgid "Haber kaynakları güvenilirlik açısından sınıflandırılır"
+msgstr "News sources are classified by reliability"
+
+msgid "Kursun Oluşturuluyor"
+msgstr "Creating Your Course"
+
+msgid "Yapay zekâ senin için kişisel kursunu hazırlıyor."
+msgstr "The AI is preparing your personal course."
+
+msgid "Bu işlem birkaç dakika sürebilir — sayfayı kapatma ya da yenileme."
+msgstr "This may take a few minutes — don't close or refresh the page."
+
+msgid "Kaynaklar taranıyor…"
+msgstr "Scanning sources…"
+
+msgid "Modüller yazılıyor…"
+msgstr "Writing modules…"
+
+msgid "Öğrenme stiline göre düzenleniyor…"
+msgstr "Adapting to your learning style…"
+
+msgid "Quiz ve görevler hazırlanıyor…"
+msgstr "Preparing quizzes and tasks…"
+
+msgid "Son kontroller yapılıyor…"
+msgstr "Final checks…"
+
+msgid "bölüm"
+msgstr "sections"
+
+msgid "kelime"
+msgstr "words"
+
+msgid "Bu modülde"
+msgstr "In this module"
+
+msgid "Bu modülün sonunda şunları yapabileceksin:"
+msgstr "By the end of this module, you'll be able to:"
+
+msgid "Slayt Paneli"
+msgstr "Slide Panel"
+
+msgid "Slayt tasarımı, yapay zekâ içerik aracı geliştikçe otomatik olarak zenginleşir."
+msgstr "Slide design automatically improves as the AI content tool evolves."
+
+msgid "Bu slayt giriş kapağıdır."
+msgstr "This slide is the title cover."
+
+msgid "Yavaşlat"
+msgstr "Slow down"
+
+msgid "Hızlandır"
+msgstr "Speed up"
+
+msgid "Ses aç / kapat"
+msgstr "Mute / unmute"
+
+msgid "Müzik: Kapalı"
+msgstr "Music: Off"
+
+msgid "Doğa"
+msgstr "Nature"
+
+msgid "Döngü"
+msgstr "Loop"
+
+msgid "Kelimeler sağdan sola akar; ortadaki büyük kelime şu an okunan. Hızını ayarla, arkana müzik seç. Durdurmak için sağ alttaki oyuncuyu kullan."
+msgstr "Words flow right to left; the big center word is the one being read. Adjust your speed, pick background music. Use the mini player at the bottom right to stop."
+
+msgid "Bir düğüm seç ve dallanmasını istediğin soruyu yaz... (örn: fotosentezi detaylandır)"
+msgstr "Select a node and type a question to branch it... (e.g. elaborate on photosynthesis)"
+
+msgid "AI ile Dallandır"
+msgstr "Branch with AI"
+
+msgid "AI dalları eklendi"
+msgstr "AI branches added"
+
+msgid "Yanıt boş geldi, tekrar dene."
+msgstr "Empty response, try again."
+
+msgid "Bu başlığı kendi notlarınla genişlet"
+msgstr "Expand this heading with your own notes"
+
+msgid "Düğüme bastıkça dallanır; kalem, renk ve metin için sol çubuğu kullan. Kurs dışına çıkmak serbest — önemli olan öğrenmek. Her şey otomatik kaydedilir."
+msgstr "Nodes branch as you tap them; use the left toolbar for pen, color and text. Going beyond the course is fine — what matters is learning. Everything saves automatically."
+
+msgid "Düğüme tıkla: varsa dalını aç/kapat, yoksa içerikten otomatik dallanır. Düzenlemek için çift tıkla; sürükleyerek yerini değiştir. + ile yeni düğüm, kalemle çizim, silgiyle temizlik."
+msgstr "Click a node: toggle its branch if it has one, or auto-branch from content. Double-click to edit; drag to move. + adds a node, pen draws, eraser clears."
+
+msgid "Önceki slayt"
+msgstr "Previous slide"
+
+msgid "Sonraki slayt"
+msgstr "Next slide"
+
+msgid "Şu an:"
+msgstr "Current:"

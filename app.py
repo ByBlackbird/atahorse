@@ -1141,6 +1141,16 @@ def assist():
         "schema": base_prompt + "Bu modülün kavramlarını hiyerarşik bir şema (ağaç yapısı, madde işaretleriyle) olarak düzenle. Başlık: modül başlığı.",
         "summary": base_prompt + "Bu modülün 30 saniyede okunabilecek kısa bir özetini yaz (3-4 cümle).",
     }
+    if action == "branch":
+        node = (data.get("node") or "").strip()[:120]
+        question = (data.get("question") or "").strip()[:300]
+        prompts["branch"] = (
+            base_prompt +
+            f"Zihin haritası düğümü: '{node}'\nÖğrencinin sorusu: {question}\n\n"
+            "Bu düğüm için tam 3 kısa dal başlığı üret. Kurallar: her satırda yalnızca bir dal başlığı olsun; "
+            "başlıklar en fazla 6 kelime ve tamamen maddi (isim/ek fiil) olsun; madde işareti, numara veya açıklama yazma; "
+            "ders kapsamına girmese de konu öğrenmeye hizmet ediyorsa kullan. Sadece 3 satır başlık döndür."
+        )
     if action not in prompts:
         return jsonify({"ok": False, "msg": _("Geçersiz istek.")}), 400
     try:

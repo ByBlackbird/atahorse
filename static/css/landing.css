@@ -43,11 +43,11 @@ body {
 .nav-link { color: rgba(255, 255, 255, 0.62); }
 .nav-link:hover { background: rgba(255, 255, 255, 0.08); color: #fff; }
 .nav-link-primary {
-    background: linear-gradient(135deg, #f5b942, #f59e0b);
-    color: #1a1206 !important;
+    background: #d97706;
+    color: #fff !important;
     font-weight: 700;
 }
-.nav-link-primary:hover { background: linear-gradient(135deg, #ffc95e, #f5b942); }
+.nav-link-primary:hover { background: #b45309; }
 .nav-link-danger { color: #f87171; }
 .nav-link-danger:hover { background: rgba(248, 113, 113, 0.12); }
 .lang-btn {
@@ -91,8 +91,8 @@ body {
     height: auto;
     display: block;
     margin: 0 auto 1.8rem;
-    filter: drop-shadow(0 0 24px rgba(245, 185, 66, 0.45));
 }
+
 
 .hero-badge {
     display: inline-flex;
@@ -136,18 +136,16 @@ body {
 .hero .btn-primary,
 .demo-box .btn-primary,
 .features .btn-primary {
-    background: linear-gradient(135deg, #f5b942, #f59e0b);
-    color: #1a1206;
+    background: #d97706;
+    color: #fff;
     font-weight: 700;
     border: none;
-    box-shadow: 0 8px 30px rgba(245, 185, 66, 0.28);
 }
 .hero .btn-primary:hover,
 .demo-box .btn-primary:hover,
 .features .btn-primary:hover {
-    background: linear-gradient(135deg, #ffc95e, #f5b942);
+    background: #b45309;
     transform: translateY(-2px);
-    box-shadow: 0 12px 40px rgba(245, 185, 66, 0.4);
 }
 .hero .btn-outline {
     background: transparent;
@@ -265,10 +263,12 @@ body {
 /* ============ GÜVENİLİR KAYNAKLAR ============ */
 .sources-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+    grid-template-columns: repeat(4, 1fr);
     gap: 1rem;
     margin-top: 2.4rem;
 }
+@media (max-width: 980px) { .sources-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 560px) { .sources-grid { grid-template-columns: 1fr; } }
 .source-chip {
     display: flex;
     align-items: center;
@@ -279,6 +279,7 @@ body {
     border-radius: 14px;
     backdrop-filter: blur(8px);
     transition: transform 0.3s, border-color 0.3s;
+    cursor: pointer;
 }
 .source-chip:hover { transform: translateY(-4px); border-color: rgba(245, 185, 66, 0.45); }
 .source-chip .sc-icon {
@@ -293,6 +294,45 @@ body {
 .source-chip .sc-icon.amber { background: rgba(245, 185, 66, 0.12); color: #f5b942; }
 .source-chip strong { color: #fff; font-size: 0.98rem; display: block; }
 .source-chip small { color: rgba(255, 255, 255, 0.45); font-size: 0.78rem; }
+
+/* Kaynak detay modalı */
+.src-modal {
+    position: fixed; inset: 0; z-index: 200;
+    display: none; align-items: center; justify-content: center;
+    background: rgba(6, 6, 12, 0.82);
+    padding: 1.2rem;
+}
+.src-modal.open { display: flex; }
+.src-modal-card {
+    width: min(520px, 100%);
+    background: #12121c;
+    border: 1px solid rgba(245, 185, 66, 0.35);
+    border-radius: 18px;
+    padding: 1.8rem;
+    color: #fff;
+}
+.src-modal-head { display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem; }
+.src-modal-head .sc-icon {
+    width: 52px; height: 52px; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    border-radius: 13px;
+    background: rgba(91, 45, 230, 0.16);
+    color: #a78bfa; font-size: 1.4rem;
+}
+.src-modal-head .sc-icon.amber { background: rgba(245, 185, 66, 0.12); color: #f5b942; }
+.src-modal-head h3 { margin: 0; font-size: 1.25rem; }
+.src-modal-head small { color: rgba(255, 255, 255, 0.5); font-size: 0.82rem; }
+.src-modal-desc { color: rgba(255, 255, 255, 0.72); font-size: 0.95rem; line-height: 1.65; margin: 0 0 1.1rem; }
+.src-modal-points { list-style: none; margin: 0 0 1.4rem; padding: 0; display: flex; flex-direction: column; gap: 0.55rem; }
+.src-modal-points li { display: flex; gap: 0.6rem; align-items: flex-start; color: rgba(255, 255, 255, 0.8); font-size: 0.88rem; line-height: 1.5; }
+.src-modal-points .ico { color: #f5b942; flex-shrink: 0; margin-top: 0.15rem; }
+.src-modal-close {
+    width: 100%; border: 1px solid rgba(255, 255, 255, 0.18);
+    background: transparent; color: #fff;
+    border-radius: 11px; padding: 0.7rem; font-weight: 700; font-size: 0.92rem;
+    cursor: pointer;
+}
+.src-modal-close:hover { border-color: #f5b942; color: #f5b942; }
 .sources-note {
     margin-top: 1.6rem;
     text-align: center;
@@ -329,7 +369,7 @@ body {
 }
 @keyframes nodePulse {
     0%, 100% { background: rgba(139, 92, 246, 0.2); box-shadow: none; }
-    50% { background: rgba(245, 185, 66, 0.85); border-color: rgba(245, 185, 66, 0.9); box-shadow: 0 0 14px rgba(245, 185, 66, 0.6); }
+    50% { background: rgba(245, 185, 66, 0.85); border-color: rgba(245, 185, 66, 0.9);  }
 }
 .nn-svg { position: absolute; inset: 0; width: 100%; height: 100%; }
 .nn-svg line { stroke: rgba(139, 92, 246, 0.22); stroke-width: 1.5; }
@@ -350,7 +390,7 @@ body {
     width: 40px; height: 40px;
     border-radius: 11px;
     display: flex; align-items: center; justify-content: center;
-    background: linear-gradient(135deg, rgba(91,45,230,.35), rgba(139,92,246,.2));
+    background: rgba(91,45,230,.3);
     color: #c4b5fd;
     font-weight: 800;
 }
@@ -402,7 +442,7 @@ body {
     position: absolute;
     inset: 0 0 auto;
     height: 2px;
-    background: linear-gradient(90deg, transparent, rgba(245, 185, 66, 0.8), rgba(91, 45, 230, 0.8), transparent);
+    background: #f5b942;
     opacity: 0;
     transition: opacity 0.35s;
 }

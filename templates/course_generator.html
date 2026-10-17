@@ -2,7 +2,30 @@
 
 {% block title %}{{ _("Kurs Oluştur") }} - Atahorse{% endblock %}
 
+{% block extra_css %}
+<style>
+.gen-loading{position:fixed;inset:0;z-index:9999;display:none;align-items:center;justify-content:center;background:var(--gray-50,#FDFCF8)}
+.gen-loading.show{display:flex}
+.gen-loading-box{width:min(480px,92%);text-align:center;background:#fff;border:1px solid var(--gray-200,#E5E7EB);border-radius:20px;padding:2.6rem 2.2rem}
+.gen-loading-box h2{font-family:'Cinzel',Georgia,serif;color:#1E1B4B;font-size:1.5rem;margin:0 0 .5rem}
+.gen-loading-sub{color:#77779a;font-size:.92rem;margin:0 0 1.8rem}
+.gen-track{height:12px;background:#EFEDF9;border-radius:999px;overflow:hidden;border:1px solid #E5E1F7}
+.gen-fill{height:100%;width:0;background:#5B2DE6;border-radius:999px;transition:width .6s ease}
+.gen-stage{margin-top:1.1rem;font-size:.9rem;font-weight:700;color:#5B2DE6;min-height:1.4rem}
+.gen-warn{margin-top:1.6rem;font-size:.8rem;color:#9a97b8;display:flex;align-items:center;justify-content:center;gap:.4rem}
+</style>
+{% endblock %}
+
 {% block content %}
+<div class="gen-loading" id="genLoading" aria-live="polite">
+    <div class="gen-loading-box">
+        <h2>{{ _("Kursun Oluşturuluyor") }}</h2>
+        <p class="gen-loading-sub">{{ _("Yapay zekâ senin için kişisel kursunu hazırlıyor.") }}</p>
+        <div class="gen-track"><div class="gen-fill" id="genFill"></div></div>
+        <div class="gen-stage" id="genStage"></div>
+        <div class="gen-warn"><svg class="ico"><use href="#i-clock"/></svg> {{ _("Bu işlem birkaç dakika sürebilir — sayfayı kapatma ya da yenileme.") }}</div>
+    </div>
+</div>
 <div class="generator-container">
     <div class="generator-header">
         <h1><svg class="ico"><use href="#i-magic"/></svg> {{ _("AI Kurs Oluşturucu") }}</h1>
@@ -10,7 +33,7 @@
     </div>
 
     <div class="generator-card">
-        <form method="POST" action="{{ url_for('generate_course') }}" class="generator-form">
+        <form method="POST" action="{{ url_for('generate_course') }}" class="generator-form" id="genForm">
             <div class="form-group">
                 <label for="topic"><svg class="ico"><use href="#i-lightbulb"/></svg> {{ _("Ne Öğrenmek İstiyorsun?") }}</label>
                 <input type="text" id="topic" name="topic" required 
@@ -47,10 +70,39 @@
                 </div>
             </div>
 
-            <button type="submit" class="btn btn-primary btn-lg btn-block">
+            <button type="submit" class="btn btn-primary btn-lg btn-block" id="genBtn">
                 <svg class="ico"><use href="#i-sparkles"/></svg> {{ _("Kursumu Oluştur") }}
             </button>
         </form>
+        <script>
+        (function(){
+            var form=document.getElementById("genForm"),btn=document.getElementById("genBtn"),
+                overlay=document.getElementById("genLoading"),fill=document.getElementById("genFill"),
+                stage=document.getElementById("genStage"),locked=false;
+            var stages=[
+                {{ _("Kaynaklar taranıyor…")|tojson }},
+                {{ _("Modüller yazılıyor…")|tojson }},
+                {{ _("Öğrenme stiline göre düzenleniyor…")|tojson }},
+                {{ _("Quiz ve görevler hazırlanıyor…")|tojson }},
+                {{ _("Son kontroller yapılıyor…")|tojson }}
+            ];
+            form.addEventListener("submit",function(e){
+                if(locked){e.preventDefault();return false;}
+                locked=true;
+                btn.disabled=true;btn.style.opacity=".55";btn.style.cursor="not-allowed";
+                overlay.classList.add("show");
+                var pct=0,si=0;
+                stage.textContent=stages[0];
+                var iv=setInterval(function(){
+                    pct=Math.min(pct+Math.random()*7+2,92);
+                    fill.style.width=pct+"%";
+                    var ns=Math.min(Math.floor(pct/100*stages.length),stages.length-1);
+                    if(ns!==si){si=ns;stage.textContent=stages[si];}
+                },700);
+                window.addEventListener("beforeunload",function(){clearInterval(iv);});
+            });
+        })();
+        </script>
     </div>
 </div>
 {% endblock %}

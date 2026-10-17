@@ -7,6 +7,11 @@
     <link rel="icon" type="image/png" href="{{ url_for('static', filename='img/favicon.png') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&display=swap" rel="stylesheet">
+    <style>
+    /* Logodaki klasik serif (Cinzel) — secici basliklarda */
+    .nav-brand-text,.hero-title,.test-top h1,.mh-hero h1,.mh-section h2,.course-view-info h1,.mm-head h2,.module-panel-header h2{font-family:'Cinzel',Georgia,serif;letter-spacing:.01em}
+    </style>
     <style>
     /* === OGRENME TEMALARI: bilimsel temelli palet gecersiz kilmalari === */
     body[data-theme="sade"]{
@@ -37,7 +42,7 @@
     <nav class="navbar">
         <div class="nav-container">
             <a href="{{ url_for('index') }}" class="nav-logo">
-                <img src="{{ url_for('static', filename='img/horse_navy.png') }}" alt="Atahorse" class="nav-logo-icon" onerror="this.style.display='none';this.nextElementSibling.style.display='inline'">
+                <img src="{{ url_for('static', filename='img/horse_violet.png') }}" alt="Atahorse" class="nav-logo-icon" onerror="this.style.display='none';this.nextElementSibling.style.display='inline'">
                 <svg class="ico" style="display:none"><use href="#i-horse"/></svg>
                 <span class="nav-brand-text">atahorse<em>.ai</em></span>
             </a>

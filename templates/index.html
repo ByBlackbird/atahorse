@@ -54,15 +54,94 @@
         <p>{{ _("Atahorse'ın eriştiği ve her kursa bağladığı kaynaklar — bilgi her zaman izlenebilir") }}</p>
     </div>
     <div class="sources-grid reveal">
-        <div class="source-chip"><div class="sc-icon amber"><svg class="ico"><use href="#i-wikipedia-w"/></svg></div><div><strong>Wikipedia</strong><small>{{ _("Ansiklopedik temel bilgi") }}</small></div></div>
-        <div class="source-chip"><div class="sc-icon"><svg class="ico"><use href="#i-graduation-cap"/></svg></div><div><strong>Google Scholar</strong><small>{{ _("Akademik makaleler ve atıflar") }}</small></div></div>
-        <div class="source-chip"><div class="sc-icon"><svg class="ico"><use href="#i-flask"/></svg></div><div><strong>arXiv</strong><small>{{ _("Açık erişimli bilim ön baskıları") }}</small></div></div>
-        <div class="source-chip"><div class="sc-icon amber"><svg class="ico"><use href="#i-book-medical"/></svg></div><div><strong>PubMed</strong><small>{{ _("Tıp ve yaşam bilimleri literatürü") }}</small></div></div>
-        <div class="source-chip"><div class="sc-icon"><svg class="ico"><use href="#i-building-columns"/></svg></div><div><strong>MIT OpenCourseWare</strong><small>{{ _("Üniversite düzeyinde ders materyali") }}</small></div></div>
-        <div class="source-chip"><div class="sc-icon amber"><svg class="ico"><use href="#i-book-open"/></svg></div><div><strong>Khan Academy</strong><small>{{ _("Adım adım öğretici içerik") }}</small></div></div>
-        <div class="source-chip"><div class="sc-icon"><svg class="ico"><use href="#i-landmark"/></svg></div><div><strong>Resmî Kurum Belgeleri</strong><small>{{ _("UNESCO, OECD ve kamu kayıtları") }}</small></div></div>
-        <div class="source-chip"><div class="sc-icon amber"><svg class="ico"><use href="#i-newspaper"/></svg></div><div><strong>Güvenilir Haber Arşivleri</strong><small>{{ _("Doğrulanmış güncel gelişmeler") }}</small></div></div>
+        <div class="source-chip" data-src="0" role="button" tabindex="0"><div class="sc-icon amber"><svg class="ico"><use href="#i-wikipedia-w"/></svg></div><div><strong>Wikipedia</strong><small>{{ _("Ansiklopedik temel bilgi") }}</small></div></div>
+        <div class="source-chip" data-src="1" role="button" tabindex="0"><div class="sc-icon"><svg class="ico"><use href="#i-graduation-cap"/></svg></div><div><strong>Google Scholar</strong><small>{{ _("Akademik makaleler ve atıflar") }}</small></div></div>
+        <div class="source-chip" data-src="2" role="button" tabindex="0"><div class="sc-icon"><svg class="ico"><use href="#i-flask"/></svg></div><div><strong>arXiv</strong><small>{{ _("Açık erişimli bilim ön baskıları") }}</small></div></div>
+        <div class="source-chip" data-src="3" role="button" tabindex="0"><div class="sc-icon amber"><svg class="ico"><use href="#i-book-medical"/></svg></div><div><strong>PubMed</strong><small>{{ _("Tıp ve yaşam bilimleri literatürü") }}</small></div></div>
+        <div class="source-chip" data-src="4" role="button" tabindex="0"><div class="sc-icon"><svg class="ico"><use href="#i-building-columns"/></svg></div><div><strong>MIT OpenCourseWare</strong><small>{{ _("Üniversite düzeyinde ders materyali") }}</small></div></div>
+        <div class="source-chip" data-src="5" role="button" tabindex="0"><div class="sc-icon amber"><svg class="ico"><use href="#i-book-open"/></svg></div><div><strong>Khan Academy</strong><small>{{ _("Adım adım öğretici içerik") }}</small></div></div>
+        <div class="source-chip" data-src="6" role="button" tabindex="0"><div class="sc-icon"><svg class="ico"><use href="#i-landmark"/></svg></div><div><strong>Resmî Kurum Belgeleri</strong><small>{{ _("UNESCO, OECD ve kamu kayıtları") }}</small></div></div>
+        <div class="source-chip" data-src="7" role="button" tabindex="0"><div class="sc-icon amber"><svg class="ico"><use href="#i-newspaper"/></svg></div><div><strong>Güvenilir Haber Arşivleri</strong><small>{{ _("Doğrulanmış güncel gelişmeler") }}</small></div></div>
     </div>
+    <div class="src-modal" id="srcModal" aria-hidden="true">
+        <div class="src-modal-card" role="dialog" aria-modal="true">
+            <div class="src-modal-head">
+                <div class="sc-icon" id="srcModalIcon"><svg class="ico"><use href="#i-wikipedia-w"/></svg></div>
+                <div><h3 id="srcModalTitle"></h3><small id="srcModalTag"></small></div>
+            </div>
+            <p class="src-modal-desc" id="srcModalDesc"></p>
+            <ul class="src-modal-points" id="srcModalPoints"></ul>
+            <button class="src-modal-close" id="srcModalClose" type="button">{{ _("Kapat") }}</button>
+        </div>
+    </div>
+    <script>
+    (function(){
+        var SRC = [
+            {icon:"#i-wikipedia-w",amber:true,tag:{{ _("Ansiklopedik temel bilgi")|tojson }},
+             desc:{{ _("Dünyanın en büyük açık ansiklopedisi; milyonlarca maddelik güncel bilgi tabanı.")|tojson }},
+             pts:[{{ _("Kurs konusunun temel kavramları ve bağlamı buradan çıkarılır")|tojson }},
+                  {{ _("Her modülün başında konuya giriş çerçevesi sağlar")|tojson }},
+                  {{ _("Kurs sonunda kullanılan maddeler kaynakçada listelenir")|tojson }}]},
+            {icon:"#i-graduation-cap",amber:false,tag:{{ _("Akademik makaleler ve atıflar")|tojson }},
+             desc:{{ _("Google'ın akademik arama motoru; hakemli makaleler, tezler ve atıf ağları.")|tojson }},
+             pts:[{{ _("Derinlemesine modüller için hakemli kaynaklar taranır")|tojson }},
+                  {{ _("Saygın yayınlara yapılan atıflar içerik güvenilirliğini doğrular")|tojson }},
+                  {{ _("İleri düzey öğrenicilere akademik derinlik eklenir")|tojson }}]},
+            {icon:"#i-flask",amber:false,tag:{{ _("Açık erişimli bilim ön baskıları")|tojson }},
+             desc:{{ _("Fizikten biyolojiye en güncel araştırma ön baskılarının açık arşivi.")|tojson }},
+             pts:[{{ _("Güncel araştırma bulguları kurs içeriğine yansıtılır")|tojson }},
+                  {{ _("Teknik ve bilimsel konularda birincil kaynak olarak kullanılır")|tojson }},
+                  {{ _("Öğrenilen bilginin bilimsel dayanağı gösterilir")|tojson }}]},
+            {icon:"#i-book-medical",amber:true,tag:{{ _("Tıp ve yaşam bilimleri literatürü")|tojson }},
+             desc:{{ _("Tıp, biyoloji ve yaşam bilimlerinin saygın uluslararası literatür veri tabanı.")|tojson }},
+             pts:[{{ _("Sağlık ve biyoloji kurslarında birincil kaynak görevi görür")|tojson }},
+                  {{ _("Klinik çalışmalar ve derlemeler özetlenerek sunulur")|tojson }},
+                  {{ _("Tıbbi bilgiler güncel yayınlarla doğrulanır")|tojson }}]},
+            {icon:"#i-building-columns",amber:false,tag:{{ _("Üniversite düzeyinde ders materyali")|tojson }},
+             desc:{{ _("MIT'nin açık ders materyali platformu; üniversite düzeyinde müfredat ve notlar.")|tojson }},
+             pts:[{{ _("Ders yapısı üniversite kalitesinde modüllere göre kurgulanır")|tojson }},
+                  {{ _("Örnek problemler ve sınav sorularıyla desteklenir")|tojson }},
+                  {{ _("İleri öğreniciler için ek kaynak derinliği sağlar")|tojson }}]},
+            {icon:"#i-book-open",amber:true,tag:{{ _("Adım adım öğretici içerik")|tojson }},
+             desc:{{ _("Bedava dünya standartlarında eğitim misyonuyla hazırlanmış interaktif dersler.")|tojson }},
+             pts:[{{ _("Yeni başlayanlar için adım adım açıklama modeli alınır")|tojson }},
+                  {{ _("Kavramlar örneklerle ve küçük adımlarla öğretilir")|tojson }},
+                  {{ _("Alıştırma mantığı kurs görevlerine uyarlanır")|tojson }}]},
+            {icon:"#i-landmark",amber:false,tag:{{ _("UNESCO, OECD ve kamu kayıtları")|tojson }},
+             desc:{{ _("Uluslararası kurumların ve devlet arşivlerinin doğrulanmış resmî belgeleri.")|tojson }},
+             pts:[{{ _("Tarih, coğrafya ve politika konularında birincil kaynak kullanılır")|tojson }},
+                  {{ _("İstatistik ve raporlar resmî verilerle desteklenir")|tojson }},
+                  {{ _("Bilginin resmî dayanağı kaynakçada belirtilir")|tojson }}]},
+            {icon:"#i-newspaper",amber:true,tag:{{ _("Doğrulanmış güncel gelişmeler")|tojson }},
+             desc:{{ _("Uluslararası ajansların doğrulama süzgecinden geçmiş haber arşivleri.")|tojson }},
+             pts:[{{ _("Güncel olaylar ve gelişmeler kurs içeriğine bağlanır")|tojson }},
+                  {{ _("Öğrenilen bilginin günümüzdeki yansıması gösterilir")|tojson }},
+                  {{ _("Haber kaynakları güvenilirlik açısından sınıflandırılır")|tojson }}]}
+        ];
+        var modal=document.getElementById("srcModal");
+        document.querySelectorAll(".source-chip").forEach(function(chip){
+            function open(){
+                var d=SRC[+chip.dataset.src]; if(!d)return;
+                var ic=document.getElementById("srcModalIcon");
+                ic.className="sc-icon"+(d.amber?" amber":"");
+                ic.querySelector("use").setAttribute("href",d.icon);
+                document.getElementById("srcModalTitle").textContent=chip.querySelector("strong").textContent;
+                document.getElementById("srcModalTag").textContent=d.tag;
+                document.getElementById("srcModalDesc").textContent=d.desc;
+                document.getElementById("srcModalPoints").innerHTML=d.pts.map(function(p){
+                    return '<li><svg class="ico"><use href="#i-circle-check"/></svg><span></span></li>';
+                }).join("");
+                Array.prototype.forEach.call(document.querySelectorAll("#srcModalPoints li span"),function(sp,i){sp.textContent=d.pts[i];});
+                modal.classList.add("open");
+            }
+            chip.addEventListener("click",open);
+            chip.addEventListener("keydown",function(e){if(e.key==="Enter"||e.key===" "){e.preventDefault();open();}});
+        });
+        document.getElementById("srcModalClose").addEventListener("click",function(){modal.classList.remove("open");});
+        modal.addEventListener("click",function(e){if(e.target===modal)modal.classList.remove("open");});
+        document.addEventListener("keydown",function(e){if(e.key==="Escape")modal.classList.remove("open");});
+    })();
+    </script>
     <p class="sources-note reveal"><svg class="ico"><use href="#i-circle-check"/></svg> {{ _("Her kursun sonunda taranan tüm kaynaklar şeffaf kaynakça olarak listelenir.") }}</p>
 </section>
 
@@ -149,7 +228,7 @@
 .style-switcher-box { max-width: 920px; margin: 36px auto 0; background: rgba(30,27,75,0.55); border: 1px solid rgba(139,92,246,0.35); border-radius: 20px; padding: 28px; backdrop-filter: blur(12px); }
 .style-tabs { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-bottom: 22px; }
 .style-tab-btn { background: rgba(255,255,255,0.06); color: #cbd5e1; border: 1px solid rgba(255,255,255,0.14); padding: 10px 20px; border-radius: 999px; cursor: pointer; font-weight: 700; font-size: 0.9rem; transition: all .2s; }
-.style-tab-btn.active { background: linear-gradient(135deg, #5B2DE6, #8B5CF6); color: #fff; border-color: #F5B942; box-shadow: 0 6px 20px rgba(91,45,230,0.4); }
+.style-tab-btn.active { background: #5B2DE6; color: #fff; border-color: #F5B942; }
 .style-pane { display: none; text-align: left; background: rgba(6,6,12,0.75); border-radius: 14px; padding: 22px; border: 1px solid rgba(245,185,66,0.22); color:#e2e8f0; }
 .style-pane.active { display: block; }
 .style-pane p { color:#cbd5e1; line-height:1.7; margin:0; }
@@ -160,7 +239,7 @@
 .gorsel-demo svg { display:block; }
 /* İşitsel sekme: mini podcast çalar */
 .pod-mini { display:flex; align-items:center; gap:14px; background:#0b1030; border-radius:14px; padding:14px 18px; }
-.pod-mini-play { width:46px; height:46px; border-radius:50%; border:none; background:linear-gradient(135deg,#F5B942,#D97706); color:#1a1206; cursor:pointer; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+.pod-mini-play { width:46px; height:46px; border-radius:50%; border:none; background:#D97706; color:#fff; cursor:pointer; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
 .pod-mini-play .ico { width:1.25em; height:1.25em; }
 .pod-mini-wave { display:flex; align-items:center; gap:3px; height:32px; flex:1; overflow:hidden; }
 .pod-mini-wave span { width:3px; background:#8B5CF6; border-radius:2px; height:22%; }

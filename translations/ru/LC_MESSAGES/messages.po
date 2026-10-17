@@ -1929,3 +1929,198 @@ msgstr "С интервалами переслушиваю записи и св�
 
 msgid "Farklı problem ve soru tiplerini karıştırarak çözerim (araya ekleme)"
 msgstr "Решаю вперемешку задачи разных типов (перемежаемое обучение)"
+
+msgid "Kapat"
+msgstr "Закрыть"
+
+msgid "Dünyanın en büyük açık ansiklopedisi; milyonlarca maddelik güncel bilgi tabanı."
+msgstr "Крупнейшая в мире открытая энциклопедия; миллионы актуальных статей."
+
+msgid "Kurs konusunun temel kavramları ve bağlamı buradan çıkarılır"
+msgstr "Основные концепции и контекст темы курса берутся отсюда"
+
+msgid "Her modülün başında konuya giriş çerçevesi sağlar"
+msgstr "Даёт вводную рамку в начале каждого модуля"
+
+msgid "Kurs sonunda kullanılan maddeler kaynakçada listelenir"
+msgstr "Использованные статьи перечислены в библиографии в конце курса"
+
+msgid "Google'ın akademik arama motoru; hakemli makaleler, tezler ve atıf ağları."
+msgstr "Академическая поисковая система Google; рецензируемые статьи, диссертации и сети цитирования."
+
+msgid "Derinlemesine modüller için hakemli kaynaklar taranır"
+msgstr "Для углублённых модулей сканируются рецензируемые источники"
+
+msgid "Saygın yayınlara yapılan atıflar içerik güvenilirliğini doğrular"
+msgstr "Ссылки на авторитетные издания подтверждают надёжность содержания"
+
+msgid "İleri düzey öğrenicilere akademik derinlik eklenir"
+msgstr "Для продвинутых учеников добавляется академическая глубина"
+
+msgid "Fizikten biyolojiye en güncel araştırma ön baskılarının açık arşivi."
+msgstr "Открытый архив свежих научных препринтов — от физики до биологии."
+
+msgid "Güncel araştırma bulguları kurs içeriğine yansıtılır"
+msgstr "Актуальные исследования отражаются в содержании курса"
+
+msgid "Teknik ve bilimsel konularda birincil kaynak olarak kullanılır"
+msgstr "Используется как первоисточник по техническим и научным темам"
+
+msgid "Öğrenilen bilginin bilimsel dayanağı gösterilir"
+msgstr "Показывает научную основу изучаемого материала"
+
+msgid "Tıp, biyoloji ve yaşam bilimlerinin saygın uluslararası literatür veri tabanı."
+msgstr "Авторитетная международная база литературы по медицине, биологии и наукам о жизни."
+
+msgid "Sağlık ve biyoloji kurslarında birincil kaynak görevi görür"
+msgstr "Служит первоисточником для курсов по здоровью и биологии"
+
+msgid "Klinik çalışmalar ve derlemeler özetlenerek sunulur"
+msgstr "Клинические исследования и обзоры представлены в виде кратких изложений"
+
+msgid "Tıbbi bilgiler güncel yayınlarla doğrulanır"
+msgstr "Медицинская информация проверяется по актуальным публикациям"
+
+msgid "MIT'nin açık ders materyali platformu; üniversite düzeyinde müfredat ve notlar."
+msgstr "Платформа открытых материалов MIT; университетская программа и конспекты."
+
+msgid "Ders yapısı üniversite kalitesinde modüllere göre kurgulanır"
+msgstr "Структура курса выстроена по модулям университетского уровня"
+
+msgid "Örnek problemler ve sınav sorularıyla desteklenir"
+msgstr "Подкреплена практическими задачами и экзаменационными вопросами"
+
+msgid "İleri öğreniciler için ek kaynak derinliği sağlar"
+msgstr "Даёт дополнительную глубину источников для продвинутых учеников"
+
+msgid "Bedava dünya standartlarında eğitim misyonuyla hazırlanmış interaktif dersler."
+msgstr "Интерактивные уроки, созданные с миссией бесплатного образования мирового уровня."
+
+msgid "Yeni başlayanlar için adım adım açıklama modeli alınır"
+msgstr "Для начинающих используется модель пошаговых объяснений"
+
+msgid "Kavramlar örneklerle ve küçük adımlarla öğretilir"
+msgstr "Концепции преподаются на примерах и небольшими шагами"
+
+msgid "Alıştırma mantığı kurs görevlerine uyarlanır"
+msgstr "Логика тренировок адаптирована в задания курса"
+
+msgid "Uluslararası kurumların ve devlet arşivlerinin doğrulanmış resmî belgeleri."
+msgstr "Проверенные официальные документы международных органов и государственных архивов."
+
+msgid "Tarih, coğrafya ve politika konularında birincil kaynak kullanılır"
+msgstr "Используется как первоисточник по истории, географии и политике"
+
+msgid "İstatistik ve raporlar resmî verilerle desteklenir"
+msgstr "Статистика и отчёты подкреплены официальными данными"
+
+msgid "Bilginin resmî dayanağı kaynakçada belirtilir"
+msgstr "Официальная основа информации указана в библиографии"
+
+msgid "Uluslararası ajansların doğrulama süzgecinden geçmiş haber arşivleri."
+msgstr "Новостные архивы, прошедшие проверку международных агентств."
+
+msgid "Güncel olaylar ve gelişmeler kurs içeriğine bağlanır"
+msgstr "Актуальные события и тенденции связываются с содержанием курса"
+
+msgid "Öğrenilen bilginin günümüzdeki yansıması gösterilir"
+msgstr "Показывает, как изученное проявляется сегодня"
+
+msgid "Haber kaynakları güvenilirlik açısından sınıflandırılır"
+msgstr "Новостные источники классифицируются по надёжности"
+
+msgid "Kursun Oluşturuluyor"
+msgstr "Создаём ваш курс"
+
+msgid "Yapay zekâ senin için kişisel kursunu hazırlıyor."
+msgstr "ИИ готовит ваш персональный курс."
+
+msgid "Bu işlem birkaç dakika sürebilir — sayfayı kapatma ya da yenileme."
+msgstr "Это может занять несколько минут — не закрывайте и не обновляйте страницу."
+
+msgid "Kaynaklar taranıyor…"
+msgstr "Сканируем источники…"
+
+msgid "Modüller yazılıyor…"
+msgstr "Пишем модули…"
+
+msgid "Öğrenme stiline göre düzenleniyor…"
+msgstr "Адаптируем под ваш стиль обучения…"
+
+msgid "Quiz ve görevler hazırlanıyor…"
+msgstr "Готовим викторины и задания…"
+
+msgid "Son kontroller yapılıyor…"
+msgstr "Финальные проверки…"
+
+msgid "bölüm"
+msgstr "разделов"
+
+msgid "kelime"
+msgstr "слов"
+
+msgid "Bu modülde"
+msgstr "В этом модуле"
+
+msgid "Bu modülün sonunda şunları yapabileceksin:"
+msgstr "К концу этого модуля вы сможете:"
+
+msgid "Slayt Paneli"
+msgstr "Панель слайдов"
+
+msgid "Slayt tasarımı, yapay zekâ içerik aracı geliştikçe otomatik olarak zenginleşir."
+msgstr "Дизайн слайдов автоматически улучшается по мере развития ИИ-инструмента."
+
+msgid "Bu slayt giriş kapağıdır."
+msgstr "Этот слайд — титульный."
+
+msgid "Yavaşlat"
+msgstr "Медленнее"
+
+msgid "Hızlandır"
+msgstr "Быстрее"
+
+msgid "Ses aç / kapat"
+msgstr "Вкл/выкл звук"
+
+msgid "Müzik: Kapalı"
+msgstr "Музыка: выкл"
+
+msgid "Doğa"
+msgstr "Природа"
+
+msgid "Döngü"
+msgstr "Повтор"
+
+msgid "Kelimeler sağdan sola akar; ortadaki büyük kelime şu an okunan. Hızını ayarla, arkana müzik seç. Durdurmak için sağ alttaki oyuncuyu kullan."
+msgstr "Слова текут справа налево; большое центральное слово — читаемое сейчас. Настройте скорость и музыку. Остановить можно мини-плеером справа внизу."
+
+msgid "Bir düğüm seç ve dallanmasını istediğin soruyu yaz... (örn: fotosentezi detaylandır)"
+msgstr "Выберите узел и введите вопрос для ветвления... (напр. расскажи подробнее о фотосинтезе)"
+
+msgid "AI ile Dallandır"
+msgstr "Ветвить с ИИ"
+
+msgid "AI dalları eklendi"
+msgstr "Ветки ИИ добавлены"
+
+msgid "Yanıt boş geldi, tekrar dene."
+msgstr "Пустой ответ, попробуйте снова."
+
+msgid "Bu başlığı kendi notlarınla genişlet"
+msgstr "Расширьте этот пункт собственными заметками"
+
+msgid "Düğüme bastıkça dallanır; kalem, renk ve metin için sol çubuğu kullan. Kurs dışına çıkmak serbest — önemli olan öğrenmek. Her şey otomatik kaydedilir."
+msgstr "Узлы ветвятся по нажатию; для пера, цвета и текста используйте левую панель. Выход за рамки курса — это нормально, главное — учиться. Всё сохраняется автоматически."
+
+msgid "Düğüme tıkla: varsa dalını aç/kapat, yoksa içerikten otomatik dallanır. Düzenlemek için çift tıkla; sürükleyerek yerini değiştir. + ile yeni düğüm, kalemle çizim, silgiyle temizlik."
+msgstr "Нажмите на узел: откройте/скройте ветку или создайте её из содержания. Двойной щелчок — редактирование, перетаскивание — перемещение. + добавляет узел, перо рисует, ластик стирает."
+
+msgid "Önceki slayt"
+msgstr "Предыдущий слайд"
+
+msgid "Sonraki slayt"
+msgstr "Следующий слайд"
+
+msgid "Şu an:"
+msgstr "Сейчас:"

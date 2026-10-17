@@ -18,7 +18,7 @@ body.test-page footer { background: #0b1030; }
 .test-top .test-logo {
     width: 56px; height: 56px; border-radius: 50%;
     margin-bottom: 14px;
-    box-shadow: 0 8px 24px rgba(30, 64, 175, .25);
+    
 }
 .test-top h1 {
     font-size: 1.55rem; font-weight: 800; color: #16307a;
@@ -31,7 +31,7 @@ body.test-page footer { background: #0b1030; }
 /* Dolma formu */
 .test-progress-wrap {
     background: #fff; border-radius: 16px;
-    box-shadow: 0 4px 20px rgba(30, 64, 175, .08);
+    
     padding: 16px 20px 18px; margin-bottom: 22px;
 }
 .test-progress-label {
@@ -46,14 +46,14 @@ body.test-page footer { background: #0b1030; }
 }
 .test-progress-bar {
     height: 100%; width: 0%; border-radius: 999px;
-    background: linear-gradient(90deg, #2563eb, #60a5fa);
+    background: #2563eb;
     transition: width .45s cubic-bezier(.22,1,.36,1);
 }
 
 /* Soru kartları */
 .test-card {
     background: #fff; border-radius: 20px;
-    box-shadow: 0 10px 34px rgba(30, 64, 175, .10);
+    
     padding: 40px 44px;
     animation: testSlide .35s cubic-bezier(.22,1,.36,1);
 }
@@ -81,7 +81,7 @@ body.test-page footer { background: #0b1030; }
     transition: border-color .18s, background .18s, transform .18s;
 }
 .test-opt:hover { border-color: #93b4ff; background: #f6f9ff; transform: translateY(-1px); }
-.test-opt.selected { border-color: #2563eb; background: #eef4ff; box-shadow: 0 4px 14px rgba(37, 99, 235, .12); }
+.test-opt.selected { border-color: #2563eb; background: #eef4ff; }
 .test-opt input { display: none; }
 .test-opt .opt-dot {
     flex: 0 0 22px; width: 22px; height: 22px; border-radius: 50%;
@@ -104,11 +104,11 @@ body.test-page footer { background: #0b1030; }
     padding: 14px 30px; transition: all .18s;
     display: inline-flex; align-items: center; gap: 8px;
 }
-.btn-test-primary { background: #2563eb; color: #fff; box-shadow: 0 6px 18px rgba(37,99,235,.30); }
+.btn-test-primary { background: #2563eb; color: #fff; }
 .btn-test-primary:hover { background: #1d4ed8; transform: translateY(-1px); }
 .btn-test-ghost { background: transparent; color: #6b7bb5; }
 .btn-test-ghost:hover { color: #1e40af; }
-.btn-test-final { background: #0f9d58; box-shadow: 0 6px 18px rgba(15,157,88,.30); }
+.btn-test-final { background: #0f9d58; }
 .btn-test-final:hover { background: #0b7a43; }
 .test-skip {
     text-align: center; margin-top: 22px;
