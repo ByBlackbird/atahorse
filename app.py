@@ -112,6 +112,50 @@ def tr(key):
 def inject_tr():
     return dict(tr=tr)
 
+# === OGRENME TEMALARI (bilimsel temelli) ===
+# Renk, ogrenme stiline gore bilissel yuk ve kodlama arastirmalarina gore ayarlanir;
+# kullanici istedigi temayi secebilir ("auto" = stilime gore otomatik).
+THEMES = {
+    "auto":    {"style": "karma",      "name": "Otomatik (Stilime Göre)",
+                "desc": "Öğrenme stilini testten çıkan sonuca göre otomatik eşleştirir. Stilin değişirse tema da onunla birlikte değişir."},
+    "sade":    {"style": "isitsel",    "name": "Sade & Sakin",
+                "desc": "İşitsel öğrenenler için: görsel sadelik dışsal bilişsel yükü azaltır (Sweller), dikkat kulağa ve iç sesine yönelir. Az renk, çok boşluk."},
+    "canli":   {"style": "gorsel",     "name": "Canlı & Görsel",
+                "desc": "Görsel öğrenenler için: renk kodlama ve güçlü kontrast, bilginin uzun süreli belleğe kodlanmasını destekler."},
+    "dinamik": {"style": "kinestetik", "name": "Dinamik & Enerjik",
+                "desc": "Kinestetik öğrenenler için: yüksek enerji ve oyunlaştırma hissi, aktif denemeyi (Kolb) ve motivasyonu destekler."},
+    "dengeli": {"style": "karma",      "name": "Dengeli",
+                "desc": "Karma profiller için bilimsel varsayılan: nötr zemin üzerinde dengeli vurgular, hiçbir kanalı yormaz."},
+}
+
+def effective_theme(user):
+    """Kullanicinin goruntulenecek temasini dondurur. 'auto'/bos ise stile gore esler."""
+    t = (getattr(user, "theme", None) or "").strip()
+    if t and t != "auto" and t in THEMES:
+        return t
+    return {"gorsel": "canli", "isitsel": "sade", "kinestetik": "dinamik"}.get(
+        getattr(user, "learning_style", "karma") or "karma", "dengeli")
+
+@app.context_processor
+def inject_theme():
+    if current_user.is_authenticated:
+        return dict(theme=effective_theme(current_user), themes=THEMES,
+                    user_theme=(current_user.theme or "auto"))
+    return dict(theme="dengeli", themes=THEMES, user_theme="auto")
+
+@app.route("/theme", methods=["POST"])
+@login_required
+def set_theme():
+    t = (request.form.get("theme") or "").strip()
+    if t not in THEMES:
+        flash(_("Geçersiz tema."), "error")
+        return redirect(request.referrer or url_for("index"))
+    conn = get_db(); c = conn.cursor()
+    c.execute("UPDATE users SET theme=? WHERE id=?", (t, current_user.id))
+    conn.commit(); conn.close()
+    flash(_("Öğrenme teman güncellendi."), "success")
+    return redirect(request.referrer or url_for("index"))
+
 # === LOGIN ===
 login_manager = LoginManager()
 login_manager.init_app(app)
@@ -214,6 +258,7 @@ def init_db():
         "ALTER TABLE courses ADD COLUMN ai_approved INTEGER DEFAULT 0",
         "ALTER TABLE users ADD COLUMN streak INTEGER DEFAULT 0",
         "ALTER TABLE users ADD COLUMN last_active TEXT",
+        "ALTER TABLE users ADD COLUMN theme TEXT",
     ]:
         try:
             c.execute(mig)
@@ -234,11 +279,12 @@ def init_db():
     print("✅ Veritabanı başlatıldı.")
 
 class User(UserMixin):
-    def __init__(self, id, username, email, full_name, learning_style, brain_lobe, plan, is_admin, courses_used, onboarded):
+    def __init__(self, id, username, email, full_name, learning_style, brain_lobe, plan, is_admin, courses_used, onboarded, theme=None):
         self.id = id; self.username = username; self.email = email
         self.full_name = full_name; self.learning_style = learning_style
         self.brain_lobe = brain_lobe; self.plan = plan; self.is_admin = is_admin
         self.courses_used = courses_used; self.onboarded = onboarded
+        self.theme = theme
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -251,7 +297,7 @@ def load_user(user_id):
                     u["learning_style"] or "karma", u["brain_lobe"] or "karma",
                     u["plan"] or "free", u["is_admin"] or 0,
                     u["courses_used"] if u["courses_used"] is not None else 0,
-                    u["onboarded"] or 0)
+                    u["onboarded"] or 0, u["theme"] if "theme" in u.keys() else None)
     return None
 
 def admin_required(f):
@@ -316,7 +362,7 @@ def generate_course_content(topic, level, learning_style, brain_lobe, lang='tr')
     sources_text = "\n".join([f"- {s['title']}: {s['body'][:200]}" for s in web_sources[:5]])
 
     system_prompt = f"""Sen Atahorse platformunun uzman AI eğitim asistanısın.
-Kullanıcının öğrenme stiline uygun, kapsamlı eğitim içeriği oluşturuyorsun.
+Kullanıcının öğrenme stiline uygun, KANITA DAYALI (bilimsel öğrenme araştırmalarına uygun) eğitim içeriği oluşturuyorsun.
 İçerik {content_lang} dilinde olmalı. JSON formatında yanıt ver."""
 
     prompt = f"""KONU: {topic} | SEVİYE: {level} | STİL: {learning_style} | LOB: {brain_lobe} | DİL: {content_lang}
@@ -330,12 +376,21 @@ WEB KAYNAKLARI:
     "description": "2-3 cümlelik açıklama",
     "modules": [
         {{"title": "Modül başlığı",
-         "content": "Detaylı konu anlatımı. Her bölüm için slayt halinde paragraflar kullan. ## ile alt başlıklar oluştur. Örnekler, listeler ekle.",
+         "content": "Detaylı konu anlatımı. ## ile alt başlıklar oluştur; paragraflar, örnekler ve listeler kullan.",
          "duration": "45 dk",
          "tasks": ["görev 1", "görev 2", "görev 3"]}}
     ]
 }}
-En az 5 modül, her modül zengin içerikli olsun. Görsel öğrenenler için içeriği yapılandırılmış bölümlere ayır."""
+
+BİLİMSEL ÖĞRENME TASARIMI — içeriği üretirken şu kurallara kesinlikle uy:
+1. DİKKAT ÇENGELİ: Her modülün content alanı, merak uyandıran kısa bir soru veya çarpıcı bir gerçekle başlasın (duyusal kayıt → dikkat geçişi).
+2. ÇALIŞMA BELLEĞİ SINIRI: Çalışma belleği aynı anda 4-7 parça bilgi tutar (Bilişsel Yük Teorisi). Her ## alt başlığı altında en fazla 3-4 kısa paragraf olsun; gereksiz tekrar ve uzun cümlelerden kaçın.
+3. AYRINTILANDIRMA: Her modülde en az bir "Neden?" veya "Nasıl?" sorusunu yanıtlayan bir bölüm olsun (elaborative interrogation — yeni bilgiyi eski bilgiyle bağlar).
+4. AKTİF GERİ ÇAĞIRMA: Her modülün sonuna "Kendini Sına:" başlığı altında 2-3 soru ekle (cevaplarını hemen altında tek cümleyle ver).
+5. ARAYA EKLEME: Modüller birbirini referans göstersin; tasks listesinde biri önceki modülle karışık pratik olsun.
+6. ARALIKLI TEKRAR: Son modül, tüm kursun ana hatlarını listeleyen kısa bir tekrar özetiyle bitsin.
+7. STİL UYUMU: Görsel stil → şemalar/listeler ağırlıklı; işitsel stil → akıcı anlatım ve ritim; kinestetik stil → adım adım uygulama talimatları.
+En az 5 modül üret."""
 
     response = ollama_chat(prompt, system_prompt=system_prompt)
     if response:
@@ -387,6 +442,9 @@ def generate_quiz(course, modules, lang='tr'):
         f"Kurs: {course['title']}\nKonu: {course['topic']}\nSeviye: {course['level']}\n"
         f"Moduller: {', '.join(module_titles)}\n\n"
         "Bu kurs icin 5 coktan secmeli degerlendirme sorusu uret. "
+        "Sorular AKTIF GERI CAAGIRMA (active recall) prensibine uygun olsun: "
+        "ogrencinin bilgiyi zihinden cagirmasini gerektirsin; acik uclu dusundurup seceneklerle dogrulasin. "
+        "Dogrudan tanim ezberi yerine uygulama ve kavrama sorulari agirlikli olsun. "
         "Her sorunun 4 secenegi ve dogru cevabin indeksi (0-3) olsun. "
         "Yalnizca gecerli JSON dondur, format:\n"
         '[{"question":"...","options":["a","b","c","d"],"correct_index":0}, ...]'
@@ -798,7 +856,7 @@ def login():
                             u["learning_style"] or "karma", u["brain_lobe"] or "karma",
                             u["plan"] or "free", u["is_admin"] or 0,
                             u["courses_used"] if u["courses_used"] is not None else 0,
-                            u["onboarded"] or 0))
+                            u["onboarded"] or 0, u["theme"] if "theme" in u.keys() else None))
             touch_streak(u["id"])
             # Onboarding: ilk giris → analiz
             if not u["onboarded"]:

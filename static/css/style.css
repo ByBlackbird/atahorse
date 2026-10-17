@@ -81,8 +81,7 @@ body {
     height: 38px;
     width: auto;
     display: block;
-    border-radius: 50%;
-    filter: drop-shadow(0 0 8px rgba(245, 185, 66, 0.3));
+    filter: drop-shadow(0 0 6px rgba(91, 45, 230, 0.25));
 }
 .nav-brand-text {
     font-size: 1.35rem;

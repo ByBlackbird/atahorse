@@ -1704,3 +1704,228 @@ msgstr "Create Your First Course"
 msgid "İlk kişisel kursunu saniyeler içinde oluştur. AI, öğrenme profiline göre müfredatı yazar."
 msgstr "Create your first personal course in seconds. AI writes the curriculum based on your learning profile."
 
+
+msgid "Bu modülün canlı kavram ağacı — içerikten otomatik çizilir. Kendi haritanı sayfanın altından düzenleyebilirsin."
+msgstr "Live concept map of this module — drawn automatically from the content. You can edit your own map at the bottom of the page."
+
+msgid "Durdur"
+msgstr "Stop"
+
+msgid "Düğüm eklemek için + seçip tuvalde yere tıkla; kalemle serbest çiz; silgiyle çizimi sil. Düğümü düzenlemek için üzerine tıkla."
+msgstr "Pick + and click on the canvas to add a node; draw freely with the pen; erase drawings with the eraser. Click a node to edit it."
+
+msgid "Metin cümle cümle akar; okunan yer vurgulanır. Ses çalarken sayfada gezinebilirsin — durdurmak için sağ alttaki oyuncuyu kullan."
+msgstr "The text flows sentence by sentence; the spoken part is highlighted. You can browse the page while audio plays — use the mini player at the bottom right to stop it."
+
+msgid "Oynat / Duraklat"
+msgstr "Play / Pause"
+
+msgid "Ses notu veya dosyanı buradan yükle; AI incelemesi değerlendirme sayfasında yapılır."
+msgstr "Upload your voice note or file here; the AI review happens on the assessment page."
+
+msgid "Sol alet çubuğundan kalem, renk ve metin seç; düğümleri sürükle, kendi çizimlerini ekle — her şey otomatik kaydedilir."
+msgstr "Pick pen, color and text from the left toolbar; drag nodes, add your own drawings — everything saves automatically."
+
+msgid "Bağlantı hatası."
+msgstr "Connection error."
+
+msgid "Bir sorun oluştu, tekrar dene."
+msgstr "Something went wrong, try again."
+
+msgid "Bu modül için slayt içeriği henüz üretilmedi."
+msgstr "Slide content for this module has not been generated yet."
+
+msgid "Doğru! Harikasın."
+msgstr "Correct! Well done."
+
+msgid "Duraklat / Devam"
+msgstr "Pause / Resume"
+
+msgid "Düğüm metni:"
+msgstr "Node text:"
+
+msgid "Kalem"
+msgstr "Pen"
+
+msgid "Metin Ekle"
+msgstr "Add Text"
+
+msgid "Sertifika için önce değerlendirme sayfasındaki AI onayından geçmelisin."
+msgstr "For the certificate you must first pass the AI approval on the assessment page."
+
+msgid "Sesli Özet"
+msgstr "Audio Summary"
+
+msgid "Seç / Sürükle"
+msgstr "Select / Drag"
+
+msgid "Silgi"
+msgstr "Eraser"
+
+msgid "Temizle"
+msgstr "Clear"
+
+msgid "Yanlış — doğru cevap işaretlendi, bir daha dene."
+msgstr "Wrong — the correct answer is marked, try again."
+
+msgid "Yanıt alınamadı."
+msgstr "No response received."
+
+msgid "Yeni düğüm"
+msgstr "New node"
+
+msgid "Önce tüm modül görevlerini tamamla, sonra kursu bitirebilirsin."
+msgstr "Complete all module tasks first, then you can finish the course."
+
+msgid "Önce önceki modülün görevlerini tamamla."
+msgstr "Complete the previous module's tasks first."
+
+msgid "İçerik hazırlanıyor..."
+msgstr "Content is being prepared..."
+
+msgid "Otomatik (Stilime Göre)"
+msgstr "Automatic (Based on My Style)"
+
+msgid "Sade & Sakin"
+msgstr "Calm & Minimal"
+
+msgid "Canlı & Görsel"
+msgstr "Vivid & Visual"
+
+msgid "Dinamik & Enerjik"
+msgstr "Dynamic & Energetic"
+
+msgid "Dengeli"
+msgstr "Balanced"
+
+msgid "Öğrenme stilini testten çıkan sonuca göre otomatik eşleştirir. Stilin değişirse tema da onunla birlikte değişir."
+msgstr "Automatically matches your learning test result. When your style changes, the theme changes with it."
+
+msgid "İşitsel öğrenenler için: görsel sadelik dışsal bilişsel yükü azaltır (Sweller), dikkat kulağa ve iç sesine yönelir. Az renk, çok boşluk."
+msgstr "For auditory learners: visual simplicity reduces extraneous cognitive load (Sweller); attention shifts to the ear and inner voice. Few colors, lots of whitespace."
+
+msgid "Görsel öğrenenler için: renk kodlama ve güçlü kontrast, bilginin uzun süreli belleğe kodlanmasını destekler."
+msgstr "For visual learners: color coding and strong contrast support encoding information into long-term memory."
+
+msgid "Kinestetik öğrenenler için: yüksek enerji ve oyunlaştırma hissi, aktif denemeyi (Kolb) ve motivasyonu destekler."
+msgstr "For kinesthetic learners: high energy and a gamified feel support active experimentation (Kolb) and motivation."
+
+msgid "Karma profiller için bilimsel varsayılan: nötr zemin üzerinde dengeli vurgular, hiçbir kanalı yormaz."
+msgstr "Scientific default for mixed profiles: balanced accents on a neutral ground; no channel is strained."
+
+msgid "Geçersiz tema."
+msgstr "Invalid theme."
+
+msgid "Öğrenme teman güncellendi."
+msgstr "Your learning theme has been updated."
+
+msgid "Öğrenme Temam"
+msgstr "My Learning Theme"
+
+msgid "Tema şu an öğrenme stiline göre otomatik seçili:"
+msgstr "The theme is currently picked automatically based on your learning style:"
+
+msgid "Şu anki teman:"
+msgstr "Your current theme:"
+
+msgid "istersen aşağıdan değiştirebilirsin."
+msgstr "you can change it below if you like."
+
+msgid "Tüm Stillere Uyar"
+msgstr "Fits All Styles"
+
+msgid "İşitsel İçin"
+msgstr "For Auditory"
+
+msgid "Görsel İçin"
+msgstr "For Visual"
+
+msgid "Kinestetik İçin"
+msgstr "For Kinesthetic"
+
+msgid "Karma İçin"
+msgstr "For Mixed"
+
+msgid "Bu Temayı Kullan"
+msgstr "Use This Theme"
+
+msgid "Şu Anki Tema"
+msgstr "Current Theme"
+
+msgid "Öğrenme temanı değiştir"
+msgstr "Change your learning theme"
+
+msgid "Bilgi İşleme Kuramı ve Kolb'un öğrenme döngüsü temelinde hazırlanmış 12 soruluk kısa analiz."
+msgstr "A 12-question quick analysis built on the Information Processing Theory and Kolb's learning cycle."
+
+msgid "Soru 1: Yeni bir konuya başlarken dikkatin ilk olarak neyi yakalar? (Duyusal kayıt → dikkat süzgeci)"
+msgstr "Q1: When you start a new topic, what catches your attention first? (Sensory register → attention filter)"
+
+msgid "Şemalar, diyagramlar ve düzenli görsel yapı"
+msgstr "Diagrams, charts and well-structured visual layout"
+
+msgid "Anlatımın ses tonu, ritmi ve hikâye anlatımı"
+msgstr "The narrator's tone of voice, rhythm and storytelling"
+
+msgid "Konuya dokunma, deneme ve uygulama fırsatı"
+msgstr "A chance to touch, try and apply the topic"
+
+msgid "Soru 2: Bir bilgiyi zihninde tutarken hangisi daha işe yarar? (Çalışma belleği: aynı anda 4-7 parça)"
+msgstr "Q2: What works best when holding information in mind? (Working memory: 4-7 chunks at a time)"
+
+msgid "Bilgiyi zihinsel görüntülere ve şemalara bölüştürürüm"
+msgstr "I break information into mental images and diagrams"
+
+msgid "Bilgiyi sesli yineler, ritim ve tekrarla pekiştiririm"
+msgstr "I repeat it aloud, reinforcing with rhythm and repetition"
+
+msgid "Bilgiyi ancak uygulayınca ve örnekleşince tutabilirim"
+msgstr "I can only retain it once I apply and exemplify it"
+
+msgid "Soru 3: Bir konuyu öğrenirken en verimli hissettiğin an hangisi? (Kolb'un öğrenme döngüsü)"
+msgstr "Q3: Which moment feels most efficient when learning? (Kolb's learning cycle)"
+
+msgid "Konunun mantığını ve şemasını kavradığım an (soyut kavramsallaştırma)"
+msgstr "When I grasp the logic and schema of the topic (abstract conceptualization)"
+
+msgid "Birini izleyip dinleyerek anladığım an (yansıtıcı gözlem)"
+msgstr "When I understand by watching and listening (reflective observation)"
+
+msgid "Konuyu yaşayarak, uygulayarak öğrendiğim an (somut deneyim)"
+msgstr "When I learn by living and applying it (concrete experience)"
+
+msgid "Soru 4: Öğrendiğin bir konuyu kalıcı hale getirmek için ne yaparsın? (Kodlama → uzun süreli bellek)"
+msgstr "Q4: What do you do to make learning stick? (Encoding → long-term memory)"
+
+msgid "Zihin haritası ve görsel notlarla kodlarım; renkler belleğe kazınır"
+msgstr "I encode with mind maps and visual notes; colors sink into memory"
+
+msgid "Sesli anlatım ve tartışmayla pekiştiririm"
+msgstr "I consolidate through speaking and discussion"
+
+msgid "Aktif geri çağırma yaparım: kaynağı kapatıp kendime uygulatırım"
+msgstr "I do active recall: close the source and make myself apply it"
+
+msgid "Soru 5: Ders çalışma ortamın nasıl olmalı? (Bilişsel yük: dikkat dağıtıcılar az olmalı)"
+msgstr "Q5: What should your study environment be like? (Cognitive load: minimize distractions)"
+
+msgid "Düzenli, renk kodlamalı, görsel olarak zengin ama yapılandırılmış bir masa"
+msgstr "An organized, color-coded, visually rich but structured desk"
+
+msgid "Sade ve sessiz görsel ortam — göz yormayan, kulağa odaklı düzen"
+msgstr "A plain, quiet visual space — easy on the eyes, focused on the ear"
+
+msgid "Kısa molalar ve hareket payı olan, pratik yapılabilen bir ortam"
+msgstr "A space with short breaks, room to move and hands-on practice"
+
+msgid "Soru 6: Uzun vadede hatırlamak için hangi tekrar stratejisi sana uyar? (Dunlosky et al., 2013)"
+msgstr "Q6: Which repetition strategy suits you for long-term memory? (Dunlosky et al., 2013)"
+
+msgid "Özetleri görsel kartlara dönüştürüp zaman aralıklarıyla gözden geçiririm (aralıklı tekrar)"
+msgstr "I turn summaries into visual cards and review them at intervals (spaced repetition)"
+
+msgid "Sesli kayıtları ve kendi anlatımlarımı aralıklarla tekrar dinlerim (aralıklı tekrar)"
+msgstr "I re-listen to recordings and my own explanations at intervals (spaced repetition)"
+
+msgid "Farklı problem ve soru tiplerini karıştırarak çözerim (araya ekleme)"
+msgstr "I mix different problem and question types (interleaving)"

@@ -27,16 +27,15 @@
 @keyframes confettiFall{0%{opacity:1;transform:translateY(0) rotate(0)}100%{opacity:0;transform:translateY(60vh) rotate(540deg)}}
 .course-main{min-width:0}
 .course-main .btn-success{background:linear-gradient(135deg,#059669,#10b981);border:none}
-/* 3 kolon yerlesim */
-.course-content-wrapper.three-col{grid-template-columns:260px 1fr 280px}
-@media (max-width:1100px){.course-content-wrapper.three-col{grid-template-columns:1fr}}
+/* Ferah 3 kolon yerlesim */
+.course-content-wrapper{display:grid;grid-template-columns:250px 1fr 250px;gap:2.2rem;margin-top:1.8rem;align-items:start}
+@media (max-width:1100px){.course-content-wrapper{grid-template-columns:1fr}}
 .course-side-right{display:flex;flex-direction:column;gap:1rem;min-width:0}
 .side-card{background:#fff;border:1px solid var(--gray-100);border-radius:var(--radius-lg);box-shadow:var(--shadow);padding:1.1rem}
 .side-card h3{font-size:.95rem;font-weight:800;color:var(--gray-800);margin:0 0 .8rem;display:flex;align-items:center;gap:.5rem}
 .side-sources-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:.55rem}
 .side-sources-list a{display:flex;gap:.5rem;align-items:center;color:var(--primary);font-size:.85rem;text-decoration:none;font-weight:600}
 .side-sources-list a:hover{text-decoration:underline}
-.side-sources-list small{color:var(--gray-400)}
 .assist-btn{display:flex;align-items:center;gap:.6rem;width:100%;border:1.5px solid var(--gray-100);background:#fff;border-radius:12px;padding:.65rem .8rem;font-weight:700;font-size:.84rem;color:var(--gray-700);cursor:pointer;transition:all .2s;margin-bottom:.5rem;text-align:left}
 .assist-btn:hover{border-color:#5B2DE6;background:linear-gradient(135deg,rgba(91,45,230,.06),rgba(245,185,66,.06));color:#1E1B4B}
 .assist-btn .ico{color:#5B2DE6;width:18px;text-align:center}
@@ -45,7 +44,6 @@
 #assistResult.loading{display:block;color:#94a3b8}
 /* Kilitli modul */
 .module-tab.locked{opacity:.55}
-.module-tab.locked .module-tab-title{color:var(--gray-400)}
 .lock-ico{margin-left:auto;color:var(--gray-300)}
 /* Sertifika hedefi */
 .cert-goal{background:linear-gradient(160deg,#1E1B4B,#312e6e);border-radius:var(--radius-lg);padding:1.1rem;color:#fff}
@@ -62,18 +60,57 @@
 .mod-tab.active{border-color:#5B2DE6;background:linear-gradient(135deg,#5B2DE6,#8B5CF6);color:#fff}
 .mod-view{display:none}
 .mod-view.active{display:block}
-/* Podcast calar */
-.podcast-bar{display:flex;align-items:center;gap:1rem;background:linear-gradient(135deg,#0b1030,#1E1B4B);border-radius:16px;padding:1rem 1.2rem;color:#fff}
-.pod-play{width:46px;height:46px;border-radius:50%;border:none;background:linear-gradient(135deg,#F5B942,#D97706);color:#1a1206;font-size:1rem;cursor:pointer;flex-shrink:0}
-.pod-wave{display:flex;align-items:center;gap:3px;height:34px;flex:1;overflow:hidden}
-.pod-wave span{width:3px;background:#8B5CF6;border-radius:2px;height:20%;transition:height .3s}
-.podcast-bar.playing .pod-wave span{animation:wave .9s ease-in-out infinite}
-@keyframes wave{0%,100%{height:18%}50%{height:95%}}
-.pod-speed{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);color:#fff;border-radius:8px;padding:.35rem .5rem;font-size:.8rem}
-.pod-time{font-size:.8rem;color:#cbd5e1;min-width:48px;text-align:right}
-.module-map-view{background:#0b1030;border-radius:16px;padding:1.2rem;text-align:center}
-.module-map-view img{width:100%;max-height:240px;object-fit:contain;background:#fff;border-radius:12px;padding:10px}
-.module-map-view p{color:#cbd5e1;font-size:.82rem;margin:.7rem 0 0}
+/* Lob kutulari (derin okuma) */
+.lobe-boxes{display:grid;grid-template-columns:1fr 1fr;gap:.9rem;margin-bottom:1.1rem}
+@media (max-width:720px){.lobe-boxes{grid-template-columns:1fr}}
+.lobe-box{border-radius:14px;padding:.9rem 1.05rem;font-size:.85rem}
+.lobe-box h4{margin:0 0 .5rem;font-size:.85rem;display:flex;align-items:center;gap:.45rem}
+.lobe-box ul{margin:0;padding-left:1.1rem;line-height:1.65}
+.lobe-box p{margin:0;line-height:1.65}
+.lobe-left{background:linear-gradient(135deg,rgba(37,99,235,.08),rgba(30,64,175,.05));border:1px solid rgba(37,99,235,.3)}
+.lobe-left h4{color:#1e40af}
+.lobe-right{background:linear-gradient(135deg,rgba(245,185,66,.12),rgba(217,119,6,.06));border:1px solid rgba(245,185,66,.45)}
+.lobe-right h4{color:#92600a}
+/* Okuma tipografisi (markdown-lite) */
+.module-text{background:#fff;border:1px solid var(--gray-100);border-radius:var(--radius-lg);box-shadow:var(--shadow);padding:1.4rem 1.6rem;line-height:1.8;color:var(--gray-700);font-size:.95rem}
+.module-text h4.mt-h1,.module-text h4.mt-h2{margin:1.1rem 0 .5rem;font-size:1.12rem;color:#1E1B4B;padding-bottom:.3rem;border-bottom:2px solid rgba(245,185,66,.5)}
+.module-text h4.mt-h3,.module-text h4.mt-h4{margin:.9rem 0 .4rem;font-size:1rem;color:#5B2DE6}
+.module-text p{margin:.55rem 0}
+.module-text ul.mt-list{margin:.5rem 0 .8rem;padding-left:1.25rem}
+.module-text ul.mt-list li{margin:.3rem 0;padding-left:.15rem}
+.module-text ul.mt-list li::marker{color:#D97706}
+.module-text pre{background:#0b1030;color:#e2e8f0;border-radius:12px;padding:.9rem 1rem;font-size:.82rem;line-height:1.6;overflow:auto;margin:.7rem 0}
+.module-text code{background:rgba(91,45,230,.09);color:#5B2DE6;border-radius:6px;padding:.08rem .35rem;font-size:.85em}
+.module-text pre code{background:none;color:inherit;padding:0}
+/* Karaoke (akan altyazı) */
+.kara-wrap{background:#fff;border:1px solid var(--gray-100);border-radius:var(--radius-lg);box-shadow:var(--shadow);overflow:hidden}
+.kara-box{height:300px;overflow-y:auto;padding:2.2rem 1.8rem;scroll-behavior:smooth;background:linear-gradient(180deg,var(--gray-50),var(--gray-100))}
+.k-sent{margin:.25rem 0;font-size:1.02rem;line-height:1.8;color:#b6b3cf;transition:all .35s;font-weight:500}
+.k-cur{color:#1E1B4B;font-weight:800;font-size:1.16rem;transform:translateX(6px)}
+.k-cur::before{content:'';display:inline-block;width:8px;height:8px;border-radius:50%;background:#F5B942;margin-right:.6rem;vertical-align:middle;box-shadow:0 0 10px rgba(245,185,66,.8)}
+.k-read{color:#6d6a8f;text-decoration:line-through;text-decoration-color:rgba(245,185,66,.6)}
+.kara-bar{display:flex;align-items:center;gap:.8rem;border-top:1px solid var(--gray-100);padding:.8rem 1.2rem;background:#fff;flex-wrap:wrap}
+.kbtn{width:42px;height:42px;border-radius:50%;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:.95rem;flex-shrink:0}
+.kbtn.play{background:linear-gradient(135deg,#5B2DE6,#8B5CF6);color:#fff;box-shadow:0 6px 16px rgba(91,45,230,.4)}
+.kbtn.stop{background:#fee2e2;color:#b91c1c}
+.kbtn:disabled{opacity:.45;cursor:default}
+.kara-bar select{border:1px solid var(--gray-200);border-radius:8px;padding:.4rem .5rem;font-size:.82rem;color:var(--gray-700)}
+.k-prog{font-size:.8rem;color:var(--gray-500);margin-left:auto;font-weight:700}
+/* Yuzeyde suren mini oyuncu */
+#podDock{position:fixed;right:18px;bottom:18px;z-index:9990;display:none;align-items:center;gap:.7rem;background:linear-gradient(135deg,#0b1030,#1E1B4B);color:#fff;border-radius:999px;padding:.55rem .9rem;box-shadow:0 14px 40px rgba(11,16,48,.5);border:1px solid rgba(245,185,66,.4)}
+#podDock.show{display:flex}
+#podDock .dk-wave{display:flex;align-items:center;gap:2.5px;height:22px}
+#podDock .dk-wave span{width:3px;background:#8B5CF6;border-radius:2px;height:30%}
+#podDock.on .dk-wave span{animation:wave .9s ease-in-out infinite}
+@keyframes wave{0%,100%{height:20%}50%{height:95%}}
+#podDock .dk-title{font-size:.78rem;max-width:180px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:#e9d5ff;font-weight:700}
+#podDock button{width:34px;height:34px;border-radius:50%;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.dk-stop{background:#dc2626;color:#fff}
+.dk-pause{background:rgba(255,255,255,.12);color:#fff;border:1px solid rgba(255,255,255,.25)!important}
+/* Modul kavram agaci */
+.module-map-view{background:#fff;border:1px solid var(--gray-100);border-radius:var(--radius-lg);box-shadow:var(--shadow);padding:1.2rem;text-align:center}
+.module-map-view svg{width:100%;height:auto;background:linear-gradient(180deg,#fdfcff,#faf9ff);border-radius:12px;border:1px dashed #e5e1f7}
+.module-map-view p{color:var(--gray-500);font-size:.82rem;margin:.7rem 0 0}
 /* Anlik pekistirme karti */
 .review-card{margin-top:1.4rem;background:linear-gradient(135deg,#fff,#fdf8ee);border:1.5px solid #F5B942;border-radius:16px;padding:1.2rem}
 .review-card h4{margin:0 0 .4rem;font-size:.92rem;color:#92600a;display:flex;align-items:center;gap:.5rem}
@@ -90,37 +127,8 @@
 .review-fb{margin-top:.7rem;font-size:.88rem;font-weight:700;display:none}
 .review-fb.ok{display:block;color:#059669}
 .review-fb.no{display:block;color:#dc2626}
-/* Zihin haritasi */
-.mindmap-section{margin-top:2.5rem;background:linear-gradient(160deg,#0b1030,#1E1B4B);border-radius:24px;padding:1.8rem;color:#fff;position:relative;overflow:hidden}
-.mindmap-section::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 20% 20%,rgba(139,92,246,.18),transparent 55%),radial-gradient(circle at 85% 80%,rgba(245,185,66,.12),transparent 50%);pointer-events:none}
-.mm-head{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:.8rem;position:relative}
-.mm-head h2{color:#F5B942;font-size:1.3rem;margin:0}
-.mm-head p{color:#cbd5e1;font-size:.88rem;margin:.2rem 0 0}
-.mm-toolbar{display:flex;gap:.5rem;flex-wrap:wrap;margin:1rem 0;position:relative}
-.mm-toolbar input{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.18);border-radius:10px;padding:.6rem .9rem;color:#fff;font-size:.88rem;min-width:180px}
-.mm-toolbar input::placeholder{color:#94a3b8}
-.mm-toolbar .btn-add{background:linear-gradient(135deg,#F5B942,#D97706);color:#1a1206;border:none;border-radius:10px;padding:.6rem 1.2rem;font-weight:800;cursor:pointer;font-size:.88rem}
-.mm-canvas{position:relative;height:520px;background:rgba(6,6,12,.55);border:1px solid rgba(139,92,246,.3);border-radius:18px;overflow:hidden;touch-action:none}
-.mm-lines{position:absolute;inset:0;width:100%;height:100%}
-.mm-lines line{stroke:rgba(139,92,246,.55);stroke-width:2;vector-effect:non-scaling-stroke}
-.mm-node{position:absolute;transform:translate(-50%,-50%);background:linear-gradient(135deg,#5B2DE6,#8B5CF6);border:1.5px solid rgba(245,185,66,.6);color:#fff;border-radius:14px;padding:.55rem .95rem;font-size:.85rem;font-weight:700;cursor:grab;box-shadow:0 8px 22px rgba(0,0,0,.45);max-width:210px;user-select:none;z-index:2}
-.mm-node:active{cursor:grabbing}
-.mm-node .mm-note{display:block;font-weight:400;font-size:.75rem;color:#e9d5ff;margin-top:.2rem;line-height:1.4}
-.mm-node.mm-center{background:linear-gradient(135deg,#F5B942,#D97706);color:#1a1206;font-size:1.02rem;cursor:default;border-color:#fff;z-index:3}
-.mm-node.mm-selected{outline:3px solid #F5B942;outline-offset:2px}
-.mm-editor{position:absolute;right:14px;top:14px;z-index:5;background:#fff;color:var(--gray-800);border-radius:14px;padding:1rem;width:250px;box-shadow:0 14px 40px rgba(0,0,0,.5);display:none}
-.mm-editor.open{display:block}
-.mm-editor h4{margin:0 0 .6rem;font-size:.95rem;color:#1E1B4B}
-.mm-editor input{width:100%;box-sizing:border-box;border:1px solid var(--gray-200);border-radius:8px;padding:.5rem .7rem;margin-bottom:.5rem;font-size:.85rem}
-.mm-editor .row{display:flex;gap:.5rem}
-.mm-editor button{flex:1;border:none;border-radius:8px;padding:.55rem;font-weight:700;cursor:pointer;font-size:.82rem}
-.mm-save{background:linear-gradient(135deg,#5B2DE6,#8B5CF6);color:#fff}
-.mm-del{background:#fee2e2;color:#b91c1c}
-.mm-hintline{color:#94a3b8;font-size:.78rem;margin-top:.7rem;position:relative}
 /* === Sayfa iskeleti === */
-.course-content-wrapper{display:grid;grid-template-columns:300px 1fr;gap:1.6rem;margin-top:1.6rem;align-items:start}
-@media (max-width:1100px){.course-content-wrapper{grid-template-columns:1fr}}
-.modules-sidebar{background:#fff;border:1px solid var(--gray-100);border-radius:var(--radius-lg);box-shadow:var(--shadow);padding:1.1rem;position:sticky;top:90px}
+.modules-sidebar{background:#fff;border:1px solid var(--gray-100);border-radius:var(--radius-lg);box-shadow:var(--shadow);padding:1.2rem;position:sticky;top:90px}
 .modules-sidebar>h3{font-size:.95rem;font-weight:800;color:var(--gray-800);margin:0 0 .8rem;display:flex;align-items:center;gap:.5rem}
 .modules-list{display:flex;flex-direction:column;gap:.5rem}
 .module-tab{display:flex;gap:.7rem;align-items:flex-start;width:100%;border:1.5px solid var(--gray-100);background:#fff;border-radius:14px;padding:.7rem .8rem;cursor:pointer;text-align:left;transition:all .2s}
@@ -136,39 +144,66 @@
 .module-panel-header{display:flex;justify-content:space-between;align-items:center;gap:1rem;margin-bottom:.6rem}
 .module-panel-header h2{margin:0;font-size:1.25rem;color:#1E1B4B}
 .module-duration{color:var(--gray-400);font-size:.82rem;white-space:nowrap}
-.module-text{background:#fff;border:1px solid var(--gray-100);border-radius:var(--radius-lg);box-shadow:var(--shadow);padding:1.3rem 1.4rem;line-height:1.75;color:var(--gray-700);font-size:.95rem}
 .tasks-section{margin-top:1.2rem;background:#fff;border:1px solid var(--gray-100);border-radius:var(--radius-lg);box-shadow:var(--shadow);padding:1.1rem 1.2rem}
 .tasks-section h3{margin:0 0 .7rem;font-size:.95rem;color:var(--gray-800);display:flex;align-items:center;gap:.5rem}
 .tasks-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:.3rem}
 .task-item{padding:.35rem .4rem}
 .task-checkbox{display:flex;gap:.6rem;align-items:flex-start;cursor:pointer;font-size:.9rem;color:var(--gray-700)}
-.module-nav{display:flex;justify-content:space-between;align-items:center;margin-top:1.4rem;gap:1rem}
-.slide-stage{background:#fff;border:1px solid var(--gray-100);border-radius:var(--radius-lg);box-shadow:var(--shadow);padding:2rem;min-height:220px}
-.slide-stage h3{margin:0 0 .8rem;color:#1E1B4B;font-size:1.2rem}
-.slide-stage p{line-height:1.75;color:var(--gray-700)}
+.module-nav{display:flex;justify-content:space-between;align-items:center;margin-top:1.6rem;gap:1rem}
+.slide-stage{background:#fff;border:1px solid var(--gray-100);border-radius:var(--radius-lg);box-shadow:var(--shadow);padding:2.2rem;min-height:260px}
+.slide-stage h3{margin:0 0 1rem;color:#1E1B4B;font-size:1.25rem}
+.slide-stage p{line-height:1.8;color:var(--gray-700)}
+.slide-stage ul{margin:.6rem 0;padding-left:1.3rem;line-height:1.9;color:var(--gray-700)}
+.slide-stage ul li::marker{color:#D97706}
+.slide-stage pre{background:#0b1030;color:#e2e8f0;border-radius:12px;padding:.9rem 1rem;font-size:.82rem;overflow:auto}
 .slide-controls{display:flex;align-items:center;justify-content:center;gap:1rem;margin-top:1rem}
 .slide-counter{font-weight:700;color:var(--gray-600);font-size:.9rem}
 .slide-hint{text-align:center;color:var(--gray-400);font-size:.78rem;margin-top:.5rem}
-/* Modul XP rozetleri */
+.slide-dots{display:flex;gap:.45rem;justify-content:center;margin-top:.7rem}
+.slide-dots span{width:8px;height:8px;border-radius:50%;background:var(--gray-200);cursor:pointer;transition:all .2s}
+.slide-dots span.active{background:#5B2DE6;transform:scale(1.25)}
 .mod-xp{background:linear-gradient(135deg,#1E1B4B,#5B2DE6);color:#F5B942;font-size:.66rem;font-weight:800;padding:.14rem .5rem;border-radius:999px;margin-left:.35rem}
 .cert-goal-links{display:flex;gap:.5rem;margin-top:.7rem}
 .cert-goal-links a{display:inline-flex;align-items:center;gap:.35rem;background:rgba(245,185,66,.12);border:1px solid rgba(245,185,66,.4);color:#F5B942;font-weight:700;font-size:.78rem;padding:.4rem .7rem;border-radius:10px;margin:0;text-decoration:none}
 .cert-goal-links a:hover{background:rgba(245,185,66,.22)}
-/* Lob kutulari (derin okuma) */
-.lobe-boxes{display:grid;grid-template-columns:1fr 1fr;gap:.9rem;margin-bottom:1.1rem}
-@media (max-width:720px){.lobe-boxes{grid-template-columns:1fr}}
-.lobe-box{border-radius:14px;padding:.9rem 1.05rem;font-size:.85rem}
-.lobe-box h4{margin:0 0 .5rem;font-size:.85rem;display:flex;align-items:center;gap:.45rem}
-.lobe-box ul{margin:0;padding-left:1.1rem;line-height:1.65}
-.lobe-box p{margin:0;line-height:1.65}
-.lobe-left{background:linear-gradient(135deg,rgba(37,99,235,.08),rgba(30,64,175,.05));border:1px solid rgba(37,99,235,.3)}
-.lobe-left h4{color:#1e40af}
-.lobe-right{background:linear-gradient(135deg,rgba(245,185,66,.12),rgba(217,119,6,.06));border:1px solid rgba(245,185,66,.45)}
-.lobe-right h4{color:#92600a}
-/* Slayt noktalari */
-.slide-dots{display:flex;gap:.45rem;justify-content:center;margin-top:.7rem}
-.slide-dots span{width:8px;height:8px;border-radius:50%;background:var(--gray-200);cursor:pointer;transition:all .2s}
-.slide-dots span.active{background:#5B2DE6;transform:scale(1.25)}
+/* === KİŞİSEL ZİHİN HARİTASI (sayfa devamı, açık zemin) === */
+.mindmap-section{margin-top:3.5rem;padding:0}
+.mm-head{max-width:1280px;margin:0 auto 1.2rem;padding:0 6px}
+.mm-head h2{color:#1E1B4B;font-size:1.5rem;margin:0;display:flex;align-items:center;gap:.6rem}
+.mm-head h2 .ico{color:#5B2DE6}
+.mm-head p{color:var(--gray-500);font-size:.9rem;margin:.3rem 0 0}
+.mm-layout{display:grid;grid-template-columns:64px 1fr;gap:1rem;max-width:1280px;margin:0 auto;padding:0 6px}
+@media (max-width:720px){.mm-layout{grid-template-columns:1fr}}
+.mm-tools{display:flex;flex-direction:column;gap:.45rem;background:#fff;border:1px solid var(--gray-100);border-radius:16px;box-shadow:var(--shadow);padding:.55rem;align-self:start;position:sticky;top:90px}
+.mm-tool{width:42px;height:42px;border-radius:11px;border:1.5px solid var(--gray-100);background:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--gray-600);transition:all .15s;font-weight:800;font-size:.8rem;padding:0}
+.mm-tool:hover{border-color:#8B5CF6;color:#5B2DE6}
+.mm-tool.active{border-color:#5B2DE6;background:linear-gradient(135deg,#5B2DE6,#8B5CF6);color:#fff;box-shadow:0 4px 12px rgba(91,45,230,.35)}
+.mm-tool.txt{font-family:Georgia,serif;font-size:1rem}
+.mm-swatches{display:flex;flex-direction:column;gap:.35rem;margin-top:.35rem;border-top:1px dashed var(--gray-100);padding-top:.5rem}
+.mm-sw{width:24px;height:24px;border-radius:50%;cursor:pointer;border:2px solid #fff;box-shadow:0 0 0 1.5px var(--gray-200);margin:0 auto}
+.mm-sw.active{box-shadow:0 0 0 2.5px #1E1B4B}
+.mm-size{display:flex;flex-direction:column;gap:.3rem;border-top:1px dashed var(--gray-100);padding-top:.5rem}
+.mm-size button{width:34px;height:26px;margin:0 auto;border-radius:8px;border:1.5px solid var(--gray-100);background:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.mm-size button.active{border-color:#5B2DE6;background:rgba(91,45,230,.08)}
+.mm-size i{display:block;background:#1E1B4B;border-radius:99px}
+.mm-canvas{position:relative;height:560px;background:var(--gray-50);border:1px solid var(--gray-200);border-radius:20px;overflow:hidden;touch-action:none;box-shadow:var(--shadow)}
+.mm-lines{position:absolute;inset:0;width:100%;height:100%}
+#mmInk{position:absolute;inset:0;width:100%;height:100%;z-index:1;pointer-events:none}
+.mm-node{position:absolute;transform:translate(-50%,-50%);background:#fff;border:2px solid #5B2DE6;color:#1E1B4B;border-radius:999px;padding:.55rem 1.05rem;font-size:.85rem;font-weight:700;cursor:grab;box-shadow:0 6px 18px rgba(30,27,75,.12);max-width:220px;user-select:none;z-index:2;line-height:1.35}
+.mm-node:active{cursor:grabbing}
+.mm-node:hover{box-shadow:0 10px 26px rgba(30,27,75,.2)}
+.mm-node .mm-note{display:block;font-weight:400;font-size:.75rem;color:#77779a;margin-top:.2rem;line-height:1.4}
+.mm-node.mm-center{background:linear-gradient(135deg,#1E1B4B,#5B2DE6);color:#F5B942;font-size:1rem;cursor:default;border-color:#F5B942;z-index:3;padding:.8rem 1.4rem}
+.mm-node.mm-selected{outline:3px solid #F5B942;outline-offset:2px}
+.mm-editor{position:absolute;right:14px;top:14px;z-index:6;background:#fff;color:var(--gray-800);border-radius:14px;padding:1rem;width:250px;box-shadow:0 14px 40px rgba(30,27,75,.25);border:1px solid var(--gray-100);display:none}
+.mm-editor.open{display:block}
+.mm-editor h4{margin:0 0 .6rem;font-size:.95rem;color:#1E1B4B}
+.mm-editor input{width:100%;box-sizing:border-box;border:1px solid var(--gray-200);border-radius:8px;padding:.5rem .7rem;margin-bottom:.5rem;font-size:.85rem}
+.mm-editor .row{display:flex;gap:.5rem}
+.mm-editor button{flex:1;border:none;border-radius:8px;padding:.55rem;font-weight:700;cursor:pointer;font-size:.82rem}
+.mm-save{background:linear-gradient(135deg,#5B2DE6,#8B5CF6);color:#fff}
+.mm-del{background:#fee2e2;color:#b91c1c}
+.mm-hintline{color:var(--gray-400);font-size:.8rem;margin-top:.8rem;max-width:1280px;margin-left:auto;margin-right:auto;padding:0 6px}
 </style>
 
 <div class="course-view">
@@ -182,6 +217,7 @@
                 <span class="style-badge"><svg class="ico"><use href="#i-brain"/></svg> {{ (course.mode_override or current_user.learning_style).capitalize() }} {{ _("Stil") }} + {{ current_user.brain_lobe.upper() }} {{ _("Lob") }} — {{ _("Bilişsel Profiline Optimize Edildi") }}</span>
                 <span class="streak-badge"><svg class="ico"><use href="#i-fire"/></svg> {{ streak }} {{ _("Gün Serisi") }}</span>
                 <span class="xp-badge"><svg class="ico"><use href="#i-bolt"/></svg> <span id="xpText">0</span> XP</span>
+                <a href="{{ url_for('index') }}#tema" class="style-badge" style="text-decoration:none" title="{{ _('Öğrenme temanı değiştir') }}"><svg class="ico"><use href="#i-th-large"/></svg> {{ _(themes[theme].name) }}</a>
             </div>
             <span class="course-badge">{{ course.level.upper() }}</span>
             <h1>{{ course.title }}</h1>
@@ -213,7 +249,7 @@
 
     <div class="ai-gate-note"><svg class="ico"><use href="#i-shield-halved"/></svg><span>{{ _("Sertifika güvenilirliği için: tüm görevleri tamamla → değerlendirme sayfasında AI onayını geç → kursu bitir.") }}</span></div>
 
-    <div class="course-content-wrapper three-col">
+    <div class="course-content-wrapper">
         <div class="modules-sidebar">
             <h3><svg class="ico"><use href="#i-list"/></svg> {{ _("Müfredat") }}</h3>
             <div class="modules-list">
@@ -251,15 +287,10 @@
         </div>
 
         <div class="course-main">
-            <div class="course-smart-tools" style="display:flex; gap:10px; margin:20px 0; flex-wrap:wrap;">
-                <button type="button" onclick="document.getElementById('mindmapSection').scrollIntoView({behavior:'smooth'})" class="btn btn-outline" style="background:#1E1B4B; color:#F5B942; padding:10px 18px; font-size:0.9rem;">
-                    <svg class="ico"><use href="#i-project-diagram"/></svg> {{ _("Zihin Haritama Git") }}
-                </button>
-            </div>
-
             <div class="module-content">
                 {% for module in modules %}
-                <div class="module-panel {% if loop.index0 == 0 %}active{% endif %}" data-index="{{ loop.index0 }}">
+                <div class="module-panel {% if loop.index0 == 0 %}active {% endif %}" data-index="{{ loop.index0 }}"
+                     data-title="{{ module.title | e }}" data-content="{{ module.content | e }}" data-duration="{{ module.duration | e }}">
                     <div class="module-panel-header">
                         <h2>{{ module.title }}</h2>
                         <span class="module-duration"><svg class="ico"><use href="#i-clock"/></svg> {{ module.duration }}</span>
@@ -276,18 +307,14 @@
                         <div class="lobe-boxes">
                             <div class="lobe-box lobe-left">
                                 <h4><svg class="ico"><use href="#i-list"/></svg> {{ _("Sol Lob") }} — {{ _("Analitik Kurgu") }}</h4>
-                                <ul>
-                                    {% for line in module.content.replace("\r", "").strip().split("\n")[:3] %}
-                                    {% if line.strip() %}<li>{{ line.strip() | truncate(90, true) }}</li>{% endif %}
-                                    {% endfor %}
-                                </ul>
+                                <ul id="solList-{{ loop.index0 }}"></ul>
                             </div>
                             <div class="lobe-box lobe-right">
                                 <h4><svg class="ico"><use href="#i-lightbulb"/></svg> {{ _("Sağ Lob") }} — {{ _("Büyük Resim & Metafor") }}</h4>
                                 <p>{{ _("Bu modülü bir bütün olarak gör: '%(title)s' kavramını günlük hayatından bir örnekle bağdaştır; ana fikri bir cümleyle kendi kelimelerinle özetlemeyi dene.", title=module.title) }}</p>
                             </div>
                         </div>
-                        <div class="module-text">{{ module.content | replace("\n", "<br>") | safe }}</div>
+                        <div class="module-text" id="modText-{{ loop.index0 }}"></div>
 
                         {% if module.tasks %}
                         <div class="tasks-section">
@@ -325,24 +352,27 @@
 
                     <div class="mod-view" data-view="map">
                         <div class="module-map-view">
-                            <svg id="conceptMap-{{ loop.index0 }}" viewBox="0 0 640 300" style="width:100%;height:auto;background:#fff;border-radius:12px"></svg>
-                            <p><svg class="ico"><use href="#i-circle-info"/></svg> {{ _("Bu modülün canlı kavram ağacı — modül içeriğinden otomatik çizilir. Kendi haritanı sayfanın altından düzenleyebilirsin.") }}</p>
+                            <svg id="conceptMap-{{ loop.index0 }}" viewBox="0 0 720 340"></svg>
+                            <p><svg class="ico"><use href="#i-circle-info"/></svg> {{ _("Bu modülün canlı kavram ağacı — içerikten otomatik çizilir. Kendi haritanı sayfanın altından düzenleyebilirsin.") }}</p>
                         </div>
                     </div>
 
                     <div class="mod-view" data-view="podcast">
-                        <div class="podcast-bar" id="pod-{{ loop.index0 }}">
-                            <button class="pod-play" onclick="togglePodcast({{ loop.index0 }}, this)" title="{{ _("Dinle") }}"><svg class="ico"><use href="#i-play"/></svg></button>
-                            <div class="pod-wave">{% for i in range(28) %}<span style="animation-delay:{{ (i % 7) * 0.12 }}s"></span>{% endfor %}</div>
-                            <select class="pod-speed" onchange="setPodSpeed(this.value)">
-                                <option value="0.75">0.75x</option>
-                                <option value="1" selected>1x</option>
-                                <option value="1.25">1.25x</option>
-                                <option value="1.5">1.5x</option>
-                            </select>
-                            <span class="pod-time">{{ module.duration }}</span>
+                        <div class="kara-wrap">
+                            <div class="kara-box" id="kara-{{ loop.index0 }}"></div>
+                            <div class="kara-bar">
+                                <button class="kbtn play" id="kplay-{{ loop.index0 }}" onclick="karaToggle({{ loop.index0 }})" title="{{ _("Oynat / Duraklat") }}"><svg class="ico"><use href="#i-play"/></svg></button>
+                                <button class="kbtn stop" onclick="karaStop()" title="{{ _("Durdur") }}"><svg class="ico"><use href="#i-times"/></svg></button>
+                                <select id="kspeed-{{ loop.index0 }}" onchange="karaSetSpeed(this.value)">
+                                    <option value="0.75">0.75x</option>
+                                    <option value="1" selected>1x</option>
+                                    <option value="1.25">1.25x</option>
+                                    <option value="1.5">1.5x</option>
+                                </select>
+                                <span class="k-prog" id="kprog-{{ loop.index0 }}">0 / 0</span>
+                            </div>
                         </div>
-                        <p style="color:var(--gray-500);font-size:.83rem;margin-top:.6rem"><svg class="ico"><use href="#i-wand-magic-sparkles"/></svg> {{ _("Sesli anlatım tarayıcının sesiyle çalışır; hızını seç, dinlerken sayfada gezinebilirsin.") }}</p>
+                        <p style="color:var(--gray-500);font-size:.83rem;margin-top:.6rem"><svg class="ico"><use href="#i-wand-magic-sparkles"/></svg> {{ _("Metin cümle cümle akar; okunan yer vurgulanır. Ses çalarken sayfada gezinebilirsin — durdurmak için sağ alttaki oyuncuyu kullan.") }}</p>
                     </div>
 
                     <div class="mod-view" data-view="slides">
@@ -397,7 +427,7 @@
                 <p style="font-size:.8rem;color:var(--gray-500);margin:0 0 .7rem">{{ _("Ses notu veya dosyanı buradan yükle; AI incelemesi değerlendirme sayfasında yapılır.") }}</p>
                 <form method="POST" action="{{ url_for('course_assessment', course_id=course.id) }}" enctype="multipart/form-data">
                     <input type="hidden" name="action" value="upload">
-                    <select name="kind" class="pod-speed" style="width:100%;background:#fff;color:var(--gray-700);border:1px solid var(--gray-200);margin-bottom:.5rem">
+                    <select name="kind" style="width:100%;border:1px solid var(--gray-200);border-radius:8px;padding:.45rem .5rem;font-size:.82rem;color:var(--gray-700);margin-bottom:.5rem;background:#fff">
                         <option value="note">{{ _("Ses Notu / Ödev") }}</option>
                         <option value="quiz">{{ _("Quiz Cevabı") }}</option>
                         <option value="project">{{ _("Proje Dosyası") }}</option>
@@ -410,7 +440,7 @@
     </div>
 
     {% if course.completed %}
-    <div style="margin-top:2rem;background:linear-gradient(135deg,#1E1B4B,#312e6e);border-radius:20px;padding:1.6rem 2rem;display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap;color:#fff">
+    <div style="margin:2.5rem auto 0;max-width:1280px;background:linear-gradient(135deg,#1E1B4B,#312e6e);border-radius:20px;padding:1.6rem 2rem;display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap;color:#fff">
         <div>
             <h3 style="margin:0;color:#F5B942"><svg class="ico"><use href="#i-award"/></svg> {{ _("Kurs Tamamlandı!") }}</h3>
             <p style="margin:.3rem 0 0;color:#cbd5e1;font-size:.9rem">{{ _("AI onaylı sertifikanı indir, QR kod ile her yerde doğrulatabilirsin.") }}</p>
@@ -421,451 +451,740 @@
 
     <section class="mindmap-section" id="mindmapSection">
         <div class="mm-head">
-            <div>
-                <h2><svg class="ico"><use href="#i-project-diagram"/></svg> {{ _("Kişisel Zihin Haritam") }}</h2>
-                <p>{{ _("Kendi notlarını ekle, sürükle, düzenle — harita seninle birlikte kaydedilir.") }}</p>
+            <h2><svg class="ico"><use href="#i-project-diagram"/></svg> {{ _("Kişisel Zihin Haritam") }}</h2>
+            <p>{{ _("Sol alet çubuğundan kalem, renk ve metin seç; düğümleri sürükle, kendi çizimlerini ekle — her şey otomatik kaydedilir.") }}</p>
+        </div>
+        <div class="mm-layout">
+            <div class="mm-tools" id="mmTools">
+                <button class="mm-tool active" data-tool="select" title="{{ _('Seç / Sürükle') }}" onclick="mmSetTool('select', this)"><svg class="ico"><use href="#i-hand-pointer"/></svg></button>
+                <button class="mm-tool" data-tool="add" title="{{ _('Düğüm Ekle') }}" onclick="mmSetTool('add', this)"><svg class="ico"><use href="#i-plus"/></svg></button>
+                <button class="mm-tool" data-tool="pen" title="{{ _('Kalem') }}" onclick="mmSetTool('pen', this)">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3l4 4L8 20l-5 1 1-5z"/></svg>
+                </button>
+                <button class="mm-tool txt" data-tool="text" title="{{ _('Metin Ekle') }}" onclick="mmSetTool('text', this)">T</button>
+                <button class="mm-tool" data-tool="erase" title="{{ _('Silgi') }}" onclick="mmSetTool('erase', this)">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 3l5 5L9 20H4v-5z"/><path d="M5 15l9-9"/></svg>
+                </button>
+                <div class="mm-swatches" id="mmSwatches"></div>
+                <div class="mm-size" id="mmSizes">
+                    <button data-w="2" onclick="mmSetWidth(2, this)"><i style="width:14px;height:2px"></i></button>
+                    <button data-w="4" class="active" onclick="mmSetWidth(4, this)"><i style="width:14px;height:4px"></i></button>
+                    <button data-w="7" onclick="mmSetWidth(7, this)"><i style="width:14px;height:7px"></i></button>
+                </div>
+                <button class="mm-tool" title="{{ _('Temizle') }}" onclick="mmClearAll()" style="margin-top:.3rem"><svg class="ico"><use href="#i-trash"/></svg></button>
             </div>
-        </div>
-        <div class="mm-toolbar">
-            <input type="text" id="mmTitle" placeholder="{{ _('Başlık ekle...') }}" maxlength="60">
-            <input type="text" id="mmNote" placeholder="{{ _('Not / açıklama (isteğe bağlı)...') }}" maxlength="200" style="min-width:220px">
-            <button class="btn-add" onclick="addNode()"><svg class="ico"><use href="#i-plus"/></svg> {{ _("Ekle") }}</button>
-        </div>
-        <div class="mm-canvas" id="mmCanvas">
-            <svg class="mm-lines" id="mmLines"></svg>
-            <div class="mm-editor" id="mmEditor">
-                <h4>{{ _("Düğümü Düzenle") }}</h4>
-                <input type="text" id="mmEditTitle" maxlength="60">
-                <input type="text" id="mmEditNote" maxlength="200" placeholder="{{ _('Not...') }}">
-                <div class="row">
-                    <button class="mm-save" onclick="saveNodeEdit()">{{ _("Kaydet") }}</button>
-                    <button class="mm-del" onclick="deleteNode()"><svg class="ico"><use href="#i-trash"/></svg></button>
+            <div class="mm-canvas" id="mmCanvas">
+                <svg class="mm-lines" id="mmLines" viewBox="0 0 100 100" preserveAspectRatio="none"></svg>
+                <canvas id="mmInk"></canvas>
+                <div class="mm-editor" id="mmEditor">
+                    <h4>{{ _("Düğümü Düzenle") }}</h4>
+                    <input type="text" id="mmEditTitle" maxlength="60">
+                    <input type="text" id="mmEditNote" maxlength="200" placeholder="{{ _('Not...') }}">
+                    <div class="row">
+                        <button class="mm-save" onclick="saveNodeEdit()">{{ _("Kaydet") }}</button>
+                        <button class="mm-del" onclick="deleteNode()"><svg class="ico"><use href="#i-trash"/></svg></button>
+                    </div>
                 </div>
             </div>
         </div>
-        <p class="mm-hintline"><svg class="ico"><use href="#i-hand-pointer"/></svg> {{ _("Düğümleri sürükleyerek yerleştir; bir düğüme tıklayarak düzenleyebilir veya silebilirsin.") }}</p>
+        <p class="mm-hintline"><svg class="ico"><use href="#i-hand-pointer"/></svg> {{ _("Düğüm eklemek için + seçip tuvalde yere tıkla; kalemle serbest çiz; silgiyle çizimi sil. Düğümü düzenlemek için üzerine tıkla.") }}</p>
     </section>
 </div>
 
+<div id="podDock">
+    <div class="dk-wave"><span></span><span style="animation-delay:.12s"></span><span style="animation-delay:.24s"></span><span style="animation-delay:.36s"></span><span style="animation-delay:.48s"></span></div>
+    <span class="dk-title" id="dkTitle"></span>
+    <button class="dk-pause" id="dkPause" onclick="dockPause()" title="{{ _('Duraklat / Devam') }}"><svg class="ico"><use href="#i-pause"/></svg></button>
+    <button class="dk-stop" onclick="karaStop()" title="{{ _('Durdur') }}"><svg class="ico"><use href="#i-times"/></svg></button>
+</div>
+
 <script>
-const courseId = {{ course.id }};
+/* ==== VERİ ==== */
+const COURSE_ID = {{ course.id }};
+const COURSE_TITLE = {{ course.title | tojson }};
+const COURSE_MODE = {{ (course.mode_override or "") | tojson }};
+const paneLang = "{{ get_locale() }}";
+const TTS_LANG = {tr:"tr-TR", en:"en-US", ru:"ru-RU"}[paneLang] || "tr-TR";
 const modulesData = {{ modules | tojson }};
-let taskState = {{ tasks_state | tojson }};
-let mmNodes = {{ mindmap | tojson }};
 const lockedFlags = {{ locked | tojson }};
 const reviewData = {{ reviews | tojson }};
-let currentMode = {{ (course.mode_override or current_user.learning_style) | tojson }};
-const assessmentDone = {{ 'true' if assessment_done else 'false' }};
-const courseCompleted = {{ 'true' if course.completed else 'false' }};
-let currentModule = 0;
-let totalXP = 0;
+let tasksState = {{ tasks_state | tojson }};
+let mmRaw = {{ mindmap | tojson }};
 
 const MODE_HINTS = {
-  gorsel: {{ _("Görsel mod aktif: kavram haritaları, şemalar ve slaytlar öne çıkıyor. Renkli yapılarla öğren.") | tojson }},
-  isitsel: {{ _("İşitsel mod aktif: podcast bölümünü aç, içeriği dinleyerek öğren. Hızını kendin ayarla.") | tojson }},
-  kinestetik: {{ _("Kinestetik mod aktif: görevleri uygulayarak, not alarak ve haritayı düzenleyerek öğren.") | tojson }}
+    tr:{gorsel:"Görsel mod açık: kavram haritaları ve slaytlarla öğren. Her modülde 'Zihin Haritası' ve 'Slayt' sekmelerine göz at.",
+        isitsel:"İşitsel mod açık: podcast sekmesinden modülü dinle — metin cümle cümle akar, okunan yer vurgulanır.",
+        kinestetik:"Kinestetik mod açık: görevleri işaretle, anlık pekiştirme sorularını çöz, sayfanın altındaki kişisel zihin haritana kendi çizimlerini ekle."},
+    en:{gorsel:"Visual mode: learn with concept maps and slides. Check the 'Mind Map' and 'Slides' tabs in each module.",
+        isitsel:"Auditory mode: listen to the module from the podcast tab — text flows sentence by sentence with the spoken part highlighted.",
+        kinestetik:"Kinesthetic mode: check off tasks, answer the quick review questions, and add your own drawings to the personal mind map at the bottom of the page."},
+    ru:{gorsel:"Визуальный режим: учитесь с помощью карт понятий и слайдов. Смотрите вкладки «Карта» и «Слайды» в каждом модуле.",
+        isitsel:"Аудиальный режим: слушайте модуль во вкладке подкаста — текст течёт по предложениям, произносимое выделяется.",
+        kinestetik:"Кинестетический режим: отмечайте задания, отвечайте на вопросы быстрой проверки и добавляйте свои рисунки на личную карту внизу страницы."}
 };
+const L = MODE_HINTS[paneLang] || MODE_HINTS.tr;
 
-function spawnXP(amount, x, y){
-  totalXP += amount;
-  document.getElementById('xpText').textContent = totalXP;
-  const el = document.createElement('span');
-  el.className = 'xp-float'; el.textContent = '+' + amount + ' XP';
-  el.style.left = (x || window.innerWidth/2) + 'px';
-  el.style.top = (y || 120) + 'px';
-  document.body.appendChild(el);
-  setTimeout(()=>el.remove(), 1200);
+/* ==== İÇERİK TEMİZLEME + MARKDOWN-LITE ==== */
+function normalizeContent(t){
+    return (t || "").replace(/\\n/g, "\n").replace(/\r/g, "");
+}
+function escHtml(s){return (s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");}
+function inlineMd(s){
+    return escHtml(s)
+        .replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>")
+        .replace(/\*(.+?)\*/g, "<em>$1</em>")
+        .replace(/`([^`]+)`/g, "<code>$1</code>");
+}
+function mdToHtml(t){
+    const lines = normalizeContent(t).split("\n");
+    let html = "", inCode = false, codeBuf = [], inList = false;
+    for (const raw of lines){
+        const line = raw.trimEnd();
+        const trimmed = line.trim();
+        if (trimmed.startsWith("```")){
+            if (inCode){ html += "<pre><code>" + escHtml(codeBuf.join("\n")) + "</code></pre>"; codeBuf = []; inCode = false; }
+            else { if (inList){ html += "</ul>"; inList = false; } inCode = true; }
+            continue;
+        }
+        if (inCode){ codeBuf.push(line); continue; }
+        const h = trimmed.match(/^(#{1,4})\s+(.*)/);
+        if (h){ if (inList){ html += "</ul>"; inList = false; } html += '<h4 class="mt-h' + h[1].length + '">' + inlineMd(h[2]) + "</h4>"; continue; }
+        const li = trimmed.match(/^[-*•]\s+(.*)/);
+        if (li){ if (!inList){ html += '<ul class="mt-list">'; inList = true; } html += "<li>" + inlineMd(li[1]) + "</li>"; continue; }
+        if (inList){ html += "</ul>"; inList = false; }
+        if (trimmed === "") continue;
+        html += "<p>" + inlineMd(trimmed) + "</p>";
+    }
+    if (inCode) html += "<pre><code>" + escHtml(codeBuf.join("\n")) + "</code></pre>";
+    if (inList) html += "</ul>";
+    return html;
+}
+function plainText(t){
+    return normalizeContent(t)
+        .replace(/```[\s\S]*?```/g, " ")
+        .replace(/^#+\s*/gm, "")
+        .replace(/\*\*/g, "").replace(/\*/g, "").replace(/`/g, "")
+        .replace(/^\s*[-*•]\s*/gm, "");
+}
+function contentSentences(mi){
+    const txt = plainText(modulesData[mi] && modulesData[mi].content);
+    const parts = txt.split(/(?<=[.!?…])\s+|\n+/);
+    const out = [];
+    for (const p of parts){
+        const s = p.trim();
+        if (s.length > 1) out.push(s.length > 220 ? s.slice(0, 220) + "…" : s);
+    }
+    return out.slice(0, 80);
+}
+function keyPoints(mi, n){
+    const lines = plainText(modulesData[mi] && modulesData[mi].content).split("\n")
+        .map(s => s.trim()).filter(s => s.length > 12);
+    return lines.slice(0, n || 3);
+}
+function moduleHeadings(mi, max){
+    const heads = normalizeContent(modulesData[mi] && modulesData[mi].content).split("\n")
+        .filter(l => /^##\s+/.test(l.trim())).map(l => l.trim().replace(/^#+\s*/, ""));
+    return heads.slice(0, max || 4);
 }
 
-function saveState(payload){
-  const body = Object.assign({tasks: taskState}, payload || {});
-  fetch('/api/course-state/' + courseId, {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(body)});
-}
+/* ==== KAYDETME / XP ==== */
 let saveTimer = null;
-function saveStateDebounced(payload){ clearTimeout(saveTimer); saveTimer = setTimeout(()=>saveState(payload), 600); }
-
-/* === Mod (öğrenme stili) === */
-function setMode(m, save){
-  currentMode = m;
-  document.querySelectorAll('.mode-pill').forEach(p=>p.classList.toggle('active', p.dataset.mode===m));
-  document.getElementById('modeHintText').textContent = MODE_HINTS[m] || '';
-  if(save !== false) saveStateDebounced({mode: m});
+function saveStateDebounced(payload){
+    clearTimeout(saveTimer);
+    saveTimer = setTimeout(() => {
+        fetch("/api/course-state/" + COURSE_ID, {
+            method: "POST", headers: {"Content-Type": "application/json"}, body: JSON.stringify(payload)
+        }).catch(() => {});
+    }, 600);
+}
+function saveProgress(pct){
+    fetch("/api/update-progress/" + COURSE_ID, {
+        method: "POST", headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({progress: pct, completed: 0})
+    }).catch(() => {});
+}
+let xpShown = parseInt(localStorage.getItem("ata_xp_" + COURSE_ID) || "0", 10);
+function drawXP(){ const el = document.getElementById("xpText"); if (el) el.textContent = xpShown; }
+function addXP(n, x, y){
+    xpShown += n;
+    localStorage.setItem("ata_xp_" + COURSE_ID, String(xpShown));
+    drawXP();
+    if (x !== undefined){
+        const f = document.createElement("div");
+        f.className = "xp-float"; f.textContent = "+" + n + " XP";
+        f.style.left = x + "px"; f.style.top = y + "px";
+        document.body.appendChild(f);
+        setTimeout(() => f.remove(), 1150);
+    }
+}
+function toast(msg){
+    const t = document.createElement("div");
+    t.textContent = msg;
+    t.style.cssText = "position:fixed;left:50%;bottom:90px;transform:translateX(-50%);z-index:99995;background:#1E1B4B;color:#F5B942;font-weight:700;font-size:.88rem;padding:.7rem 1.3rem;border-radius:999px;box-shadow:0 10px 30px rgba(30,27,75,.4)";
+    document.body.appendChild(t);
+    setTimeout(() => { t.style.transition = "opacity .4s"; t.style.opacity = "0"; }, 2200);
+    setTimeout(() => t.remove(), 2700);
 }
 
-/* === Modül görünüm sekmeleri === */
+/* ==== ÖĞRENME MODU ==== */
+function setMode(m){
+    document.querySelectorAll(".mode-pill").forEach(b => b.classList.toggle("active", b.dataset.mode === m));
+    document.getElementById("modeHintText").textContent = L[m] || "";
+    saveStateDebounced({mode: m});
+}
+
+/* ==== MODÜL GEZİNTİSİ ==== */
+let currentModule = 0;
+function showModule(i){
+    if (lockedFlags[i]){
+        toast("{{ _('Önce önceki modülün görevlerini tamamla.') }}");
+        return;
+    }
+    currentModule = i;
+    document.querySelectorAll(".module-panel").forEach(p => p.classList.toggle("active", +p.dataset.index === i));
+    document.querySelectorAll(".module-tab").forEach(b => b.classList.toggle("active", +b.dataset.index === i));
+    window.scrollTo({top: 0, behavior: "smooth"});
+}
+function nextModule(){ if (currentModule + 1 < modulesData.length) showModule(currentModule + 1); }
+function prevModule(){ if (currentModule > 0) showModule(currentModule - 1); }
 function setView(mi, view, btn){
-  const panel = document.querySelectorAll('.module-panel')[mi];
-  panel.querySelectorAll('.mod-view').forEach(v=>v.classList.toggle('active', v.dataset.view===view));
-  panel.querySelectorAll('.mod-tab').forEach(t=>t.classList.remove('active'));
-  btn.classList.add('active');
+    const panel = document.querySelector('.module-panel[data-index="' + mi + '"]');
+    panel.querySelectorAll(".mod-view").forEach(v => v.classList.toggle("active", v.dataset.view === view));
+    panel.querySelectorAll(".mod-tab").forEach(b => b.classList.remove("active"));
+    if (btn) btn.classList.add("active");
+    if (view === "slides") renderSlide(mi);
 }
 
-/* === Modül geçişi (kilit korumalı) === */
-function showModule(mi){
-  if (lockedFlags[mi]){
-    const tab = document.querySelector('.module-tab[data-index="'+mi+'"]');
-    tab.style.animation='none'; void tab.offsetWidth;
-    tab.style.animation='shakeX .4s';
-    return;
-  }
-  currentModule = mi;
-  document.querySelectorAll('.module-panel').forEach((p,i)=>p.classList.toggle('active', i===mi));
-  document.querySelectorAll('.module-tab').forEach((t,i)=>t.classList.toggle('active', i===mi));
-  const done = document.querySelectorAll('.module-panel .task-check:checked').length;
-  updateProgress();
-}
-function nextModule(){ showModule(Math.min(currentModule+1, modulesData.length-1)); }
-function prevModule(){ showModule(Math.max(currentModule-1, 0)); }
-
-/* === Görevler / XP / ilerleme === */
-function totalTasks(){ return modulesData.reduce((a,m)=>a+(m.tasks?m.tasks.length:0),0); }
-function countDone(){
-  let n=0;
-  document.querySelectorAll('.module-panel').forEach((p,mi)=>{
-    p.querySelectorAll('.task-check').forEach(cb=>{ if(cb.checked) n++; });
-  });
-  return n;
-}
-function refreshTaskUI(){
-  document.querySelectorAll('.module-panel').forEach((p,mi)=>{
-    const boxes = p.querySelectorAll('.task-check');
-    if(!boxes.length) return;
-    let done=0;
-    boxes.forEach(cb=>{
-      const li = cb.closest('.task-item');
-      const ti = +cb.dataset.ti;
-      if(cb.checked){ done++; li.classList.add('done'); }
-      else li.classList.remove('done');
-      if(!taskState[String(mi)]) taskState[String(mi)] = {};
-      taskState[String(mi)][String(ti)] = cb.checked;
+/* ==== GÖREVLER ==== */
+function refreshTasksUI(mi){
+    const mods = document.querySelectorAll('.task-item[data-mi="' + mi + '"]');
+    if (!mods.length) return;
+    let done = 0, total = 0;
+    mods.forEach(li => {
+        const ti = li.dataset.ti;
+        const st = !!(tasksState[mi] && tasksState[mi][ti]);
+        li.classList.toggle("done", st);
+        const cb = li.querySelector(".task-check");
+        if (cb) cb.checked = st;
+        total++; if (st) done++;
     });
-    const line = document.getElementById('tline-'+mi);
-    if(line) line.style.width = (boxes.length? Math.round(done/boxes.length*100):0) + '%';
-    const star = document.getElementById('star-'+mi);
-    if(star) star.innerHTML = done===boxes.length ? '<svg class="ico"><use href="#i-star"/></svg>' : '<svg class="ico"><use href="#i-star"/></svg>';
-  });
+    const line = document.getElementById("tline-" + mi);
+    if (line) line.style.width = (total ? Math.round(done / total * 100) : 0) + "%";
+    const star = document.getElementById("star-" + mi);
+    if (star) star.style.display = done === total ? "inline" : "none";
+    if (done === total && total > 0){
+        const allTotal = document.querySelectorAll(".task-item").length;
+        const allDone = document.querySelectorAll(".task-item.done").length;
+        saveProgress(Math.round(allDone / allTotal * 100));
+    }
 }
 function onTaskChange(cb){
-  refreshTaskUI();
-  if(cb.checked){
-    const r = cb.getBoundingClientRect();
-    spawnXP(20, r.left + r.width/2, r.top);
-  }
-  checkModuleAward(+cb.dataset.mi);
-  saveStateDebounced({});
-  updateProgress();
-}
-function updateProgress(){
-  const t = totalTasks();
-  const pct = t ? Math.round(countDone()/t*100) : Math.round((currentModule+1)/modulesData.length*100);
-  fetch('/api/update-progress/' + courseId, {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({progress: pct, completed: courseCompleted?1:0})});
-  const ring = document.querySelector('.progress-ring-fill');
-  if(ring) ring.style.strokeDashoffset = 283 - (283*pct/100);
-  const pt = document.querySelector('.progress-text-circle');
-  if(pt) pt.textContent = '%' + pct;
+    const mi = cb.dataset.mi, ti = cb.dataset.ti;
+    if (!tasksState[mi]) tasksState[mi] = {};
+    tasksState[mi][ti] = cb.checked;
+    if (cb.checked){
+        const r = cb.getBoundingClientRect();
+        addXP(20, r.left + 10, r.top);
+    }
+    saveStateDebounced({tasks: tasksState});
+    refreshTasksUI(+mi);
 }
 
-/* === Kurs tamamlama (AI korumalı) === */
-function completeCourse(){
-  fetch('/api/complete-course/' + courseId, {method:'POST', headers:{'Content-Type':'application/json'}})
-    .then(r=>r.json()).then(d=>{
-      if(d.ok){ launchConfetti(); setTimeout(()=>location.reload(), 1600); }
-      else {
-        const msg = d.reason==='tasks' ? {{ _("Önce tüm görevleri tamamla.") | tojson }} : {{ _("Değerlendirme sayfasında AI onayını geçmen gerek.") | tojson }};
-        alert(msg);
-        if(d.reason==='assessment') window.location.href = '/course/' + courseId + '/assessment';
-      }
-    });
-}
-function launchConfetti(){
-  const icons = ['🎉','⭐','🏆','🎓','✨','🐴'];
-  for(let i=0;i<50;i++){
-    const el = document.createElement('span');
-    el.className='confetti-piece';
-    el.textContent = icons[i%icons.length];
-    el.style.left = Math.random()*100+'vw';
-    el.style.top = (-10 - Math.random()*10)+'vh';
-    el.style.animationDelay = (Math.random()*0.6)+'s';
-    document.body.appendChild(el);
-    setTimeout(()=>el.remove(), 2600);
-  }
-}
-
-/* === Podcast (tarayıcı TTS) === */
-let podUtter = null;
-let podModule = -1;
-function podText(mi){
-  const m = modulesData[mi];
-  return (m.title + '. ' + (m.content||'')).slice(0, 1800);
-}
-function togglePodcast(mi, btn){
-  const bar = document.getElementById('pod-'+mi);
-  if(podModule===mi && window.speechSynthesis && window.speechSynthesis.speaking){
-    window.speechSynthesis.cancel();
-    podModule=-1; bar.classList.remove('playing');
-    btn.innerHTML='<svg class="ico"><use href="#i-play"/></svg>';
-    return;
-  }
-  if(!('speechSynthesis' in window)){ alert({{ _("Tarayıcın sesli anlatımı desteklemiyor.") | tojson }}); return; }
-  window.speechSynthesis.cancel();
-  document.querySelectorAll('.podcast-bar').forEach(b=>b.classList.remove('playing'));
-  document.querySelectorAll('.pod-play').forEach(b=>b.innerHTML='<svg class="ico"><use href="#i-play"/></svg>');
-  podUtter = new SpeechSynthesisUtterance(podText(mi));
-  podUtter.lang = 'tr-TR';
-  podUtter.rate = parseFloat(document.querySelector('#pod-'+mi+' .pod-speed').value) || 1;
-  podUtter.onend = ()=>{ bar.classList.remove('playing'); btn.innerHTML='<svg class="ico"><use href="#i-play"/></svg>'; podModule=-1; };
-  window.speechSynthesis.speak(podUtter);
-  podModule = mi;
-  bar.classList.add('playing');
-  btn.innerHTML='<svg class="ico"><use href="#i-pause"/></svg>';
-}
-function setPodSpeed(v){
-  if(podUtter){ podUtter.rate = parseFloat(v)||1; }
-}
-
-/* === Anlık pekiştirme === */
-const picked = {};
-function pickOption(mi, oi, el){
-  picked[mi] = oi;
-  document.querySelectorAll('#review-'+mi+' .review-opt').forEach(b=>b.classList.remove('correct','wrong'));
-  el.classList.add('selected');
-  document.getElementById('rcheck-'+mi).disabled = false;
+/* ==== ANLIK PEKİSTİRME ==== */
+let reviewPick = {};
+function pickOption(mi, oi, btn){
+    reviewPick[mi] = oi;
+    document.querySelectorAll('#review-' + mi + ' .review-opt').forEach(b => b.classList.remove("correct", "wrong"));
+    btn.classList.add("correct");
+    document.getElementById("rcheck-" + mi).disabled = false;
 }
 function checkReview(mi){
-  const rev = reviewData.find(r=>r.mi===mi);
-  const fb = document.getElementById('rfb-'+mi);
-  const btn = document.getElementById('rcheck-'+mi);
-  document.querySelectorAll('#review-'+mi+' .review-opt').forEach(b=>{
-    b.disabled = true;
-    if(+b.dataset.oi === rev.correct_index) b.classList.add('correct');
-  });
-  if(picked[mi] === rev.correct_index){
-    fb.textContent = {{ _("Doğru! Harika gidiyorsun.") | tojson }};
-    fb.className = 'review-fb ok';
-    const r = btn.getBoundingClientRect();
-    spawnXP(25, r.left + r.width/2, r.top);
-  } else {
-    fb.textContent = {{ _("Yanlış — doğru cevap işaretlendi, bir sonraki soruda devam et!") | tojson }};
-    fb.className = 'review-fb no';
-    const wrong = document.querySelector('#review-'+mi+' .review-opt[data-oi="'+picked[mi]+'"]');
-    if(wrong) wrong.classList.add('wrong');
-  }
-  btn.disabled = true; btn.textContent = {{ _("Tamamlandı") | tojson }};
+    const rev = reviewData.find(r => r.mi === mi);
+    if (!rev || reviewPick[mi] === undefined) return;
+    const ok = reviewPick[mi] === rev.correct_index;
+    document.querySelectorAll('#review-' + mi + ' .review-opt').forEach((b, i) => {
+        b.disabled = true;
+        if (i === rev.correct_index) b.classList.add("correct");
+        else if (i === reviewPick[mi]) b.classList.add("wrong");
+    });
+    const fb = document.getElementById("rfb-" + mi);
+    fb.className = "review-fb " + (ok ? "ok" : "no");
+    fb.textContent = ok ? "{{ _('Doğru! Harikasın.') }}" : "{{ _('Yanlış — doğru cevap işaretlendi, bir daha dene.') }}";
+    document.getElementById("rcheck-" + mi).disabled = true;
+    if (ok){
+        const r = fb.getBoundingClientRect();
+        addXP(25, r.left + 20, r.top);
+    }
 }
 
-/* === Bilişsel Asistan === */
-function assist(action){
-  const box = document.getElementById('assistResult');
-  box.className='show loading';
-  box.textContent = {{ _("AI düşünüyor...") | tojson }};
-  fetch('/api/assist', {method:'POST', headers:{'Content-Type':'application/json'},
-    body: JSON.stringify({action: action, course_id: courseId, module: currentModule})})
-    .then(r=>r.json()).then(d=>{
-      box.classList.remove('loading');
-      if(d.ok){
-        box.textContent = d.text;
-        if(action==='summary' && 'speechSynthesis' in window){
-          const u = new SpeechSynthesisUtterance(d.text.slice(0,600));
-          u.lang='tr-TR'; u.rate=1.15;
-          window.speechSynthesis.speak(u);
+/* ==== SES MOTORU + KARAOKE + DOCK ==== */
+const karaoke = {}; // mi -> {sents:[], built:bool}
+let tts = {runId: 0, speaking: false, paused: false, mode: null, mi: 0, sents: [], idx: 0, rate: 1, title: ""};
+function karaBuild(mi){
+    if (karaoke[mi] && karaoke[mi].built) return;
+    const box = document.getElementById("kara-" + mi);
+    if (!box) return;
+    const sents = contentSentences(mi);
+    box.innerHTML = sents.map(s => '<p class="k-sent">' + escHtml(s) + "</p>").join("");
+    karaoke[mi] = {sents, built: true};
+    const prog = document.getElementById("kprog-" + mi);
+    if (prog) prog.textContent = "0 / " + sents.length;
+}
+function karaHighlight(mi, idx, done){
+    const box = document.getElementById("kara-" + mi);
+    if (!box) return;
+    const ps = box.querySelectorAll(".k-sent");
+    ps.forEach((p, i) => {
+        p.classList.toggle("k-cur", i === idx);
+        p.classList.toggle("k-read", i < idx || (done && i === idx));
+        if (i === idx) p.scrollIntoView({block: "center", behavior: "smooth"});
+    });
+}
+function clearKaraoke(){
+    document.querySelectorAll(".k-sent").forEach(p => p.classList.remove("k-cur", "k-read"));
+    document.querySelectorAll(".k-prog").forEach(el => {
+        const mi = el.id.replace("kprog-", "");
+        if (karaoke[mi]) el.textContent = "0 / " + karaoke[mi].sents.length;
+    });
+    document.querySelectorAll(".kbtn.play .ico use").forEach(u => u.setAttribute("href", "#i-play"));
+}
+function dockShow(title){
+    document.getElementById("dkTitle").textContent = title;
+    document.getElementById("podDock").classList.add("show", "on");
+    document.getElementById("dkPause").querySelector("use").setAttribute("href", "#i-pause");
+}
+function dockHide(){ document.getElementById("podDock").classList.remove("show", "on"); }
+function dockPause(){
+    if (!tts.speaking) return;
+    if (tts.paused){ speechSynthesis.resume(); tts.paused = false; }
+    else { speechSynthesis.pause(); tts.paused = true; }
+    document.getElementById("dkPause").querySelector("use").setAttribute("href", tts.paused ? "#i-play" : "#i-pause");
+}
+function karaStop(){
+    tts.runId++;
+    speechSynthesis.cancel();
+    tts.speaking = false; tts.paused = false;
+    dockHide(); clearKaraoke();
+    document.querySelectorAll(".kbtn.play").forEach(b => b.disabled = false);
+}
+function speakChain(){
+    const run = tts.runId;
+    if (tts.idx >= tts.sents.length){
+        tts.speaking = false;
+        dockHide();
+        karaHighlight(tts.mi, tts.sents.length, true);
+        const btn = document.getElementById("kplay-" + tts.mi);
+        if (btn){ btn.disabled = false; btn.querySelector("use").setAttribute("href", "#i-play"); }
+        return;
+    }
+    const u = new SpeechSynthesisUtterance(tts.sents[tts.idx]);
+    u.lang = TTS_LANG; u.rate = tts.rate; u.pitch = 1;
+    const idx = tts.idx;
+    // vurguyu hemen isaretle (onstart bazi tarayicilarda gecikir/ateslenmez)
+    if (tts.mode === "karaoke") karaHighlight(tts.mi, idx, false);
+    const progEl = document.getElementById("kprog-" + tts.mi);
+    if (progEl && tts.mode === "karaoke") progEl.textContent = (idx + 1) + " / " + tts.sents.length;
+    u.onend = () => { if (run !== tts.runId) return; tts.idx++; speakChain(); };
+    u.onerror = () => { if (run !== tts.runId) return; tts.idx++; speakChain(); };
+    speechSynthesis.speak(u);
+}
+function karaokeStart(mi){
+    karaBuild(mi);
+    karaStop();
+    tts = {runId: tts.runId + 1, speaking: true, paused: false, mode: "karaoke", mi, sents: karaoke[mi].sents, idx: 0, rate: tts.rate || 1, title: modulesData[mi].title};
+    const btn = document.getElementById("kplay-" + mi);
+    if (btn) btn.disabled = true;
+    document.getElementById("kplay-" + mi).querySelector("use").setAttribute("href", "#i-pause");
+    dockShow(modulesData[mi].title);
+    speakChain();
+}
+function ttsSpeakPlain(text, title){
+    const sents = plainText(text).split(/(?<=[.!?…])\s+|\n+/).map(s => s.trim()).filter(s => s.length > 1).slice(0, 40);
+    if (!sents.length) return;
+    karaStop();
+    tts = {runId: tts.runId + 1, speaking: true, paused: false, mode: "plain", mi: -1, sents, idx: 0, rate: tts.rate || 1, title: title || "{{ _('Sesli Özet') }}"};
+    dockShow(tts.title);
+    speakChain();
+}
+function karaToggle(mi){
+    if (tts.speaking && tts.mode === "karaoke" && tts.mi === mi){ dockPause(); return; }
+    karaokeStart(mi);
+}
+function karaSetSpeed(v){ tts.rate = parseFloat(v) || 1; }
+window.addEventListener("beforeunload", () => { try { speechSynthesis.cancel(); } catch(e){} });
+
+/* ==== SLAYTLAR ==== */
+const slidesCache = {};
+function mdToSlides(mi){
+    if (slidesCache[mi]) return slidesCache[mi];
+    const t = normalizeContent(modulesData[mi] && modulesData[mi].content).trim();
+    const slides = [];
+    if (!t){
+        slides.push({title: modulesData[mi].title, html: "<p>{{ _('Bu modül için slayt içeriği henüz üretilmedi.') }}</p>"});
+    } else {
+        const parts = t.split(/^##\s+/m).map(s => s.trim()).filter(Boolean);
+        let intro = parts.shift() || "";
+        const h1 = intro.match(/^#\s+(.*)/m);
+        if (h1) intro = intro.replace(h1[0], "").trim();
+        const introParas = intro.split("\n").map(s => s.trim()).filter(s => s && !/^#/.test(s));
+        slides.push({title: h1 ? h1[1] : modulesData[mi].title,
+            html: (introParas[0] ? "<p>" + inlineMd(introParas[0]) + "</p>" : "") +
+                  (introParas.length > 1 ? "<ul>" + introParas.slice(1, 7).map(p => "<li>" + inlineMd(p.replace(/^[-*•]\s*/, "")) + "</li>").join("") + "</ul>" : "")});
+        for (const part of parts.slice(0, 12)){
+            const lines = part.split("\n").map(s => s.trim());
+            const head = lines.shift() || "";
+            const paras = lines.filter(s => s && !/^#/.test(s));
+            const lis = paras.filter(p => /^[-*•]/.test(p)).map(p => "<li>" + inlineMd(p.replace(/^[-*•]\s*/, "")) + "</li>");
+            const rest = paras.filter(p => !/^[-*•]/.test(p)).slice(0, 2).map(p => "<p>" + inlineMd(p) + "</p>").join("");
+            slides.push({title: head, html: rest + (lis.length ? "<ul>" + lis.slice(0, 8).join("") + "</ul>" : "")});
         }
-      } else {
-        box.textContent = d.msg || {{ _("AI yanıtı alınamadı, tekrar dene.") | tojson }};
-      }
-    })
-    .catch(()=>{ box.classList.remove('loading'); box.textContent = {{ _("AI yanıtı alınamadı, tekrar dene.") | tojson }}; });
-}
-function quickNote(){
-  const t = prompt({{ _("Not başlığı:") | tojson }});
-  if(!t) return;
-  const n = prompt({{ _("Not / açıklama (isteğe bağlı):") | tojson }}) || '';
-  mmNodes.push({title:t, note:n, x:20+Math.random()*60, y:25+Math.random()*50});
-  mmRender(); saveStateDebounced({mindmap: mmNodes});
-  document.getElementById('mindmapSection').scrollIntoView({behavior:'smooth'});
-}
-
-/* === Zihin haritası === */
-function escapeHtml(s){ return (s||'').replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
-function mmDrawLines(){
-  const svg = document.getElementById('mmLines');
-  const canvas = document.getElementById('mmCanvas');
-  const W = canvas.clientWidth, H = canvas.clientHeight;
-  svg.setAttribute('viewBox','0 0 '+W+' '+H);
-  let html = '<line x1="'+W/2+'" y1="'+H/2+'" x2="'+W/2+'" y2="'+H/2+'" style="display:none"/>';
-  mmNodes.forEach(n=>{
-    html += '<line x1="'+(W/2)+'" y1="'+(H/2)+'" x2="'+(n.x/100*W)+'" y2="'+(n.y/100*H)+'"/>';
-  });
-  svg.innerHTML = html;
-}
-let selectedNode = -1;
-function mmRender(){
-  const canvas = document.getElementById('mmCanvas');
-  canvas.querySelectorAll('.mm-node').forEach(e=>e.remove());
-  const W = canvas.clientWidth, H = canvas.clientHeight;
-  const center = document.createElement('div');
-  center.className = 'mm-node mm-center';
-  center.style.left = '50%'; center.style.top = '50%';
-  center.textContent = {{ (course.title[:40]) | tojson }};
-  canvas.appendChild(center);
-  mmNodes.forEach((n,i)=>{
-    const el = document.createElement('div');
-    el.className = 'mm-node' + (i===selectedNode ? ' mm-selected' : '');
-    el.style.left = n.x+'%'; el.style.top = n.y+'%';
-    el.innerHTML = escapeHtml(n.title) + (n.note ? '<span class="mm-note">'+escapeHtml(n.note)+'</span>' : '');
-    el.addEventListener('pointerdown', ev=>startDrag(ev, i));
-    el.addEventListener('click', ()=>selectNode(i));
-    canvas.appendChild(el);
-  });
-  mmDrawLines();
-}
-function addNode(){
-  const t = document.getElementById('mmTitle').value.trim();
-  if(!t) return;
-  const n = document.getElementById('mmNote').value.trim();
-  mmNodes.push({title:t, note:n, x:20+Math.random()*60, y:25+Math.random()*50});
-  document.getElementById('mmTitle').value='';
-  document.getElementById('mmNote').value='';
-  mmRender(); saveStateDebounced({mindmap: mmNodes});
-  spawnXP(10);
-}
-function selectNode(i){
-  selectedNode = i;
-  document.querySelectorAll('.mm-node').forEach((e,j)=>e.classList.toggle('mm-selected', j-1===i));
-  const ed = document.getElementById('mmEditor');
-  ed.classList.add('open');
-  document.getElementById('mmEditTitle').value = mmNodes[i].title;
-  document.getElementById('mmEditNote').value = mmNodes[i].note || '';
-}
-function saveNodeEdit(){
-  if(selectedNode<0) return;
-  mmNodes[selectedNode].title = document.getElementById('mmEditTitle').value.trim() || mmNodes[selectedNode].title;
-  mmNodes[selectedNode].note = document.getElementById('mmEditNote').value.trim();
-  document.getElementById('mmEditor').classList.remove('open');
-  mmRender(); saveStateDebounced({mindmap: mmNodes});
-}
-function deleteNode(){
-  if(selectedNode<0) return;
-  mmNodes.splice(selectedNode,1);
-  selectedNode = -1;
-  document.getElementById('mmEditor').classList.remove('open');
-  mmRender(); saveStateDebounced({mindmap: mmNodes});
-}
-function startDrag(ev, i){
-  if(ev.button!==undefined && ev.button!==0) return;
-  ev.preventDefault();
-  const canvas = document.getElementById('mmCanvas');
-  const move = e=>{
-    const r = canvas.getBoundingClientRect();
-    mmNodes[i].x = Math.min(96, Math.max(4, (e.clientX - r.left)/r.width*100));
-    mmNodes[i].y = Math.min(94, Math.max(6, (e.clientY - r.top)/r.height*100));
-    mmRender();
-  };
-  const up = ()=>{
-    document.removeEventListener('pointermove', move);
-    document.removeEventListener('pointerup', up);
-    saveStateDebounced({mindmap: mmNodes});
-  };
-  document.addEventListener('pointermove', move);
-  document.addEventListener('pointerup', up);
-}
-
-/* === Slaytlar === */
-const slideState = {};
-function mdToSlides(text){
-  const chunks = (text||'').split(/\n{2,}/).map(s=>s.trim()).filter(Boolean);
-  return chunks.length ? chunks : [{{ _("Bu modül için slayt içeriği yakında.") | tojson }}];
+    }
+    slidesCache[mi] = {slides, idx: 0};
+    return slidesCache[mi];
 }
 function renderSlide(mi){
-  const m = modulesData[mi];
-  const slides = mdToSlides(m.content);
-  const st = slideState[mi] = slideState[mi] || {i:0, slides: slides};
-  st.slides = slides;
-  st.i = Math.min(st.i, slides.length-1);
-  const stage = document.getElementById('slideStage-'+mi);
-  if(!stage) return;
-  const parts = slides[st.i].split('\n');
-  const title = parts[0].replace(/^#+\s*/,'');
-  const body = parts.slice(1).join('<br>') || '';
-  stage.innerHTML = '<h3>'+escapeHtml(title)+'</h3><p>'+escapeHtml(body).replace(/&lt;br&gt;/g,'<br>')+'</p>';
-  const now = document.getElementById('slideNow-'+mi);
-  const tot = document.getElementById('slideTotal-'+mi);
-  if(now) now.textContent = st.i+1;
-  if(tot) tot.textContent = slides.length;
-  const dots = document.getElementById('slideDots-'+mi);
-  if(dots){
-    dots.innerHTML = slides.map((_,di)=>'<span class="'+(di===st.i?'active':'')+'" onclick="goSlide('+mi+','+di+')"></span>').join('');
-  }
+    const st = mdToSlides(mi);
+    const stage = document.getElementById("slideStage-" + mi);
+    const s = st.slides[st.idx];
+    stage.innerHTML = "<h3>" + escHtml(s.title) + "</h3>" + s.html;
+    document.getElementById("slideNow-" + mi).textContent = st.idx + 1;
+    document.getElementById("slideTotal-" + mi).textContent = st.slides.length;
+    const dots = document.getElementById("slideDots-" + mi);
+    dots.innerHTML = st.slides.map((_, i) => '<span class="' + (i === st.idx ? "active" : "") + '" onclick="goSlide(' + mi + ',' + i + ')"></span>').join("");
 }
-function goSlide(mi, di){ const st=slideState[mi]; if(!st) return; st.i=Math.max(0, Math.min(di, st.slides.length-1)); renderSlide(mi); }
-function nextSlide(){ const st=slideState[currentModule]; if(!st) return; st.i=Math.min(st.i+1, st.slides.length-1); renderSlide(currentModule); }
-function prevSlide(){ const st=slideState[currentModule]; if(!st) return; st.i=Math.max(st.i-1, 0); renderSlide(currentModule); }
-document.addEventListener('keydown', e=>{
-  if(['INPUT','TEXTAREA','SELECT'].includes(document.activeElement.tagName)) return;
-  if(e.key==='ArrowRight') nextSlide();
-  if(e.key==='ArrowLeft') prevSlide();
+function goSlide(mi, i){ const st = mdToSlides(mi); st.idx = Math.max(0, Math.min(i, st.slides.length - 1)); renderSlide(mi); }
+function nextSlide(){ goSlide(currentModule, mdToSlides(currentModule).idx + 1); }
+function prevSlide(){ goSlide(currentModule, mdToSlides(currentModule).idx - 1); }
+document.addEventListener("keydown", e => {
+    const panel = document.querySelector('.module-panel[data-index="' + currentModule + '"]');
+    if (!panel || !panel.querySelector('[data-view="slides"]').classList.contains("active")) return;
+    if (e.key === "ArrowRight") nextSlide();
+    if (e.key === "ArrowLeft") prevSlide();
 });
 
-/* === Modul kavram agaci (dinamik SVG) === */
+/* ==== MODÜL KAVRAM AĞACI (otomatik) ==== */
+const BRANCH_COLORS = ["#5B2DE6", "#D97706", "#2563EB", "#059669", "#DB2777", "#0891B2"];
 function drawConceptMap(mi){
-  const svg = document.getElementById('conceptMap-'+mi);
-  if(!svg) return;
-  const m = modulesData[mi];
-  const title = (m.title||'').replace(/^\d+\.\s*/,'').slice(0,26) || ('Modul '+(mi+1));
-  const lines = (m.content||'').split(/\n+/).map(s=>s.trim()).filter(Boolean).slice(0,4);
-  while(lines.length < 3){ lines.push({{ _("Alt Başlık") | tojson }}+' '+(lines.length+1)); }
-  const W=640, H=300;
-  let h = '<line x1="'+W/2+'" y1="'+H/2+'" x2="'+W/2+'" y2="'+H/2+'" style="display:none"/>';
-  const pos = [[40,40],[40,210],[420,60],[420,190]];
-  lines.forEach((ln,i)=>{
-    const label = ln.replace(/^#+\s*/,'').slice(0,30);
-    const x = pos[i%4][0], y = pos[i%4][1];
-    h += '<line x1="'+(W/2)+'" y1="'+(H/2)+'" x2="'+(x+100)+'" y2="'+(y+22)+'" stroke="'+(i%2?'#F5B942':'#5B2DE6')+'" stroke-width="1.6" opacity=".55"/>';
-  });
-  h += '<rect x="'+(W/2-105)+'" y="'+(H/2-26)+'" rx="13" width="210" height="52" fill="#1E1B4B"/>'
-     + '<text x="'+(W/2)+'" y="'+(H/2+5)+'" text-anchor="middle" font-size="13" font-weight="800" fill="#F5B942">'+escapeHtml(title)+'</text>';
-  lines.forEach((ln,i)=>{
-    const label = ln.replace(/^#+\s*/,'').slice(0,30);
-    const x = pos[i%4][0], y = pos[i%4][1];
-    h += '<rect x="'+x+'" y="'+y+'" rx="10" width="200" height="42" fill="#fff" stroke="'+(i%2?'#D97706':'#5B2DE6')+'" stroke-width="1.6"/>'
-       + '<text x="'+(x+100)+'" y="'+(y+26)+'" text-anchor="middle" font-size="12" font-weight="700" fill="#312e81">'+escapeHtml(label)+'</text>';
-  });
-  svg.innerHTML = h;
+    const svg = document.getElementById("conceptMap-" + mi);
+    if (!svg) return;
+    const title = modulesData[mi].title;
+    let heads = moduleHeadings(mi, 4);
+    if (!heads.length){
+        heads = keyPoints(mi, 4).map(s => s.split(/[.!?…]/)[0].trim()).filter(s => s.length > 3);
+    }
+    const nodes = heads.slice(0, 4);
+    const W = 720, H = 340, cx = W / 2, cy = H / 2;
+    let out = '<defs><filter id="cms' + mi + '" x="-30%" y="-30%" width="160%" height="160%"><feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="#1E1B4B" flood-opacity="0.15"/></filter></defs>';
+    const pos = [[120, 80], [600, 80], [120, 260], [600, 260]];
+    nodes.forEach((n, i) => {
+        const [x, y] = pos[i % 4];
+        const c = BRANCH_COLORS[i % BRANCH_COLORS.length];
+        const mx = (cx + x) / 2, my = (cy + y) / 2 - 46;
+        out += '<path d="M' + cx + ',' + cy + ' Q' + mx + ',' + my + ' ' + x + ',' + y + '" fill="none" stroke="' + c + '" stroke-width="2.5" stroke-opacity="0.5" stroke-linecap="round"/>';
+        out += '<g filter="url(#cms' + mi + ')"><rect x="' + (x - 92) + '" y="' + (y - 24) + '" rx="24" width="184" height="48" fill="#fff" stroke="' + c + '" stroke-width="2"/></g>';
+        const short = n.length > 34 ? n.slice(0, 34) + "…" : n;
+        out += '<text x="' + x + '" y="' + (y + 4) + '" text-anchor="middle" font-size="11.5" font-weight="700" fill="#1E1B4B">' + escHtml(short) + "</text>";
+    });
+    out += '<g filter="url(#cms' + mi + ')"><rect x="' + (cx - 110) + '" y="' + (cy - 30) + '" rx="30" width="220" height="60" fill="#1E1B4B" stroke="#F5B942" stroke-width="2"/></g>';
+    const t = title.length > 30 ? title.slice(0, 30) + "…" : title;
+    out += '<text x="' + cx + '" y="' + (cy + 5) + '" text-anchor="middle" font-size="14" font-weight="800" fill="#F5B942">' + escHtml(t) + "</text>";
+    svg.innerHTML = out;
 }
 
-/* === Modul tamamlama +100 XP (ilk kez) === */
-const moduleAwarded = {};
-function checkModuleAward(mi){
-  const panel = document.querySelectorAll('.module-panel')[mi];
-  if(!panel || moduleAwarded[mi]) return;
-  const boxes = panel.querySelectorAll('.task-check');
-  if(!boxes.length) return;
-  const allDone = Array.from(boxes).every(cb=>cb.checked);
-  if(allDone){
-    moduleAwarded[mi] = true;
-    const star = document.getElementById('star-'+mi);
-    if(star) star.innerHTML = '<svg class="ico"><use href="#i-star"/></svg>';
-    spawnXP(100);
-  }
+/* ==== KİŞİSEL ZİHİN HARİTASI v2 ==== */
+const MM_COLORS = ["#5B2DE6", "#F5B942", "#2563EB", "#059669", "#DB2777", "#D97706", "#0891B2"];
+let mmNodes = [], mmInk = [];
+let mmTool = "select", mmColor = MM_COLORS[0], mmWidth = 4;
+let mmSel = -1, mmDrag = -1, mmDrawing = null;
+const mmCanvas = document.getElementById("mmCanvas");
+const mmInkCv = document.getElementById("mmInk");
+
+function mmNormalize(){
+    if (Array.isArray(mmRaw)) mmNodes = mmRaw;
+    else if (mmRaw && typeof mmRaw === "object"){
+        mmNodes = mmRaw.nodes || [];
+        mmInk = mmRaw.ink || [];
+    }
+    mmNodes = mmNodes.filter(n => n && typeof n.x === "number");
+}
+function mmSeed(){
+    if (mmNodes.length) return;
+    let k = 0;
+    modulesData.forEach((m, mi) => {
+        moduleHeadings(mi, 2).forEach(h => {
+            mmNodes.push({title: h.slice(0, 46), note: "", x: 50, y: 50, color: MM_COLORS[k % MM_COLORS.length]});
+            k++;
+        });
+    });
+    mmNodes = mmNodes.slice(0, 8);
+    mmAutoLayout();
+}
+function mmAutoLayout(){
+    const n = mmNodes.length;
+    if (!n) return;
+    mmNodes.forEach((nd, i) => {
+        const ang = (i / n) * Math.PI * 2 - Math.PI / 2;
+        nd.x = Math.round((50 + Math.cos(ang) * 33) * 10) / 10;
+        nd.y = Math.round((50 + Math.sin(ang) * 34) * 10) / 10;
+    });
+}
+function mmPct(e){
+    const r = mmCanvas.getBoundingClientRect();
+    return {x: (e.clientX - r.left) / r.width * 100, y: (e.clientY - r.top) / r.height * 100,
+            px: e.clientX - r.left, py: e.clientY - r.top, w: r.width, h: r.height};
+}
+function mmSave(){ saveStateDebounced({mindmap: {nodes: mmNodes, ink: mmInk}}); }
+function mmDrawInk(){
+    const r = mmCanvas.getBoundingClientRect();
+    const dpr = window.devicePixelRatio || 1;
+    mmInkCv.width = r.width * dpr; mmInkCv.height = r.height * dpr;
+    const ctx = mmInkCv.getContext("2d");
+    ctx.scale(dpr, dpr);
+    ctx.lineCap = "round"; ctx.lineJoin = "round";
+    for (const s of mmInk){
+        if (s.points.length < 2) continue;
+        ctx.strokeStyle = s.color; ctx.lineWidth = s.width;
+        ctx.beginPath();
+        ctx.moveTo(s.points[0].x / 100 * r.width, s.points[0].y / 100 * r.height);
+        for (const p of s.points.slice(1)) ctx.lineTo(p.x / 100 * r.width, p.y / 100 * r.height);
+        ctx.stroke();
+    }
+}
+function mmLiveStrokePreview(){
+    if (!mmDrawing) return;
+    mmDrawInk();
+    const r = mmCanvas.getBoundingClientRect();
+    const ctx = mmInkCv.getContext("2d");
+    ctx.strokeStyle = mmDrawing.color; ctx.lineWidth = mmDrawing.width;
+    ctx.lineCap = "round"; ctx.beginPath();
+    ctx.moveTo(mmDrawing.points[0].x / 100 * r.width, mmDrawing.points[0].y / 100 * r.height);
+    for (const p of mmDrawing.points.slice(1)) ctx.lineTo(p.x / 100 * r.width, p.y / 100 * r.height);
+    ctx.stroke();
+}
+function mmDrawLines(){
+    const svg = document.getElementById("mmLines");
+    let paths = "";
+    for (let i = 0; i < mmNodes.length; i++){
+        const n = mmNodes[i];
+        const c = n.color || MM_COLORS[i % MM_COLORS.length];
+        const mx = (50 + n.x) / 2, my = (50 + n.y) / 2;
+        const dx = n.x - 50, dy = n.y - 50;
+        const off = Math.min(22, Math.hypot(dx, dy) * 0.22);
+        paths += '<path d="M50,50 Q' + (mx - dy * 0.18) + ',' + (my + dx * 0.18 + (off > 14 ? 8 : 0)) + " " + n.x + "," + n.y +
+                 '" fill="none" stroke="' + c + '" stroke-width="2.5" stroke-opacity="0.5" stroke-linecap="round"/>';
+    }
+    svg.innerHTML = paths;
+}
+function mmRender(){
+    mmCanvas.querySelectorAll(".mm-node").forEach(el => el.remove());
+    mmDrawLines();
+    const center = document.createElement("div");
+    center.className = "mm-node mm-center";
+    center.style.left = "50%"; center.style.top = "50%";
+    center.textContent = COURSE_TITLE.length > 34 ? COURSE_TITLE.slice(0, 34) + "…" : COURSE_TITLE;
+    mmCanvas.appendChild(center);
+    mmNodes.forEach((n, i) => {
+        const c = n.color || MM_COLORS[i % MM_COLORS.length];
+        const el = document.createElement("div");
+        el.className = "mm-node" + (i === mmSel ? " mm-selected" : "");
+        el.style.left = n.x + "%"; el.style.top = n.y + "%";
+        el.style.borderColor = c;
+        el.style.background = "#ffffff";
+        el.dataset.i = i;
+        el.innerHTML = escHtml(n.title || "{{ _('Yeni düğüm') }}") + (n.note ? '<span class="mm-note">' + escHtml(n.note) + "</span>" : "");
+        mmCanvas.appendChild(el);
+    });
+    mmDrawInk();
+}
+function mmSetTool(t, btn){
+    mmTool = t;
+    document.querySelectorAll(".mm-tool").forEach(b => b.classList.remove("active"));
+    if (btn) btn.classList.add("active");
+    mmCanvas.style.cursor = t === "pen" ? "crosshair" : (t === "select" ? "default" : "copy");
+}
+function mmSetWidth(w, btn){
+    mmWidth = w;
+    document.querySelectorAll("#mmSizes button").forEach(b => b.classList.toggle("active", b === btn));
+}
+function mmClearAll(){
+    if (!mmInk.length) return;
+    mmInk = [];
+    mmDrawing = null;
+    mmRender();
+    mmSave();
+}
+function mmOpenEditor(i){
+    mmSel = i;
+    const n = mmNodes[i];
+    document.getElementById("mmEditTitle").value = n.title || "";
+    document.getElementById("mmEditNote").value = n.note || "";
+    document.getElementById("mmEditor").classList.add("open");
+    mmRender();
+}
+function mmCloseEditor(){ document.getElementById("mmEditor").classList.remove("open"); mmSel = -1; mmRender(); }
+function saveNodeEdit(){
+    if (mmSel < 0 || !mmNodes[mmSel]) return;
+    mmNodes[mmSel].title = document.getElementById("mmEditTitle").value.trim() || mmNodes[mmSel].title;
+    mmNodes[mmSel].note = document.getElementById("mmEditNote").value.trim();
+    mmNodes[mmSel].color = mmColor;
+    mmCloseEditor(); mmSave();
+}
+function deleteNode(){
+    if (mmSel < 0) return;
+    mmNodes.splice(mmSel, 1);
+    mmCloseEditor(); mmSave();
+}
+function distToStroke(px, py, s, w, h){
+    let best = 1e9;
+    for (let i = 1; i < s.points.length; i++){
+        const ax = s.points[i-1].x / 100 * w, ay = s.points[i-1].y / 100 * h;
+        const bx = s.points[i].x / 100 * w, by = s.points[i].y / 100 * h;
+        const vx = bx - ax, vy = by - ay;
+        const len2 = vx * vx + vy * vy || 1;
+        let t = ((px - ax) * vx + (py - ay) * vy) / len2;
+        t = Math.max(0, Math.min(1, t));
+        const dx = px - (ax + t * vx), dy = py - (ay + t * vy);
+        best = Math.min(best, Math.hypot(dx, dy));
+    }
+    return best;
+}
+mmCanvas.addEventListener("pointerdown", e => {
+    if (e.target.closest(".mm-node") || e.target.closest(".mm-editor")) return;
+    const p = mmPct(e);
+    if (mmTool === "add"){
+        mmNodes.push({title: "{{ _('Yeni düğüm') }}", note: "", x: Math.round(p.x*10)/10, y: Math.round(p.y*10)/10, color: mmColor});
+        mmOpenEditor(mmNodes.length - 1); mmSave();
+    } else if (mmTool === "text"){
+        const t = prompt("{{ _('Düğüm metni:') }}", "");
+        if (t && t.trim()){
+            mmNodes.push({title: t.trim().slice(0, 60), note: "", x: Math.round(p.x*10)/10, y: Math.round(p.y*10)/10, color: mmColor});
+            mmRender(); mmSave();
+        }
+    } else if (mmTool === "pen"){
+        mmDrawing = {color: mmColor, width: mmWidth, points: [{x: p.x, y: p.y}]};
+        mmCanvas.setPointerCapture(e.pointerId);
+    } else if (mmTool === "erase"){
+        const r = mmCanvas.getBoundingClientRect();
+        let hit = -1, bd = 12;
+        mmInk.forEach((s, i) => { const d = distToStroke(p.px, p.py, s, r.width, r.height); if (d < bd){ bd = d; hit = i; } });
+        if (hit >= 0){ mmInk.splice(hit, 1); mmRender(); mmSave(); }
+    }
+});
+mmCanvas.addEventListener("pointermove", e => {
+    if (mmDrawing){
+        const p = mmPct(e);
+        const last = mmDrawing.points[mmDrawing.points.length - 1];
+        if (Math.hypot(p.x - last.x, p.y - last.y) > 0.4) mmDrawing.points.push({x: p.x, y: p.y});
+        mmLiveStrokePreview();
+    }
+});
+mmCanvas.addEventListener("pointerup", e => {
+    if (mmDrawing && mmDrawing.points.length > 1){
+        mmInk.push(mmDrawing);
+        mmSave();
+    }
+    mmDrawing = null;
+    mmDrawInk();
+});
+document.addEventListener("pointerdown", e => {
+    const node = e.target.closest(".mm-node:not(.mm-center)");
+    if (node && mmCanvas.contains(node)){
+        if (mmTool === "select"){
+            if (mmSel !== +node.dataset.i) mmOpenEditor(+node.dataset.i);
+            mmDrag = +node.dataset.i;
+        }
+    }
+});
+document.addEventListener("pointermove", e => {
+    if (mmDrag < 0 || !mmNodes[mmDrag]) return;
+    const p = mmPct(e);
+    mmNodes[mmDrag].x = Math.max(2, Math.min(98, Math.round(p.x * 10) / 10));
+    mmNodes[mmDrag].y = Math.max(2, Math.min(98, Math.round(p.y * 10) / 10));
+    const el = [...mmCanvas.querySelectorAll(".mm-node")].find(n => +n.dataset.i === mmDrag);
+    if (el){ el.style.left = mmNodes[mmDrag].x + "%"; el.style.top = mmNodes[mmDrag].y + "%"; }
+    mmDrawLines();
+});
+document.addEventListener("pointerup", () => {
+    if (mmDrag >= 0){ mmDrag = -1; mmSave(); }
+});
+window.addEventListener("resize", () => { mmDrawInk(); });
+
+/* ==== ASİSTAN ==== */
+function assist(action){
+    const box = document.getElementById("assistResult");
+    box.className = "loading"; box.textContent = "{{ _('AI düşünüyor...') }}";
+    fetch("/api/assist", {
+        method: "POST", headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({action, course_id: COURSE_ID, module: currentModule})
+    }).then(r => r.json()).then(d => {
+        if (!d.ok){ box.className = "show"; box.textContent = d.msg || "{{ _('Yanıt alınamadı.') }}"; return; }
+        box.className = "show";
+        box.textContent = d.text;
+        if (action === "summary") ttsSpeakPlain(d.text, "{{ _('Sesli Özet') }}");
+    }).catch(() => { box.className = "show"; box.textContent = "{{ _('Bağlantı hatası.') }}"; });
+}
+function quickNote(){
+    document.getElementById("mindmapSection").scrollIntoView({behavior: "smooth"});
+    mmSetTool("add", document.querySelector('.mm-tool[data-tool="add"]'));
 }
 
-/* === Başlangıç === */
-document.addEventListener('DOMContentLoaded', ()=>{
-  setMode(currentMode, false);
-  document.querySelectorAll('.task-check').forEach(cb=>{
-    const mi = cb.dataset.mi, ti = cb.dataset.ti;
-    if(taskState[mi] && taskState[mi][ti]) cb.checked = true;
-  });
-  refreshTaskUI();
-  updateProgress();
-  modulesData.forEach((m,mi)=>{
-    if(document.getElementById('slideStage-'+mi)) renderSlide(mi);
-    drawConceptMap(mi);
-  });
-  mmRender();
-  window.addEventListener('resize', mmDrawLines);
-  const st = {{ streak }};
-  if(st>=3) spawnXP(st*2);
+/* ==== KURSU BİTİR ==== */
+function completeCourse(){
+    fetch("/api/complete-course/" + COURSE_ID, {method: "POST"})
+        .then(r => r.json()).then(d => {
+            if (d.ok){
+                for (let i = 0; i < 26; i++){
+                    const c = document.createElement("div");
+                    c.className = "confetti-piece";
+                    c.textContent = ["🎉","⭐","🎓","🏆","✨"][i % 5];
+                    c.style.left = Math.random() * 100 + "vw";
+                    c.style.top = "-20px";
+                    c.style.animationDelay = (Math.random() * 0.6) + "s";
+                    document.body.appendChild(c);
+                    setTimeout(() => c.remove(), 2600);
+                }
+                setTimeout(() => location.reload(), 1200);
+            } else if (d.reason === "tasks"){
+                alert("{{ _('Önce tüm modül görevlerini tamamla, sonra kursu bitirebilirsin.') }}");
+            } else if (d.reason === "assessment"){
+                alert("{{ _('Sertifika için önce değerlendirme sayfasındaki AI onayından geçmelisin.') }}");
+                location.href = "{{ url_for('course_assessment', course_id=course.id) }}";
+            } else {
+                alert("{{ _('Bir sorun oluştu, tekrar dene.') }}");
+            }
+        }).catch(() => alert("{{ _('Bağlantı hatası.') }}"));
+}
+
+/* ==== BAŞLAT ==== */
+document.addEventListener("DOMContentLoaded", () => {
+    drawXP();
+    setMode(COURSE_MODE || "{{ current_user.learning_style }}");
+    modulesData.forEach((m, mi) => {
+        const txt = document.getElementById("modText-" + mi);
+        if (txt) txt.innerHTML = mdToHtml(m.content);
+        const sol = document.getElementById("solList-" + mi);
+        if (sol) sol.innerHTML = keyPoints(mi, 3).map(k => "<li>" + escHtml(k.length > 110 ? k.slice(0, 110) + "…" : k) + "</li>").join("") || "<li>{{ _('İçerik hazırlanıyor...') }}</li>";
+        karaoke[mi] = {sents: [], built: false};
+        drawConceptMap(mi);
+        refreshTasksUI(mi);
+    });
+    mmNormalize();
+    mmSeed();
+    const sw = document.getElementById("mmSwatches");
+    MM_COLORS.forEach((c, i) => {
+        const b = document.createElement("button");
+        b.className = "mm-sw" + (i === 0 ? " active" : "");
+        b.style.background = c;
+        b.title = c;
+        b.onclick = () => {
+            mmColor = c;
+            document.querySelectorAll(".mm-sw").forEach(x => x.classList.remove("active"));
+            b.classList.add("active");
+            if (mmSel >= 0 && mmNodes[mmSel]){ mmNodes[mmSel].color = c; mmRender(); mmSave(); }
+        };
+        sw.appendChild(b);
+    });
+    mmRender();
 });
 </script>
-<style>@keyframes shakeX{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}</style>
 {% endblock %}

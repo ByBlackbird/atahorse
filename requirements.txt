@@ -8,4 +8,4 @@ reportlab==4.0.7
 python-dotenv==1.0.0
 gunicorn==21.2.0
 qrcode==7.4.2
-pillow==10.2.0
+pillow>=10.2.0

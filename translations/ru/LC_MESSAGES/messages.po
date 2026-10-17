@@ -1704,3 +1704,228 @@ msgstr "Создать первый курс"
 msgid "İlk kişisel kursunu saniyeler içinde oluştur. AI, öğrenme profiline göre müfredatı yazar."
 msgstr "Создай первый персональный курс за секунды. AI напишет программу по твоему профилю обучения."
 
+
+msgid "Bu modülün canlı kavram ağacı — içerikten otomatik çizilir. Kendi haritanı sayfanın altından düzenleyebilirsin."
+msgstr "Живая карта понятий этого модуля — рисуется автоматически из содержимого. Свою карту можно редактировать внизу страницы."
+
+msgid "Durdur"
+msgstr "Стоп"
+
+msgid "Düğüm eklemek için + seçip tuvalde yere tıkla; kalemle serbest çiz; silgiyle çizimi sil. Düğümü düzenlemek için üzerine tıkla."
+msgstr "Выберите + и кликните по холсту, чтобы добавить узел; рисуйте пером; стирайте ластиком. Кликните по узлу, чтобы изменить его."
+
+msgid "Metin cümle cümle akar; okunan yer vurgulanır. Ses çalarken sayfada gezinebilirsin — durdurmak için sağ alttaki oyuncuyu kullan."
+msgstr "Текст течёт по предложениям; произносимое выделяется. Можно листать страницу во время озвучки — остановить звук можно мини-плеером справа внизу."
+
+msgid "Oynat / Duraklat"
+msgstr "Играть / Пауза"
+
+msgid "Ses notu veya dosyanı buradan yükle; AI incelemesi değerlendirme sayfasında yapılır."
+msgstr "Загрузите здесь голосовое сообщение или файл; AI-проверка проходит на странице оценки."
+
+msgid "Sol alet çubuğundan kalem, renk ve metin seç; düğümleri sürükle, kendi çizimlerini ekle — her şey otomatik kaydedilir."
+msgstr "Выберите ручку, цвет и текст на левой панели; перетаскивайте узлы, добавляйте свои рисунки — всё сохраняется автоматически."
+
+msgid "Bağlantı hatası."
+msgstr "Ошибка соединения."
+
+msgid "Bir sorun oluştu, tekrar dene."
+msgstr "Что-то пошло не так, попробуйте ещё раз."
+
+msgid "Bu modül için slayt içeriği henüz üretilmedi."
+msgstr "Слайды для этого модуля ещё не созданы."
+
+msgid "Doğru! Harikasın."
+msgstr "Верно! Молодец."
+
+msgid "Duraklat / Devam"
+msgstr "Пауза / Продолжить"
+
+msgid "Düğüm metni:"
+msgstr "Текст узла:"
+
+msgid "Kalem"
+msgstr "Ручка"
+
+msgid "Metin Ekle"
+msgstr "Добавить текст"
+
+msgid "Sertifika için önce değerlendirme sayfasındaki AI onayından geçmelisin."
+msgstr "Для сертификата сначала пройдите AI-проверку на странице оценки."
+
+msgid "Sesli Özet"
+msgstr "Аудио-конспект"
+
+msgid "Seç / Sürükle"
+msgstr "Выбрать / Тянуть"
+
+msgid "Silgi"
+msgstr "Ластик"
+
+msgid "Temizle"
+msgstr "Очистить"
+
+msgid "Yanlış — doğru cevap işaretlendi, bir daha dene."
+msgstr "Неверно — правильный ответ отмечен, попробуйте ещё раз."
+
+msgid "Yanıt alınamadı."
+msgstr "Ответ не получен."
+
+msgid "Yeni düğüm"
+msgstr "Новый узел"
+
+msgid "Önce tüm modül görevlerini tamamla, sonra kursu bitirebilirsin."
+msgstr "Сначала выполните все задания модулей, затем можно завершить курс."
+
+msgid "Önce önceki modülün görevlerini tamamla."
+msgstr "Сначала выполните задания предыдущего модуля."
+
+msgid "İçerik hazırlanıyor..."
+msgstr "Содержимое готовится..."
+
+msgid "Otomatik (Stilime Göre)"
+msgstr "Автоматически (по моему стилю)"
+
+msgid "Sade & Sakin"
+msgstr "Спокойная и сдержанная"
+
+msgid "Canlı & Görsel"
+msgstr "Яркая и визуальная"
+
+msgid "Dinamik & Energik"
+msgstr "Динамичная и энергичная"
+
+msgid "Dengeli"
+msgstr "Сбалансированная"
+
+msgid "Öğrenme stilini testten çıkan sonuca göre otomatik eşleştirir. Stilin değişirse tema da onunla birlikte değişir."
+msgstr "Автоматически подбирает тему по результатам теста. Стиль изменится — тема изменится вместе с ним."
+
+msgid "İşitsel öğrenenler için: görsel sadelik dışsal bilişsel yükü azaltır (Sweller), dikkat kulağa ve iç sesine yönelir. Az renk, çok boşluk."
+msgstr "Для аудиалов: визуальная простота снижает внешнюю когнитивную нагрузку (Свеллер); внимание переходит к слуху и внутреннему голосу. Мало цвета, много воздуха."
+
+msgid "Görsel öğrenenler için: renk kodlama ve güçlü kontrast, bilginin uzun süreli belleğe kodlanmasını destekler."
+msgstr "Для визуалов: цветовое кодирование и сильный контраст помогают закрепить информацию в долговременной памяти."
+
+msgid "Kinestetik öğrenenler için: yüksek enerji ve oyunlaştırma hissi, aktif denemeyi (Kolb) ve motivasyonu destekler."
+msgstr "Для кинестетиков: высокая энергия и элемент игры поддерживают активное экспериментирование (Колб) и мотивацию."
+
+msgid "Karma profiller için bilimsel varsayılan: nötr zemin üzerinde dengeli vurgular, hiçbir kanalı yormaz."
+msgstr "Научный вариант по умолчанию для смешанных профилей: сбалансированные акценты на нейтральном фоне."
+
+msgid "Geçersiz tema."
+msgstr "Недопустимая тема."
+
+msgid "Öğrenme teman güncellendi."
+msgstr "Тема обучения обновлена."
+
+msgid "Öğrenme Temam"
+msgstr "Моя тема обучения"
+
+msgid "Tema şu an öğrenme stiline göre otomatik seçili:"
+msgstr "Тема сейчас выбрана автоматически по вашему стилю обучения:"
+
+msgid "Şu anki teman:"
+msgstr "Ваша текущая тема:"
+
+msgid "istersen aşağıdan değiştirebilirsin."
+msgstr "при желании можно изменить ниже."
+
+msgid "Tüm Stillere Uyar"
+msgstr "Подходит всем стилям"
+
+msgid "İşitsel İçin"
+msgstr "Для аудиалов"
+
+msgid "Görsel İçin"
+msgstr "Для визуалов"
+
+msgid "Kinestetik İçin"
+msgstr "Для кинестетиков"
+
+msgid "Karma İçin"
+msgstr "Для смешанного стиля"
+
+msgid "Bu Temayı Kullan"
+msgstr "Использовать эту тему"
+
+msgid "Şu Anki Tema"
+msgstr "Текущая тема"
+
+msgid "Öğrenme temanı değiştir"
+msgstr "Изменить тему обучения"
+
+msgid "Bilgi İşleme Kuramı ve Kolb'un öğrenme döngüsü temelinde hazırlanmış 12 soruluk kısa analiz."
+msgstr "Короткий анализ из 12 вопросов, основанный на теории обработки информации и цикле обучения Колба."
+
+msgid "Soru 1: Yeni bir konuya başlarken dikkatin ilk olarak neyi yakalar? (Duyusal kayıt → dikkat süzgeci)"
+msgstr "Вопрос 1: Что в первую очередь привлекает ваше внимание при изучении новой темы? (Сенсорная память → фильтр внимания)"
+
+msgid "Şemalar, diyagramlar ve düzenli görsel yapı"
+msgstr "Схемы, диаграммы и упорядоченная визуальная структура"
+
+msgid "Anlatımın ses tonu, ritmi ve hikâye anlatımı"
+msgstr "Тон, ритм и подача рассказчика"
+
+msgid "Konuya dokunma, deneme ve uygulama fırsatı"
+msgstr "Возможность потрогать, попробовать и применить тему"
+
+msgid "Soru 2: Bir bilgiyi zihninde tutarken hangisi daha işe yarar? (Çalışma belleği: aynı anda 4-7 parça)"
+msgstr "Вопрос 2: Что лучше помогает удерживать информацию в уме? (Рабочая память: 4-7 единиц одновременно)"
+
+msgid "Bilgiyi zihinsel görüntülere ve şemalara bölüştürürüm"
+msgstr "Разбиваю информацию на мысленные образы и схемы"
+
+msgid "Bilgiyi sesli yineler, ritim ve tekrarla pekiştiririm"
+msgstr "Повторяю вслух, закрепляю ритмом и повторением"
+
+msgid "Bilgiyi ancak uygulayınca ve örnekleşince tutabilirim"
+msgstr "Удерживаю информацию, только применяя её на примерах"
+
+msgid "Soru 3: Bir konuyu öğrenirken en verimli hissettiğin an hangisi? (Kolb'un öğrenme döngüsü)"
+msgstr "Вопрос 3: В какой момент обучение даётся эффективнее всего? (Цикл обучения Колба)"
+
+msgid "Konunun mantığını ve şemasını kavradığım an (soyut kavramsallaştırma)"
+msgstr "Когда постигаю логику и схему темы (абстрактная концептуализация)"
+
+msgid "Birini izleyip dinleyerek anladığım an (yansıtıcı gözlem)"
+msgstr "Когда понимаю, наблюдая и слушая (рефлексивное наблюдение)"
+
+msgid "Konuyu yaşayarak, uygulayarak öğrendiğim an (somut deneyim)"
+msgstr "Когда учусь через жизненный опыт и практику (конкретный опыт)"
+
+msgid "Soru 4: Öğrendiğin bir konuyu kalıcı hale getirmek için ne yaparsın? (Kodlama → uzun süreli bellek)"
+msgstr "Вопрос 4: Что вы делаете, чтобы знания закрепились? (Кодирование → долговременная память)"
+
+msgid "Zihin haritası ve görsel notlarla kodlarım; renkler belleğe kazınır"
+msgstr "Кодирую с помощью карт и визуальных заметок; цвета запоминаются"
+
+msgid "Sesli anlatım ve tartışmayla pekiştiririm"
+msgstr "Закрепляю устным пересказом и обсуждением"
+
+msgid "Aktif geri çağırma yaparım: kaynağı kapatıp kendime uygulatırım"
+msgstr "Применяю активное припоминание: закрываю источник и воспроизвожу"
+
+msgid "Soru 5: Ders çalışma ortamın nasıl olmalı? (Bilişsel yük: dikkat dağıtıcılar az olmalı)"
+msgstr "Вопрос 5: Какой должна быть среда для занятий? (Когнитивная нагрузка: меньше отвлекающих факторов)"
+
+msgid "Düzenli, renk kodlamalı, görsel olarak zengin ama yapılandırılmış bir masa"
+msgstr "Упорядоченный, цветовой, визуально насыщенный, но структурированный стол"
+
+msgid "Sade ve sessiz görsel ortam — göz yormayan, kulağa odaklı düzen"
+msgstr "Простое тихое визуальное пространство — лёгкое для глаз, сфокусированное на слух"
+
+msgid "Kısa molalar ve hareket payı olan, pratik yapılabilen bir ortam"
+msgstr "Пространство с короткими перерывами, движением и практикой"
+
+msgid "Soru 6: Uzun vadede hatırlamak için hangi tekrar stratejisi sana uyar? (Dunlosky et al., 2013)"
+msgstr "Вопрос 6: Какая стратегия повторения подходит для долгосрочной памяти? (Dunlosky и др., 2013)"
+
+msgid "Özetleri görsel kartlara dönüştürüp zaman aralıklarıyla gözden geçiririm (aralıklı tekrar)"
+msgstr "Превращаю конспекты в визуальные карточки и повторяю с интервалами (интервальное повторение)"
+
+msgid "Sesli kayıtları ve kendi anlatımlarımı aralıklarla tekrar dinlerim (aralıklı tekrar)"
+msgstr "С интервалами переслушиваю записи и свои пересказы (интервальное повторение)"
+
+msgid "Farklı problem ve soru tiplerini karıştırarak çözerim (araya ekleme)"
+msgstr "Решаю вперемешку задачи разных типов (перемежаемое обучение)"

@@ -13,7 +13,7 @@
     <div class="test-top">
         <img src="{{ url_for('static', filename='img/logo.png') }}" alt="Atahorse" class="test-logo" onerror="this.style.display='none'">
         <h1><svg class="ico" style="color:#2563eb"><use href="#i-brain"/></svg> {{ _("Beyin Analizi") }}</h1>
-        <p>{{ _("Sana en uygun öğrenme yolunu bulmak için hazırlanmış 12 soruluk kısa analiz.") }}</p>
+        <p>{{ _("Bilgi İşleme Kuramı ve Kolb'un öğrenme döngüsü temelinde hazırlanmış 12 soruluk kısa analiz.") }}</p>
     </div>
 
     <div class="test-progress-wrap">
@@ -30,11 +30,11 @@
         <div class="test-step" data-section="style">
             <div class="test-card">
                 <span class="test-step-tag">{{ _("Bölüm 1") }} · {{ _("Öğrenme Stili") }}</span>
-                <h2 class="test-q">{{ _("Soru 1: Karşına tamamen yeni ve soyut bir konu çıktı. İlk olarak ne yaparsın?") }}</h2>
+                <h2 class="test-q">{{ _("Soru 1: Yeni bir konuya başlarken dikkatin ilk olarak neyi yakalar? (Duyusal kayıt → dikkat süzgeci)") }}</h2>
                 <div class="test-opts">
-                    <label class="test-opt"><input type="radio" name="q1" value="visual"><span class="opt-dot"></span><span class="opt-text">{{ _("Konunun şemasını, haritasını veya görsellerini araştırırım") }}</span></label>
-                    <label class="test-opt"><input type="radio" name="q1" value="auditory"><span class="opt-dot"></span><span class="opt-text">{{ _("Konunun anlatıldığı bir video, podcast veya sohbet ararım") }}</span></label>
-                    <label class="test-opt"><input type="radio" name="q1" value="kinesthetic"><span class="opt-dot"></span><span class="opt-text">{{ _("Hemen denemeye başlarım; yaparak öğrenirim") }}</span></label>
+                    <label class="test-opt"><input type="radio" name="q1" value="visual"><span class="opt-dot"></span><span class="opt-text">{{ _("Şemalar, diyagramlar ve düzenli görsel yapı") }}</span></label>
+                    <label class="test-opt"><input type="radio" name="q1" value="auditory"><span class="opt-dot"></span><span class="opt-text">{{ _("Anlatımın ses tonu, ritmi ve hikâye anlatımı") }}</span></label>
+                    <label class="test-opt"><input type="radio" name="q1" value="kinesthetic"><span class="opt-dot"></span><span class="opt-text">{{ _("Konuya dokunma, deneme ve uygulama fırsatı") }}</span></label>
                 </div>
             </div>
         </div>
@@ -42,11 +42,11 @@
         <div class="test-step" data-section="style">
             <div class="test-card">
                 <span class="test-step-tag">{{ _("Bölüm 1") }} · {{ _("Öğrenme Stili") }}</span>
-                <h2 class="test-q">{{ _("Soru 2: Okuduğun bir metni hatırlamak istediğinde zihninde ne canlanır?") }}</h2>
+                <h2 class="test-q">{{ _("Soru 2: Bir bilgiyi zihninde tutarken hangisi daha işe yarar? (Çalışma belleği: aynı anda 4-7 parça)") }}</h2>
                 <div class="test-opts">
-                    <label class="test-opt"><input type="radio" name="q2" value="visual"><span class="opt-dot"></span><span class="opt-text">{{ _("Sayfadaki başlıklar, renkler ve paragrafların görünüşü") }}</span></label>
-                    <label class="test-opt"><input type="radio" name="q2" value="auditory"><span class="opt-dot"></span><span class="opt-text">{{ _("Metni okurken duyduğum iç sesim ve vurgular") }}</span></label>
-                    <label class="test-opt"><input type="radio" name="q2" value="kinesthetic"><span class="opt-dot"></span><span class="opt-text">{{ _("Metinle ilgili yaşadığım deneyimler ve hisler") }}</span></label>
+                    <label class="test-opt"><input type="radio" name="q2" value="visual"><span class="opt-dot"></span><span class="opt-text">{{ _("Bilgiyi zihinsel görüntülere ve şemalara bölüştürürüm") }}</span></label>
+                    <label class="test-opt"><input type="radio" name="q2" value="auditory"><span class="opt-dot"></span><span class="opt-text">{{ _("Bilgiyi sesli yineler, ritim ve tekrarla pekiştiririm") }}</span></label>
+                    <label class="test-opt"><input type="radio" name="q2" value="kinesthetic"><span class="opt-dot"></span><span class="opt-text">{{ _("Bilgiyi ancak uygulayınca ve örnekleşince tutabilirim") }}</span></label>
                 </div>
             </div>
         </div>
@@ -54,11 +54,11 @@
         <div class="test-step" data-section="style">
             <div class="test-card">
                 <span class="test-step-tag">{{ _("Bölüm 1") }} · {{ _("Öğrenme Stili") }}</span>
-                <h2 class="test-q">{{ _("Soru 3: Bir derse ya da toplantıya katılıyorsun. Sana en verimli gelen ortam hangisi?") }}</h2>
+                <h2 class="test-q">{{ _("Soru 3: Bir konuyu öğrenirken en verimli hissettiğin an hangisi? (Kolb'un öğrenme döngüsü)") }}</h2>
                 <div class="test-opts">
-                    <label class="test-opt"><input type="radio" name="q3" value="visual"><span class="opt-dot"></span><span class="opt-text">{{ _("Slaytlar, grafikler ve yazılı özetlerin olduğu ortam") }}</span></label>
-                    <label class="test-opt"><input type="radio" name="q3" value="auditory"><span class="opt-dot"></span><span class="opt-text">{{ _("Anlatıcının sesini net duyduğum, soru-cevabın bol olduğu ortam") }}</span></label>
-                    <label class="test-opt"><input type="radio" name="q3" value="kinesthetic"><span class="opt-dot"></span><span class="opt-text">{{ _("Atölye, laboratuvar veya uygulamalı çalışma ortamı") }}</span></label>
+                    <label class="test-opt"><input type="radio" name="q3" value="visual"><span class="opt-dot"></span><span class="opt-text">{{ _("Konunun mantığını ve şemasını kavradığım an (soyut kavramsallaştırma)") }}</span></label>
+                    <label class="test-opt"><input type="radio" name="q3" value="auditory"><span class="opt-dot"></span><span class="opt-text">{{ _("Birini izleyip dinleyerek anladığım an (yansıtıcı gözlem)") }}</span></label>
+                    <label class="test-opt"><input type="radio" name="q3" value="kinesthetic"><span class="opt-dot"></span><span class="opt-text">{{ _("Konuyu yaşayarak, uygulayarak öğrendiğim an (somut deneyim)") }}</span></label>
                 </div>
             </div>
         </div>
@@ -66,11 +66,11 @@
         <div class="test-step" data-section="style">
             <div class="test-card">
                 <span class="test-step-tag">{{ _("Bölüm 1") }} · {{ _("Öğrenme Stili") }}</span>
-                <h2 class="test-q">{{ _("Soru 4: Karmaşık bir bilgiyi bir arkadaşına anlatman gerekse nasıl anlatırsın?") }}</h2>
+                <h2 class="test-q">{{ _("Soru 4: Öğrendiğin bir konuyu kalıcı hale getirmek için ne yaparsın? (Kodlama → uzun süreli bellek)") }}</h2>
                 <div class="test-opts">
-                    <label class="test-opt"><input type="radio" name="q4" value="visual"><span class="opt-dot"></span><span class="opt-text">{{ _("Çizimler, karşılaştırma tabloları ve örnek görsellerle") }}</span></label>
-                    <label class="test-opt"><input type="radio" name="q4" value="auditory"><span class="opt-dot"></span><span class="opt-text">{{ _("Sesli anlatır, gerekirse sesli mesaj bile çekerim") }}</span></label>
-                    <label class="test-opt"><input type="radio" name="q4" value="kinesthetic"><span class="opt-dot"></span><span class="opt-text">{{ _("Somut bir örnekle veya birlikte uygulayarak gösteririm") }}</span></label>
+                    <label class="test-opt"><input type="radio" name="q4" value="visual"><span class="opt-dot"></span><span class="opt-text">{{ _("Zihin haritası ve görsel notlarla kodlarım; renkler belleğe kazınır") }}</span></label>
+                    <label class="test-opt"><input type="radio" name="q4" value="auditory"><span class="opt-dot"></span><span class="opt-text">{{ _("Sesli anlatım ve tartışmayla pekiştiririm") }}</span></label>
+                    <label class="test-opt"><input type="radio" name="q4" value="kinesthetic"><span class="opt-dot"></span><span class="opt-text">{{ _("Aktif geri çağırma yaparım: kaynağı kapatıp kendime uygulatırım") }}</span></label>
                 </div>
             </div>
         </div>
@@ -78,11 +78,11 @@
         <div class="test-step" data-section="style">
             <div class="test-card">
                 <span class="test-step-tag">{{ _("Bölüm 1") }} · {{ _("Öğrenme Stili") }}</span>
-                <h2 class="test-q">{{ _("Soru 5: Sınav haftasındasın. Çalışma stratejin hangisine daha yakın?") }}</h2>
+                <h2 class="test-q">{{ _("Soru 5: Ders çalışma ortamın nasıl olmalı? (Bilişsel yük: dikkat dağıtıcılar az olmalı)") }}</h2>
                 <div class="test-opts">
-                    <label class="test-opt"><input type="radio" name="q5" value="visual"><span class="opt-dot"></span><span class="opt-text">{{ _("Renkli notlar, zihin haritaları ve özet tablolar hazırlarım") }}</span></label>
-                    <label class="test-opt"><input type="radio" name="q5" value="auditory"><span class="opt-dot"></span><span class="opt-text">{{ _("Konuyu sesli tekrar eder, kayıt dinler veya arkadaşıma anlatırım") }}</span></label>
-                    <label class="test-opt"><input type="radio" name="q5" value="kinesthetic"><span class="opt-dot"></span><span class="opt-text">{{ _("Soru çözer, kod yazar veya pratik egzersizler yaparım") }}</span></label>
+                    <label class="test-opt"><input type="radio" name="q5" value="visual"><span class="opt-dot"></span><span class="opt-text">{{ _("Düzenli, renk kodlamalı, görsel olarak zengin ama yapılandırılmış bir masa") }}</span></label>
+                    <label class="test-opt"><input type="radio" name="q5" value="auditory"><span class="opt-dot"></span><span class="opt-text">{{ _("Sade ve sessiz görsel ortam — göz yormayan, kulağa odaklı düzen") }}</span></label>
+                    <label class="test-opt"><input type="radio" name="q5" value="kinesthetic"><span class="opt-dot"></span><span class="opt-text">{{ _("Kısa molalar ve hareket payı olan, pratik yapılabilen bir ortam") }}</span></label>
                 </div>
             </div>
         </div>
@@ -90,11 +90,11 @@
         <div class="test-step" data-section="style">
             <div class="test-card">
                 <span class="test-step-tag">{{ _("Bölüm 1") }} · {{ _("Öğrenme Stili") }}</span>
-                <h2 class="test-q">{{ _("Soru 6: Yönünü kaybettiğin bir şehirdesin. Ne yaparsın?") }}</h2>
+                <h2 class="test-q">{{ _("Soru 6: Uzun vadede hatırlamak için hangi tekrar stratejisi sana uyar? (Dunlosky et al., 2013)") }}</h2>
                 <div class="test-opts">
-                    <label class="test-opt"><input type="radio" name="q6" value="visual"><span class="opt-dot"></span><span class="opt-text">{{ _("Haritaya veya telefondaki navigasyona bakarım") }}</span></label>
-                    <label class="test-opt"><input type="radio" name="q6" value="auditory"><span class="opt-dot"></span><span class="opt-text">{{ _("Birine yol tarifi sorar, tarifleri dinleyerek ilerlerim") }}</span></label>
-                    <label class="test-opt"><input type="radio" name="q6" value="kinesthetic"><span class="opt-dot"></span><span class="opt-text">{{ _("Etrafta yürür, kendi kendime yönü hissederek bulurum") }}</span></label>
+                    <label class="test-opt"><input type="radio" name="q6" value="visual"><span class="opt-dot"></span><span class="opt-text">{{ _("Özetleri görsel kartlara dönüştürüp zaman aralıklarıyla gözden geçiririm (aralıklı tekrar)") }}</span></label>
+                    <label class="test-opt"><input type="radio" name="q6" value="auditory"><span class="opt-dot"></span><span class="opt-text">{{ _("Sesli kayıtları ve kendi anlatımlarımı aralıklarla tekrar dinlerim (aralıklı tekrar)") }}</span></label>
+                    <label class="test-opt"><input type="radio" name="q6" value="kinesthetic"><span class="opt-dot"></span><span class="opt-text">{{ _("Farklı problem ve soru tiplerini karıştırarak çözerim (araya ekleme)") }}</span></label>
                 </div>
             </div>
         </div>

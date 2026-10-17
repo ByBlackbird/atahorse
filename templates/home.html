@@ -53,6 +53,24 @@
 .mh-empty b{display:block;color:#1E1B4B;font-size:17px;margin-bottom:6px}
 .cert-mini{display:inline-flex;align-items:center;gap:6px;background:#ECFDF5;color:#047857;
     border:1px solid #A7F3D0;border-radius:999px;padding:6px 12px;font-size:12.5px;font-weight:700;text-decoration:none}
+/* Tema secici */
+.th-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:14px}
+.th-card{background:#fff;border:2px solid #e9e6f7;border-radius:16px;padding:16px;display:flex;flex-direction:column;gap:9px;transition:all .15s}
+.th-card:hover{border-color:#8B5CF6;transform:translateY(-2px)}
+.th-card.active{border-color:#5B2DE6;box-shadow:0 8px 24px rgba(91,45,230,.18)}
+.th-preview{height:44px;border-radius:10px}
+.th-preview.sade{background:linear-gradient(135deg,#FCFCFA,#E2E8F0 60%,#475569)}
+.th-preview.canli{background:linear-gradient(135deg,#F7F5FF,#8B5CF6 60%,#1E1B4B)}
+.th-preview.dinamik{background:linear-gradient(135deg,#FFFDF7,#EA580C 60%,#9A3412)}
+.th-preview.dengeli{background:linear-gradient(135deg,#F8FAFC,#4F46E5 60%,#4338CA)}
+.th-preview.auto{background:linear-gradient(135deg,#F8FAFC,#B45309 55%,#1E1B4B)}
+.th-name{font-weight:800;color:#1E1B4B;font-size:14.5px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.th-style{font-size:11px;font-weight:800;background:#EFEBFF;color:#5B2DE6;border-radius:999px;padding:3px 9px}
+.th-desc{font-size:12.5px;color:#77779a;line-height:1.55;flex:1}
+.th-btn{border:none;border-radius:10px;padding:9px;font-weight:700;font-size:13px;cursor:pointer;background:linear-gradient(135deg,#5B2DE6,#8B5CF6);color:#fff}
+.th-btn.current{background:#EFEBFF;color:#5B2DE6;cursor:default}
+.th-note{font-size:12.5px;color:#77779a;margin:-4px 0 12px}
+.th-note b{color:#1E1B4B}
 </style>
 {% endblock %}
 
@@ -99,6 +117,37 @@
         <a href="{{ url_for('pricing') }}" class="mh-btn ghost"><svg class="ico" style="color:#D97706"><use href="#i-crown"/></svg> {{ _("Premium'a Yükselt") }}</a>
         {% endif %}
     </div>
+
+    <div class="mh-section" id="tema">
+        <h2><svg class="ico"><use href="#i-th-large"/></svg> {{ _("Öğrenme Temam") }}</h2>
+        <p class="th-note">
+            {% if user_theme == 'auto' %}
+                {{ _("Tema şu an öğrenme stiline göre otomatik seçili:") }} <b>{{ _(themes[theme].name) }}</b>
+            {% else %}
+                {{ _("Şu anki teman:") }} <b>{{ _(themes[theme].name) }}</b> — {{ _("istersen aşağıdan değiştirebilirsin.") }}
+            {% endif %}
+        </p>
+        <div class="th-grid">
+            {% for key, t in themes.items() %}
+            <div class="th-card {% if key == user_theme %}active{% endif %}">
+                <div class="th-preview {{ key }}"></div>
+                <div class="th-name">{{ _(t.name) }}
+                    <span class="th-style">{{ {"auto":_("Tüm Stillere Uyar"),"sade":_("İşitsel İçin"),"canli":_("Görsel İçin"),"dinamik":_("Kinestetik İçin"),"dengeli":_("Karma İçin")}[key] }}</span>
+                </div>
+                <div class="th-desc">{{ _(t.desc) }}</div>
+                <form method="POST" action="{{ url_for('set_theme') }}">
+                    <input type="hidden" name="theme" value="{{ key }}">
+                    {% if key == user_theme %}
+                    <button type="button" class="th-btn current">{{ _("Şu Anki Tema") }}</button>
+                    {% else %}
+                    <button type="submit" class="th-btn">{{ _("Bu Temayı Kullan") }}</button>
+                    {% endif %}
+                </form>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
 
     {% set active = courses | selectattr('completed', 'equalto', 0) | list %}
     {% set done = courses | selectattr('completed', 'equalto', 1) | list %}
