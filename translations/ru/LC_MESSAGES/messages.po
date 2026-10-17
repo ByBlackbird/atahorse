@@ -726,3 +726,366 @@ msgstr "Ваш пароль"
 
 msgid "Şifreyi Güncelle"
 msgstr "Обновить пароль"
+
+msgid "AI kursunuzu oluşturuyor..."
+msgstr "Создаем ваш ИИ-курс..."
+
+msgid "Adım adım öğretici içerik"
+msgstr "Пошаговый учебный контент"
+
+msgid "Akademik makaleler ve atıflar"
+msgstr "Академические статьи и цитирования"
+
+msgid "Analizi Tamamla"
+msgstr "Завершить анализ"
+
+msgid "Anlatıcının sesini net duyduğum, soru-cevabın bol olduğu ortam"
+msgstr "Окружение, где я отчетливо слышу лектора и много вопросов и ответов"
+
+msgid "Ansiklopedik temel bilgi"
+msgstr "Энциклопедические базовые знания"
+
+msgid "Atahorse'ın eriştiği ve her kursa bağladığı kaynaklar — bilgi her zaman izlenebilir"
+msgstr "Источники, к которым имеет доступ Atahorse, и связи с каждым курсом — информация всегда прослеживаема"
+
+msgid "Atahorse'ın yapay zekâsı her kursu senin için katman katman işler"
+msgstr "ИИ Atahorse обрабатывает каждый курс послойно специально для вас"
+
+msgid "Atölye, laboratuvar veya uygulamalı çalışma ortamı"
+msgstr "Мастерская, лаборатория или практическая среда"
+
+msgid "Açık erişimli bilim ön baskıları"
+msgstr "Научные препринты открытого доступа"
+
+msgid "Aşamaları, tarihleri ve detay listeleriyle net bir plan kurarım"
+msgstr "Я составляю четкий план с этапами, датами и подробными списками"
+
+msgid "Bekliyor"
+msgstr "Ожидает"
+
+msgid "Beyin Analizi"
+msgstr "Анализ мозга"
+
+msgid "Bilgi Quiz'i"
+msgstr "Проверка знаний"
+
+msgid "Birine yol tarifi sorar, tarifleri dinleyerek ilerlerim"
+msgstr "Я спрашиваю дорогу у прохожих и иду, слушая объяснения"
+
+msgid "Bu dosya türü desteklenmiyor."
+msgstr "Этот тип файла не поддерживается."
+
+msgid "Bu kodla eşleşen bir sertifika yok. Kodu kontrol edin."
+msgstr "Сертификат с таким кодом не найден. Проверьте код."
+
+msgid "Bu sayfaya erişim yetkiniz yok."
+msgstr "У вас нет доступа к этой странице."
+
+msgid "Bu sertifika Atahorse kayıtlarında doğrulandı."
+msgstr "Этот сертификат подтвержден в записях Atahorse."
+
+msgid "Bölüm 1"
+msgstr "Раздел 1"
+
+msgid "Bölüm 2"
+msgstr "Раздел 2"
+
+msgid "Deep Learning"
+msgstr "Глубокое обучение"
+
+msgid "Deep Learning ile Kişisel Öğretmen"
+msgstr "Персональный преподаватель на основе глубокого обучения"
+
+msgid "Derin Analiz"
+msgstr "Глубокий анализ"
+
+msgid "Detaylı analizle beyninin hangi lobuyla öğrendiğini keşfet. Görsel, işitsel veya kinestetik — her profile özel içerik."
+msgstr "Узнайте, какая доля вашего мозга лучше всего усваивает информацию, с помощью детального анализа. Визуальный, слуховой или кинестетический — контент для каждого профиля."
+
+msgid "Devam"
+msgstr "Далее"
+
+msgid "Değerlendirildi"
+msgstr "Оценено"
+
+msgid "Değerlendirme"
+msgstr "Оценка"
+
+msgid "Dosya"
+msgstr "Файл"
+
+msgid "Dosyan yüklendi! Ekibimiz inceleyecek."
+msgstr "Файл загружен! Наша команда его проверит."
+
+msgid "Doğrulanmış güncel gelişmeler"
+msgstr "Проверенные актуальные события"
+
+msgid "Düşünme Tarzı"
+msgstr "Стиль мышления"
+
+msgid "Etrafta yürür, kendi kendime yönü hissederek bulurum"
+msgstr "Я хожу вокруг и нахожу дорогу на ощупь"
+
+msgid "Geleceğin olasılıklarını hayal ederek plan yaparım"
+msgstr "Я планирую, представляя будущие возможности"
+
+msgid "Genel bir vizyon belirler, detayları ilerledikçe şekillendiririm"
+msgstr "Я задаю общее видение и уточняю детали по ходу"
+
+msgid "Geri"
+msgstr "Назад"
+
+msgid "Geçerli Sertifika"
+msgstr "Действительный сертификат"
+
+msgid "Geçmiş deneyimlerden ve kanıtlardan yola çıkarak plan yaparım"
+msgstr "Я планирую, опираясь на прошлый опыт и доказательства"
+
+msgid "Gönderi silindi."
+msgstr "Материал удален."
+
+msgid "Görsel öğrenen bir öğrenci olduğun için notlarını / çizimlerini yüklemen yeterli. Ekibimiz kontrol edecek."
+msgstr "Как визуальный ученик, просто загрузите свои заметки / рисунки. Наша команда их проверит."
+
+msgid "Görüntüler, hayaller ve bütünsel imgelerle düşünürüm"
+msgstr "Я думаю образами, мечтами и целостными картинами"
+
+msgid "Güven"
+msgstr "Доверие"
+
+msgid "Güvenilir Kaynak Ağı"
+msgstr "Сеть надежных источников"
+
+msgid "Haritaya veya telefondaki navigasyona bakarım"
+msgstr "Я смотрю на карту или навигацию в телефоне"
+
+msgid "Hayal gücimi ve fikrin büyük resme uygunluğunu sorgularım"
+msgstr "Я проверяю свое воображение и соответствие идеи общей картине"
+
+msgid "Hemen denemeye başlarım; yaparak öğrenirim"
+msgstr "Я сразу начинаю пробовать; учусь на практике"
+
+msgid "Hemen sezgilerime göre bir çözüm dener, yolda düzeltirim"
+msgstr "Я пробую решение по интуиции и исправляю по ходу"
+
+msgid "Her kursun sonunda taranan tüm kaynaklar şeffaf kaynakça olarak listelenir."
+msgstr "В конце каждого курса все просканированные источники перечислены в прозрачной библиографии."
+
+msgid "Kaynakları Gör"
+msgstr "Посмотреть источники"
+
+msgid "Kişisel Çıktın"
+msgstr "Ваш личный результат"
+
+msgid "Kişiselleştirme"
+msgstr "Персонализация"
+
+msgid "Konunun anlatıldığı bir video, podcast veya sohbet ararım"
+msgstr "Я ищу видео, подкаст или разговор, объясняющий тему"
+
+msgid "Konunun şemasını, haritasını veya görsellerini araştırırım"
+msgstr "Я ищу схемы, карты или изображения по теме"
+
+msgid "Konuyu sesli tekrar eder, kayıt dinler veya arkadaşıma anlatırım"
+msgstr "Я повторяю тему вслух, слушаю записи или объясняю другу"
+
+msgid "Kurallar ve adım adım talimatlarla ilerlemek isterim"
+msgstr "Я предпочитаю следовать правилам и пошаговым инструкциям"
+
+msgid "Kurs Değerlendirmesi"
+msgstr "Оценка курса"
+
+msgid "Kurs:"
+msgstr "Курс:"
+
+msgid "Kurs; modüller, görevler ve doğrulanabilir sertifika ile sunulur. Kaynakça her zaman açık, bilgi her zaman izlenebilir."
+msgstr "Курсы включают модули, задания и проверяемый сертификат. Библиография всегда открыта, информация всегда прослеживаема."
+
+msgid "Kursa dön"
+msgstr "Вернуться к курсу"
+
+msgid "Kursu ne kadar özümsediğini ölçelim. Sorular senin kursuna özel üretildi."
+msgstr "Проверим, насколько вы усвоили курс. Вопросы созданы специально для вашего курса."
+
+msgid "Lütfen bir dosya seç."
+msgstr "Пожалуйста, выберите файл."
+
+msgid "Metinle ilgili yaşadığım deneyimler ve hisler"
+msgstr "Мой опыт и чувства, связанные с текстом"
+
+msgid "Metni okurken duyduğum iç sesim ve vurgular"
+msgstr "Внутренний голос и интонации, которые я слышу при чтении"
+
+msgid "Not"
+msgstr "Заметка"
+
+msgid "Not / Dosya Yükle"
+msgstr "Загрузить заметку / файл"
+
+msgid "Not / Ses"
+msgstr "Заметка / Аудио"
+
+msgid "Pratik yaparak öğreniyorsun: yaptığın çalışmayı anlatan bir not veya ses kaydı yükle."
+msgstr "Вы учитесь на практике: загрузите заметку или аудиозапись с описанием вашей работы."
+
+msgid "Puan"
+msgstr "Балл"
+
+msgid "Quiz Sonuçları"
+msgstr "Результаты тестов"
+
+msgid "Quiz değerlendirildi:"
+msgstr "Тест оценен:"
+
+msgid "Quiz sonucun"
+msgstr "Ваш результат теста"
+
+msgid "Quiz şu an üretilemedi — AI servisine bağlanılamıyor. Lütfen daha sonra tekrar dene ya da ödevini yükle."
+msgstr "Тест пока не создан — нет связи с ИИ-сервисом. Попробуйте позже или загрузите задание."
+
+msgid "Quiz'i Bitir"
+msgstr "Завершить тест"
+
+msgid "Renkli notlar, zihin haritaları ve özet tablolar hazırlarım"
+msgstr "Я готовлю цветные заметки, карты разума и сводные таблицы"
+
+msgid "Sana en uygun öğrenme yolunu bulmak için hazırlanmış 12 soruluk kısa analiz."
+msgstr "Краткий анализ из 12 вопросов, чтобы найти лучший для вас путь обучения."
+
+msgid "Sayfadaki başlıklar, renkler ve paragrafların görünüşü"
+msgstr "Вид заголовков, цветов и абзацев на странице"
+
+msgid "Senin öğrenme stiline (görsel, işitsel, kinestetik) ve seviyene göre içerik yeniden yazılır — teknik terimler anladığın dile indirgenir."
+msgstr "Контент переписывается под ваш стиль обучения (визуальный, слуховой, кинестетический) и уровень — технические термины переводятся на понятный вам язык."
+
+msgid "Sertifika Bulunamadı"
+msgstr "Сертификат не найден"
+
+msgid "Sertifika Doğrulama"
+msgstr "Проверка сертификата"
+
+msgid "Sertifika No"
+msgstr "Номер сертификата"
+
+msgid "Sertifika Sahibi"
+msgstr "Владелец сертификата"
+
+msgid "Ses"
+msgstr "Аудио"
+
+msgid "Ses Kaydı Yükle"
+msgstr "Загрузить аудиозапись"
+
+msgid "Sesli anlatır, gerekirse sesli mesaj bile çekerim"
+msgstr "Я объясняю вслух, при необходимости записываю голосовые сообщения"
+
+msgid "Sesli anlayan bir öğrenci olduğun için konuyu sesli anlatmanı istiyoruz. Dilersen notunu da ekleyebilirsin."
+msgstr "Поскольку вы учитесь на слух, мы просим вас объяснить тему вслух. Можно также приложить заметки."
+
+msgid "Sinir ağı katmanları konunun kavram haritasını çıkarır; çelişen bilgileri çapraz kontrol eder, en güncel olanı seçer."
+msgstr "Слои нейросети строят карту понятий темы; перекрестно проверяют противоречивую информацию и выбирают самую актуальную."
+
+msgid "Slaytlar, grafikler ve yazılı özetlerin olduğu ortam"
+msgstr "Окружение со слайдами, графиками и письменными конспектами"
+
+msgid "Somut bir örnekle veya birlikte uygulayarak gösteririm"
+msgstr "Я показываю на конкретном примере или вместе практикую"
+
+msgid "Soru"
+msgstr "Вопрос"
+
+msgid "Soru 10: Yeni bir beceri öğrenirken (ör. müzik aleti, kod, dil)..."
+msgstr "Вопрос 10: При изучении нового навыка (например, инструмента, программирования, языка)..."
+
+msgid "Soru 11: Masanda bir konuyu düşünürken zihninin nasıl çalıştığını fark ediyorsun?"
+msgstr "Вопрос 11: Размышляя о теме, как вы замечаете, что работает ваш ум?"
+
+msgid "Soru 12: Zamanla ilgili hangisi sana daha doğru geliyor?"
+msgstr "Вопрос 12: Что вам ближе в отношении времени?"
+
+msgid "Soru 1: Karşına tamamen yeni ve soyut bir konu çıktı. İlk olarak ne yaparsın?"
+msgstr "Вопрос 1: Вам встретилась совершенно новая абстрактная тема. Что вы сделаете в первую очередь?"
+
+msgid "Soru 2: Okuduğun bir metni hatırlamak istediğinde zihninde ne canlanır?"
+msgstr "Вопрос 2: Когда вы пытаетесь вспомнить прочитанный текст, что всплывает в памяти?"
+
+msgid "Soru 3: Bir derse ya da toplantıya katılıyorsun. Sana en verimli gelen ortam hangisi?"
+msgstr "Вопрос 3: Вы посещаете занятие или встречу. Какая среда для вас самая эффективная?"
+
+msgid "Soru 4: Karmaşık bir bilgiyi bir arkadaşına anlatman gerekse nasıl anlatırsın?"
+msgstr "Вопрос 4: Если бы вам нужно было объяснить сложную информацию другу, как бы вы это сделали?"
+
+msgid "Soru 5: Sınav haftasındasın. Çalışma stratejin hangisine daha yakın?"
+msgstr "Вопрос 5: Неделя экзаменов. Какая стратегия подготовки вам ближе?"
+
+msgid "Soru 6: Yönünü kaybettiğin bir şehirdesin. Ne yaparsın?"
+msgstr "Вопрос 6: Вы потерялись в незнакомом городе. Что будете делать?"
+
+msgid "Soru 7: Aniden bir arıza ya da beklenmedik bir problem çıktı. İlk tepkin ne olur?"
+msgstr "Вопрос 7: Внезапная поломка или неожиданная проблема. Ваша первая реакция?"
+
+msgid "Soru 8: Yeni bir proje ya da hedef için plan yaparken..."
+msgstr "Вопрос 8: При планировании нового проекта или цели..."
+
+msgid "Soru 9: Sana iddialı bir yeni fikir anlatıldı. Ne sorgularsın?"
+msgstr "Вопрос 9: Вам предложили смелую новую идею. Что вы будете проверять?"
+
+msgid "Soru çözer, kod yazar veya pratik egzersizler yaparım"
+msgstr "Я решаю задачи, пишу код или выполняю практические упражнения"
+
+msgid "Sözcüklerle, iç sesle ve sıralı cümlelerle düşünürüm"
+msgstr "Я думаю словами, внутренним голосом и последовательными фразами"
+
+msgid "Teknoloji"
+msgstr "Технологии"
+
+msgid "Test atlandı."
+msgstr "Тест пропущен."
+
+msgid "Tıp ve yaşam bilimleri literatürü"
+msgstr "Литература по медицине и наукам о жизни"
+
+msgid "UNESCO, OECD ve kamu kayıtları"
+msgstr "ЮНЕСКО, ОЭСР и государственные архивы"
+
+msgid "Veriyi, kanıtı ve mantıksal tutarlılığı sorgularım"
+msgstr "Я проверяю данные, доказательства и логическую последовательность"
+
+msgid "Wikipedia'dan akademik makalelere milyonlarca güvenilir kaynak taranır; her biri doğruluk için sınıflandırılır."
+msgstr "Сканируются миллионы надежных источников — от Википедии до академических статей; каждый классифицируется по достоверности."
+
+msgid "Yükle"
+msgstr "Загрузить"
+
+msgid "istediğin zaman tekrar doldurabilirsin."
+msgstr "вы можете пройти его в любое время."
+
+msgid "testi atlayabilirsin"
+msgstr "пропустить тест"
+
+msgid "Çizimler, karşılaştırma tabloları ve örnek görsellerle"
+msgstr "С рисунками, сравнительными таблицами и примерами"
+
+msgid "Önce durur, olası nedenleri tek tek sıralayıp analiz ederim"
+msgstr "Я сначала останавливаюсь, перечисляю возможные причины и анализирую"
+
+msgid "Önceki gönderilerin"
+msgstr "Ваши предыдущие материалы"
+
+msgid "Özgürce denemeler yapıp kendi yolumu keşfetmek isterim"
+msgstr "Я хочу свободно экспериментировать и находить свой путь"
+
+msgid "Öğrenci Gönderileri"
+msgstr "Материалы студентов"
+
+msgid "Üniversite düzeyinde ders materyali"
+msgstr "Университетские учебные материалы"
+
+msgid "İncelemede"
+msgstr "На проверке"
+
+msgid "Şeffaf Öğretim"
+msgstr "Прозрачное обучение"
+
+msgid "Şu an vaktin yoksa"
+msgstr "Если сейчас нет времени,"

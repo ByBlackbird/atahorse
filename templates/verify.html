@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block title %}{{ _("Sertifika Doğrulama") }} - Atahorse{% endblock %}
+{% block extra_css %}<link rel="stylesheet" href="{{ url_for('static', filename='css/auth.css') }}">{% endblock %}
+
+{% block content %}
+<div class="auth-container">
+    <div class="auth-card" style="max-width: 520px;">
+        <div class="auth-header">
+            <div class="auth-logo-wrap"><img src="{{ url_for('static', filename='img/logo.png') }}" alt="Atahorse" class="auth-logo-img"></div>
+            {% if cert %}
+            <h2 style="color:#4ade80;"><i class="fas fa-circle-check"></i> {{ _("Geçerli Sertifika") }}</h2>
+            <p>{{ _("Bu sertifika Atahorse kayıtlarında doğrulandı.") }}</p>
+            {% else %}
+            <h2 style="color:#f87171;"><i class="fas fa-circle-xmark"></i> {{ _("Sertifika Bulunamadı") }}</h2>
+            <p>{{ _("Bu kodla eşleşen bir sertifika yok. Kodu kontrol edin.") }}</p>
+            {% endif %}
+        </div>
+        {% if cert %}
+        <div style="text-align:left; display:flex; flex-direction:column; gap:0.8rem; margin-bottom:1.4rem;">
+            <div><strong style="color:rgba(255,255,255,.5); font-size:.8rem; text-transform:uppercase; letter-spacing:.08em;">{{ _("Sertifika Sahibi") }}</strong><br><span style="color:#fff; font-size:1.1rem; font-weight:700;">{{ cert.full_name or cert.username }}</span></div>
+            <div><strong style="color:rgba(255,255,255,.5); font-size:.8rem; text-transform:uppercase; letter-spacing:.08em;">{{ _("Kurs") }}</strong><br><span style="color:#f5b942; font-weight:600;">{{ cert.course_title }}</span></div>
+            <div><strong style="color:rgba(255,255,255,.5); font-size:.8rem; text-transform:uppercase; letter-spacing:.08em;">{{ _("Sertifika No") }}</strong><br><span style="color:#fff; font-family:monospace;">{{ cert.certificate_code }}</span></div>
+        </div>
+        {% endif %}
+        <div class="auth-footer">
+            <a href="{{ url_for('index') }}" style="color:#f5b942;">← atahorse.ai</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

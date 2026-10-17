@@ -16,9 +16,8 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from reportlab.lib.pagesizes import A4, landscape
 from reportlab.lib import colors
 from reportlab.lib.units import cm
-from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer
-from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
-from reportlab.lib.enums import TA_CENTER
+from reportlab.pdfgen import canvas
+from reportlab.lib.utils import ImageReader
 import requests
 
 app = Flask(__name__)
@@ -119,7 +118,8 @@ login_manager.login_view = "login"
 login_manager.login_message = _("Lütfen önce giriş yapın.")
 login_manager.login_message_category = "warning"
 
-DB_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "atahorse.db")
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+DB_PATH = os.path.join(BASE_DIR, "atahorse.db")
 
 def get_db():
     conn = sqlite3.connect(DB_PATH)
@@ -177,6 +177,32 @@ def init_db():
         description TEXT,
         status TEXT DEFAULT 'completed',
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        FOREIGN KEY (user_id) REFERENCES users (id))""")
+
+
+    c.execute("""CREATE TABLE IF NOT EXISTS quizzes (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        course_id INTEGER NOT NULL,
+        user_id INTEGER NOT NULL,
+        questions TEXT NOT NULL,
+        answers TEXT,
+        score INTEGER,
+        max_score INTEGER,
+        status TEXT DEFAULT 'pending',
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        FOREIGN KEY (course_id) REFERENCES courses (id),
+        FOREIGN KEY (user_id) REFERENCES users (id))""")
+
+    c.execute("""CREATE TABLE IF NOT EXISTS submissions (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        course_id INTEGER NOT NULL,
+        user_id INTEGER NOT NULL,
+        kind TEXT NOT NULL,
+        filename TEXT NOT NULL,
+        stored TEXT NOT NULL,
+        mime TEXT,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        FOREIGN KEY (course_id) REFERENCES courses (id),
         FOREIGN KEY (user_id) REFERENCES users (id))""")
 
     conn.commit()
@@ -326,39 +352,183 @@ def generate_fallback_course(topic, level, lang='tr'):
     return {"title": f"{topic} - {level.title()} Eğitimi", "description": f"{topic} konusunda kapsamlı {level} seviyesi eğitim.", "modules": mods, "sources": []}
 
 # === PDF SERTİFİKA ===
-def generate_certificate_pdf(user_name, course_title, cert_code, date_str, lang='tr'):
+def generate_quiz(course, modules, lang='tr'):
+    """Kurs modullerinden 5 soruluk degerlendirme uretir.
+    Donus: [{question, options[4], correct_index}] veya None."""
+    module_titles = [m.get("title","") for m in modules[:8]]
+    prompt = (
+        f"Kurs: {course['title']}\nKonu: {course['topic']}\nSeviye: {course['level']}\n"
+        f"Moduller: {', '.join(module_titles)}\n\n"
+        "Bu kurs icin 5 coktan secmeli degerlendirme sorusu uret. "
+        "Her sorunun 4 secenegi ve dogru cevabin indeksi (0-3) olsun. "
+        "Yalnizca gecerli JSON dondur, format:\n"
+        '[{"question":"...","options":["a","b","c","d"],"correct_index":0}, ...]'
+    )
+    try:
+        raw = ollama_chat(prompt, system_prompt="Sen bir egitim degerlendirme uzmanisin. Sadece JSON dondur.")
+        start = raw.find("["); end = raw.rfind("]") + 1
+        if start == -1 or end == 0:
+            return None
+        data = json.loads(raw[start:end])
+        quiz = []
+        for q in data[:5]:
+            if "question" in q and isinstance(q.get("options"), list) and len(q["options"]) >= 2:
+                opts = [str(o) for o in q["options"]][:4]
+                ci = int(q.get("correct_index", 0))
+                ci = max(0, min(ci, len(opts) - 1))
+                quiz.append({"question": str(q["question"]), "options": opts, "correct_index": ci})
+        return quiz if len(quiz) >= 3 else None
+    except Exception:
+        return None
+
+def generate_certificate_pdf(user_name, course_title, cert_code, date_str, lang='tr', level='beginner'):
+    """Kurumsal sertifika: lacivert-amber çerçeve, seviye rozeti, doğrulama kodu."""
     buffer = BytesIO()
-    doc = SimpleDocTemplate(buffer, pagesize=landscape(A4),
-                            rightMargin=2*cm, leftMargin=2*cm, topMargin=2*cm, bottomMargin=2*cm)
-    styles = getSampleStyleSheet()
+    W, H = landscape(A4)
+    c = canvas.Canvas(buffer, pagesize=landscape(A4))
+
+    NAVY = colors.HexColor('#1E1B4B')
+    PURPLE = colors.HexColor('#5B2DE6')
+    AMBER = colors.HexColor('#F5B942')
+    AMBER_D = colors.HexColor('#D97706')
+    INK = colors.HexColor('#232338')
+    GRAY = colors.HexColor('#5b5b70')
+    IVORY = colors.HexColor('#FDFCF8')
+
     texts = {
-        'tr': {'sub': 'Kişiselleştirilmiş AI Eğitim Platformu', 'type': 'KATILIM SERTİFİKASI',
-               't1': 'Bu sertifika', 't2': 'adlı kişinin aşağıdaki eğitimi başarıyla tamamladığını onaylar.',
-               'date': 'Tarih', 'no': 'Sertifika No', 'foot': 'Atahorse AI Eğitim Platformu'},
-        'en': {'sub': 'Personalized AI Education Platform', 'type': 'CERTIFICATE OF COMPLETION',
+        'tr': {'sub': 'KISISELLESTIRILMIS AI EGITIM PLATFORMU', 'type': 'BASARI SERTIFIKASI',
+               't1': 'Bu belge,', 't2': 'adli kisinin asagidaki egitimi basariyla tamamladigini onaylar.',
+               'date': 'Tarih', 'no': 'Sertifika No', 'level_lbl': 'Zorluk Seviyesi',
+               'verify': 'Dogrulama', 'sign': 'Atahorse AI Egitim Platformu'},
+        'en': {'sub': 'PERSONALIZED AI EDUCATION PLATFORM', 'type': 'CERTIFICATE OF COMPLETION',
                't1': 'This certificate confirms that', 't2': 'has successfully completed the following course.',
-               'date': 'Date', 'no': 'Certificate No', 'foot': 'Atahorse AI Education Platform'},
-        'ru': {'sub': 'Платформа Персонализированного AI Образования', 'type': 'СЕРТИФИКАТ О ЗАВЕРШЕНИИ',
-               't1': 'Настоящий сертификат подтверждает, что', 't2': 'успешно завершил(а) следующий курс.',
-               'date': 'Дата', 'no': '№ Сертификата', 'foot': 'Платформа Atahorse AI'}
+               'date': 'Date', 'no': 'Certificate No', 'level_lbl': 'Difficulty Level',
+               'verify': 'Verify at', 'sign': 'Atahorse AI Education Platform'},
+        'ru': {'sub': 'PLATFORM PERSONALIZED AI EDUCATION', 'type': 'CERTIFICATE OF COMPLETION',
+               't1': 'This certificate confirms that', 't2': 'has successfully completed the following course.',
+               'date': 'Date', 'no': 'Certificate No', 'level_lbl': 'Difficulty Level',
+               'verify': 'Verify at', 'sign': 'Atahorse AI Education Platform'}
     }
     t = texts.get(lang, texts['tr'])
-    mk = lambda name, parent, size, color, bold=True: ParagraphStyle(name, parent=styles[parent],
-        fontSize=size, textColor=colors.HexColor(color), alignment=TA_CENTER,
-        spaceAfter=20 if bold else 10, fontName='Helvetica-Bold' if bold else 'Helvetica')
-    story = [Spacer(1, 1.5*cm), Paragraph("Atahorse", mk('T','Heading1',48,'#1a365d')),
-             Paragraph(t['sub'], mk('S','Normal',18,'#4a5568',False)),
-             Spacer(1, 1*cm), Paragraph(t['type'], mk('CT','Heading2',28,'#744210')),
-             Spacer(1, 0.5*cm), Paragraph(t['t1'], mk('x','Normal',14,'#4a5568',False)),
-             Spacer(1, 0.3*cm), Paragraph(f"<b>{user_name}</b>", mk('N','Heading2',36,'#2c5282')),
-             Spacer(1, 0.3*cm), Paragraph(t['t2'], mk('x2','Normal',14,'#4a5568',False)),
-             Spacer(1, 0.5*cm), Paragraph(f"<b>{course_title}</b>", mk('C','Heading3',24,'#2d3748')),
-             Spacer(1, 1*cm), Paragraph(f"{t['date']}: {date_str}", mk('d','Normal',14,'#4a5568',False)),
-             Spacer(1, 0.3*cm), Paragraph(f"{t['no']}: {cert_code}", mk('c','Normal',12,'#718096',False)),
-             Spacer(1, 1*cm), Paragraph(t['foot'], mk('f','Normal',10,'#a0aec0',False))]
-    doc.build(story)
+    # Turkce karakterleri ASCII'ye cevir (Helvetica WinAnsi Turkce desteklemez)
+    tr_map = str.maketrans('ğĞşŞıİçÇöÖüÜ', 'gGsSiIcCoOuU')
+    user_name = user_name.translate(tr_map)
+    course_title = course_title.translate(tr_map)
+    lv = (level or 'beginner').lower()
+    lv_map = {
+        'beginner':     {'tr': 'BASLANGIC', 'en': 'BEGINNER',     'col': AMBER,  'txt': colors.HexColor('#1a1206')},
+        'intermediate': {'tr': 'ORTA',      'en': 'INTERMEDIATE', 'col': PURPLE, 'txt': colors.white},
+        'advanced':     {'tr': 'ILERI',      'en': 'ADVANCED',     'col': NAVY,   'txt': AMBER},
+    }
+    lv_info = lv_map.get(lv, lv_map['beginner'])
+    lv_name = lv_info.get(lang, lv_info['en'])
+
+    # --- zemin ---
+    c.setFillColor(IVORY)
+    c.rect(0, 0, W, H, stroke=0, fill=1)
+
+    # --- cift cerceve ---
+    c.setStrokeColor(NAVY); c.setLineWidth(3)
+    c.rect(24, 24, W-48, H-48)
+    c.setStrokeColor(AMBER); c.setLineWidth(1.2)
+    c.rect(32, 32, W-64, H-64)
+    # kose vurgulari
+    c.setStrokeColor(AMBER); c.setLineWidth(3)
+    for cxx, cyy, dx, dy in [(24,24,1,1),(W-24,24,-1,1),(24,H-24,1,-1),(W-24,H-24,-1,-1)]:
+        c.line(cxx, cyy, cxx+26*dx, cyy)
+        c.line(cxx, cyy, cxx, cyy+26*dy)
+
+    cx = W / 2
+
+    # --- logo ---
+    try:
+        logo = ImageReader(os.path.join(BASE_DIR, 'static', 'img', 'logo.png'))
+        c.drawImage(logo, cx-30, H-118, width=60, height=60, mask='auto')
+    except Exception:
+        pass
+
+    # --- marka ---
+    c.setFillColor(NAVY)
+    c.setFont('Helvetica-Bold', 21)
+    c.drawCentredString(cx, H-142, "ATAHORSE.AI")
+    c.setFillColor(GRAY)
+    c.setFont('Helvetica', 8.4)
+    c.drawCentredString(cx, H-156, t['sub'])
+
+    # --- sertifika tipi rozeti ---
+    c.setFillColor(AMBER)
+    c.roundRect(cx-150, H-208, 300, 30, 6, stroke=0, fill=1)
+    c.setFillColor(colors.HexColor('#1a1206'))
+    c.setFont('Helvetica-Bold', 14.5)
+    c.drawCentredString(cx, H-198, t['type'])
+
+    # --- metinler ---
+    c.setFillColor(GRAY)
+    c.setFont('Helvetica', 11.5)
+    c.drawCentredString(cx, H-248, t['t1'])
+
+    c.setFillColor(NAVY)
+    c.setFont('Helvetica-Bold', 30)
+    c.drawCentredString(cx, H-284, user_name)
+
+    c.setStrokeColor(AMBER); c.setLineWidth(1.6)
+    c.line(cx-170, H-298, cx+170, H-298)
+
+    c.setFillColor(GRAY)
+    c.setFont('Helvetica', 11.5)
+    c.drawCentredString(cx, H-322, t['t2'])
+
+    c.setFillColor(INK)
+    c.setFont('Helvetica-Bold', 19)
+    title = course_title if len(course_title) <= 64 else course_title[:61] + '...'
+    c.drawCentredString(cx, H-352, title)
+
+    # --- seviye rozeti (sag ust bolge) ---
+    bx, by = W-196, H-262
+    c.setFillColor(lv_info['col'])
+    c.roundRect(bx, by, 150, 54, 8, stroke=0, fill=1)
+    c.setFillColor(lv_info['txt'])
+    c.setFont('Helvetica', 8)
+    c.drawCentredString(bx+75, by+38, t['level_lbl'].upper())
+    c.setFont('Helvetica-Bold', 13)
+    c.drawCentredString(bx+75, by+20, lv_name)
+
+    # --- alt bilgi satiri ---
+    c.setFillColor(GRAY)
+    c.setFont('Helvetica', 10.5)
+    c.drawString(64, 88, f"{t['date']}: {date_str}")
+    c.drawRightString(W-64, 88, f"{t['no']}: {cert_code}")
+    c.setFont('Helvetica', 9)
+    c.setFillColor(AMBER_D)
+    c.drawCentredString(cx, 62, f"{t['verify']}: atahorse.ai/verify/{cert_code}")
+
+    # --- imza blogu ---
+    c.setStrokeColor(NAVY); c.setLineWidth(1)
+    c.line(100, 128, 260, 128)
+    c.setFillColor(NAVY)
+    c.setFont('Helvetica-Bold', 10.5)
+    c.drawString(100, 114, "Atahorse")
+    c.setFillColor(GRAY)
+    c.setFont('Helvetica', 8.5)
+    c.drawString(100, 102, t['sign'])
+
+    # --- altin muhur ---
+    sx, sy = W-130, 130
+    c.setStrokeColor(AMBER_D); c.setLineWidth(2)
+    c.circle(sx, sy, 34, stroke=1, fill=0)
+    c.setFillColor(AMBER)
+    c.circle(sx, sy, 27, stroke=0, fill=1)
+    c.setFillColor(colors.HexColor('#1a1206'))
+    c.setFont('Helvetica-Bold', 15)
+    c.drawCentredString(sx, sy-5, "AI")
+    c.setFont('Helvetica', 6.5)
+    c.drawCentredString(sx, sy-15, "ATAHORSE")
+
+    c.showPage()
+    c.save()
     buffer.seek(0)
     return buffer
+
 
 # ================= ROTALAR =================
 
@@ -601,10 +771,139 @@ def certificate(course_id):
     conn.close()
     pdf = generate_certificate_pdf(current_user.full_name or current_user.username,
                                    course["title"], code,
-                                   datetime.datetime.now().strftime("%d %B %Y"),
-                                   session.get('lang','tr'))
+                                   datetime.datetime.now().strftime("%d.%m.%Y"),
+                                   session.get('lang','tr'), level=course["level"])
     return send_file(pdf, mimetype="application/pdf", as_attachment=True,
                      download_name=f"Atahorse_{course['title'][:30].replace(' ','_')}.pdf")
+
+
+UPLOAD_DIR = os.path.join(os.path.dirname(DB_PATH), "uploads")
+ALLOWED_UPLOADS = {
+    "note": {".txt", ".pdf", ".png", ".jpg", ".jpeg", ".md", ".docx"},
+    "audio": {".mp3", ".wav", ".ogg", ".m4a"},
+}
+
+@app.route("/course/<int:course_id>/assessment", methods=["GET", "POST"])
+@login_required
+def course_assessment(course_id):
+    conn = get_db(); c = conn.cursor()
+    c.execute("SELECT * FROM courses WHERE id=? AND user_id=?", (course_id, current_user.id))
+    course = c.fetchone()
+    if not course:
+        conn.close(); flash(_("Kurs bulunamadı."), "danger")
+        return redirect(url_for("dashboard"))
+
+    if request.method == "POST":
+        action = request.form.get("action", "")
+
+        if action == "quiz":
+            c.execute("SELECT * FROM quizzes WHERE course_id=? AND user_id=?", (course_id, current_user.id))
+            quiz = c.fetchone()
+            if not quiz or quiz["status"] == "graded":
+                conn.close()
+                return redirect(url_for("course_assessment", course_id=course_id))
+            questions = json.loads(quiz["questions"])
+            answers = []
+            correct = 0
+            for i, q in enumerate(questions):
+                ans = request.form.get(f"q{i}", "")
+                answers.append(ans)
+                try:
+                    if int(ans) == q["correct_index"]:
+                        correct += 1
+                except (ValueError, TypeError):
+                    pass
+            c.execute("""UPDATE quizzes SET answers=?, score=?, max_score=?, status='graded'
+                         WHERE id=?""",
+                      (json.dumps(answers), correct, len(questions), quiz["id"]))
+            conn.commit(); conn.close()
+            flash(_("Quiz değerlendirildi:") + f" {correct}/{len(questions)}", "success")
+            return redirect(url_for("course_assessment", course_id=course_id))
+
+        if action == "upload":
+            kind = request.form.get("kind", "note")
+            if kind not in ALLOWED_UPLOADS:
+                kind = "note"
+            f = request.files.get("file")
+            if not f or not f.filename:
+                conn.close(); flash(_("Lütfen bir dosya seç."), "danger")
+                return redirect(url_for("course_assessment", course_id=course_id))
+            ext = os.path.splitext(f.filename)[1].lower()
+            if ext not in ALLOWED_UPLOADS[kind]:
+                conn.close()
+                flash(_("Bu dosya türü desteklenmiyor.") + f" ({ext})", "danger")
+                return redirect(url_for("course_assessment", course_id=course_id))
+            os.makedirs(UPLOAD_DIR, exist_ok=True)
+            safe = f"u{current_user.id}_c{course_id}_{kind}_{datetime.datetime.now().strftime('%Y%m%d%H%M%S')}{ext}"
+            f.save(os.path.join(UPLOAD_DIR, safe))
+            c.execute("""INSERT INTO submissions (course_id,user_id,kind,filename,stored,mime)
+                         VALUES (?,?,?,?,?,?)""",
+                      (course_id, current_user.id, kind, f.filename, safe, f.mimetype))
+            conn.commit(); conn.close()
+            flash(_("Dosyan yüklendi! Ekibimiz inceleyecek."), "success")
+            return redirect(url_for("course_assessment", course_id=course_id))
+
+    # GET — mevcut quiz / gonderiler
+    c.execute("SELECT * FROM quizzes WHERE course_id=? AND user_id=?", (course_id, current_user.id))
+    quiz = c.fetchone()
+    if not quiz:
+        modules_tmp = json.loads(course["modules"]) if course["modules"] else []
+        qz = generate_quiz(course, modules_tmp, session.get('lang','tr'))
+        if qz:
+            conn.execute('INSERT INTO quizzes (course_id,user_id,questions) VALUES (?,?,?)',
+                         (course_id, current_user.id, json.dumps(qz, ensure_ascii=False)))
+            conn.commit()
+            c.execute("SELECT * FROM quizzes WHERE course_id=? AND user_id=?", (course_id, current_user.id))
+            quiz = c.fetchone()
+    questions = None
+    user_answers = None
+    if quiz:
+        questions = json.loads(quiz["questions"])
+        user_answers = json.loads(quiz["answers"]) if quiz["answers"] else None
+    c.execute("""SELECT * FROM submissions WHERE course_id=? AND user_id=?
+                 ORDER BY created_at DESC""", (course_id, current_user.id))
+    submissions = c.fetchall()
+    conn.close()
+
+    conn = get_db(); c = conn.cursor()
+    c.execute("SELECT learning_style FROM users WHERE id=?", (current_user.id,))
+    style = (c.fetchone() or {"learning_style": "karma"})["learning_style"]
+    conn.close()
+
+    return render_template("assessment.html", course=course, quiz=quiz, questions=questions,
+                           user_answers=user_answers, submissions=submissions, style=style)
+
+@app.route("/admin/submission/<int:sub_id>/delete", methods=["POST"])
+@login_required
+@admin_required
+def admin_delete_submission(sub_id):
+    conn = get_db(); c = conn.cursor()
+    c.execute("SELECT stored FROM submissions WHERE id=?", (sub_id,))
+    row = c.fetchone()
+    if row:
+        try:
+            os.remove(os.path.join(UPLOAD_DIR, row["stored"]))
+        except OSError:
+            pass
+        c.execute("DELETE FROM submissions WHERE id=?", (sub_id,))
+        conn.commit()
+    conn.close()
+    flash(_("Gönderi silindi."), "success")
+    return redirect(url_for("admin_dashboard"))
+
+
+@app.route("/verify/<code>")
+def verify_certificate(code):
+    """Sertifika doğrulama — herkese açık."""
+    conn = get_db(); c = conn.cursor()
+    c.execute("""SELECT certificates.*, courses.title as course_title, users.full_name, users.username
+                 FROM certificates
+                 JOIN courses ON certificates.course_id = courses.id
+                 JOIN users ON certificates.user_id = users.id
+                 WHERE certificates.certificate_code = ?""", (code,))
+    cert = c.fetchone()
+    conn.close()
+    return render_template("verify.html", cert=cert, code=code)
 
 @app.route("/api/ollama-status")
 def ollama_status():
@@ -645,11 +944,24 @@ def admin_dashboard():
                  WHERE created_at >= date('now','-7 days') AND is_admin=0
                  GROUP BY date(created_at)""")
     signup_data = c.fetchall()
+
+    # Quiz sonuclari ve ogrenci gonderileri
+    c.execute("""SELECT quizzes.*, users.username, courses.title as course_title FROM quizzes
+                 LEFT JOIN users ON quizzes.user_id = users.id
+                 LEFT JOIN courses ON quizzes.course_id = courses.id
+                 ORDER BY quizzes.id DESC LIMIT 30""")
+    quiz_results = c.fetchall()
+    c.execute("""SELECT submissions.*, users.username, courses.title as course_title FROM submissions
+                 LEFT JOIN users ON submissions.user_id = users.id
+                 LEFT JOIN courses ON submissions.course_id = courses.id
+                 ORDER BY submissions.id DESC LIMIT 50""")
+    all_submissions = c.fetchall()
     conn.close()
     return render_template("admin/dashboard.html", total_users=total_users, premium=premium, free=free,
                            total_courses=total_courses, completed=completed, certificates=certificates,
                            revenue=revenue, completion_rate=completion_rate, payments=payments,
-                           users=users, all_courses=all_courses, signup_data=signup_data)
+                           users=users, all_courses=all_courses, signup_data=signup_data,
+                           quiz_results=quiz_results, all_submissions=all_submissions)
 
 @app.route("/admin/user/<int:user_id>/plan", methods=["POST"])
 @login_required

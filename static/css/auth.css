@@ -97,6 +97,7 @@ body {
     backdrop-filter: blur(14px);
 }
 .nav-logo { color: #fff; }
+.nav-brand-text { color: #fff; }
 .nav-logo img { filter: drop-shadow(0 0 10px rgba(245, 185, 66, 0.35)); }
 .nav-link { color: rgba(255, 255, 255, 0.62); }
 .nav-link:hover { background: rgba(255, 255, 255, 0.08); color: #fff; }

@@ -62,6 +62,38 @@
         </table></div>
     </div>
 
+    <!-- Quiz sonuçları -->
+    <div class="setup-section" style="margin-bottom:2rem">
+        <h2><i class="fas fa-clipboard-check"></i> {{ _("Quiz Sonuçları") }}</h2>
+        {% if quiz_results %}
+        <div class="table-wrap"><table class="admin-table">
+            <thead><tr><th>#</th><th>{{ _("Öğrenci") }}</th><th>{{ _("Kurs") }}</th><th>{{ _("Puan") }}</th><th>{{ _("Durum") }}</th><th>{{ _("Tarih") }}</th></tr></thead>
+            <tbody>{% for qz in quiz_results %}<tr>
+                <td>{{ qz.id }}</td><td>{{ qz.username }}</td><td>{{ qz.course_title }}</td>
+                <td>{% if qz.status == 'graded' %}<strong style="color:{{ '#0f9d58' if qz.score*2 >= qz.max_score else '#dc2626' }}">{{ qz.score }}/{{ qz.max_score }}</strong>{% else %}—{% endif %}</td>
+                <td>{% if qz.status == 'graded' %}<span class="plan-badge premium">✓ {{ _("Değerlendirildi") }}</span>{% else %}<span class="plan-badge free">{{ _("Bekliyor") }}</span>{% endif %}</td>
+                <td>{{ qz.created_at[:16] }}</td></tr>{% endfor %}</tbody>
+        </table></div>
+        {% else %}<p style="color:var(--gray-400)">{{ tr('no_data') }}</p>{% endif %}
+    </div>
+
+    <!-- Öğrenci gönderileri (not / ses) -->
+    <div class="setup-section" style="margin-bottom:2rem">
+        <h2><i class="fas fa-upload"></i> {{ _("Öğrenci Gönderileri") }} ({{ _("Not / Ses") }})</h2>
+        {% if all_submissions %}
+        <div class="table-wrap"><table class="admin-table">
+            <thead><tr><th>#</th><th>{{ _("Öğrenci") }}</th><th>{{ _("Kurs") }}</th><th>{{ _("Tür") }}</th><th>{{ _("Dosya") }}</th><th>{{ _("Tarih") }}</th><th>{{ tr('actions') }}</th></tr></thead>
+            <tbody>{% for s in all_submissions %}<tr>
+                <td>{{ s.id }}</td><td>{{ s.username }}</td><td>{{ s.course_title }}</td>
+                <td><span class="plan-badge {{ 'premium' if s.kind == 'audio' else 'free' }}">{{ _("Ses") if s.kind == 'audio' else _("Not") }}</span></td>
+                <td>{{ s.filename }}</td><td>{{ s.created_at[:16] }}</td>
+                <td><form method="POST" action="{{ url_for('admin_delete_submission', sub_id=s.id) }}" style="display:inline" onsubmit="return confirm('{{ _('Silinsin mi?') }}')">
+                    <button class="btn btn-sm btn-outline"><i class="fas fa-trash"></i></button>
+                </form></td></tr>{% endfor %}</tbody>
+        </table></div>
+        {% else %}<p style="color:var(--gray-400)">{{ tr('no_data') }}</p>{% endif %}
+    </div>
+
     <!-- Kurs kataloğu -->
     <div class="setup-section">
         <h2><i class="fas fa-book"></i> {{ tr('course_catalog') }}</h2>

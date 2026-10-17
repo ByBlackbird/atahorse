@@ -1,0 +1,124 @@
+/* ===== Beyin Analizi — Sihirbaz (mavi / beyaz, sade & güvenilir) ===== */
+body.test-page {
+    background: #eef3ff !important;
+    min-height: 100vh;
+}
+.test-shell {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 48px 20px 80px;
+}
+/* Açık temalı sayfada navbar koyu kalsın */
+.test-page .navbar { background: #0b1030 !important; }
+body.test-page footer { background: #0b1030; }
+.test-top {
+    text-align: center;
+    margin-bottom: 28px;
+}
+.test-top .test-logo {
+    width: 56px; height: 56px; border-radius: 50%;
+    margin-bottom: 14px;
+    box-shadow: 0 8px 24px rgba(30, 64, 175, .25);
+}
+.test-top h1 {
+    font-size: 1.55rem; font-weight: 800; color: #16307a;
+    letter-spacing: -.02em;
+}
+.test-top p {
+    color: #5b6b9e; font-size: .95rem; margin-top: 6px;
+}
+
+/* Dolma formu */
+.test-progress-wrap {
+    background: #fff; border-radius: 16px;
+    box-shadow: 0 4px 20px rgba(30, 64, 175, .08);
+    padding: 16px 20px 18px; margin-bottom: 22px;
+}
+.test-progress-label {
+    display: flex; justify-content: space-between; align-items: center;
+    font-size: .8rem; font-weight: 700; color: #3b4f8f; margin-bottom: 8px;
+}
+.test-progress-label .tp-step {
+    background: #e8eeff; color: #1e40af; padding: 3px 10px; border-radius: 999px;
+}
+.test-progress {
+    height: 10px; border-radius: 999px; background: #e3e9fb; overflow: hidden;
+}
+.test-progress-bar {
+    height: 100%; width: 0%; border-radius: 999px;
+    background: linear-gradient(90deg, #2563eb, #60a5fa);
+    transition: width .45s cubic-bezier(.22,1,.36,1);
+}
+
+/* Soru kartları */
+.test-card {
+    background: #fff; border-radius: 20px;
+    box-shadow: 0 10px 34px rgba(30, 64, 175, .10);
+    padding: 40px 44px;
+    animation: testSlide .35s cubic-bezier(.22,1,.36,1);
+}
+@keyframes testSlide {
+    from { opacity: 0; transform: translateX(26px); }
+    to { opacity: 1; transform: translateX(0); }
+}
+.test-step { display: none; }
+.test-step.active { display: block; }
+.test-step-tag {
+    display: inline-block; font-size: .72rem; font-weight: 700;
+    letter-spacing: .12em; text-transform: uppercase;
+    color: #2563eb; background: #e8eeff; padding: 5px 12px; border-radius: 999px;
+    margin-bottom: 16px;
+}
+.test-q {
+    font-size: 1.22rem; font-weight: 750; color: #16295e;
+    line-height: 1.45; margin-bottom: 26px;
+}
+.test-opts { display: flex; flex-direction: column; gap: 12px; }
+.test-opt {
+    display: flex; align-items: flex-start; gap: 14px;
+    border: 2px solid #e3e9fb; border-radius: 14px;
+    padding: 15px 18px; cursor: pointer;
+    transition: border-color .18s, background .18s, transform .18s;
+}
+.test-opt:hover { border-color: #93b4ff; background: #f6f9ff; transform: translateY(-1px); }
+.test-opt.selected { border-color: #2563eb; background: #eef4ff; box-shadow: 0 4px 14px rgba(37, 99, 235, .12); }
+.test-opt input { display: none; }
+.test-opt .opt-dot {
+    flex: 0 0 22px; width: 22px; height: 22px; border-radius: 50%;
+    border: 2px solid #b9c7ee; margin-top: 1px; position: relative;
+}
+.test-opt.selected .opt-dot { border-color: #2563eb; }
+.test-opt.selected .opt-dot::after {
+    content: ""; position: absolute; inset: 4px; border-radius: 50%; background: #2563eb;
+}
+.test-opt .opt-text { color: #2c3e74; font-size: .98rem; line-height: 1.5; }
+
+/* Gezinme */
+.test-nav {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-top: 32px; gap: 12px;
+}
+.btn-test {
+    border: none; cursor: pointer; font-family: inherit;
+    font-size: 1rem; font-weight: 700; border-radius: 12px;
+    padding: 14px 30px; transition: all .18s;
+    display: inline-flex; align-items: center; gap: 8px;
+}
+.btn-test-primary { background: #2563eb; color: #fff; box-shadow: 0 6px 18px rgba(37,99,235,.30); }
+.btn-test-primary:hover { background: #1d4ed8; transform: translateY(-1px); }
+.btn-test-ghost { background: transparent; color: #6b7bb5; }
+.btn-test-ghost:hover { color: #1e40af; }
+.btn-test-final { background: #0f9d58; box-shadow: 0 6px 18px rgba(15,157,88,.30); }
+.btn-test-final:hover { background: #0b7a43; }
+.test-skip {
+    text-align: center; margin-top: 22px;
+    font-size: .85rem; color: #8a97c4;
+}
+.test-skip a { color: #2563eb; font-weight: 600; text-decoration: none; }
+.test-skip a:hover { text-decoration: underline; }
+
+@media (max-width: 640px) {
+    .test-card { padding: 28px 22px; }
+    .test-q { font-size: 1.05rem; }
+    .test-shell { padding-top: 32px; }
+}

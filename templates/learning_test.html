@@ -2,160 +2,256 @@
 
 {% block title %}{{ _("Öğrenme Stili Testi") }} - Atahorse{% endblock %}
 
+{% block body_attrs %} class="test-page"{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/test.css') }}">
+{% endblock %}
+
 {% block content %}
-<div class="test-container">
-    <div class="test-header">
-        <h1><i class="fas fa-brain"></i> {{ _("Öğrenme Stili ve Beyin Lobu Analizi") }}</h1>
-        <p>{{ _("Sana en uygun öğrenme yöntemini belirlemek için bu kısa testi tamamla.") }}</p>
-        <p class="test-note">{{ _("Dilersen bu testi") }} <a href="{{ url_for('skip_test') }}" class="skip-link">{{ _("atlayabilirsin") }}</a>.</p>
+<div class="test-shell">
+    <div class="test-top">
+        <img src="{{ url_for('static', filename='img/logo.png') }}" alt="Atahorse" class="test-logo" onerror="this.style.display='none'">
+        <h1><i class="fas fa-brain" style="color:#2563eb"></i> {{ _("Beyin Analizi") }}</h1>
+        <p>{{ _("Sana en uygun öğrenme yolunu bulmak için hazırlanmış 12 soruluk kısa analiz.") }}</p>
     </div>
 
-    <form method="POST" action="{{ url_for('learning_test') }}" class="test-form">
+    <div class="test-progress-wrap">
+        <div class="test-progress-label">
+            <span id="tp-label">{{ _("Soru") }} 1 / 12</span>
+            <span class="tp-step" id="tp-section">{{ _("Öğrenme Stili") }}</span>
+        </div>
+        <div class="test-progress"><div class="test-progress-bar" id="tp-bar"></div></div>
+    </div>
 
-        <div class="test-section">
-            <h2><i class="fas fa-eye"></i> {{ _("Bölüm 1: Öğrenme Stilin") }}</h2>
-            <p class="section-desc">{{ _("Aşağıdaki soruları içgüdüsel olarak cevapla.") }}</p>
+    <form method="POST" action="{{ url_for('learning_test') }}{% if onboarding %}?onboarding=1{% endif %}" id="test-form">
 
-            <div class="question-card">
-                <h3>{{ _("Soru 1: Yeni bir konuyu öğrenirken en çok hangi yöntemi tercih edersin?") }}</h3>
-                <div class="options">
-                    <label class="option">
-                        <input type="radio" name="q1" value="visual" required>
-                        <span class="option-text">{{ _("Grafik, diyagram ve görsel materyallerle") }}</span>
-                    </label>
-                    <label class="option">
-                        <input type="radio" name="q1" value="auditory">
-                        <span class="option-text">{{ _("Sesli anlatım, podcast veya tartışma ile") }}</span>
-                    </label>
-                    <label class="option">
-                        <input type="radio" name="q1" value="kinesthetic">
-                        <span class="option-text">{{ _("Pratik yaparak, deneyerek ve hareket ederek") }}</span>
-                    </label>
-                </div>
-            </div>
-
-            <div class="question-card">
-                <h3>{{ _("Soru 2: Bir sunum hazırlarken...") }}</h3>
-                <div class="options">
-                    <label class="option">
-                        <input type="radio" name="q2" value="visual" required>
-                        <span class="option-text">{{ _("Renkli şemalar, infografikler ve görseller kullanırım") }}</span>
-                    </label>
-                    <label class="option">
-                        <input type="radio" name="q2" value="auditory">
-                        <span class="option-text">{{ _("Konuşma metni ve sesli notlar hazırlarım") }}</span>
-                    </label>
-                    <label class="option">
-                        <input type="radio" name="q2" value="kinesthetic">
-                        <span class="option-text">{{ _("Fiziksel model, örnek veya canlandırma yaparım") }}</span>
-                    </label>
-                </div>
-            </div>
-
-            <div class="question-card">
-                <h3>{{ _("Soru 3: Bilgiyi hatırlarken...") }}</h3>
-                <div class="options">
-                    <label class="option">
-                        <input type="radio" name="q3" value="visual" required>
-                        <span class="option-text">{{ _("Gördüğüm resimleri, yazıları hatırlarım") }}</span>
-                    </label>
-                    <label class="option">
-                        <input type="radio" name="q3" value="auditory">
-                        <span class="option-text">{{ _("Duyduğum sesleri, konuşmaları hatırlarım") }}</span>
-                    </label>
-                    <label class="option">
-                        <input type="radio" name="q3" value="kinesthetic">
-                        <span class="option-text">{{ _("Yaptığım hareketleri, deneyimleri hatırlarım") }}</span>
-                    </label>
-                </div>
-            </div>
-
-            <div class="question-card">
-                <h3>{{ _("Soru 4: Boş zamanlarımda...") }}</h3>
-                <div class="options">
-                    <label class="option">
-                        <input type="radio" name="q4" value="visual" required>
-                        <span class="option-text">{{ _("Kitap okurum, film izlerim, resim yaparım") }}</span>
-                    </label>
-                    <label class="option">
-                        <input type="radio" name="q4" value="auditory">
-                        <span class="option-text">{{ _("Müzik dinlerim, sohbet ederim, podcast dinlerim") }}</span>
-                    </label>
-                    <label class="option">
-                        <input type="radio" name="q4" value="kinesthetic">
-                        <span class="option-text">{{ _("Spor yaparım, el işiyle uğraşırım, gezerim") }}</span>
-                    </label>
+        <!-- ============ BÖLÜM 1: ÖĞRENME STİLİ (q1–q6) ============ -->
+        <div class="test-step" data-section="style">
+            <div class="test-card">
+                <span class="test-step-tag">{{ _("Bölüm 1") }} · {{ _("Öğrenme Stili") }}</span>
+                <h2 class="test-q">{{ _("Soru 1: Karşına tamamen yeni ve soyut bir konu çıktı. İlk olarak ne yaparsın?") }}</h2>
+                <div class="test-opts">
+                    <label class="test-opt"><input type="radio" name="q1" value="visual"><span class="opt-dot"></span><span class="opt-text">{{ _("Konunun şemasını, haritasını veya görsellerini araştırırım") }}</span></label>
+                    <label class="test-opt"><input type="radio" name="q1" value="auditory"><span class="opt-dot"></span><span class="opt-text">{{ _("Konunun anlatıldığı bir video, podcast veya sohbet ararım") }}</span></label>
+                    <label class="test-opt"><input type="radio" name="q1" value="kinesthetic"><span class="opt-dot"></span><span class="opt-text">{{ _("Hemen denemeye başlarım; yaparak öğrenirim") }}</span></label>
                 </div>
             </div>
         </div>
 
-        <div class="test-section">
-            <h2><i class="fas fa-microscope"></i> {{ _("Bölüm 2: Beyin Lobu Tercihin") }}</h2>
-            <p class="section-desc">{{ _("Hangi düşünme tarzı sana daha yakın?") }}</p>
-
-            <div class="question-card">
-                <h3>{{ _("Soru 5: Bir problemle karşılaştığında...") }}</h3>
-                <div class="options">
-                    <label class="option">
-                        <input type="radio" name="b1" value="left" required>
-                        <span class="option-text">{{ _("Mantıksal adımlarla, analiz ederek çözerim") }}</span>
-                    </label>
-                    <label class="option">
-                        <input type="radio" name="b1" value="right">
-                        <span class="option-text">{{ _("Sezgisel olarak, farklı açılardan bakarak çözerim") }}</span>
-                    </label>
-                </div>
-            </div>
-
-            <div class="question-card">
-                <h3>{{ _("Soru 6: Plan yaparken...") }}</h3>
-                <div class="options">
-                    <label class="option">
-                        <input type="radio" name="b2" value="left" required>
-                        <span class="option-text">{{ _("Detaylı liste, takvim ve sıralama yaparım") }}</span>
-                    </label>
-                    <label class="option">
-                        <input type="radio" name="b2" value="right">
-                        <span class="option-text">{{ _("Genel bir çerçeve çizer, esnek kalırım") }}</span>
-                    </label>
-                </div>
-            </div>
-
-            <div class="question-card">
-                <h3>{{ _("Soru 7: Yeni bir fikir değerlendirirken...") }}</h3>
-                <div class="options">
-                    <label class="option">
-                        <input type="radio" name="b3" value="left" required>
-                        <span class="option-text">{{ _("Verilere, kanıtlara ve istatistiklere bakarım") }}</span>
-                    </label>
-                    <label class="option">
-                        <input type="radio" name="b3" value="right">
-                        <span class="option-text">{{ _("İlk izlenimime, yaratıcılığıma güvenirim") }}</span>
-                    </label>
-                </div>
-            </div>
-
-            <div class="question-card">
-                <h3>{{ _("Soru 8: Öğrenirken...") }}</h3>
-                <div class="options">
-                    <label class="option">
-                        <input type="radio" name="b4" value="left" required>
-                        <span class="option-text">{{ _("Adım adım, kurallara uyarak ilerlerim") }}</span>
-                    </label>
-                    <label class="option">
-                        <input type="radio" name="b4" value="right">
-                        <span class="option-text">{{ _("Bütünsel olarak, bağlantılar kurarak ilerlerim") }}</span>
-                    </label>
+        <div class="test-step" data-section="style">
+            <div class="test-card">
+                <span class="test-step-tag">{{ _("Bölüm 1") }} · {{ _("Öğrenme Stili") }}</span>
+                <h2 class="test-q">{{ _("Soru 2: Okuduğun bir metni hatırlamak istediğinde zihninde ne canlanır?") }}</h2>
+                <div class="test-opts">
+                    <label class="test-opt"><input type="radio" name="q2" value="visual"><span class="opt-dot"></span><span class="opt-text">{{ _("Sayfadaki başlıklar, renkler ve paragrafların görünüşü") }}</span></label>
+                    <label class="test-opt"><input type="radio" name="q2" value="auditory"><span class="opt-dot"></span><span class="opt-text">{{ _("Metni okurken duyduğum iç sesim ve vurgular") }}</span></label>
+                    <label class="test-opt"><input type="radio" name="q2" value="kinesthetic"><span class="opt-dot"></span><span class="opt-text">{{ _("Metinle ilgili yaşadığım deneyimler ve hisler") }}</span></label>
                 </div>
             </div>
         </div>
 
-        <div class="test-actions">
-            <button type="submit" class="btn btn-primary btn-lg">
-                <i class="fas fa-check-circle"></i> {{ _("Testi Tamamla") }}
+        <div class="test-step" data-section="style">
+            <div class="test-card">
+                <span class="test-step-tag">{{ _("Bölüm 1") }} · {{ _("Öğrenme Stili") }}</span>
+                <h2 class="test-q">{{ _("Soru 3: Bir derse ya da toplantıya katılıyorsun. Sana en verimli gelen ortam hangisi?") }}</h2>
+                <div class="test-opts">
+                    <label class="test-opt"><input type="radio" name="q3" value="visual"><span class="opt-dot"></span><span class="opt-text">{{ _("Slaytlar, grafikler ve yazılı özetlerin olduğu ortam") }}</span></label>
+                    <label class="test-opt"><input type="radio" name="q3" value="auditory"><span class="opt-dot"></span><span class="opt-text">{{ _("Anlatıcının sesini net duyduğum, soru-cevabın bol olduğu ortam") }}</span></label>
+                    <label class="test-opt"><input type="radio" name="q3" value="kinesthetic"><span class="opt-dot"></span><span class="opt-text">{{ _("Atölye, laboratuvar veya uygulamalı çalışma ortamı") }}</span></label>
+                </div>
+            </div>
+        </div>
+
+        <div class="test-step" data-section="style">
+            <div class="test-card">
+                <span class="test-step-tag">{{ _("Bölüm 1") }} · {{ _("Öğrenme Stili") }}</span>
+                <h2 class="test-q">{{ _("Soru 4: Karmaşık bir bilgiyi bir arkadaşına anlatman gerekse nasıl anlatırsın?") }}</h2>
+                <div class="test-opts">
+                    <label class="test-opt"><input type="radio" name="q4" value="visual"><span class="opt-dot"></span><span class="opt-text">{{ _("Çizimler, karşılaştırma tabloları ve örnek görsellerle") }}</span></label>
+                    <label class="test-opt"><input type="radio" name="q4" value="auditory"><span class="opt-dot"></span><span class="opt-text">{{ _("Sesli anlatır, gerekirse sesli mesaj bile çekerim") }}</span></label>
+                    <label class="test-opt"><input type="radio" name="q4" value="kinesthetic"><span class="opt-dot"></span><span class="opt-text">{{ _("Somut bir örnekle veya birlikte uygulayarak gösteririm") }}</span></label>
+                </div>
+            </div>
+        </div>
+
+        <div class="test-step" data-section="style">
+            <div class="test-card">
+                <span class="test-step-tag">{{ _("Bölüm 1") }} · {{ _("Öğrenme Stili") }}</span>
+                <h2 class="test-q">{{ _("Soru 5: Sınav haftasındasın. Çalışma stratejin hangisine daha yakın?") }}</h2>
+                <div class="test-opts">
+                    <label class="test-opt"><input type="radio" name="q5" value="visual"><span class="opt-dot"></span><span class="opt-text">{{ _("Renkli notlar, zihin haritaları ve özet tablolar hazırlarım") }}</span></label>
+                    <label class="test-opt"><input type="radio" name="q5" value="auditory"><span class="opt-dot"></span><span class="opt-text">{{ _("Konuyu sesli tekrar eder, kayıt dinler veya arkadaşıma anlatırım") }}</span></label>
+                    <label class="test-opt"><input type="radio" name="q5" value="kinesthetic"><span class="opt-dot"></span><span class="opt-text">{{ _("Soru çözer, kod yazar veya pratik egzersizler yaparım") }}</span></label>
+                </div>
+            </div>
+        </div>
+
+        <div class="test-step" data-section="style">
+            <div class="test-card">
+                <span class="test-step-tag">{{ _("Bölüm 1") }} · {{ _("Öğrenme Stili") }}</span>
+                <h2 class="test-q">{{ _("Soru 6: Yönünü kaybettiğin bir şehirdesin. Ne yaparsın?") }}</h2>
+                <div class="test-opts">
+                    <label class="test-opt"><input type="radio" name="q6" value="visual"><span class="opt-dot"></span><span class="opt-text">{{ _("Haritaya veya telefondaki navigasyona bakarım") }}</span></label>
+                    <label class="test-opt"><input type="radio" name="q6" value="auditory"><span class="opt-dot"></span><span class="opt-text">{{ _("Birine yol tarifi sorar, tarifleri dinleyerek ilerlerim") }}</span></label>
+                    <label class="test-opt"><input type="radio" name="q6" value="kinesthetic"><span class="opt-dot"></span><span class="opt-text">{{ _("Etrafta yürür, kendi kendime yönü hissederek bulurum") }}</span></label>
+                </div>
+            </div>
+        </div>
+
+        <!-- ============ BÖLÜM 2: BEYİN LOBU (b1–b6) ============ -->
+        <div class="test-step" data-section="lobe">
+            <div class="test-card">
+                <span class="test-step-tag">{{ _("Bölüm 2") }} · {{ _("Düşünme Tarzı") }}</span>
+                <h2 class="test-q">{{ _("Soru 7: Aniden bir arıza ya da beklenmedik bir problem çıktı. İlk tepkin ne olur?") }}</h2>
+                <div class="test-opts">
+                    <label class="test-opt"><input type="radio" name="b1" value="left"><span class="opt-dot"></span><span class="opt-text">{{ _("Önce durur, olası nedenleri tek tek sıralayıp analiz ederim") }}</span></label>
+                    <label class="test-opt"><input type="radio" name="b1" value="right"><span class="opt-dot"></span><span class="opt-text">{{ _("Hemen sezgilerime göre bir çözüm dener, yolda düzeltirim") }}</span></label>
+                </div>
+            </div>
+        </div>
+
+        <div class="test-step" data-section="lobe">
+            <div class="test-card">
+                <span class="test-step-tag">{{ _("Bölüm 2") }} · {{ _("Düşünme Tarzı") }}</span>
+                <h2 class="test-q">{{ _("Soru 8: Yeni bir proje ya da hedef için plan yaparken...") }}</h2>
+                <div class="test-opts">
+                    <label class="test-opt"><input type="radio" name="b2" value="left"><span class="opt-dot"></span><span class="opt-text">{{ _("Aşamaları, tarihleri ve detay listeleriyle net bir plan kurarım") }}</span></label>
+                    <label class="test-opt"><input type="radio" name="b2" value="right"><span class="opt-dot"></span><span class="opt-text">{{ _("Genel bir vizyon belirler, detayları ilerledikçe şekillendiririm") }}</span></label>
+                </div>
+            </div>
+        </div>
+
+        <div class="test-step" data-section="lobe">
+            <div class="test-card">
+                <span class="test-step-tag">{{ _("Bölüm 2") }} · {{ _("Düşünme Tarzı") }}</span>
+                <h2 class="test-q">{{ _("Soru 9: Sana iddialı bir yeni fikir anlatıldı. Ne sorgularsın?") }}</h2>
+                <div class="test-opts">
+                    <label class="test-opt"><input type="radio" name="b3" value="left"><span class="opt-dot"></span><span class="opt-text">{{ _("Veriyi, kanıtı ve mantıksal tutarlılığı sorgularım") }}</span></label>
+                    <label class="test-opt"><input type="radio" name="b3" value="right"><span class="opt-dot"></span><span class="opt-text">{{ _("Hayal gücimi ve fikrin büyük resme uygunluğunu sorgularım") }}</span></label>
+                </div>
+            </div>
+        </div>
+
+        <div class="test-step" data-section="lobe">
+            <div class="test-card">
+                <span class="test-step-tag">{{ _("Bölüm 2") }} · {{ _("Düşünme Tarzı") }}</span>
+                <h2 class="test-q">{{ _("Soru 10: Yeni bir beceri öğrenirken (ör. müzik aleti, kod, dil)...") }}</h2>
+                <div class="test-opts">
+                    <label class="test-opt"><input type="radio" name="b4" value="left"><span class="opt-dot"></span><span class="opt-text">{{ _("Kurallar ve adım adım talimatlarla ilerlemek isterim") }}</span></label>
+                    <label class="test-opt"><input type="radio" name="b4" value="right"><span class="opt-dot"></span><span class="opt-text">{{ _("Özgürce denemeler yapıp kendi yolumu keşfetmek isterim") }}</span></label>
+                </div>
+            </div>
+        </div>
+
+        <div class="test-step" data-section="lobe">
+            <div class="test-card">
+                <span class="test-step-tag">{{ _("Bölüm 2") }} · {{ _("Düşünme Tarzı") }}</span>
+                <h2 class="test-q">{{ _("Soru 11: Masanda bir konuyu düşünürken zihninin nasıl çalıştığını fark ediyorsun?") }}</h2>
+                <div class="test-opts">
+                    <label class="test-opt"><input type="radio" name="b5" value="left"><span class="opt-dot"></span><span class="opt-text">{{ _("Sözcüklerle, iç sesle ve sıralı cümlelerle düşünürüm") }}</span></label>
+                    <label class="test-opt"><input type="radio" name="b5" value="right"><span class="opt-dot"></span><span class="opt-text">{{ _("Görüntüler, hayaller ve bütünsel imgelerle düşünürüm") }}</span></label>
+                </div>
+            </div>
+        </div>
+
+        <div class="test-step" data-section="lobe">
+            <div class="test-card">
+                <span class="test-step-tag">{{ _("Bölüm 2") }} · {{ _("Düşünme Tarzı") }}</span>
+                <h2 class="test-q">{{ _("Soru 12: Zamanla ilgili hangisi sana daha doğru geliyor?") }}</h2>
+                <div class="test-opts">
+                    <label class="test-opt"><input type="radio" name="b6" value="left"><span class="opt-dot"></span><span class="opt-text">{{ _("Geçmiş deneyimlerden ve kanıtlardan yola çıkarak plan yaparım") }}</span></label>
+                    <label class="test-opt"><input type="radio" name="b6" value="right"><span class="opt-dot"></span><span class="opt-text">{{ _("Geleceğin olasılıklarını hayal ederek plan yaparım") }}</span></label>
+                </div>
+            </div>
+        </div>
+
+        <div class="test-nav">
+            <button type="button" class="btn-test btn-test-ghost" id="btn-prev" style="visibility:hidden">
+                <i class="fas fa-arrow-left"></i> {{ _("Geri") }}
             </button>
-            <a href="{{ url_for('skip_test') }}" class="btn btn-outline">{{ _("Testi Atla") }}</a>
+            <button type="button" class="btn-test btn-test-primary" id="btn-next">
+                {{ _("Devam") }} <i class="fas fa-arrow-right"></i>
+            </button>
+            <button type="submit" class="btn-test btn-test-final" id="btn-final" style="display:none">
+                <i class="fas fa-check-circle"></i> {{ _("Analizi Tamamla") }}
+            </button>
         </div>
     </form>
+
+    <p class="test-skip">{{ _("Şu an vaktin yoksa") }} <a href="{{ url_for('skip_test') }}">{{ _("testi atlayabilirsin") }}</a>, {{ _("istediğin zaman tekrar doldurabilirsin.") }}</p>
 </div>
+
+<script>
+(function () {
+    var steps = Array.prototype.slice.call(document.querySelectorAll('.test-step'));
+    var bar = document.getElementById('tp-bar');
+    var label = document.getElementById('tp-label');
+    var sectionTag = document.getElementById('tp-section');
+    var btnPrev = document.getElementById('btn-prev');
+    var btnNext = document.getElementById('btn-next');
+    var btnFinal = document.getElementById('btn-final');
+    var form = document.getElementById('test-form');
+    var total = steps.length;
+    var current = 0;
+
+    var labels = {
+        style: {{ _("Öğrenme Stili") | tojson }},
+        lobe: {{ _("Düşünme Tarzı") | tojson }}
+    };
+
+    function show(i) {
+        current = i;
+        steps.forEach(function (s, idx) { s.classList.toggle('active', idx === i); });
+        var pct = Math.round(((i + 1) / total) * 100);
+        bar.style.width = pct + '%';
+        label.textContent = {{ _("Soru") | tojson }} + ' ' + (i + 1) + ' / ' + total;
+        sectionTag.textContent = labels[steps[i].dataset.section] || '';
+        btnPrev.style.visibility = i === 0 ? 'hidden' : 'visible';
+        var last = (i === total - 1);
+        btnNext.style.display = last ? 'none' : 'inline-flex';
+        btnFinal.style.display = last ? 'inline-flex' : 'none';
+        // kart animasyonunu yeniden tetikle
+        var card = steps[i].querySelector('.test-card');
+        if (card) { card.style.animation = 'none'; void card.offsetWidth; card.style.animation = ''; }
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function answered(i) {
+        var inputs = steps[i].querySelectorAll('input[type=radio]');
+        for (var j = 0; j < inputs.length; j++) { if (inputs[j].checked) return true; }
+        return false;
+    }
+
+    steps.forEach(function (step, si) {
+        step.querySelectorAll('.test-opt').forEach(function (opt) {
+            opt.addEventListener('click', function () {
+                step.querySelectorAll('.test-opt').forEach(function (o) { o.classList.remove('selected'); });
+                opt.classList.add('selected');
+                setTimeout(function () {
+                    if (!answered(si)) return;
+                    if (si < total - 1) show(si + 1);
+                }, 280);
+            });
+        });
+    });
+
+    btnNext.addEventListener('click', function () {
+        if (answered(current)) { show(current + 1); }
+        else {
+            var card = steps[current].querySelector('.test-card');
+            card.style.animation = 'none'; void card.offsetWidth;
+            card.style.animation = '';
+            card.style.boxShadow = '0 0 0 3px #fca5a5';
+            setTimeout(function () { card.style.boxShadow = ''; }, 900);
+        }
+    });
+    btnPrev.addEventListener('click', function () { if (current > 0) show(current - 1); });
+    form.addEventListener('submit', function (e) {
+        if (!answered(current)) { e.preventDefault(); }
+    });
+
+    show(0);
+})();
+</script>
 {% endblock %}

@@ -1,0 +1,167 @@
+{% extends "base.html" %}
+
+{% block title %}{{ _("Kurs Değerlendirmesi") }} - Atahorse{% endblock %}
+
+{% block body_attrs %} class="test-page"{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/test.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="test-shell" style="max-width:780px">
+    <div class="test-top">
+        <h1><i class="fas fa-clipboard-check" style="color:#f5b942"></i> {{ _("Kurs Değerlendirmesi") }}</h1>
+        <p>{{ _("Kurs:") }} <strong>{{ course["title"] }}</strong></p>
+        <a href="{{ url_for('view_course', course_id=course['id']) }}" class="skip-link" style="color:#8b5cf6">&larr; {{ _("Kursa dön") }}</a>
+    </div>
+
+    <!-- ============ QUIZ ============ -->
+    <div class="test-card" style="margin-bottom:26px">
+        <span class="test-step-tag" style="background:#fdf3d7;color:#92610a">{{ _("Bölüm 1") }} · {{ _("Bilgi Quiz'i") }}</span>
+        {% if quiz and quiz["status"] == "graded" %}
+            <h2 class="test-q" style="font-size:1.15rem">{{ _("Quiz sonucun") }}: <span style="color:#0f9d58">{{ quiz["score"] }}/{{ quiz["max_score"] }}</span></h2>
+            {% if questions %}
+            <div style="margin-top:18px">
+                {% for q in questions %}
+                    {% set ua = user_answers[loop.index0]|int if user_answers and user_answers[loop.index0] != '' else -1 %}
+                    <div style="padding:14px 16px;border:2px solid {{ '#0f9d58' if ua == q['correct_index'] else '#fca5a5' }};border-radius:12px;margin-bottom:12px">
+                        <p style="font-weight:700;color:#16295e;margin-bottom:8px">{{ loop.index }}. {{ q["question"] }}</p>
+                        {% for opt in q["options"] %}
+                            <p style="font-size:.92rem;color:{{ '#0f9d58' if loop.index0 == q['correct_index'] else ('#dc2626' if loop.index0 == ua else '#5b6b9e') }};margin:3px 0 3px 12px">
+                                {% if loop.index0 == q["correct_index"] %}<i class="fas fa-check"></i>
+                                {% elif loop.index0 == ua %}<i class="fas fa-times"></i>{% endif %}
+                                {{ opt }}
+                            </p>
+                        {% endfor %}
+                    </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+        {% elif questions %}
+            <h2 class="test-q" style="font-size:1.15rem">{{ _("Kursu ne kadar özümsediğini ölçelim. Sorular senin kursuna özel üretildi.") }}</h2>
+            <form method="POST" id="quiz-form">
+                <input type="hidden" name="action" value="quiz">
+                <div id="quiz-steps">
+                    {% for q in questions %}
+                    <div class="quiz-step" {% if not loop.first %}style="display:none"{% endif %}>
+                        <p style="font-weight:700;color:#16295e;margin-bottom:14px;font-size:1.05rem">{{ loop.index }}. {{ q["question"] }}</p>
+                        <div class="test-opts">
+                            {% for opt in q["options"] %}
+                            <label class="test-opt">
+                                <input type="radio" name="q{{ loop.index0 }}" value="{{ loop.index0 }}">
+                                <span class="opt-dot"></span>
+                                <span class="opt-text">{{ opt }}</span>
+                            </label>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                <div class="test-nav">
+                    <button type="button" class="btn-test btn-test-ghost" id="quiz-prev" style="visibility:hidden"><i class="fas fa-arrow-left"></i> {{ _("Geri") }}</button>
+                    <button type="button" class="btn-test btn-test-primary" id="quiz-next">{{ _("Devam") }} <i class="fas fa-arrow-right"></i></button>
+                    <button type="submit" class="btn-test btn-test-final" id="quiz-submit" style="display:none"><i class="fas fa-check-circle"></i> {{ _("Quiz'i Bitir") }}</button>
+                </div>
+            </form>
+        {% else %}
+            <p style="color:#5b6b9e">{{ _("Quiz şu an üretilemedi — AI servisine bağlanılamıyor. Lütfen daha sonra tekrar dene ya da ödevini yükle.") }}</p>
+        {% endif %}
+    </div>
+
+    <!-- ============ KİŞİSEL ÇIKTI YÜKLEME ============ -->
+    <div class="test-card">
+        <span class="test-step-tag" style="background:#efe9ff;color:#5b2de6">{{ _("Bölüm 2") }} · {{ _("Kişisel Çıktın") }}</span>
+        <h2 class="test-q" style="font-size:1.15rem">
+            {% if style == "isitsel" %}
+                {{ _("Sesli anlayan bir öğrenci olduğun için konuyu sesli anlatmanı istiyoruz. Dilersen notunu da ekleyebilirsin.") }}
+            {% elif style == "gorsel" %}
+                {{ _("Görsel öğrenen bir öğrenci olduğun için notlarını / çizimlerini yüklemen yeterli. Ekibimiz kontrol edecek.") }}
+            {% else %}
+                {{ _("Pratik yaparak öğreniyorsun: yaptığın çalışmayı anlatan bir not veya ses kaydı yükle.") }}
+            {% endif %}
+        </h2>
+
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:8px" class="upload-grid">
+            <form method="POST" enctype="multipart/form-data" class="upload-box" style="border:2px dashed #93b4ff;border-radius:14px;padding:22px;text-align:center">
+                <input type="hidden" name="action" value="upload">
+                <input type="hidden" name="kind" value="note">
+                <i class="fas fa-file-alt" style="font-size:2rem;color:#2563eb"></i>
+                <p style="font-weight:700;color:#16295e;margin:10px 0 4px">{{ _("Not / Dosya Yükle") }}</p>
+                <p style="font-size:.8rem;color:#8a97c4;margin-bottom:14px">txt · pdf · png · jpg · md · docx</p>
+                <input type="file" name="file" accept=".txt,.pdf,.png,.jpg,.jpeg,.md,.docx" required style="font-size:.85rem;margin-bottom:12px">
+                <br>
+                <button type="submit" class="btn-test btn-test-primary" style="padding:10px 22px;font-size:.9rem"><i class="fas fa-upload"></i> {{ _("Yükle") }}</button>
+            </form>
+            <form method="POST" enctype="multipart/form-data" class="upload-box" style="border:2px dashed #c4b5fd;border-radius:14px;padding:22px;text-align:center">
+                <input type="hidden" name="action" value="upload">
+                <input type="hidden" name="kind" value="audio">
+                <i class="fas fa-microphone" style="font-size:2rem;color:#5b2de6"></i>
+                <p style="font-weight:700;color:#16295e;margin:10px 0 4px">{{ _("Ses Kaydı Yükle") }}</p>
+                <p style="font-size:.8rem;color:#8a97c4;margin-bottom:14px">mp3 · wav · ogg · m4a</p>
+                <input type="file" name="file" accept=".mp3,.wav,.ogg,.m4a,audio/*" required style="font-size:.85rem;margin-bottom:12px">
+                <br>
+                <button type="submit" class="btn-test" style="padding:10px 22px;font-size:.9rem;background:#5b2de6;color:#fff;box-shadow:0 6px 18px rgba(91,45,230,.30)"><i class="fas fa-upload"></i> {{ _("Yükle") }}</button>
+            </form>
+        </div>
+
+        {% if submissions %}
+        <div style="margin-top:26px">
+            <p style="font-weight:700;color:#16295e;margin-bottom:10px"><i class="fas fa-history"></i> {{ _("Önceki gönderilerin") }}</p>
+            {% for s in submissions %}
+            <div style="display:flex;justify-content:space-between;align-items:center;background:#f6f9ff;border-radius:10px;padding:10px 14px;margin-bottom:8px">
+                <span style="font-size:.9rem;color:#2c3e74">
+                    <i class="fas fa-{{ 'microphone' if s['kind']=='audio' else 'file-alt' }}" style="color:#5b2de6"></i>
+                    {{ s["filename"] }} <small style="color:#8a97c4">· {{ s["created_at"] }}</small>
+                </span>
+                <span style="font-size:.78rem;color:#0f9d58;font-weight:700"><i class="fas fa-check"></i> {{ _("İncelemede") }}</span>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<script>
+(function () {
+    var form = document.getElementById('quiz-form');
+    if (!form) return;
+    var steps = Array.prototype.slice.call(document.querySelectorAll('.quiz-step'));
+    var prev = document.getElementById('quiz-prev');
+    var next = document.getElementById('quiz-next');
+    var submit = document.getElementById('quiz-submit');
+    var cur = 0, total = steps.length;
+    function show(i) {
+        cur = i;
+        steps.forEach(function (s, idx) { s.style.display = idx === i ? 'block' : 'none'; });
+        prev.style.visibility = i === 0 ? 'hidden' : 'visible';
+        var last = i === total - 1;
+        next.style.display = last ? 'none' : 'inline-flex';
+        submit.style.display = last ? 'inline-flex' : 'none';
+    }
+    function answered(i) {
+        var r = steps[i].querySelector('input[type=radio]:checked');
+        return !!r;
+    }
+    steps.forEach(function (step, si) {
+        step.querySelectorAll('.test-opt').forEach(function (opt) {
+            opt.addEventListener('click', function () {
+                step.querySelectorAll('.test-opt').forEach(function (o) { o.classList.remove('selected'); });
+                opt.classList.add('selected');
+            });
+        });
+    });
+    next.addEventListener('click', function () {
+        if (answered(cur)) show(cur + 1);
+        else { alert({{ _('"Lütfen bir seçenek işaretle."') | tojson }}); }
+    });
+    prev.addEventListener('click', function () { if (cur > 0) show(cur - 1); });
+    form.addEventListener('submit', function (e) {
+        for (var i = 0; i < total; i++) {
+            if (!answered(i)) { e.preventDefault(); show(i); alert({{ _('"Lütfen tüm soruları cevapla."') | tojson }}); return; }
+        }
+    });
+    show(0);
+})();
+</script>
+{% endblock %}

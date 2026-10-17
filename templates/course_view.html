@@ -9,6 +9,7 @@
             <div style="display:flex;gap:.5rem;margin-bottom:.75rem">
                 <button class="btn btn-sm btn-primary" onclick="toggleMode('read')" id="btnRead"><i class="fas fa-book-open"></i> {{ tr('reading_mode') }}</button>
                 <button class="btn btn-sm btn-outline" onclick="toggleMode('slides')" id="btnSlides"><i class="fas fa-tv"></i> {{ tr('slideshow') }}</button>
+                <a href="{{ url_for('course_assessment', course_id=course.id) }}" class="btn btn-sm btn-outline"><i class="fas fa-clipboard-check"></i> {{ _("Değerlendirme") }}</a>
             </div>
             <span class="course-badge">{{ course.level.upper() }}</span>
             <h1>{{ course.title }}</h1>

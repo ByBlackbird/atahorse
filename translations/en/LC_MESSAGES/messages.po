@@ -726,3 +726,366 @@ msgstr "Your password"
 
 msgid "Şifreyi Güncelle"
 msgstr "Update Password"
+
+msgid "AI kursunuzu oluşturuyor..."
+msgstr "Creating your AI course..."
+
+msgid "Adım adım öğretici içerik"
+msgstr "Step-by-step tutorial content"
+
+msgid "Akademik makaleler ve atıflar"
+msgstr "Academic papers and citations"
+
+msgid "Analizi Tamamla"
+msgstr "Complete the Analysis"
+
+msgid "Anlatıcının sesini net duyduğum, soru-cevabın bol olduğu ortam"
+msgstr "An environment where I hear the speaker clearly with plenty of Q&A"
+
+msgid "Ansiklopedik temel bilgi"
+msgstr "Encyclopedic foundational knowledge"
+
+msgid "Atahorse'ın eriştiği ve her kursa bağladığı kaynaklar — bilgi her zaman izlenebilir"
+msgstr "Sources Atahorse can access and links to every course — information is always traceable"
+
+msgid "Atahorse'ın yapay zekâsı her kursu senin için katman katman işler"
+msgstr "Atahorse's AI processes every course layer by layer for you"
+
+msgid "Atölye, laboratuvar veya uygulamalı çalışma ortamı"
+msgstr "A workshop, lab or hands-on practice environment"
+
+msgid "Açık erişimli bilim ön baskıları"
+msgstr "Open-access science preprints"
+
+msgid "Aşamaları, tarihleri ve detay listeleriyle net bir plan kurarım"
+msgstr "I build a clear plan with stages, dates and detailed lists"
+
+msgid "Bekliyor"
+msgstr "Pending"
+
+msgid "Beyin Analizi"
+msgstr "Brain Analysis"
+
+msgid "Bilgi Quiz'i"
+msgstr "Knowledge Quiz"
+
+msgid "Birine yol tarifi sorar, tarifleri dinleyerek ilerlerim"
+msgstr "I ask someone for directions and follow them by listening"
+
+msgid "Bu dosya türü desteklenmiyor."
+msgstr "This file type is not supported."
+
+msgid "Bu kodla eşleşen bir sertifika yok. Kodu kontrol edin."
+msgstr "No certificate matches this code. Please check the code."
+
+msgid "Bu sayfaya erişim yetkiniz yok."
+msgstr "You don't have permission to access this page."
+
+msgid "Bu sertifika Atahorse kayıtlarında doğrulandı."
+msgstr "This certificate was verified in Atahorse records."
+
+msgid "Bölüm 1"
+msgstr "Section 1"
+
+msgid "Bölüm 2"
+msgstr "Section 2"
+
+msgid "Deep Learning"
+msgstr "Deep Learning"
+
+msgid "Deep Learning ile Kişisel Öğretmen"
+msgstr "A Personal Tutor Powered by Deep Learning"
+
+msgid "Derin Analiz"
+msgstr "Deep Analysis"
+
+msgid "Detaylı analizle beyninin hangi lobuyla öğrendiğini keşfet. Görsel, işitsel veya kinestetik — her profile özel içerik."
+msgstr "Discover which lobe of your brain learns best through detailed analysis. Visual, auditory or kinesthetic — content tailored to every profile."
+
+msgid "Devam"
+msgstr "Continue"
+
+msgid "Değerlendirildi"
+msgstr "Graded"
+
+msgid "Değerlendirme"
+msgstr "Assessment"
+
+msgid "Dosya"
+msgstr "File"
+
+msgid "Dosyan yüklendi! Ekibimiz inceleyecek."
+msgstr "Your file was uploaded! Our team will review it."
+
+msgid "Doğrulanmış güncel gelişmeler"
+msgstr "Verified up-to-date developments"
+
+msgid "Düşünme Tarzı"
+msgstr "Thinking Style"
+
+msgid "Etrafta yürür, kendi kendime yönü hissederek bulurum"
+msgstr "I walk around and find my way by feel"
+
+msgid "Geleceğin olasılıklarını hayal ederek plan yaparım"
+msgstr "I plan by imagining future possibilities"
+
+msgid "Genel bir vizyon belirler, detayları ilerledikçe şekillendiririm"
+msgstr "I set a broad vision and shape details as I go"
+
+msgid "Geri"
+msgstr "Back"
+
+msgid "Geçerli Sertifika"
+msgstr "Valid Certificate"
+
+msgid "Geçmiş deneyimlerden ve kanıtlardan yola çıkarak plan yaparım"
+msgstr "I plan based on past experience and evidence"
+
+msgid "Gönderi silindi."
+msgstr "Submission deleted."
+
+msgid "Görsel öğrenen bir öğrenci olduğun için notlarını / çizimlerini yüklemen yeterli. Ekibimiz kontrol edecek."
+msgstr "As a visual learner, just upload your notes / drawings. Our team will check them."
+
+msgid "Görüntüler, hayaller ve bütünsel imgelerle düşünürüm"
+msgstr "I think in images, dreams and holistic pictures"
+
+msgid "Güven"
+msgstr "Trust"
+
+msgid "Güvenilir Kaynak Ağı"
+msgstr "Trusted Source Network"
+
+msgid "Haritaya veya telefondaki navigasyona bakarım"
+msgstr "I check a map or my phone's navigation"
+
+msgid "Hayal gücimi ve fikrin büyük resme uygunluğunu sorgularım"
+msgstr "I question my imagination and how the idea fits the big picture"
+
+msgid "Hemen denemeye başlarım; yaparak öğrenirim"
+msgstr "I start trying right away; I learn by doing"
+
+msgid "Hemen sezgilerime göre bir çözüm dener, yolda düzeltirim"
+msgstr "I try a solution by intuition and fix it along the way"
+
+msgid "Her kursun sonunda taranan tüm kaynaklar şeffaf kaynakça olarak listelenir."
+msgstr "At the end of every course, all scanned sources are listed as a transparent bibliography."
+
+msgid "Kaynakları Gör"
+msgstr "View Sources"
+
+msgid "Kişisel Çıktın"
+msgstr "Your Personal Output"
+
+msgid "Kişiselleştirme"
+msgstr "Personalization"
+
+msgid "Konunun anlatıldığı bir video, podcast veya sohbet ararım"
+msgstr "I look for a video, podcast or conversation explaining the topic"
+
+msgid "Konunun şemasını, haritasını veya görsellerini araştırırım"
+msgstr "I research diagrams, mind maps or visuals of the topic"
+
+msgid "Konuyu sesli tekrar eder, kayıt dinler veya arkadaşıma anlatırım"
+msgstr "I repeat the topic out loud, listen to recordings or explain it to a friend"
+
+msgid "Kurallar ve adım adım talimatlarla ilerlemek isterim"
+msgstr "I prefer to follow rules and step-by-step instructions"
+
+msgid "Kurs Değerlendirmesi"
+msgstr "Course Assessment"
+
+msgid "Kurs:"
+msgstr "Course:"
+
+msgid "Kurs; modüller, görevler ve doğrulanabilir sertifika ile sunulur. Kaynakça her zaman açık, bilgi her zaman izlenebilir."
+msgstr "Courses are delivered with modules, assignments and a verifiable certificate. The bibliography is always open, information always traceable."
+
+msgid "Kursa dön"
+msgstr "Back to course"
+
+msgid "Kursu ne kadar özümsediğini ölçelim. Sorular senin kursuna özel üretildi."
+msgstr "Let's measure how well you absorbed the course. Questions were generated specifically for your course."
+
+msgid "Lütfen bir dosya seç."
+msgstr "Please choose a file."
+
+msgid "Metinle ilgili yaşadığım deneyimler ve hisler"
+msgstr "My experiences and feelings related to the text"
+
+msgid "Metni okurken duyduğum iç sesim ve vurgular"
+msgstr "The inner voice and emphasis I hear while reading"
+
+msgid "Not"
+msgstr "Note"
+
+msgid "Not / Dosya Yükle"
+msgstr "Upload Note / File"
+
+msgid "Not / Ses"
+msgstr "Note / Audio"
+
+msgid "Pratik yaparak öğreniyorsun: yaptığın çalışmayı anlatan bir not veya ses kaydı yükle."
+msgstr "You learn by practice: upload a note or voice recording describing the work you did."
+
+msgid "Puan"
+msgstr "Score"
+
+msgid "Quiz Sonuçları"
+msgstr "Quiz Results"
+
+msgid "Quiz değerlendirildi:"
+msgstr "Quiz graded:"
+
+msgid "Quiz sonucun"
+msgstr "Your quiz result"
+
+msgid "Quiz şu an üretilemedi — AI servisine bağlanılamıyor. Lütfen daha sonra tekrar dene ya da ödevini yükle."
+msgstr "The quiz couldn't be generated right now — can't reach the AI service. Please try again later or upload your assignment."
+
+msgid "Quiz'i Bitir"
+msgstr "Finish Quiz"
+
+msgid "Renkli notlar, zihin haritaları ve özet tablolar hazırlarım"
+msgstr "I prepare colorful notes, mind maps and summary tables"
+
+msgid "Sana en uygun öğrenme yolunu bulmak için hazırlanmış 12 soruluk kısa analiz."
+msgstr "A short 12-question analysis prepared to find the learning path that suits you best."
+
+msgid "Sayfadaki başlıklar, renkler ve paragrafların görünüşü"
+msgstr "The look of headings, colors and paragraphs on the page"
+
+msgid "Senin öğrenme stiline (görsel, işitsel, kinestetik) ve seviyene göre içerik yeniden yazılır — teknik terimler anladığın dile indirgenir."
+msgstr "Content is rewritten for your learning style (visual, auditory, kinesthetic) and level — technical terms are translated into language you understand."
+
+msgid "Sertifika Bulunamadı"
+msgstr "Certificate Not Found"
+
+msgid "Sertifika Doğrulama"
+msgstr "Certificate Verification"
+
+msgid "Sertifika No"
+msgstr "Certificate No"
+
+msgid "Sertifika Sahibi"
+msgstr "Certificate Holder"
+
+msgid "Ses"
+msgstr "Audio"
+
+msgid "Ses Kaydı Yükle"
+msgstr "Upload Voice Recording"
+
+msgid "Sesli anlatır, gerekirse sesli mesaj bile çekerim"
+msgstr "I explain out loud, even recording voice messages if needed"
+
+msgid "Sesli anlayan bir öğrenci olduğun için konuyu sesli anlatmanı istiyoruz. Dilersen notunu da ekleyebilirsin."
+msgstr "Since you learn by listening, we'd like you to explain the topic out loud. You can also add your notes."
+
+msgid "Sinir ağı katmanları konunun kavram haritasını çıkarır; çelişen bilgileri çapraz kontrol eder, en güncel olanı seçer."
+msgstr "Neural network layers map out the topic's concept graph; cross-checking conflicting information and selecting the most up-to-date."
+
+msgid "Slaytlar, grafikler ve yazılı özetlerin olduğu ortam"
+msgstr "An environment with slides, charts and written summaries"
+
+msgid "Somut bir örnekle veya birlikte uygulayarak gösteririm"
+msgstr "I show it with a concrete example or by practicing together"
+
+msgid "Soru"
+msgstr "Question"
+
+msgid "Soru 10: Yeni bir beceri öğrenirken (ör. müzik aleti, kod, dil)..."
+msgstr "Question 10: When learning a new skill (e.g. instrument, coding, language)..."
+
+msgid "Soru 11: Masanda bir konuyu düşünürken zihninin nasıl çalıştığını fark ediyorsun?"
+msgstr "Question 11: As you think about a topic at your desk, how do you notice your mind working?"
+
+msgid "Soru 12: Zamanla ilgili hangisi sana daha doğru geliyor?"
+msgstr "Question 12: Which of these feels more true to you about time?"
+
+msgid "Soru 1: Karşına tamamen yeni ve soyut bir konu çıktı. İlk olarak ne yaparsın?"
+msgstr "Question 1: A completely new and abstract topic comes up. What do you do first?"
+
+msgid "Soru 2: Okuduğun bir metni hatırlamak istediğinde zihninde ne canlanır?"
+msgstr "Question 2: When you try to remember a text you read, what comes to mind?"
+
+msgid "Soru 3: Bir derse ya da toplantıya katılıyorsun. Sana en verimli gelen ortam hangisi?"
+msgstr "Question 3: You're attending a class or meeting. Which environment works best for you?"
+
+msgid "Soru 4: Karmaşık bir bilgiyi bir arkadaşına anlatman gerekse nasıl anlatırsın?"
+msgstr "Question 4: If you had to explain complex information to a friend, how would you do it?"
+
+msgid "Soru 5: Sınav haftasındasın. Çalışma stratejin hangisine daha yakın?"
+msgstr "Question 5: It's exam week. Which study strategy is closer to yours?"
+
+msgid "Soru 6: Yönünü kaybettiğin bir şehirdesin. Ne yaparsın?"
+msgstr "Question 6: You're lost in a city. What do you do?"
+
+msgid "Soru 7: Aniden bir arıza ya da beklenmedik bir problem çıktı. İlk tepkin ne olur?"
+msgstr "Question 7: A sudden breakdown or unexpected problem occurs. What's your first reaction?"
+
+msgid "Soru 8: Yeni bir proje ya da hedef için plan yaparken..."
+msgstr "Question 8: When planning a new project or goal..."
+
+msgid "Soru 9: Sana iddialı bir yeni fikir anlatıldı. Ne sorgularsın?"
+msgstr "Question 9: Someone pitches you a bold new idea. What do you question?"
+
+msgid "Soru çözer, kod yazar veya pratik egzersizler yaparım"
+msgstr "I solve problems, write code or do practical exercises"
+
+msgid "Sözcüklerle, iç sesle ve sıralı cümlelerle düşünürüm"
+msgstr "I think in words, inner voice and sequential sentences"
+
+msgid "Teknoloji"
+msgstr "Technology"
+
+msgid "Test atlandı."
+msgstr "Test skipped."
+
+msgid "Tıp ve yaşam bilimleri literatürü"
+msgstr "Medical and life sciences literature"
+
+msgid "UNESCO, OECD ve kamu kayıtları"
+msgstr "UNESCO, OECD and public records"
+
+msgid "Veriyi, kanıtı ve mantıksal tutarlılığı sorgularım"
+msgstr "I question the data, evidence and logical consistency"
+
+msgid "Wikipedia'dan akademik makalelere milyonlarca güvenilir kaynak taranır; her biri doğruluk için sınıflandırılır."
+msgstr "Millions of trusted sources are scanned — from Wikipedia to academic papers; each classified for accuracy."
+
+msgid "Yükle"
+msgstr "Upload"
+
+msgid "istediğin zaman tekrar doldurabilirsin."
+msgstr "you can retake it anytime."
+
+msgid "testi atlayabilirsin"
+msgstr "skip the test"
+
+msgid "Çizimler, karşılaştırma tabloları ve örnek görsellerle"
+msgstr "With drawings, comparison tables and example visuals"
+
+msgid "Önce durur, olası nedenleri tek tek sıralayıp analiz ederim"
+msgstr "I pause first, list possible causes one by one and analyze"
+
+msgid "Önceki gönderilerin"
+msgstr "Your previous submissions"
+
+msgid "Özgürce denemeler yapıp kendi yolumu keşfetmek isterim"
+msgstr "I want to experiment freely and discover my own path"
+
+msgid "Öğrenci Gönderileri"
+msgstr "Student Submissions"
+
+msgid "Üniversite düzeyinde ders materyali"
+msgstr "University-level course materials"
+
+msgid "İncelemede"
+msgstr "Under Review"
+
+msgid "Şeffaf Öğretim"
+msgstr "Transparent Teaching"
+
+msgid "Şu an vaktin yoksa"
+msgstr "If you don't have time right now,"
