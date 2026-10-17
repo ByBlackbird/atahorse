@@ -2124,3 +2124,99 @@ msgstr "Следующий слайд"
 
 msgid "Şu an:"
 msgstr "Сейчас:"
+
+msgid "Kaynaklar taranıyor"
+msgstr "Поиск источников"
+
+msgid "Modüller yazılıyor"
+msgstr "Создание модулей"
+
+msgid "Öğrenme stiline göre düzenleniyor"
+msgstr "Адаптация под ваш стиль обучения"
+
+msgid "Quiz ve görevler hazırlanıyor"
+msgstr "Подготовка тестов и заданий"
+
+msgid "Son kontroller yapılıyor"
+msgstr "Финальная проверка"
+
+msgid "Başlangıç"
+msgstr "Начальный"
+
+msgid "Yeni başlıyorum"
+msgstr "Я только начинаю"
+
+msgid "Orta"
+msgstr "Средний"
+
+msgid "Biraz biliyorum, derinleşmek istiyorum"
+msgstr "Кое-что знаю, хочу углубиться"
+
+msgid "İleri"
+msgstr "Продвинутый"
+
+msgid "Uzmanlaşmak istiyorum"
+msgstr "Хочу стать экспертом"
+
+msgid "Bitirmek için son soruyu işaretle"
+msgstr "Отметьте последний вопрос, чтобы завершить"
+
+msgid "AI onayı bekleniyor"
+msgstr "Ожидает подтверждения ИИ"
+
+msgid "AI onayladı"
+msgstr "ИИ подтвердил"
+
+msgid "Yapılacaklar"
+msgstr "Задачи"
+
+msgid "Onay bekleniyor"
+msgstr "Ожидает подтверждения"
+
+msgid "Git"
+msgstr "Перейти"
+
+msgid "Profilim"
+msgstr "Мой профиль"
+
+msgid "Üyelik"
+msgstr "Участник с"
+
+msgid "Tamamlanan"
+msgstr "Завершено"
+
+msgid "Ortalama İlerleme"
+msgstr "Средний прогресс"
+
+msgid "Bilişsel Analizim"
+msgstr "Мой когнитивный анализ"
+
+msgid "Profil Gücü"
+msgstr "Сила профиля"
+
+msgid "Analizi Yenile"
+msgstr "Обновить анализ"
+
+msgid "Buna Göre Kurs Üret"
+msgstr "Создать курс под меня"
+
+msgid "Görev Takibim"
+msgstr "Мои задания"
+
+msgid "AI Onaylı Görev"
+msgstr "Задание, подтверждённое ИИ"
+
+msgid "Toplam Görev"
+msgstr "Всего заданий"
+
+msgid "Görev Başarımı"
+msgstr "Успешность заданий"
+
+msgid "Önerilen Kurslar"
+msgstr "Рекомендуемые курсы"
+
+msgid "Toplulukta henüz öneri için yeterli tamamlanmış kurs yok. İlk sen tamamla!"
+msgstr "В сообществе пока недостаточно завершённых курсов для рекомендаций. Завершите первым!"
+
+msgid "Kendi Kursunu Oluştur"
+msgstr "Создайте свой курс"

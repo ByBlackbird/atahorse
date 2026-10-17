@@ -2124,3 +2124,99 @@ msgstr "Next slide"
 
 msgid "Şu an:"
 msgstr "Current:"
+
+msgid "Kaynaklar taranıyor"
+msgstr "Scanning sources"
+
+msgid "Modüller yazılıyor"
+msgstr "Writing modules"
+
+msgid "Öğrenme stiline göre düzenleniyor"
+msgstr "Adapting to your learning style"
+
+msgid "Quiz ve görevler hazırlanıyor"
+msgstr "Preparing quizzes and tasks"
+
+msgid "Son kontroller yapılıyor"
+msgstr "Final checks"
+
+msgid "Başlangıç"
+msgstr "Beginner"
+
+msgid "Yeni başlıyorum"
+msgstr "I'm just starting"
+
+msgid "Orta"
+msgstr "Intermediate"
+
+msgid "Biraz biliyorum, derinleşmek istiyorum"
+msgstr "I know a bit, want to go deeper"
+
+msgid "İleri"
+msgstr "Advanced"
+
+msgid "Uzmanlaşmak istiyorum"
+msgstr "I want to master it"
+
+msgid "Bitirmek için son soruyu işaretle"
+msgstr "Mark the last question to finish"
+
+msgid "AI onayı bekleniyor"
+msgstr "Waiting for AI approval"
+
+msgid "AI onayladı"
+msgstr "AI approved"
+
+msgid "Yapılacaklar"
+msgstr "To-Do"
+
+msgid "Onay bekleniyor"
+msgstr "Awaiting approval"
+
+msgid "Git"
+msgstr "Go"
+
+msgid "Profilim"
+msgstr "My Profile"
+
+msgid "Üyelik"
+msgstr "Member since"
+
+msgid "Tamamlanan"
+msgstr "Completed"
+
+msgid "Ortalama İlerleme"
+msgstr "Average Progress"
+
+msgid "Bilişsel Analizim"
+msgstr "My Cognitive Analysis"
+
+msgid "Profil Gücü"
+msgstr "Profile Strength"
+
+msgid "Analizi Yenile"
+msgstr "Refresh Analysis"
+
+msgid "Buna Göre Kurs Üret"
+msgstr "Generate a Course For Me"
+
+msgid "Görev Takibim"
+msgstr "My Task Tracking"
+
+msgid "AI Onaylı Görev"
+msgstr "AI-Approved Task"
+
+msgid "Toplam Görev"
+msgstr "Total Tasks"
+
+msgid "Görev Başarımı"
+msgstr "Task Success Rate"
+
+msgid "Önerilen Kurslar"
+msgstr "Recommended Courses"
+
+msgid "Toplulukta henüz öneri için yeterli tamamlanmış kurs yok. İlk sen tamamla!"
+msgstr "Not enough completed community courses for recommendations yet. Be the first to finish one!"
+
+msgid "Kendi Kursunu Oluştur"
+msgstr "Create Your Own Course"

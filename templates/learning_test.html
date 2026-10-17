@@ -209,7 +209,17 @@
         btnPrev.style.visibility = i === 0 ? 'hidden' : 'visible';
         var last = (i === total - 1);
         btnNext.style.display = last ? 'none' : 'inline-flex';
-        btnFinal.style.display = last ? 'inline-flex' : 'none';
+        btnFinal.style.display = (last && answered(i)) ? 'inline-flex' : 'none';
+        if (last && !answered(i)) {
+            btnNext.style.display = 'inline-flex';
+            btnNext.disabled = true;
+            btnNext.textContent = {{ _("Bitirmek için son soruyu işaretle") | tojson }};
+            btnNext.style.opacity = '.65';
+        } else {
+            btnNext.disabled = false;
+            btnNext.innerHTML = {{ _("Devam") | tojson }} + ' <svg class="ico"><use href="#i-arrow-right"/></svg>';
+            btnNext.style.opacity = '';
+        }
         // kart animasyonunu yeniden tetikle
         var card = steps[i].querySelector('.test-card');
         if (card) { card.style.animation = 'none'; void card.offsetWidth; card.style.animation = ''; }
@@ -230,6 +240,7 @@
                 setTimeout(function () {
                     if (!answered(si)) return;
                     if (si < total - 1) show(si + 1);
+                    else show(si); // son soru: işaretleme anında Testi Tamamla'yı aç
                 }, 280);
             });
         });

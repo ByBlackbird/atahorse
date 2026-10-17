@@ -6,58 +6,61 @@
 <style>
 .member-home{max-width:1120px;margin:0 auto;padding:28px 20px 60px}
 .mh-hero{display:flex;flex-wrap:wrap;gap:18px;align-items:stretch;justify-content:space-between;
-    background:#1E1B4B;
+    background:var(--primary-dark);
     border:1px solid rgba(245,185,66,.35);border-radius:18px;padding:26px 28px;color:#FDFCF8}
 .mh-hero h1{margin:0 0 6px;font-size:26px}
 .mh-hero p{margin:0;color:#c9c4ee;font-size:14px}
 .mh-chips{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}
 .mh-chip{display:inline-flex;align-items:center;gap:7px;background:rgba(255,255,255,.08);
     border:1px solid rgba(255,255,255,.16);border-radius:999px;padding:7px 14px;font-size:13px;font-weight:600}
-.mh-chip .ico{color:#F5B942}
-.mh-chip.plan{background:rgba(245,185,66,.16);border-color:rgba(245,185,66,.5);color:#FCD34D}
+.mh-chip .ico{color:var(--gold)}
+.mh-chip.plan{background:rgba(245,185,66,.16);border-color:rgba(245,185,66,.5);color:var(--gold)}
 .mh-side{display:flex;flex-direction:column;justify-content:center;gap:10px;min-width:220px}
 .mh-ai{font-size:13px;display:flex;align-items:center;gap:8px;color:#c9c4ee}
 .mh-ai .dot{width:9px;height:9px;border-radius:50%;background:#22c55e;box-shadow:0 0 8px #22c55e}
 .mh-ai.off .dot{background:#ef4444;box-shadow:0 0 8px #ef4444}
 .mh-quota{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.14);
     border-radius:12px;padding:10px 14px;font-size:13px}
-.mh-quota b{color:#FCD34D}
+.mh-quota b{color:var(--gold)}
 .mh-actions{display:flex;gap:12px;flex-wrap:wrap;margin:22px 0}
 .mh-btn{display:inline-flex;align-items:center;gap:9px;border-radius:12px;padding:13px 22px;
     font-size:14.5px;font-weight:700;text-decoration:none;transition:transform .12s,box-shadow .12s}
 .mh-btn:hover{transform:translateY(-2px)}
-.mh-btn.primary{background:#D97706;color:#fff}
-.mh-btn.ghost{background:#fff;border:1.5px solid #ddd9f3;color:#1E1B4B}
-.mh-btn.ghost:hover{border-color:#8B5CF6}
+.mh-btn.primary{background:var(--warning);color:#fff}
+.mh-btn.ghost{background:#fff;border:1.5px solid #ddd9f3;color:var(--primary-dark)}
+.mh-btn.ghost:hover{border-color:var(--secondary)}
 .blueprint-card{max-width:none;margin:0}
 .mh-grid{display:grid;grid-template-columns:1.5fr 1fr;gap:22px;align-items:start}
+.todo-row{text-decoration:none;color:inherit}
+.todo-row:hover{border-color:#B9A8F2}
+.cr-icon.todo{background:var(--primary-light);color:var(--primary)}
 @media(max-width:900px){.mh-grid{grid-template-columns:1fr}}
 .mh-section{margin-top:26px}
-.mh-section h2{display:flex;align-items:center;gap:10px;font-size:19px;margin:0 0 14px;color:#1E1B4B}
-.mh-section h2 .ico{color:#5B2DE6}
+.mh-section h2{display:flex;align-items:center;gap:10px;font-size:19px;margin:0 0 14px;color:var(--primary-dark)}
+.mh-section h2 .ico{color:var(--primary)}
 .course-row{display:flex;align-items:center;gap:16px;background:#fff;border:1px solid #e9e6f7;
     border-radius:14px;padding:16px 18px;margin-bottom:12px;transition:box-shadow .12s}
 .course-row:hover{box-shadow:0 6px 20px rgba(30,27,75,.08)}
 .cr-icon{width:44px;height:44px;flex:none;border-radius:12px;display:flex;align-items:center;justify-content:center;
-    background:#5B2DE6;color:#fff}
-.cr-icon.done{background:#D97706;color:#fff}
+    background:var(--primary);color:#fff}
+.cr-icon.done{background:var(--warning);color:#fff}
 .cr-body{flex:1;min-width:0}
-.cr-title{font-weight:700;color:#1E1B4B;font-size:15px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cr-title{font-weight:700;color:var(--primary-dark);font-size:15px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .cr-meta{font-size:12.5px;color:#77779a;margin-top:3px;display:flex;gap:12px;flex-wrap:wrap}
 .cr-bar{height:7px;background:#efedf9;border-radius:99px;margin-top:9px;overflow:hidden}
-.cr-bar span{display:block;height:100%;border-radius:99px;background:#5B2DE6}
-.cr-bar.full span{background:#D97706}
+.cr-bar span{display:block;height:100%;border-radius:99px;background:var(--primary)}
+.cr-bar.full span{background:var(--warning)}
 .cr-cta{flex:none;display:flex;gap:8px}
 .mh-empty{text-align:center;padding:44px 20px;background:#fff;border:1.5px dashed #cfc9ee;border-radius:16px;color:#77779a}
-.mh-empty .ico{font-size:34px;color:#8B5CF6;margin-bottom:10px}
-.mh-empty b{display:block;color:#1E1B4B;font-size:17px;margin-bottom:6px}
+.mh-empty .ico{font-size:34px;color:var(--secondary);margin-bottom:10px}
+.mh-empty b{display:block;color:var(--primary-dark);font-size:17px;margin-bottom:6px}
 .cert-mini{display:inline-flex;align-items:center;gap:6px;background:#ECFDF5;color:#047857;
     border:1px solid #A7F3D0;border-radius:999px;padding:6px 12px;font-size:12.5px;font-weight:700;text-decoration:none}
 /* Tema secici */
 .th-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:14px}
 .th-card{background:#fff;border:2px solid #e9e6f7;border-radius:16px;padding:16px;display:flex;flex-direction:column;gap:9px;transition:all .15s}
-.th-card:hover{border-color:#8B5CF6;transform:translateY(-2px)}
-.th-card.active{border-color:#5B2DE6}
+.th-card:hover{border-color:var(--secondary);transform:translateY(-2px)}
+.th-card.active{border-color:var(--primary)}
 .th-preview{height:44px;border-radius:10px}
 .th-preview{display:flex;gap:6px;padding:7px;background:#F6F5FB}
 .th-preview i{flex:1;border-radius:6px}
@@ -66,13 +69,13 @@
 .th-preview.dinamik i:nth-child(1){background:#F5B942}.th-preview.dinamik i:nth-child(2){background:#EA580C}.th-preview.dinamik i:nth-child(3){background:#9A3412}
 .th-preview.dengeli i:nth-child(1){background:#4F46E5}.th-preview.dengeli i:nth-child(2){background:#4338CA}.th-preview.dengeli i:nth-child(3){background:#1E1B4B}
 .th-preview.auto i:nth-child(1){background:#F5B942}.th-preview.auto i:nth-child(2){background:#B45309}.th-preview.auto i:nth-child(3){background:#1E1B4B}
-.th-name{font-weight:800;color:#1E1B4B;font-size:14.5px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
-.th-style{font-size:11px;font-weight:800;background:#EFEBFF;color:#5B2DE6;border-radius:999px;padding:3px 9px}
+.th-name{font-weight:800;color:var(--primary-dark);font-size:14.5px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.th-style{font-size:11px;font-weight:800;background:var(--primary-light);color:var(--primary);border-radius:999px;padding:3px 9px}
 .th-desc{font-size:12.5px;color:#77779a;line-height:1.55;flex:1}
-.th-btn{border:none;border-radius:10px;padding:9px;font-weight:700;font-size:13px;cursor:pointer;background:#5B2DE6;color:#fff}
-.th-btn.current{background:#EFEBFF;color:#5B2DE6;cursor:default}
+.th-btn{border:none;border-radius:10px;padding:9px;font-weight:700;font-size:13px;cursor:pointer;background:var(--primary);color:#fff}
+.th-btn.current{background:var(--primary-light);color:var(--primary);cursor:default}
 .th-note{font-size:12.5px;color:#77779a;margin:-4px 0 12px}
-.th-note b{color:#1E1B4B}
+.th-note b{color:var(--primary-dark)}
 </style>
 {% endblock %}
 
@@ -116,7 +119,7 @@
         <a href="{{ url_for('generate_course') }}" class="mh-btn primary"><svg class="ico"><use href="#i-wand-magic-sparkles"/></svg> {{ _("Yeni Kurs Oluştur") }}</a>
         <a href="{{ url_for('learning_test') }}" class="mh-btn ghost"><svg class="ico"><use href="#i-microscope"/></svg> {{ _("Öğrenme Testini Tekrarla") }}</a>
         {% if current_user.plan != 'premium' %}
-        <a href="{{ url_for('pricing') }}" class="mh-btn ghost"><svg class="ico" style="color:#D97706"><use href="#i-crown"/></svg> {{ _("Premium'a Yükselt") }}</a>
+        <a href="{{ url_for('pricing') }}" class="mh-btn ghost"><svg class="ico" style="color:var(--warning)"><use href="#i-crown"/></svg> {{ _("Premium'a Yükselt") }}</a>
         {% endif %}
     </div>
 
@@ -157,6 +160,22 @@
     {% if courses %}
     <div class="mh-grid">
         <div>
+            {% if todo %}
+            <div class="mh-section" style="margin-top:0">
+                <h2><svg class="ico"><use href="#i-list-check"/></svg> {{ _("Yapılacaklar") }} <span style="font-size:.75rem;font-weight:800;background:var(--primary-light);color:var(--primary);border-radius:999px;padding:2px 10px">{{ todo|length }}</span></h2>
+                {% for t in todo %}
+                <a href="{{ url_for('view_course', course_id=t.course_id) }}" class="course-row todo-row">
+                    <div class="cr-icon todo"><svg class="ico"><use href="#i-{{ 'clock' if t.pending else 'circle' }}"/></svg></div>
+                    <div class="cr-body">
+                        <div class="cr-title" style="white-space:normal">{{ t.task }}</div>
+                        <div class="cr-meta"><span><svg class="ico" style="width:.9em;height:.9em"><use href="#i-book-open"/></svg> {{ t.title }}</span>
+                        {% if t.pending %}<span style="color:var(--warning);font-weight:700"><svg class="ico" style="width:.9em;height:.9em"><use href="#i-robot"/></svg> {{ _("Onay bekleniyor") }}</span>{% endif %}</div>
+                    </div>
+                    <div class="cr-cta"><span class="btn btn-primary btn-sm" style="pointer-events:none">{{ _("Git") }}</span></div>
+                </a>
+                {% endfor %}
+            </div>
+            {% endif %}
             {% if active %}
             <div class="mh-section">
                 <h2><svg class="ico"><use href="#i-play"/></svg> {{ _("Devam Eden Kurslar") }}</h2>

@@ -4,25 +4,63 @@
 
 {% block extra_css %}
 <style>
-.gen-loading{position:fixed;inset:0;z-index:9999;display:none;align-items:center;justify-content:center;background:var(--gray-50,#FDFCF8)}
+.gen-loading{position:fixed;inset:0;z-index:9999;display:none;align-items:center;justify-content:center;background:#FDFCF8;overflow:hidden}
 .gen-loading.show{display:flex}
-.gen-loading-box{width:min(480px,92%);text-align:center;background:#fff;border:1px solid var(--gray-200,#E5E7EB);border-radius:20px;padding:2.6rem 2.2rem}
-.gen-loading-box h2{font-family:'Cinzel',Georgia,serif;color:#1E1B4B;font-size:1.5rem;margin:0 0 .5rem}
-.gen-loading-sub{color:#77779a;font-size:.92rem;margin:0 0 1.8rem}
+/* hareketli düz arka plan efekti */
+.gen-bg{position:absolute;inset:0;pointer-events:none}
+.gen-bg .dots{position:absolute;inset:-60px;background-image:radial-gradient(#d9d4f0 1.4px,transparent 1.4px);background-size:26px 26px;animation:genPan 26s linear infinite}
+@keyframes genPan{from{transform:translate(0,0)}to{transform:translate(26px,26px)}}
+.gen-shape{position:absolute;border-radius:50%;opacity:.14;animation:genFloat 14s ease-in-out infinite}
+.gen-shape.s1{width:340px;height:340px;border:3px solid #5B2DE6;left:6%;top:10%}
+.gen-shape.s2{width:220px;height:220px;border:3px solid #D97706;right:8%;top:56%;animation-delay:-4s}
+.gen-shape.s3{width:150px;height:150px;border:3px solid #8B5CF6;left:16%;bottom:8%;animation-delay:-8s}
+.gen-shape.s4{width:90px;height:90px;border:3px solid #F5B942;right:20%;top:12%;animation-delay:-2s;opacity:.22}
+@keyframes genFloat{0%,100%{transform:translateY(0) rotate(0deg)}50%{transform:translateY(-34px) rotate(10deg)}}
+.gen-loading-box{position:relative;width:min(520px,92%);text-align:center;background:#fff;border:1.5px solid #E3DFF5;border-radius:20px;padding:2.4rem 2.2rem 2rem}
+.gen-loading-box h2{font-family:'Cinzel',Georgia,serif;color:var(--primary-dark);font-size:1.5rem;margin:0 0 .3rem}
+.gen-loading-sub{color:#77779a;font-size:.92rem;margin:0 0 1.4rem}
+.gen-pct{font-family:'Cinzel',Georgia,serif;font-size:2.6rem;font-weight:700;color:var(--primary);line-height:1;margin-bottom:.9rem}
+.gen-pct small{font-size:1.2rem;color:#9a97b8}
 .gen-track{height:12px;background:#EFEDF9;border-radius:999px;overflow:hidden;border:1px solid #E5E1F7}
-.gen-fill{height:100%;width:0;background:#5B2DE6;border-radius:999px;transition:width .6s ease}
-.gen-stage{margin-top:1.1rem;font-size:.9rem;font-weight:700;color:#5B2DE6;min-height:1.4rem}
-.gen-warn{margin-top:1.6rem;font-size:.8rem;color:#9a97b8;display:flex;align-items:center;justify-content:center;gap:.4rem}
+.gen-fill{height:100%;width:0;background:var(--primary);border-radius:999px;transition:width .5s ease}
+.gen-steps{list-style:none;margin:1.2rem 0 0;padding:0;display:flex;flex-direction:column;gap:.45rem;text-align:left}
+.gen-steps li{display:flex;align-items:center;gap:.6rem;font-size:.86rem;font-weight:600;color:#9a97b8;transition:color .3s}
+.gen-steps li .dot{width:20px;height:20px;border-radius:50%;border:2px solid #D9D4F0;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;font-size:.7rem;color:transparent;transition:all .3s}
+.gen-steps li.done{color:#3f3d5c}
+.gen-steps li.done .dot{background:#059669;border-color:#059669;color:#fff}
+.gen-steps li.on{color:var(--primary)}
+.gen-steps li.on .dot{border-color:var(--primary);animation:genPulse 1.1s ease-in-out infinite}
+@keyframes genPulse{0%,100%{box-shadow:0 0 0 0 rgba(91,45,230,.25)}50%{box-shadow:0 0 0 6px rgba(91,45,230,0)}}
+.gen-warn{margin-top:1.5rem;font-size:.8rem;color:#9a97b8;display:flex;align-items:center;justify-content:center;gap:.4rem}
+/* seviye seçim kartları */
+.lvl-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:.8rem}
+.lvl-cards input{position:absolute;opacity:0;pointer-events:none}
+.lvl-card{display:block;background:#fff;border:1.5px solid var(--gray-200,#E5E7EB);border-radius:14px;padding:.9rem 1rem;cursor:pointer;transition:border-color .2s,background .2s}
+.lvl-card:hover{border-color:#B9A8F2}
+.lvl-bar{display:block;height:6px;background:#EFEDF9;border-radius:99px;overflow:hidden;margin-bottom:.6rem}
+.lvl-bar i{display:block;height:100%;background:var(--primary);border-radius:99px}
+.lvl-card b{display:block;color:var(--primary-dark);font-size:.95rem}
+.lvl-card small{display:block;color:#77779a;font-size:.78rem;margin-top:.15rem;line-height:1.4}
+.lvl-cards input:checked + .lvl-card{border-color:var(--primary);background:#F7F5FF}
+.lvl-cards input:checked + .lvl-card .lvl-bar{background:var(--primary-light)}
+.lvl-cards input:checked + .lvl-card b{color:var(--primary)}
+@media (max-width:640px){.lvl-cards{grid-template-columns:1fr}}
 </style>
 {% endblock %}
 
 {% block content %}
 <div class="gen-loading" id="genLoading" aria-live="polite">
+    <div class="gen-bg">
+        <div class="dots"></div>
+        <div class="gen-shape s1"></div><div class="gen-shape s2"></div>
+        <div class="gen-shape s3"></div><div class="gen-shape s4"></div>
+    </div>
     <div class="gen-loading-box">
         <h2>{{ _("Kursun Oluşturuluyor") }}</h2>
         <p class="gen-loading-sub">{{ _("Yapay zekâ senin için kişisel kursunu hazırlıyor.") }}</p>
+        <div class="gen-pct"><span id="genPct">0</span><small>%</small></div>
         <div class="gen-track"><div class="gen-fill" id="genFill"></div></div>
-        <div class="gen-stage" id="genStage"></div>
+        <ol class="gen-steps" id="genSteps"></ol>
         <div class="gen-warn"><svg class="ico"><use href="#i-clock"/></svg> {{ _("Bu işlem birkaç dakika sürebilir — sayfayı kapatma ya da yenileme.") }}</div>
     </div>
 </div>
@@ -42,12 +80,27 @@
             </div>
 
             <div class="form-group">
-                <label for="level"><svg class="ico"><use href="#i-signal"/></svg> {{ _("Hangi Seviyede?") }}</label>
-                <select id="level" name="level" class="form-input form-input-lg">
-                    <option value="baslangic">{{ _("Başlangıç - Yeni başlıyorum") }}</option>
-                    <option value="orta" selected>{{ _("Orta - Biraz biliyorum, derinleşmek istiyorum") }}</option>
-                    <option value="ileri">{{ _("İleri - Uzmanlaşmak istiyorum") }}</option>
-                </select>
+                <label><svg class="ico"><use href="#i-signal"/></svg> {{ _("Hangi Seviyede?") }}</label>
+                <div class="lvl-cards" id="lvlCards">
+                    <input type="radio" name="level" value="baslangic" id="lvl-baslangic">
+                    <label class="lvl-card" for="lvl-baslangic">
+                        <span class="lvl-bar"><i style="width:33%"></i></span>
+                        <b>{{ _("Başlangıç") }}</b>
+                        <small>{{ _("Yeni başlıyorum") }}</small>
+                    </label>
+                    <input type="radio" name="level" value="orta" id="lvl-orta" checked>
+                    <label class="lvl-card" for="lvl-orta">
+                        <span class="lvl-bar"><i style="width:66%"></i></span>
+                        <b>{{ _("Orta") }}</b>
+                        <small>{{ _("Biraz biliyorum, derinleşmek istiyorum") }}</small>
+                    </label>
+                    <input type="radio" name="level" value="ileri" id="lvl-ileri">
+                    <label class="lvl-card" for="lvl-ileri">
+                        <span class="lvl-bar"><i style="width:100%"></i></span>
+                        <b>{{ _("İleri") }}</b>
+                        <small>{{ _("Uzmanlaşmak istiyorum") }}</small>
+                    </label>
+                </div>
             </div>
 
             <div class="user-preferences">
@@ -78,27 +131,39 @@
         (function(){
             var form=document.getElementById("genForm"),btn=document.getElementById("genBtn"),
                 overlay=document.getElementById("genLoading"),fill=document.getElementById("genFill"),
-                stage=document.getElementById("genStage"),locked=false;
+                pctEl=document.getElementById("genPct"),stepsEl=document.getElementById("genSteps"),locked=false;
             var stages=[
-                {{ _("Kaynaklar taranıyor…")|tojson }},
-                {{ _("Modüller yazılıyor…")|tojson }},
-                {{ _("Öğrenme stiline göre düzenleniyor…")|tojson }},
-                {{ _("Quiz ve görevler hazırlanıyor…")|tojson }},
-                {{ _("Son kontroller yapılıyor…")|tojson }}
+                {{ _("Kaynaklar taranıyor")|tojson }},
+                {{ _("Modüller yazılıyor")|tojson }},
+                {{ _("Öğrenme stiline göre düzenleniyor")|tojson }},
+                {{ _("Quiz ve görevler hazırlanıyor")|tojson }},
+                {{ _("Son kontroller yapılıyor")|tojson }}
             ];
+            stepsEl.innerHTML=stages.map(function(s){
+                return '<li><span class="dot"></span><span>'+s+'</span></li>';
+            }).join("");
+            var stepEls=stepsEl.querySelectorAll("li");
+            function paintSteps(si,pct){
+                stepEls.forEach(function(li,i){
+                    li.classList.toggle("done",i<si||(i===si&&pct>=92));
+                    li.classList.toggle("on",i===si&&pct<92);
+                    li.querySelector(".dot").textContent=i<si?"✓":"";
+                });
+            }
             form.addEventListener("submit",function(e){
                 if(locked){e.preventDefault();return false;}
                 locked=true;
                 btn.disabled=true;btn.style.opacity=".55";btn.style.cursor="not-allowed";
                 overlay.classList.add("show");
                 var pct=0,si=0;
-                stage.textContent=stages[0];
+                paintSteps(0,0);
                 var iv=setInterval(function(){
-                    pct=Math.min(pct+Math.random()*7+2,92);
+                    pct=Math.min(pct+Math.random()*4+1.2,92);
                     fill.style.width=pct+"%";
+                    pctEl.textContent=Math.round(pct);
                     var ns=Math.min(Math.floor(pct/100*stages.length),stages.length-1);
-                    if(ns!==si){si=ns;stage.textContent=stages[si];}
-                },700);
+                    if(ns!==si){si=ns;paintSteps(si,pct);}
+                },420);
                 window.addEventListener("beforeunload",function(){clearInterval(iv);});
             });
         })();

@@ -8,6 +8,7 @@
     --warning: #d97706;
     --danger: #dc2626;
     --info: #0891b2;
+    --gold: #F5B942;
     --dark: #1e293b;
     --gray-50: #f8fafc;
     --gray-100: #f1f5f9;
@@ -1008,9 +1009,9 @@ body {
 
 /* === COURSE VIEW === */
 .course-view {
-    max-width: 1480px;
+    max-width: 1560px;
     margin: 0 auto;
-    padding: 2rem 2.2rem;
+    padding: 1.6rem 1.8rem;
 }
 
 .course-view-header {
@@ -1654,3 +1655,8 @@ button .ico, .btn .ico{pointer-events:none}
 .blueprint-card .bp-head{display:flex;align-items:center;gap:.5rem;color:#F5B942;font-size:.78rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase;margin-bottom:.45rem}
 .blueprint-card .bp-title{font-size:1.15rem;font-weight:800;color:#fff;margin-bottom:.3rem}
 .blueprint-card .bp-desc{font-size:.88rem;color:#cbd5e1;line-height:1.6}
+
+/* uyumlu acilir secimler */
+.ah-select{appearance:none;-webkit-appearance:none;width:100%;border:1.5px solid var(--gray-200);border-radius:10px;padding:.55rem 2.2rem .55rem .8rem;font-size:.85rem;font-weight:600;color:var(--primary-dark);background:#fff url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M1 1l4 4 4-4' fill='none' stroke='%235B2DE6' stroke-width='1.6' stroke-linecap='round'/%3E%3C/svg%3E") no-repeat right .8rem center;cursor:pointer;transition:border-color .2s}
+.ah-select:hover{border-color:#B9A8F2}
+.ah-select:focus{outline:none;border-color:var(--primary)}

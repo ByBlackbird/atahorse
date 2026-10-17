@@ -193,7 +193,7 @@
         <div id="pane-gorsel" class="style-pane active">
             <div class="pane-topic">{{ _("Örnek Konu") }}: <strong>{{ _("Fotosentez") }}</strong> — {{ _("Görsel Zihine Anlatım") }}</div>
             <div class="gorsel-demo">
-                <svg id="miniMap" viewBox="0 0 640 240" style="width:100%;height:auto;background:#0b1030;border-radius:12px"></svg>
+                <svg id="miniMap" viewBox="0 0 640 240" style="width:100%;height:auto;background:#FDFCF8;border-radius:12px"></svg>
                 <p class="pane-note">{{ _("Soyut kavramlar hiyerarşik zihin haritalarına dönüştürülür — göz tararken beynin ilişkileri anında kurar.") }}</p>
             </div>
         </div>
@@ -202,7 +202,7 @@
             <div class="pod-mini" id="podMini">
                 <button class="pod-mini-play" id="podMiniPlay" onclick="demoSpeak()" title="{{ _("Dinle") }}"><svg class="ico"><use href="#i-play"/></svg></button>
                 <div class="pod-mini-wave">{% for i in range(24) %}<span style="animation-delay:{{ (i % 6) * 0.12 }}s"></span>{% endfor %}</div>
-                <select class="pod-mini-speed" id="podMiniSpeed" onchange="demoSpeakRate(this.value)">
+                <select class="pod-mini-speed ah-select" id="podMiniSpeed" onchange="demoSpeakRate(this.value)" style="width:auto;background-color:rgba(255,255,255,.1);border-color:rgba(255,255,255,.2);color:#fff">
                     <option value="1" selected>1x</option>
                     <option value="1.25">1.25x</option>
                     <option value="1.5">1.5x</option>
@@ -242,7 +242,7 @@
 .pod-mini-play { width:46px; height:46px; border-radius:50%; border:none; background:#D97706; color:#fff; cursor:pointer; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
 .pod-mini-play .ico { width:1.25em; height:1.25em; }
 .pod-mini-wave { display:flex; align-items:center; gap:3px; height:32px; flex:1; overflow:hidden; }
-.pod-mini-wave span { width:3px; background:#8B5CF6; border-radius:2px; height:22%; }
+.pod-mini-wave span { width:3px; background:#F5B942; border-radius:2px; height:22%; }
 .pod-mini.playing .pod-mini-wave span { animation:wave .9s ease-in-out infinite; }
 @keyframes wave { 0%,100%{height:18%} 50%{height:95%} }
 .pod-mini-speed { background:rgba(255,255,255,.1); border:1px solid rgba(255,255,255,.2); color:#fff; border-radius:8px; padding:.35rem .5rem; font-size:.8rem; }
@@ -260,8 +260,8 @@
 /* Demo çıktısı: kaynak çipleri, harita, özet */
 .demo-sources { display:flex; gap:8px; flex-wrap:wrap; margin:14px 0; }
 .demo-src { display:inline-flex; align-items:center; gap:.4rem; background:rgba(5,150,105,.14); border:1px solid rgba(5,150,105,.45); color:#6ee7b7; font-size:.78rem; font-weight:700; padding:.35rem .8rem; border-radius:999px; }
-.demo-map-wrap { background:#0b1030; border:1px solid rgba(139,92,246,.3); border-radius:14px; padding:14px; margin-top:6px; }
-.demo-map-label { display:flex; align-items:center; gap:.5rem; color:#F5B942; font-size:.85rem; font-weight:800; margin-bottom:10px; }
+.demo-map-wrap { background:#FDFCF8; border:1px solid #E3DFF5; border-radius:14px; padding:14px; margin-top:6px; }
+.demo-map-label { display:flex; align-items:center; gap:.5rem; color:#1E1B4B; font-size:.85rem; font-weight:800; margin-bottom:10px; }
 .demo-summary { background:rgba(245,185,66,.08); border:1px solid rgba(245,185,66,.3); border-radius:12px; padding:12px 16px; color:#e2e8f0; font-size:.88rem; line-height:1.7; margin-top:14px; }
 </style>
 <script>
@@ -283,18 +283,23 @@ const paneLang = "{{ get_locale() }}";
         ru: {root:'Фотосинтез', kids:['Световые реакции','Тёмный цикл','Хлорофилл','Газообмен']}
     };
     const d = L[paneLang] || L.tr;
-    let h = '<line x1="320" y1="120" x2="120" y2="45" stroke="#8B5CF6" stroke-width="1.6" opacity=".6"/>'
-          + '<line x1="320" y1="120" x2="120" y2="120" stroke="#8B5CF6" stroke-width="1.6" opacity=".6"/>'
-          + '<line x1="320" y1="120" x2="120" y2="195" stroke="#8B5CF6" stroke-width="1.6" opacity=".6"/>'
-          + '<line x1="320" y1="120" x2="520" y2="82" stroke="#F5B942" stroke-width="1.6" opacity=".6"/>'
-          + '<line x1="320" y1="120" x2="520" y2="158" stroke="#F5B942" stroke-width="1.6" opacity=".6"/>';
-    h += '<rect x="238" y="98" rx="14" width="164" height="44" fill="#F5B942"/>'
-       + '<text x="320" y="125" text-anchor="middle" font-size="15" font-weight="800" fill="#1a1206">' + d.root + '</text>';
-    const colors = ['#5B2DE6','#5B2DE6','#D97706','#D97706'];
+    // Noktalı zemin (kişisel zihin haritasıyla aynı dil)
+    let h = '<defs><pattern id="mmDots" width="22" height="22" patternUnits="userSpaceOnUse"><circle cx="1.1" cy="1.1" r="1.1" fill="#d9d4f0"/></pattern></defs>'
+          + '<rect width="640" height="240" fill="url(#mmDots)"/>';
+    // Düz ince bağlayıcılar
+    h += '<line x1="320" y1="120" x2="120" y2="46" stroke="#C4BFE0" stroke-width="1.2"/>'
+       + '<line x1="320" y1="120" x2="120" y2="120" stroke="#C4BFE0" stroke-width="1.2"/>'
+       + '<line x1="320" y1="120" x2="120" y2="194" stroke="#C4BFE0" stroke-width="1.2"/>'
+       + '<line x1="320" y1="120" x2="520" y2="83" stroke="#C4BFE0" stroke-width="1.2"/>'
+       + '<line x1="320" y1="120" x2="520" y2="157" stroke="#C4BFE0" stroke-width="1.2"/>';
+    // Merkez: lacivert hap
+    h += '<rect x="238" y="98" rx="22" width="164" height="44" fill="#1E1B4B" stroke="#F5B942" stroke-width="1.5"/>'
+       + '<text x="320" y="125" text-anchor="middle" font-size="15" font-weight="800" fill="#F5B942">' + d.root + '</text>';
+    // Çocuklar: beyaz hap düğümler
     d.kids.forEach(function(k,i){
-        const x = i < 3 ? 28 : 408, y = (i % 3) * 75 + 27;
-        h += '<rect x="' + x + '" y="' + y + '" rx="11" width="184" height="38" fill="rgba(91,45,230,.25)" stroke="' + colors[i] + '" stroke-width="1.6"/>'
-           + '<text x="' + (x + 92) + '" y="' + (y + 24) + '" text-anchor="middle" font-size="13" font-weight="700" fill="#e9d5ff">' + k + '</text>';
+        const x = i < 3 ? 28 : 408, y = (i % 3) * 74 + 27;
+        h += '<rect x="' + x + '" y="' + y + '" rx="19" width="184" height="38" fill="#ffffff" stroke="#E3DFF5" stroke-width="1.5"/>'
+           + '<text x="' + (x + 92) + '" y="' + (y + 24) + '" text-anchor="middle" font-size="13" font-weight="700" fill="#1E1B4B">' + k + '</text>';
     });
     svg.innerHTML = h;
 })();
@@ -501,15 +506,15 @@ function drawDemoMap(topic){
     if(!svg) return;
     const labels={tr:[ "{{ _('Tanım') }}", "{{ _('Tarihçe') }}", "{{ _('Uygulama') }}" ], en:[ "{{ _('Definition') }}", "{{ _('History') }}", "{{ _('Application') }}" ], ru:[ "{{ _('Определение') }}", "{{ _('История') }}", "{{ _('Применение') }}" ]};
     const L=(labels[lang]||labels.tr);
-    let h='<line x1="320" y1="110" x2="120" y2="45" stroke="#8B5CF6" stroke-width="1.6" opacity=".6"/>'
-        +'<line x1="320" y1="110" x2="120" y2="175" stroke="#8B5CF6" stroke-width="1.6" opacity=".6"/>'
-        +'<line x1="320" y1="110" x2="520" y2="110" stroke="#F5B942" stroke-width="1.6" opacity=".6"/>';
-    h+='<rect x="238" y="88" rx="14" width="164" height="44" fill="#F5B942"/>'
-      +'<text x="320" y="115" text-anchor="middle" font-size="14" font-weight="800" fill="#1a1206">'+(topic.length>22?topic.slice(0,21)+'…':topic)+'</text>';
-    const pos=[[28,27],[28,157],[408,91]];
+    let h='<line x1="320" y1="110" x2="120" y2="46" stroke="#C4BFE0" stroke-width="1.2"/>'
+        +'<line x1="320" y1="110" x2="120" y2="174" stroke="#C4BFE0" stroke-width="1.2"/>'
+        +'<line x1="320" y1="110" x2="520" y2="110" stroke="#C4BFE0" stroke-width="1.2"/>';
+    h+='<rect x="238" y="88" rx="22" width="164" height="44" fill="#1E1B4B" stroke="#F5B942" stroke-width="1.5"/>'
+      +'<text x="320" y="115" text-anchor="middle" font-size="14" font-weight="800" fill="#F5B942">'+(topic.length>22?topic.slice(0,21)+'…':topic)+'</text>';
+    const pos=[[28,27],[28,155],[408,91]];
     L.forEach(function(k,i){
-        h+='<rect x="'+pos[i][0]+'" y="'+pos[i][1]+'" rx="11" width="184" height="38" fill="rgba(91,45,230,.25)" stroke="'+(i===2?'#D97706':'#5B2DE6')+'" stroke-width="1.6"/>'
-          +'<text x="'+(pos[i][0]+92)+'" y="'+(pos[i][1]+24)+'" text-anchor="middle" font-size="13" font-weight="700" fill="#e9d5ff">'+k+'</text>';
+        h+='<rect x="'+pos[i][0]+'" y="'+pos[i][1]+'" rx="19" width="184" height="38" fill="#ffffff" stroke="#E3DFF5" stroke-width="1.5"/>'
+          +'<text x="'+(pos[i][0]+92)+'" y="'+(pos[i][1]+24)+'" text-anchor="middle" font-size="13" font-weight="700" fill="#1E1B4B">'+k+'</text>';
     });
     svg.innerHTML=h;
 }

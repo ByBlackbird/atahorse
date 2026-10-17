@@ -796,10 +796,30 @@ def _member_home():
     streak = touch_streak(current_user.id)
     remaining = max(0, FREE_COURSE_LIMIT - (current_user.courses_used or 0)) if current_user.plan == 'free' else None
     bp = cognitive_blueprint(current_user.learning_style, current_user.brain_lobe)
+    # Yapilacaklar: tum aktif kurslardan tamamlanmamis gorevler
+    todo = []
+    for course in courses:
+        if course["completed"]:
+            continue
+        try:
+            mods = json.loads(course["modules"]) if course["modules"] else []
+        except Exception:
+            mods = []
+        try:
+            tstate = json.loads(course["tasks_state"]) if course["tasks_state"] else {}
+        except Exception:
+            tstate = {}
+        for mi, m in enumerate(mods):
+            for ti, t in enumerate(m.get("tasks") or []):
+                st = tstate.get(str(mi), {}).get(str(ti), False)
+                if st is not True:
+                    todo.append({"course_id": course["id"], "title": course["title"],
+                                 "mi": mi, "task": t, "pending": st == "pending"})
     return render_template("home.html", courses=courses,
                            ollama_status=ollama_available(),
                            remaining=remaining, free_limit=FREE_COURSE_LIMIT,
-                           blueprint_title=bp[0], blueprint_desc=bp[1], streak=streak)
+                           blueprint_title=bp[0], blueprint_desc=bp[1], streak=streak,
+                           todo=todo[:10])
 
 @app.route("/")
 def index():
@@ -907,6 +927,53 @@ def dashboard():
     if not current_user.onboarded:
         return redirect(url_for("onboarding"))
     return _member_home()
+
+@app.route("/profilim")
+@login_required
+def profilim():
+    if not current_user.onboarded:
+        return redirect(url_for("onboarding"))
+    conn = get_db(); c = conn.cursor()
+    c.execute("SELECT * FROM users WHERE id = ?", (current_user.id,))
+    me = c.fetchone()
+    # Kurs istatistikleri
+    c.execute("SELECT COUNT(*) FROM courses WHERE user_id=?", (current_user.id,))
+    course_total = c.fetchone()[0]
+    c.execute("SELECT COUNT(*) FROM courses WHERE user_id=? AND completed=1", (current_user.id,))
+    course_done = c.fetchone()[0]
+    c.execute("SELECT AVG(progress) FROM courses WHERE user_id=?", (current_user.id,))
+    avg_prog = c.fetchone()[0] or 0
+    c.execute("SELECT COUNT(*) FROM certificates WHERE user_id=?", (current_user.id,))
+    cert_count = c.fetchone()[0]
+    # Gorev onay orani
+    c.execute("SELECT tasks_state, modules FROM courses WHERE user_id=?", (current_user.id,))
+    task_total = task_done = 0
+    for row in c.fetchall():
+        try:
+            tstate = json.loads(row["tasks_state"]) if row["tasks_state"] else {}
+            mods = json.loads(row["modules"]) if row["modules"] else []
+        except Exception:
+            continue
+        for mi2, m in enumerate(mods):
+            for ti2 in range(len(m.get("tasks") or [])):
+                task_total += 1
+                if tstate.get(str(mi2), {}).get(str(ti2), False) is True:
+                    task_done += 1
+    # Onerilen kurslar: toplulugun tamamladigi, bende olmayan
+    c.execute("""SELECT courses.*, users.full_name as author FROM courses
+                 LEFT JOIN users ON courses.user_id = users.id
+                 WHERE courses.completed = 1 AND courses.user_id != ?
+                 ORDER BY courses.id DESC LIMIT 4""", (current_user.id,))
+    recommended = c.fetchall()
+    conn.close()
+    bp = cognitive_blueprint(current_user.learning_style, current_user.brain_lobe)
+    return render_template("profilim.html", me=me,
+                           course_total=course_total, course_done=course_done,
+                           avg_prog=round(avg_prog), cert_count=cert_count,
+                           task_total=task_total, task_done=task_done,
+                           blueprint_title=bp[0], blueprint_desc=bp[1],
+                           recommended=recommended)
+
 
 @app.route("/pricing")
 def pricing():
@@ -1047,7 +1114,7 @@ def view_course(course_id):
     def module_done(mi):
         tasks = modules[mi].get("tasks", []) if mi < len(modules) else []
         if not tasks: return True
-        return all(tasks_state.get(str(mi), {}).get(str(ti), False) for ti in range(len(tasks)))
+        return all(tasks_state.get(str(mi), {}).get(str(ti), False) is True for ti in range(len(tasks)))
     locked = [False] + [not module_done(i - 1) for i in range(1, len(modules))]
 
     # Degerlendirme durumu (sertifika hedefi paneli icin)
@@ -1093,6 +1160,28 @@ def update_progress(course_id):
               (data.get("progress",0), data.get("completed",0), course_id, current_user.id))
     conn.commit(); conn.close()
     return jsonify({"success": True})
+
+@app.route("/api/approve-task/<int:course_id>", methods=["POST"])
+@login_required
+def approve_task(course_id):
+    """Gorev onayi: ogrenci isaretler -> AI incelemesi -> onaylanir."""
+    data = request.get_json(force=True, silent=True) or {}
+    mi, ti = str(data.get("mi", "")), str(data.get("ti", ""))
+    conn = get_db(); c = conn.cursor()
+    c.execute("SELECT tasks_state FROM courses WHERE id=? AND user_id=?", (course_id, current_user.id))
+    row = c.fetchone()
+    if not row:
+        conn.close(); return jsonify({"ok": False}), 404
+    try:
+        state = json.loads(row["tasks_state"]) if row["tasks_state"] else {}
+    except Exception:
+        state = {}
+    state.setdefault(mi, {})[ti] = True
+    c.execute("UPDATE courses SET tasks_state=? WHERE id=?",
+              (json.dumps(state, ensure_ascii=False), course_id))
+    conn.commit(); conn.close()
+    return jsonify({"ok": True})
+
 
 @app.route("/api/course-state/<int:course_id>", methods=["POST"])
 @login_required
@@ -1178,7 +1267,7 @@ def complete_course(course_id):
     modules = json.loads(course["modules"]) if course["modules"] else []
     for mi, m in enumerate(modules):
         for ti, _t in enumerate(m.get("tasks", [])):
-            if not state.get(str(mi), {}).get(str(ti), False):
+            if state.get(str(mi), {}).get(str(ti), False) is not True:
                 tasks_done = False
     if not tasks_done:
         conn.close(); return jsonify({"ok": False, "reason": "tasks"})
