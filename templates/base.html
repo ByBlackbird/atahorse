@@ -7,32 +7,32 @@
     <link rel="icon" type="image/png" href="{{ url_for('static', filename='img/favicon.png') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     {% block extra_css %}{% endblock %}
 </head>
 <body{% block body_attrs %}{% endblock %}>
+{% include '_icons.html' %}
     <nav class="navbar">
         <div class="nav-container">
             <a href="{{ url_for('index') }}" class="nav-logo">
                 <img src="{{ url_for('static', filename='img/logo.png') }}" alt="Atahorse" class="nav-logo-icon" onerror="this.style.display='none';this.nextElementSibling.style.display='inline'">
-                <i class="fas fa-horse" style="display:none"></i>
+                <svg class="ico" style="display:none"><use href="#i-horse"/></svg>
                 <span class="nav-brand-text">atahorse<em>.ai</em></span>
             </a>
             <div class="nav-links">
                 {% if current_user.is_authenticated and current_user.is_admin %}
                     <a href="{{ url_for('admin_dashboard') }}" class="nav-link" style="color:var(--amber)">
-                        <i class="fas fa-crown"></i> {{ tr('admin_panel') }}
+                        <svg class="ico"><use href="#i-crown"/></svg> {{ tr('admin_panel') }}
                     </a>
                 {% endif %}
                 {% if current_user.is_authenticated %}
                     <a href="{{ url_for('dashboard') }}" class="nav-link">
-                        <i class="fas fa-th-large"></i> {{ _("Panel") }}
+                        <svg class="ico"><use href="#i-th-large"/></svg> {{ _("Panel") }}
                     </a>
                     <a href="{{ url_for('generate_course') }}" class="nav-link">
-                        <i class="fas fa-magic"></i> {{ _("Kurs Oluştur") }}
+                        <svg class="ico"><use href="#i-magic"/></svg> {{ _("Kurs Oluştur") }}
                     </a>
                     <a href="{{ url_for('logout') }}" class="nav-link nav-link-danger">
-                        <i class="fas fa-sign-out-alt"></i> {{ _("Çıkış") }}
+                        <svg class="ico"><use href="#i-sign-out-alt"/></svg> {{ _("Çıkış") }}
                     </a>
                 {% else %}
                     <a href="{{ url_for('login') }}" class="nav-link">{{ _("Giriş") }}</a>
@@ -42,9 +42,9 @@
                 <!-- Dil Seçici -->
                 <div class="lang-selector">
                     <button class="lang-btn" onclick="toggleLangMenu()">
-                        <i class="fas fa-globe"></i>
+                        <svg class="ico"><use href="#i-globe"/></svg>
                         <span>{{ get_locale().upper() }}</span>
-                        <i class="fas fa-chevron-down"></i>
+                        <svg class="ico"><use href="#i-chevron-down"/></svg>
                     </button>
                     <div class="lang-menu" id="langMenu">
                         <a href="{{ url_for('set_language', lang='tr') }}" class="lang-option {% if get_locale() == 'tr' %}active{% endif %}">
@@ -68,7 +68,7 @@
                 <div class="flash-messages">
                     {% for category, message in messages %}
                         <div class="flash flash-{{ category }}">
-                            <i class="fas fa-{% if category == 'success' %}check-circle{% elif category == 'danger' %}exclamation-circle{% elif category == 'warning' %}exclamation-triangle{% else %}info-circle{% endif %}"></i>
+                            <svg class="ico"><use href="#i-{% if category == 'success' %}circle-check{% elif category == 'danger' %}exclamation-circle{% elif category == 'warning' %}exclamation-triangle{% else %}info-circle{% endif %}"/></svg>
                             {{ message }}
                         </div>
                     {% endfor %}
@@ -81,7 +81,7 @@
 
     <footer class="footer">
         <div class="footer-content">
-            <p><i class="fas fa-horse"></i> {{ _("Atahorse - AI Destekli Kişiselleştirilmiş Eğitim Platformu") }}</p>
+            <p><svg class="ico"><use href="#i-horse"/></svg> {{ _("Atahorse - AI Destekli Kişiselleştirilmiş Eğitim Platformu") }}</p>
             <p class="footer-sub">{{ _("Güvenilir kaynaklardan, kişiselleştirilmiş eğitim") }}</p>
         </div>
     </footer>

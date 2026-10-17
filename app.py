@@ -4,6 +4,7 @@ Freemium Model + Admin Panel + Kaynakça + Slayt + Çoklu Dil
 """
 
 import os
+import random
 import sqlite3
 import json
 import datetime
@@ -205,6 +206,20 @@ def init_db():
         FOREIGN KEY (course_id) REFERENCES courses (id),
         FOREIGN KEY (user_id) REFERENCES users (id))""")
 
+    # --- GOC: eski veritabanlarına yeni kolonlar (gorev durumu, mod secimi, zihin haritasi, AI onayi) ---
+    for mig in [
+        "ALTER TABLE courses ADD COLUMN tasks_state TEXT",
+        "ALTER TABLE courses ADD COLUMN mode_override TEXT",
+        "ALTER TABLE courses ADD COLUMN mindmap TEXT",
+        "ALTER TABLE courses ADD COLUMN ai_approved INTEGER DEFAULT 0",
+        "ALTER TABLE users ADD COLUMN streak INTEGER DEFAULT 0",
+        "ALTER TABLE users ADD COLUMN last_active TEXT",
+    ]:
+        try:
+            c.execute(mig)
+        except sqlite3.OperationalError:
+            pass
+
     conn.commit()
 
     # Varsayilan admin olustur (ilk kurulumda)
@@ -381,8 +396,138 @@ def generate_quiz(course, modules, lang='tr'):
     except Exception:
         return None
 
+def generate_fallback_quiz(course, modules, lang='tr'):
+    """Ollama kapaliysa devreye girer: kurs verilerinden 5 coktan secmeli soru uretir.
+    Hicbir ogrenci quizsiz kalmaz. Donus: [{question, options[4], correct_index}]"""
+    def _cget(key, default=""):
+        try:
+            return course[key]
+        except Exception:
+            return default
+    topic = (_cget("topic") or _cget("title") or "Konu").strip()
+    level = (_cget("level") or "beginner").lower()
+    titles = [m.get("title", "") for m in modules if m.get("title")]
+    if not titles:
+        titles = [topic]
+    distractors_pool = [
+        "Veri Analizi ve Gorsellestirme", "Liderlik ve Ekip Yonetimi",
+        "Finansal Okuryazarlik", "Dijital Pazarlama Stratejileri",
+        "Proje Yonetimi Temelleri", "Iletisim ve Sunum Becerileri",
+        "Yapay Zeka Uygulamalari", "Girisimcilik ve Inovasyon",
+        "Is Surecleri Otomasyonu", "Kullanici Deneyimi Tasarimi",
+    ]
+    pool = [d for d in distractors_pool if d.lower() not in " ".join(titles).lower()]
+
+    def mk_opts(correct, wrongs):
+        opts = [correct] + [w for w in wrongs if w and w != correct][:3]
+        if len(opts) < 4:
+            return None
+        random.shuffle(opts)
+        return {"options": opts, "correct_index": opts.index(correct)}
+
+    L = {
+        'tr': {
+            'q_mod': f"Bu kursun {{i}}. modulunun adi hangisidir?",
+            'q_topic': "Bu kursun ana ogrenme konusu asagidakilerden hangisidir?",
+            'q_level': "Bu kurs hangi zorluk seviyesinde hazirlanmistir?",
+            'q_count': "Bu kurs toplam kac ogrenme modulunden olusmaktadir?",
+            'q_first': "Kursun ilk modulu hangi konuyla baslamaktadir?",
+            'lv': {'beginner': 'Baslangic', 'intermediate': 'Orta', 'advanced': 'Ileri', 'expert': 'Uzman'},
+            'nums': ['Iki', 'Uc', 'Dort', 'Bes', 'Alti', 'Yedi', 'Sekiz', 'Dokuz', 'On'],
+        },
+        'en': {
+            'q_mod': "What is the name of module {{i}} in this course?",
+            'q_topic': "What is the main learning topic of this course?",
+            'q_level': "At which difficulty level is this course prepared?",
+            'q_count': "How many learning modules does this course consist of in total?",
+            'q_first': "Which topic does the first module of the course start with?",
+            'lv': {'beginner': 'Beginner', 'intermediate': 'Intermediate', 'advanced': 'Advanced', 'expert': 'Expert'},
+            'nums': ['Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine', 'Ten'],
+        },
+        'ru': {
+            'q_mod': "Как называется модуль {{i}} этого курса?",
+            'q_topic': "Какова основная тема обучения этого курса?",
+            'q_level': "На каком уровне сложности подготовлен этот курс?",
+            'q_count': "Из скольких учебных модулей состоит этот курс?",
+            'q_first': "С какой темы начинается первый модуль курса?",
+            'lv': {'beginner': 'Начальный', 'intermediate': 'Средний', 'advanced': 'Продвинутый', 'expert': 'Эксперт'},
+            'nums': ['Два', 'Три', 'Четыре', 'Пять', 'Шесть', 'Семь', 'Восемь', 'Девять', 'Десять'],
+        },
+    }
+    T = L.get(lang, L['tr'])
+    used_wrong = []
+    quiz = []
+
+    def wrongs(n):
+        picks = [p for p in pool if p not in used_wrong][:n]
+        used_wrong.extend(picks)
+        return picks
+
+    def add(question, correct, wlist):
+        base = mk_opts(correct, wlist)
+        if base and question.strip():
+            base["question"] = question.strip()
+            quiz.append(base)
+
+    if len(titles) >= 2:
+        idx = min(1, len(titles) - 1)
+        add(T['q_mod'].replace("{i}", str(idx + 1)), titles[idx], wrongs(3))
+    add(T['q_topic'], topic, wrongs(3))
+    lv_correct = T['lv'].get(level, T['lv']['beginner'])
+    lv_wrong = [v for k, v in T['lv'].items() if v != lv_correct]
+    add(T['q_level'], lv_correct, lv_wrong[:3])
+    n = len(titles)
+    if 2 <= n <= 10:
+        num_word = T['nums'][n - 2] if n - 2 < len(T['nums']) else str(n)
+        add(T['q_count'], num_word, [w for w in T['nums'] if w != num_word][:3])
+    first_title = titles[0]
+    first_key = first_title.split(":")[-1].strip() if ":" in first_title else first_title
+    add(T['q_first'], first_key, wrongs(3))
+
+    while len(quiz) < 3 and len(titles) > 2:
+        idx = len(quiz) % len(titles)
+        add(T['q_mod'].replace("{i}", str(idx + 1)), titles[idx], wrongs(3))
+    random.shuffle(quiz)
+    return quiz[:5] if len(quiz) >= 3 else None
+
+def _cert_fonts():
+    """DejaVuSans bulunursa UTF-8 (Turkce) fontlari kaydeder, yoksa None doner."""
+    found = {}
+    for key, fname in (("reg", "DejaVuSans.ttf"), ("bold", "DejaVuSans-Bold.ttf"),
+                       ("oblique", "DejaVuSans-Oblique.ttf")):
+        for d in ("/usr/share/fonts/truetype/dejavu", "/usr/share/fonts/dejavu",
+                  os.path.join(BASE_DIR, "static", "fonts")):
+            p = os.path.join(d, fname)
+            if os.path.isfile(p):
+                found[key] = p
+                break
+    if not found.get("reg"):
+        return None
+    try:
+        from reportlab.pdfbase import pdfmetrics
+        from reportlab.pdfbase.ttfonts import TTFont
+        reg = found["reg"]
+        if reg not in _cert_fonts._registered:
+            pdfmetrics.registerFont(TTFont("DejaVu", reg))
+            _cert_fonts._registered.add(reg)
+        if found.get("bold") and found["bold"] not in _cert_fonts._registered:
+            pdfmetrics.registerFont(TTFont("DejaVu-Bold", found["bold"]))
+            _cert_fonts._registered.add(found["bold"])
+        if found.get("oblique") and found["oblique"] not in _cert_fonts._registered:
+            pdfmetrics.registerFont(TTFont("DejaVu-Oblique", found["oblique"]))
+            _cert_fonts._registered.add(found["oblique"])
+        from reportlab.lib.fonts import addMapping
+        addMapping("DejaVu", 0, 0, "DejaVu")
+        addMapping("DejaVu", 1, 0, "DejaVu-Bold")
+        addMapping("DejaVu", 0, 1, "DejaVu-Oblique")
+        addMapping("DejaVu", 1, 1, "DejaVu-Bold")
+        return {"reg": "DejaVu", "bold": "DejaVu-Bold", "oblique": "DejaVu-Oblique"}
+    except Exception:
+        return None
+_cert_fonts._registered = set()
+
 def generate_certificate_pdf(user_name, course_title, cert_code, date_str, lang='tr', level='beginner'):
-    """Kurumsal sertifika: lacivert-amber çerçeve, seviye rozeti, doğrulama kodu."""
+    """Profesyonel sertifika: orta eksende hizali, altin at muhurlu, QR kodlu."""
     buffer = BytesIO()
     W, H = landscape(A4)
     c = canvas.Canvas(buffer, pagesize=landscape(A4))
@@ -391,34 +536,55 @@ def generate_certificate_pdf(user_name, course_title, cert_code, date_str, lang=
     PURPLE = colors.HexColor('#5B2DE6')
     AMBER = colors.HexColor('#F5B942')
     AMBER_D = colors.HexColor('#D97706')
+    GOLD_L = colors.HexColor('#FCD34D')
     INK = colors.HexColor('#232338')
     GRAY = colors.HexColor('#5b5b70')
     IVORY = colors.HexColor('#FDFCF8')
+    WHITE = colors.white
 
     texts = {
         'tr': {'sub': 'KISISELLESTIRILMIS AI EGITIM PLATFORMU', 'type': 'BASARI SERTIFIKASI',
                't1': 'Bu belge,', 't2': 'adli kisinin asagidaki egitimi basariyla tamamladigini onaylar.',
                'date': 'Tarih', 'no': 'Sertifika No', 'level_lbl': 'Zorluk Seviyesi',
-               'verify': 'Dogrulama', 'sign': 'Atahorse AI Egitim Platformu'},
+               'verify': 'Dogrulama', 'sign': 'Atahorse AI Egitim Platformu', 'scan': 'Sertifikayi dogrulamak icin QR kodu okutun'},
         'en': {'sub': 'PERSONALIZED AI EDUCATION PLATFORM', 'type': 'CERTIFICATE OF COMPLETION',
                't1': 'This certificate confirms that', 't2': 'has successfully completed the following course.',
                'date': 'Date', 'no': 'Certificate No', 'level_lbl': 'Difficulty Level',
-               'verify': 'Verify at', 'sign': 'Atahorse AI Education Platform'},
+               'verify': 'Verify at', 'sign': 'Atahorse AI Education Platform', 'scan': 'Scan the QR code to verify this certificate'},
         'ru': {'sub': 'PLATFORM PERSONALIZED AI EDUCATION', 'type': 'CERTIFICATE OF COMPLETION',
                't1': 'This certificate confirms that', 't2': 'has successfully completed the following course.',
                'date': 'Date', 'no': 'Certificate No', 'level_lbl': 'Difficulty Level',
-               'verify': 'Verify at', 'sign': 'Atahorse AI Education Platform'}
+               'verify': 'Verify at', 'sign': 'Atahorse AI Education Platform', 'scan': 'Scan the QR code to verify this certificate'}
     }
     t = texts.get(lang, texts['tr'])
-    # Turkce karakterleri ASCII'ye cevir (Helvetica WinAnsi Turkce desteklemez)
-    tr_map = str.maketrans('ğĞşŞıİçÇöÖüÜ', 'gGsSiIcCoOuU')
-    user_name = user_name.translate(tr_map)
-    course_title = course_title.translate(tr_map)
+    # UTF-8 font (DejaVu) bulunursa gercek Turkce karakterler kullanilir;
+    # bulunamazsa eski davranis: ASCII cevirimi + Helvetica.
+    F = _cert_fonts() or {"reg": "Helvetica", "bold": "Helvetica-Bold", "oblique": "Helvetica-BoldOblique"}
+    if F["reg"] != "Helvetica":
+        t_utf8 = {
+            'tr': {'sub': 'KİŞİSELLEŞTİRİLMİŞ AI EĞİTİM PLATFORMU', 'type': 'BAŞARI SERTİFİKASI',
+                   't1': 'Bu belge,', 't2': 'adlı kişinin aşağıdaki eğitimi başarıyla tamamladığını onaylar.',
+                   'date': 'Tarih', 'no': 'Sertifika No', 'level_lbl': 'Zorluk Seviyesi',
+                   'verify': 'Doğrulama', 'sign': 'Atahorse AI Eğitim Platformu',
+                   'scan': 'Sertifikayı doğrulamak için QR kodu okutun'},
+            'en': texts['en'],
+            'ru': {'sub': 'ПЕРСОНАЛИЗИРОВАННАЯ AI-ПЛАТФОРМА ОБРАЗОВАНИЯ', 'type': 'СЕРТИФИКАТ ОБ ОКОНЧАНИИ',
+                   't1': 'Настоящий сертификат подтверждает, что', 't2': 'успешно завершил(а) следующий курс.',
+                   'date': 'Дата', 'no': '№ сертификата', 'level_lbl': 'Уровень сложности',
+                   'verify': 'Проверить:', 'sign': 'Atahorse AI — образовательная платформа',
+                   'scan': 'Отсканируйте QR-код для проверки сертификата'},
+        }
+        t = t_utf8.get(lang, t_utf8['tr'])
+    else:
+        # Turkce karakterleri ASCII'ye cevir (Helvetica WinAnsi Turkce desteklemez)
+        tr_map = str.maketrans('ğĞşŞıİçÇöÖüÜ', 'gGsSiIcCoOuU')
+        user_name = user_name.translate(tr_map)
+        course_title = course_title.translate(tr_map)
     lv = (level or 'beginner').lower()
     lv_map = {
-        'beginner':     {'tr': 'BASLANGIC', 'en': 'BEGINNER',     'col': AMBER,  'txt': colors.HexColor('#1a1206')},
-        'intermediate': {'tr': 'ORTA',      'en': 'INTERMEDIATE', 'col': PURPLE, 'txt': colors.white},
-        'advanced':     {'tr': 'ILERI',      'en': 'ADVANCED',     'col': NAVY,   'txt': AMBER},
+        'beginner':     {'tr': 'BAŞLANGIÇ' if F["reg"] != "Helvetica" else 'BASLANGIC', 'en': 'BEGINNER',     'col': AMBER,  'txt': colors.HexColor('#1a1206')},
+        'intermediate': {'tr': 'ORTA',      'en': 'INTERMEDIATE', 'col': PURPLE, 'txt': WHITE},
+        'advanced':     {'tr': 'İLERİ' if F["reg"] != "Helvetica" else 'ILERI',      'en': 'ADVANCED',     'col': NAVY,   'txt': AMBER},
     }
     lv_info = lv_map.get(lv, lv_map['beginner'])
     lv_name = lv_info.get(lang, lv_info['en'])
@@ -432,7 +598,6 @@ def generate_certificate_pdf(user_name, course_title, cert_code, date_str, lang=
     c.rect(24, 24, W-48, H-48)
     c.setStrokeColor(AMBER); c.setLineWidth(1.2)
     c.rect(32, 32, W-64, H-64)
-    # kose vurgulari
     c.setStrokeColor(AMBER); c.setLineWidth(3)
     for cxx, cyy, dx, dy in [(24,24,1,1),(W-24,24,-1,1),(24,H-24,1,-1),(W-24,H-24,-1,-1)]:
         c.line(cxx, cyy, cxx+26*dx, cyy)
@@ -443,86 +608,106 @@ def generate_certificate_pdf(user_name, course_title, cert_code, date_str, lang=
     # --- logo ---
     try:
         logo = ImageReader(os.path.join(BASE_DIR, 'static', 'img', 'logo.png'))
-        c.drawImage(logo, cx-30, H-118, width=60, height=60, mask='auto')
+        c.drawImage(logo, cx-26, H-108, width=52, height=52, mask='auto')
     except Exception:
         pass
 
-    # --- marka ---
+    # --- marka (kucuk, sade) ---
     c.setFillColor(NAVY)
-    c.setFont('Helvetica-Bold', 21)
-    c.drawCentredString(cx, H-142, "ATAHORSE.AI")
+    c.setFont(F['bold'], 15)
+    c.drawCentredString(cx, H-126, "ATAHORSE.AI")
     c.setFillColor(GRAY)
-    c.setFont('Helvetica', 8.4)
-    c.drawCentredString(cx, H-156, t['sub'])
+    c.setFont(F['reg'], 7.5)
+    c.drawCentredString(cx, H-138, t['sub'])
 
     # --- sertifika tipi rozeti ---
     c.setFillColor(AMBER)
-    c.roundRect(cx-150, H-208, 300, 30, 6, stroke=0, fill=1)
+    c.roundRect(cx-140, H-184, 280, 28, 6, stroke=0, fill=1)
     c.setFillColor(colors.HexColor('#1a1206'))
-    c.setFont('Helvetica-Bold', 14.5)
-    c.drawCentredString(cx, H-198, t['type'])
+    c.setFont(F['bold'], 13)
+    c.drawCentredString(cx, H-175, t['type'])
 
-    # --- metinler ---
+    # --- metinler: orta eksende hizali, temiz punto hiyerarsisi ---
     c.setFillColor(GRAY)
-    c.setFont('Helvetica', 11.5)
-    c.drawCentredString(cx, H-248, t['t1'])
+    c.setFont(F['reg'], 11)
+    c.drawCentredString(cx, H-228, t['t1'])
 
     c.setFillColor(NAVY)
-    c.setFont('Helvetica-Bold', 30)
-    c.drawCentredString(cx, H-284, user_name)
+    c.setFont(F['bold'], 34)
+    c.drawCentredString(cx, H-264, user_name)
 
     c.setStrokeColor(AMBER); c.setLineWidth(1.6)
-    c.line(cx-170, H-298, cx+170, H-298)
+    c.line(cx-150, H-278, cx+150, H-278)
 
     c.setFillColor(GRAY)
-    c.setFont('Helvetica', 11.5)
-    c.drawCentredString(cx, H-322, t['t2'])
+    c.setFont(F['reg'], 11)
+    c.drawCentredString(cx, H-300, t['t2'])
 
     c.setFillColor(INK)
-    c.setFont('Helvetica-Bold', 19)
-    title = course_title if len(course_title) <= 64 else course_title[:61] + '...'
-    c.drawCentredString(cx, H-352, title)
+    c.setFont(F['bold'], 20)
+    title = course_title if len(course_title) <= 60 else course_title[:57] + '...'
+    c.drawCentredString(cx, H-330, title)
 
-    # --- seviye rozeti (sag ust bolge) ---
-    bx, by = W-196, H-262
+    # --- seviye rozeti (orta eksende, kurs adinin altinda) ---
+    bw, bh = 150, 44
+    bx, by = cx-bw/2, H-396
     c.setFillColor(lv_info['col'])
-    c.roundRect(bx, by, 150, 54, 8, stroke=0, fill=1)
+    c.roundRect(bx, by, bw, bh, 8, stroke=0, fill=1)
     c.setFillColor(lv_info['txt'])
-    c.setFont('Helvetica', 8)
-    c.drawCentredString(bx+75, by+38, t['level_lbl'].upper())
-    c.setFont('Helvetica-Bold', 13)
-    c.drawCentredString(bx+75, by+20, lv_name)
+    c.setFont(F['reg'], 7.5)
+    c.drawCentredString(cx, by+29, t['level_lbl'].upper())
+    c.setFont(F['bold'], 12)
+    c.drawCentredString(cx, by+13, lv_name)
 
-    # --- alt bilgi satiri ---
-    c.setFillColor(GRAY)
-    c.setFont('Helvetica', 10.5)
-    c.drawString(64, 88, f"{t['date']}: {date_str}")
-    c.drawRightString(W-64, 88, f"{t['no']}: {cert_code}")
-    c.setFont('Helvetica', 9)
-    c.setFillColor(AMBER_D)
-    c.drawCentredString(cx, 62, f"{t['verify']}: atahorse.ai/verify/{cert_code}")
-
-    # --- imza blogu ---
-    c.setStrokeColor(NAVY); c.setLineWidth(1)
-    c.line(100, 128, 260, 128)
+    # --- marka imzasi (orta eksende) ---
     c.setFillColor(NAVY)
-    c.setFont('Helvetica-Bold', 10.5)
-    c.drawString(100, 114, "Atahorse")
+    c.setFont(F['oblique'], 17)
+    c.drawCentredString(cx, 132, "Atahorse")
     c.setFillColor(GRAY)
-    c.setFont('Helvetica', 8.5)
-    c.drawString(100, 102, t['sign'])
+    c.setFont(F['reg'], 8)
+    c.drawCentredString(cx, 118, t['sign'])
 
-    # --- altin muhur ---
-    sx, sy = W-130, 130
-    c.setStrokeColor(AMBER_D); c.setLineWidth(2)
-    c.circle(sx, sy, 34, stroke=1, fill=0)
+    # --- tarih + bireysel sertifika no (tek ortali satir) ---
+    c.setFillColor(INK)
+    c.setFont(F['bold'], 10)
+    c.drawCentredString(cx, 94, f"{t['date']}: {date_str}   |   {t['no']}: {cert_code}")
+    c.setFont(F['reg'], 8.5)
+    c.setFillColor(AMBER_D)
+    c.drawCentredString(cx, 76, f"{t['verify']}: atahorse.ai/verify/{cert_code}")
+
+    # --- QR kod (sol alt: dogrulama) ---
+    try:
+        import qrcode
+        qr = qrcode.QRCode(border=1, box_size=4)
+        qr.add_data(f"https://atahorse.ai/verify/{cert_code}")
+        qr.make()
+        qr_img = qr.make_image(fill_color="#1E1B4B", back_color="white")
+        qr_buf = BytesIO(); qr_img.save(qr_buf, format="PNG"); qr_buf.seek(0)
+        c.drawImage(ImageReader(qr_buf), 64, 56, width=72, height=72)
+        c.setFillColor(GRAY)
+        c.setFont(F['reg'], 7)
+        c.drawCentredString(100, 44, t['scan'])
+    except Exception:
+        pass
+
+    # --- altin at muhuru (sag alt: onay) ---
+    sx, sy = W-112, 92
+    c.setStrokeColor(AMBER_D); c.setLineWidth(2.2)
+    c.circle(sx, sy, 40, stroke=1, fill=0)
+    c.setStrokeColor(GOLD_L); c.setLineWidth(1)
+    c.circle(sx, sy, 36, stroke=1, fill=0)
     c.setFillColor(AMBER)
-    c.circle(sx, sy, 27, stroke=0, fill=1)
-    c.setFillColor(colors.HexColor('#1a1206'))
-    c.setFont('Helvetica-Bold', 15)
-    c.drawCentredString(sx, sy-5, "AI")
-    c.setFont('Helvetica', 6.5)
-    c.drawCentredString(sx, sy-15, "ATAHORSE")
+    c.circle(sx, sy, 30, stroke=0, fill=1)
+    try:
+        logo2 = ImageReader(os.path.join(BASE_DIR, 'static', 'img', 'logo.png'))
+        c.drawImage(logo2, sx-19, sy-13, width=38, height=38, mask='auto')
+    except Exception:
+        c.setFillColor(colors.HexColor('#1a1206'))
+        c.setFont(F['bold'], 14)
+        c.drawCentredString(sx, sy-5, "AI")
+    c.setFillColor(AMBER_D)
+    c.setFont(F['bold'], 8.5)
+    c.drawCentredString(sx, sy-48, "ONAYLI")
 
     c.showPage()
     c.save()
@@ -580,6 +765,7 @@ def login():
         if u and check_password_hash(u["password_hash"], password):
             login_user(User(u["id"],u["username"],u["email"],u["full_name"],u["learning_style"],
                             u["brain_lobe"],u["plan"],u["is_admin"],u["courses_used"],u["onboarded"]))
+            touch_streak(u["id"])
             # Onboarding: ilk giris → analiz
             if not u["onboarded"]:
                 return redirect(url_for("onboarding"))
@@ -611,6 +797,18 @@ def logout():
 # === FREEMIUM ===
 FREE_COURSE_LIMIT = 3
 
+def cognitive_blueprint(style, lobe):
+    """Kullanicinin ogrenme stili + beyin lobuna gore Bilişsel Kimlik metni."""
+    combos = {
+        ("gorsel", "left"):   (_("Analitik Zihin Mimarı"), _("Kavram haritaları ve yapılandırılmış şemalarla %60 daha hızlı öğrenir.")),
+        ("gorsel", "right"):  (_("Görsel Hikâye Anlatıcısı"), _("Büyük resmi görselleştirerek hatırlar; diyagramlar ve renk kodları en güçlü silahıdır.")),
+        ("isitsel", "left"):  (_("Sistematik Dinleyici"), _("Adım adım sesli anlatım ve ritmik tekrarlarla detaylı bilgiyi işler.")),
+        ("isitsel", "right"): (_("Sezgisel Dinleyici"), _("Sohbet havasında anlatılan konuları konuşarak ve dinleyerek içselleştirir.")),
+        ("kinestetik", "left"): (_("Uygulayıcı Mühendis"), _("Her kuralı hemen deneyerek öğrenir; kontrol listeleri ve mikro görevlerle parlar.")),
+        ("kinestetik", "right"): (_("Deneyimsel Kaşif"), _("Gerçek hayat vakaları ve projeler aracılığıyla öğrenir; teoriyi uygulamada sever.")),
+    }
+    return combos.get((style, lobe), ( _("Dengeli Bilişsel Profil"), _("Görsel, işitsel ve kinestetik yolların hepsini kullanarak esnek öğrenirsin.") ))
+
 @app.route("/dashboard")
 @login_required
 def dashboard():
@@ -619,9 +817,11 @@ def dashboard():
     courses = c.fetchall()
     conn.close()
     remaining = max(0, FREE_COURSE_LIMIT - current_user.courses_used) if current_user.plan == 'free' else None
+    bp = cognitive_blueprint(current_user.learning_style, current_user.brain_lobe)
     return render_template("dashboard.html", courses=courses,
                            ollama_status=ollama_available(),
-                           remaining=remaining, free_limit=FREE_COURSE_LIMIT)
+                           remaining=remaining, free_limit=FREE_COURSE_LIMIT,
+                           blueprint_title=bp[0], blueprint_desc=bp[1])
 
 @app.route("/pricing")
 def pricing():
@@ -721,30 +921,186 @@ def generate_course():
         conn.commit(); conn.close()
         flash(_("Kursunuz başarıyla oluşturuldu!"), "success")
         return redirect(url_for("view_course", course_id=cid))
-    return render_template("course_generator.html")
+    bp = cognitive_blueprint(current_user.learning_style, current_user.brain_lobe)
+    return render_template("course_generator.html", blueprint_title=bp[0], blueprint_desc=bp[1])
+
+def touch_streak(user_id):
+    """Gun serisini gunceller: bugun ilk ziyaretse arttirir, kesinti varsa sifirlar."""
+    today = datetime.date.today()
+    conn = get_db(); c = conn.cursor()
+    c.execute("SELECT streak, last_active FROM users WHERE id=?", (user_id,))
+    row = c.fetchone()
+    streak = row["streak"] or 0
+    last = row["last_active"]
+    if last != today.isoformat():
+        yesterday = (today - datetime.timedelta(days=1)).isoformat()
+        streak = (streak + 1) if last == yesterday else 1
+        c.execute("UPDATE users SET streak=?, last_active=? WHERE id=?", (streak, today.isoformat(), user_id))
+        conn.commit()
+    conn.close()
+    return streak
 
 @app.route("/course/<int:course_id>")
 @login_required
 def view_course(course_id):
+    streak = touch_streak(current_user.id)
     conn = get_db(); c = conn.cursor()
     c.execute("SELECT * FROM courses WHERE id=? AND user_id=?", (course_id, current_user.id))
-    course = c.fetchone(); conn.close()
+    course = c.fetchone()
     if not course:
+        conn.close()
         flash(_("Kurs bulunamadı."), "danger")
         return redirect(url_for("dashboard"))
     modules = json.loads(course["modules"]) if course["modules"] else []
     sources = json.loads(course["sources"]) if course["sources"] else []
-    return render_template("course_view.html", course=course, modules=modules, sources=sources)
+    try: tasks_state = json.loads(course["tasks_state"]) if course["tasks_state"] else {}
+    except Exception: tasks_state = {}
+    try: mindmap = json.loads(course["mindmap"]) if course["mindmap"] else []
+    except Exception: mindmap = []
+
+    # Kilitli moduller: onceki modulun tum gorevleri bitmeden acilmaz
+    def module_done(mi):
+        tasks = modules[mi].get("tasks", []) if mi < len(modules) else []
+        if not tasks: return True
+        return all(tasks_state.get(str(mi), {}).get(str(ti), False) for ti in range(len(tasks)))
+    locked = [False] + [not module_done(i - 1) for i in range(1, len(modules))]
+
+    # Degerlendirme durumu (sertifika hedefi paneli icin)
+    c.execute("SELECT id FROM quizzes WHERE course_id=? AND user_id=? AND status='graded'", (course_id, current_user.id))
+    quiz_ok = c.fetchone() is not None
+    c.execute("SELECT id FROM submissions WHERE course_id=? AND user_id=?", (course_id, current_user.id))
+    sub_ok = c.fetchone() is not None
+    assessment_done = quiz_ok or sub_ok
+    all_tasks_done = all(module_done(i) for i in range(len(modules)))
+    conn.close()
+
+    # Anlik pekistirme kartlari (Duolingo tarzi): her modul icin 2 secenekli mini soru
+    import random as _rnd
+    def clean_title(t):
+        import re as _re
+        return _re.sub(r'^\d+\.\s*', '', (t or '')).strip()
+    reviews = []
+    for i, m in enumerate(modules):
+        correct = clean_title(m.get("title"))[:60]
+        others = [clean_title(mm.get("title"))[:60] for j, mm in enumerate(modules) if j != i and clean_title(mm.get("title"))]
+        if not correct: correct = (course["topic"] or "")[:60]
+        if not correct: continue
+        distractor = _rnd.choice(others) if others else (course["topic"] or "Başka bir konu")[:60]
+        opts = [correct, distractor]
+        _rnd.shuffle(opts)
+        reviews.append({"mi": i, "question": _("Bu modülde hangi kavram işleniyor?"), "options": opts,
+                        "correct_index": opts.index(correct)})
+
+    return render_template("course_view.html", course=course, modules=modules, sources=sources,
+                           tasks_state=tasks_state, mindmap=mindmap,
+                           locked=locked, streak=streak, reviews=reviews,
+                           all_tasks_done=all_tasks_done, assessment_done=assessment_done)
 
 @app.route("/api/update-progress/<int:course_id>", methods=["POST"])
 @login_required
 def update_progress(course_id):
     data = request.get_json()
     conn = get_db(); c = conn.cursor()
-    c.execute("UPDATE courses SET progress=?, completed=? WHERE id=? AND user_id=?",
+    # completed asla geriye alinmasin (ilerleme kaydi tamamlanmisi sifirlamasin)
+    c.execute("""UPDATE courses SET progress=?,
+                 completed = CASE WHEN completed=1 THEN 1 ELSE ? END
+                 WHERE id=? AND user_id=?""",
               (data.get("progress",0), data.get("completed",0), course_id, current_user.id))
     conn.commit(); conn.close()
     return jsonify({"success": True})
+
+@app.route("/api/course-state/<int:course_id>", methods=["POST"])
+@login_required
+def save_course_state(course_id):
+    """Görev durumları, öğrenme modu seçimi ve kişisel zihin haritasını kaydeder."""
+    data = request.get_json(force=True, silent=True) or {}
+    sets, vals = [], []
+    if "tasks" in data:
+        sets.append("tasks_state=?"); vals.append(json.dumps(data["tasks"], ensure_ascii=False))
+    if "mode" in data:
+        sets.append("mode_override=?"); vals.append(str(data["mode"])[:20])
+    if "mindmap" in data:
+        sets.append("mindmap=?"); vals.append(json.dumps(data["mindmap"], ensure_ascii=False))
+    if not sets:
+        return jsonify({"success": False}), 400
+    conn = get_db(); c = conn.cursor()
+    c.execute(f"UPDATE courses SET {', '.join(sets)} WHERE id=? AND user_id=?", vals + [course_id, current_user.id])
+    conn.commit(); conn.close()
+    return jsonify({"success": True})
+
+@app.route("/api/assist", methods=["POST"])
+@login_required
+def assist():
+    """Bilissel Asistan: Ollama aciksa modul icerigiyle cevap uretir."""
+    data = request.get_json(force=True, silent=True) or {}
+    action = data.get("action", "")
+    course_id = int(data.get("course_id", 0))
+    module_idx = int(data.get("module", 0))
+    conn = get_db(); c = conn.cursor()
+    c.execute("SELECT * FROM courses WHERE id=? AND user_id=?", (course_id, current_user.id))
+    course = c.fetchone(); conn.close()
+    if not course:
+        return jsonify({"ok": False, "msg": _("Kurs bulunamadı.")}), 404
+    modules = json.loads(course["modules"]) if course["modules"] else []
+    if module_idx >= len(modules):
+        return jsonify({"ok": False, "msg": _("Modül bulunamadı.")}), 404
+    m = modules[module_idx]
+    if not ollama_available():
+        return jsonify({"ok": False, "msg": _("AI şu an kapalı. Ollama başlatıldığında bu özellik çalışır.")})
+    base_prompt = (
+        f"Kurs: {course['title']}\nKonu: {course['topic']}\nSeviye: {course['level']}\n"
+        f"Modül: {m.get('title')}\nModül içeriği:\n{(m.get('content') or '')[:1600]}\n\n"
+    )
+    prompts = {
+        "explain": base_prompt + "Bu modüldeki kavramları gerçek hayattan 3 somut örnekle açıkla. Kısa, net maddeler halinde yaz.",
+        "schema": base_prompt + "Bu modülün kavramlarını hiyerarşik bir şema (ağaç yapısı, madde işaretleriyle) olarak düzenle. Başlık: modül başlığı.",
+        "summary": base_prompt + "Bu modülün 30 saniyede okunabilecek kısa bir özetini yaz (3-4 cümle).",
+    }
+    if action not in prompts:
+        return jsonify({"ok": False, "msg": _("Geçersiz istek.")}), 400
+    try:
+        text = ollama_chat(prompts[action], system_prompt="Sen sade ve anlaşılır açıklayan bir eğitim asistanısın. Türkçe cevap ver.")
+        return jsonify({"ok": True, "text": text})
+    except Exception:
+        return jsonify({"ok": False, "msg": _("AI yanıtı alınamadı, tekrar dene.")})
+
+@app.route("/api/complete-course/<int:course_id>", methods=["POST"])
+@login_required
+def complete_course(course_id):
+    """Kursu ancak tüm görevler bitince + değerlendirme (AI onayı) tamamlanınca bitirir."""
+    conn = get_db(); c = conn.cursor()
+    c.execute("SELECT * FROM courses WHERE id=? AND user_id=?", (course_id, current_user.id))
+    course = c.fetchone()
+    if not course:
+        conn.close(); return jsonify({"ok": False, "reason": "notfound"}), 404
+
+    # 1) Tüm görevler tamamlanmış olmalı
+    tasks_done = True
+    try:
+        state = json.loads(course["tasks_state"]) if course["tasks_state"] else {}
+    except Exception:
+        state = {}
+    modules = json.loads(course["modules"]) if course["modules"] else []
+    for mi, m in enumerate(modules):
+        for ti, _t in enumerate(m.get("tasks", [])):
+            if not state.get(str(mi), {}).get(str(ti), False):
+                tasks_done = False
+    if not tasks_done:
+        conn.close(); return jsonify({"ok": False, "reason": "tasks"})
+
+    # 2) AI onayı: quiz değerlendirilmiş VEYA dosya gönderimi olmalı
+    c.execute("SELECT id FROM quizzes WHERE course_id=? AND user_id=? AND status='graded'",
+              (course_id, current_user.id))
+    quiz_ok = c.fetchone() is not None
+    c.execute("SELECT id FROM submissions WHERE course_id=? AND user_id=?", (course_id, current_user.id))
+    sub_ok = c.fetchone() is not None
+    if not (quiz_ok or sub_ok):
+        conn.close(); return jsonify({"ok": False, "reason": "assessment"})
+
+    c.execute("UPDATE courses SET progress=100, completed=1, ai_approved=1 WHERE id=? AND user_id=?",
+              (course_id, current_user.id))
+    conn.commit(); conn.close()
+    return jsonify({"ok": True})
 
 @app.route("/certificate/<int:course_id>")
 @login_required
@@ -755,8 +1111,9 @@ def certificate(course_id):
     if not course:
         conn.close(); flash(_("Kurs bulunamadı."), "danger")
         return redirect(url_for("dashboard"))
-    if not course["completed"]:
-        conn.close(); flash(_("Sertifika almak için kursu tamamlamanız gerekiyor."), "warning")
+    if not course["completed"] or not course["ai_approved"]:
+        conn.close()
+        flash(_("Sertifika almak için tüm görevleri tamamlayıp AI onayını (değerlendirme) geçmeniz gerekiyor."), "warning")
         return redirect(url_for("view_course", course_id=course_id))
     c.execute("SELECT * FROM certificates WHERE course_id=? AND user_id=?", (course_id, current_user.id))
     existing = c.fetchone()
@@ -773,8 +1130,14 @@ def certificate(course_id):
                                    course["title"], code,
                                    datetime.datetime.now().strftime("%d.%m.%Y"),
                                    session.get('lang','tr'), level=course["level"])
-    return send_file(pdf, mimetype="application/pdf", as_attachment=True,
-                     download_name=f"Atahorse_{course['title'][:30].replace(' ','_')}.pdf")
+    # Kisisellestirilmis dosya adi (ASCII guvenli)
+    tr_map2 = str.maketrans('ğĞşŞıİçÇöÖüÜ', 'gGsSiIcCoOuU')
+    def _fname(s, maxlen=26):
+        s = s.translate(tr_map2)
+        s = ''.join(ch if ch.isalnum() else '_' for ch in s).strip('_')
+        return s[:maxlen]
+    fname = f"Atahorse_Sertifika_{_fname(current_user.full_name or current_user.username)}_{_fname(course['title'])}_{code[-6:]}.pdf"
+    return send_file(pdf, mimetype="application/pdf", as_attachment=True, download_name=fname)
 
 
 UPLOAD_DIR = os.path.join(os.path.dirname(DB_PATH), "uploads")
@@ -848,7 +1211,9 @@ def course_assessment(course_id):
     quiz = c.fetchone()
     if not quiz:
         modules_tmp = json.loads(course["modules"]) if course["modules"] else []
-        qz = generate_quiz(course, modules_tmp, session.get('lang','tr'))
+        lang_now = session.get('lang','tr')
+        # Ollama once dener; kapali/gecersizse fallback quiz devreye girer — hicbir ogrenci quizsiz kalmaz
+        qz = generate_quiz(course, modules_tmp, lang_now) or generate_fallback_quiz(course, modules_tmp, lang_now)
         if qz:
             conn.execute('INSERT INTO quizzes (course_id,user_id,questions) VALUES (?,?,?)',
                          (course_id, current_user.id, json.dumps(qz, ensure_ascii=False)))

@@ -8,15 +8,15 @@
         <h1>🧠 {{ _("Zihnini Tanıyalım") }}</h1>
         <p class="ob-sub">{{ _("Sana özel eğitim deneyimi için önce öğrenme profilini analiz ediyoruz. Beynin nasıl çalışıyor, hangi yöntemle daha hızlı öğreniyorsun?") }}</p>
         <div class="ob-cards">
-            <div class="ob-card"><i class="fas fa-eye"></i><h4>{{ _("Görsel") }}</h4><p>{{ _("Şemalar ve görsellerle") }}</p></div>
-            <div class="ob-card"><i class="fas fa-headphones"></i><h4>{{ _("İşitsel") }}</h4><p>{{ _("Ses ve anlatımla") }}</p></div>
-            <div class="ob-card"><i class="fas fa-hands"></i><h4>{{ _("Kinestetik") }}</h4><p>{{ _("Deneyim ve pratikle") }}</p></div>
+            <div class="ob-card"><svg class="ico"><use href="#i-eye"/></svg><h4>{{ _("Görsel") }}</h4><p>{{ _("Şemalar ve görsellerle") }}</p></div>
+            <div class="ob-card"><svg class="ico"><use href="#i-headphones"/></svg><h4>{{ _("İşitsel") }}</h4><p>{{ _("Ses ve anlatımla") }}</p></div>
+            <div class="ob-card"><svg class="ico"><use href="#i-hands"/></svg><h4>{{ _("Kinestetik") }}</h4><p>{{ _("Deneyim ve pratikle") }}</p></div>
         </div>
         <div class="ob-actions">
-            <a href="{{ url_for('learning_test', onboarding=1) }}" class="btn btn-primary btn-lg"><i class="fas fa-play"></i> {{ tr('take_test_now') }} (~2 {{ _("dakika") }})</a>
+            <a href="{{ url_for('learning_test', onboarding=1) }}" class="btn btn-primary btn-lg"><svg class="ico"><use href="#i-play"/></svg> {{ tr('take_test_now') }} (~2 {{ _("dakika") }})</a>
             <a href="{{ url_for('skip_test') }}" class="btn btn-outline">{{ _("Atla, daha sonra") }}</a>
         </div>
-        <p class="ob-note"><i class="fas fa-lock"></i> {{ _("Analiz sonucu yalnızca kurslarını kişiselleştirmek için kullanılır.") }}</p>
+        <p class="ob-note"><svg class="ico"><use href="#i-lock"/></svg> {{ _("Analiz sonucu yalnızca kurslarını kişiselleştirmek için kullanılır.") }}</p>
     </div>
 </div>
 {% endblock %}

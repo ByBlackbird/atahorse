@@ -13,15 +13,15 @@
         </div>
         <form method="POST" action="{{ url_for('login') }}" class="auth-form">
             <div class="form-group">
-                <label for="username"><i class="fas fa-user"></i> {{ _("Kullanıcı Adı") }}</label>
+                <label for="username"><svg class="ico"><use href="#i-user"/></svg> {{ _("Kullanıcı Adı") }}</label>
                 <input type="text" id="username" name="username" required placeholder="{{ _("Kullanıcı adınız") }}" class="form-input">
             </div>
             <div class="form-group">
-                <label for="password"><i class="fas fa-lock"></i> {{ _("Şifre") }}</label>
+                <label for="password"><svg class="ico"><use href="#i-lock"/></svg> {{ _("Şifre") }}</label>
                 <input type="password" id="password" name="password" required placeholder="{{ _("Şifreniz") }}" class="form-input">
             </div>
             <button type="submit" class="btn btn-primary btn-block">
-                <i class="fas fa-sign-in-alt"></i> {{ _("Giriş Yap") }}
+                <svg class="ico"><use href="#i-sign-in-alt"/></svg> {{ _("Giriş Yap") }}
             </button>
         </form>
         <div class="auth-footer">

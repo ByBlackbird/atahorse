@@ -3,23 +3,23 @@
 {% block content %}
 <div class="dashboard">
     <div class="dashboard-header">
-        <div class="welcome-section"><h1><i class="fas fa-crown" style="color:var(--warning)"></i> {{ tr('admin_panel') }}</h1>
-            <a href="{{ url_for('admin_change_password') }}" class="btn btn-outline btn-sm" style="margin-top:.6rem"><i class="fas fa-key"></i> {{ _("Şifre Değiştir") }}</a>
+        <div class="welcome-section"><h1><svg class="ico" style="color:var(--warning)"><use href="#i-crown"/></svg> {{ tr('admin_panel') }}</h1>
+            <a href="{{ url_for('admin_change_password') }}" class="btn btn-outline btn-sm" style="margin-top:.6rem"><svg class="ico"><use href="#i-key"/></svg> {{ _("Şifre Değiştir") }}</a>
         </div>
         <div class="status-cards" style="grid-template-columns:repeat(auto-fit,minmax(180px,1fr))">
-            <div class="status-card"><i class="fas fa-users"></i><div><span class="status-label">{{ tr('members') }}</span><span class="status-value">{{ total_users }}</span></div></div>
-            <div class="status-card"><i class="fas fa-crown" style="color:var(--warning);background:#fef3c7"></i><div><span class="status-label">{{ tr('premium_users') }}</span><span class="status-value">{{ premium }}</span></div></div>
-            <div class="status-card"><i class="fas fa-user" style="color:var(--info);background:#cffafe"></i><div><span class="status-label">{{ tr('free_users') }}</span><span class="status-value">{{ free }}</span></div></div>
-            <div class="status-card"><i class="fas fa-graduation-cap"></i><div><span class="status-label">{{ tr('active_courses') }}</span><span class="status-value">{{ total_courses }}</span></div></div>
-            <div class="status-card"><i class="fas fa-check-double" style="color:var(--success);background:#dcfce7"></i><div><span class="status-label">{{ tr('completion_rate') }}</span><span class="status-value">%{{ completion_rate }}</span></div></div>
-            <div class="status-card"><i class="fas fa-certificate"></i><div><span class="status-label">{{ _("Sertifika") }}</span><span class="status-value">{{ certificates }}</span></div></div>
-            <div class="status-card"><i class="fas fa-wallet" style="color:var(--success);background:#dcfce7"></i><div><span class="status-label">{{ tr('revenue') }}</span><span class="status-value">{{ "%.2f"|format(revenue) }} ₺</span></div></div>
+            <div class="status-card"><svg class="ico"><use href="#i-users"/></svg><div><span class="status-label">{{ tr('members') }}</span><span class="status-value">{{ total_users }}</span></div></div>
+            <div class="status-card"><svg class="ico" style="color:var(--warning);background:#fef3c7"><use href="#i-crown"/></svg><div><span class="status-label">{{ tr('premium_users') }}</span><span class="status-value">{{ premium }}</span></div></div>
+            <div class="status-card"><svg class="ico" style="color:var(--info);background:#cffafe"><use href="#i-user"/></svg><div><span class="status-label">{{ tr('free_users') }}</span><span class="status-value">{{ free }}</span></div></div>
+            <div class="status-card"><svg class="ico"><use href="#i-graduation-cap"/></svg><div><span class="status-label">{{ tr('active_courses') }}</span><span class="status-value">{{ total_courses }}</span></div></div>
+            <div class="status-card"><svg class="ico" style="color:var(--success);background:#dcfce7"><use href="#i-check-double"/></svg><div><span class="status-label">{{ tr('completion_rate') }}</span><span class="status-value">%{{ completion_rate }}</span></div></div>
+            <div class="status-card"><svg class="ico"><use href="#i-certificate"/></svg><div><span class="status-label">{{ _("Sertifika") }}</span><span class="status-value">{{ certificates }}</span></div></div>
+            <div class="status-card"><svg class="ico" style="color:var(--success);background:#dcfce7"><use href="#i-wallet"/></svg><div><span class="status-label">{{ tr('revenue') }}</span><span class="status-value">{{ "%.2f"|format(revenue) }} ₺</span></div></div>
         </div>
     </div>
 
     <!-- Kayıt grafiği -->
     <div class="setup-section" style="margin-bottom:2rem">
-        <h2><i class="fas fa-chart-bar"></i> {{ _("Son 7 Gün Kayıtları") }}</h2>
+        <h2><svg class="ico"><use href="#i-chart-bar"/></svg> {{ _("Son 7 Gün Kayıtları") }}</h2>
         {% if signup_data %}
         <div class="bar-chart">
             {% set max = signup_data|map(attribute='cnt')|list|max %}
@@ -32,7 +32,7 @@
 
     <!-- Ödemeler -->
     <div class="setup-section" style="margin-bottom:2rem">
-        <h2><i class="fas fa-money-bill-wave"></i> {{ tr('recent_payments') }}</h2>
+        <h2><svg class="ico"><use href="#i-money-bill-wave"/></svg> {{ tr('recent_payments') }}</h2>
         {% if payments %}
         <div class="table-wrap"><table class="admin-table">
             <thead><tr><th>#</th><th>{{ _("Kullanıcı") }}</th><th>{{ _("Tutar") }}</th><th>{{ _("Tür") }}</th><th>{{ _("Açıklama") }}</th><th>{{ _("Tarih") }}</th></tr></thead>
@@ -47,7 +47,7 @@
 
     <!-- Kullanıcı yönetimi -->
     <div class="setup-section" style="margin-bottom:2rem">
-        <h2><i class="fas fa-user-cog"></i> {{ tr('user_mgmt') }}</h2>
+        <h2><svg class="ico"><use href="#i-user-cog"/></svg> {{ tr('user_mgmt') }}</h2>
         <div class="table-wrap"><table class="admin-table">
             <thead><tr><th>ID</th><th>{{ _("Kullanıcı") }}</th><th>{{ _("E-posta") }}</th><th>{{ tr('plan') }}</th><th>{{ _("Kurs") }}</th><th>{{ tr('joined') }}</th><th>{{ tr('actions') }}</th></tr></thead>
             <tbody>{% for u in users %}<tr>
@@ -64,7 +64,7 @@
 
     <!-- Quiz sonuçları -->
     <div class="setup-section" style="margin-bottom:2rem">
-        <h2><i class="fas fa-clipboard-check"></i> {{ _("Quiz Sonuçları") }}</h2>
+        <h2><svg class="ico"><use href="#i-clipboard-check"/></svg> {{ _("Quiz Sonuçları") }}</h2>
         {% if quiz_results %}
         <div class="table-wrap"><table class="admin-table">
             <thead><tr><th>#</th><th>{{ _("Öğrenci") }}</th><th>{{ _("Kurs") }}</th><th>{{ _("Puan") }}</th><th>{{ _("Durum") }}</th><th>{{ _("Tarih") }}</th></tr></thead>
@@ -79,7 +79,7 @@
 
     <!-- Öğrenci gönderileri (not / ses) -->
     <div class="setup-section" style="margin-bottom:2rem">
-        <h2><i class="fas fa-upload"></i> {{ _("Öğrenci Gönderileri") }} ({{ _("Not / Ses") }})</h2>
+        <h2><svg class="ico"><use href="#i-upload"/></svg> {{ _("Öğrenci Gönderileri") }} ({{ _("Not / Ses") }})</h2>
         {% if all_submissions %}
         <div class="table-wrap"><table class="admin-table">
             <thead><tr><th>#</th><th>{{ _("Öğrenci") }}</th><th>{{ _("Kurs") }}</th><th>{{ _("Tür") }}</th><th>{{ _("Dosya") }}</th><th>{{ _("Tarih") }}</th><th>{{ tr('actions') }}</th></tr></thead>
@@ -88,7 +88,7 @@
                 <td><span class="plan-badge {{ 'premium' if s.kind == 'audio' else 'free' }}">{{ _("Ses") if s.kind == 'audio' else _("Not") }}</span></td>
                 <td>{{ s.filename }}</td><td>{{ s.created_at[:16] }}</td>
                 <td><form method="POST" action="{{ url_for('admin_delete_submission', sub_id=s.id) }}" style="display:inline" onsubmit="return confirm('{{ _('Silinsin mi?') }}')">
-                    <button class="btn btn-sm btn-outline"><i class="fas fa-trash"></i></button>
+                    <button class="btn btn-sm btn-outline"><svg class="ico"><use href="#i-trash"/></svg></button>
                 </form></td></tr>{% endfor %}</tbody>
         </table></div>
         {% else %}<p style="color:var(--gray-400)">{{ tr('no_data') }}</p>{% endif %}
@@ -96,7 +96,7 @@
 
     <!-- Kurs kataloğu -->
     <div class="setup-section">
-        <h2><i class="fas fa-book"></i> {{ tr('course_catalog') }}</h2>
+        <h2><svg class="ico"><use href="#i-book"/></svg> {{ tr('course_catalog') }}</h2>
         <div class="table-wrap"><table class="admin-table">
             <thead><tr><th>#</th><th>{{ _("Kurs") }}</th><th>{{ _("Öğrenci") }}</th><th>{{ _("Seviye") }}</th><th>{{ _("İlerleme") }}</th><th>{{ _("Durum") }}</th></tr></thead>
             <tbody>{% for c in all_courses %}<tr>

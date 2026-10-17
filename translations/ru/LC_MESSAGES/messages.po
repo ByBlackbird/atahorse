@@ -1143,3 +1143,507 @@ msgstr "Как создаётся кинестетический модуль?"
 
 msgid "Uzun teorik girişler atlanır; ilk dakikadan itibaren gerçek hayat senaryoları, adım adım mikro görevler ve uygulanabilir proje şablonları sunulur."
 msgstr "Длинные теоретические вступления пропускаются; с первой минуты — реальные сценарии, пошаговые микрозадачи и готовые шаблоны проектов."
+
+msgid "görev"
+msgstr "задание"
+
+msgid "Onaylı"
+msgstr "Подтверждено"
+
+msgid "Veriliş Tarihi"
+msgstr "Дата выдачи"
+
+msgid "Zihin Haritama Git"
+msgstr "К моей карте разума"
+
+msgid "Sertifika güvenilirliği için: tüm görevleri tamamla → değerlendirme sayfasında AI onayını geç → kursu bitir."
+msgstr "Для надёжности сертификата: выполни все задания → пройди AI-подтверждение на странице оценки → заверши курс."
+
+msgid "Tüm görevleri tamamlamadan kurs bitiremezsin. Bitmeyen görevlerin yıldızı eksik kalır!"
+msgstr "Нельзя завершить курс, не выполнив все задания. Незавершённые задания оставляют звезду пустой!"
+
+msgid "Sertifika güvenilirliği için AI onayı şart: önce Değerlendirme sayfasından quizi çöz veya bir dosya/ses gönder."
+msgstr "Для надёжности сертификата нужно AI-подтверждение: сначала пройди тест или отправь файл/аудио на странице оценки."
+
+msgid "Kurs tamamlanamadı, tekrar dene."
+msgstr "Не удалось завершить курс, попробуйте снова."
+
+msgid "Kişisel Zihin Haritam"
+msgstr "Моя личная карта разума"
+
+msgid "Düğümleri sürükle, tıkla ve notunu ekle — harita senin, öğrenme yolun senin."
+msgstr "Перетаскивай узлы, нажимай и добавляй заметки — карта твоя, путь обучения твой."
+
+msgid "Başlık (ör. Fotosentez)"
+msgstr "Название (напр. Фотосинтез)"
+
+msgid "Not / açıklama (isteğe bağlı)"
+msgstr "Заметка / описание (необязательно)"
+
+msgid "Düğüm Ekle"
+msgstr "Добавить узел"
+
+msgid "Düğümü Düzenle"
+msgstr "Редактировать узел"
+
+msgid "İpucu: düğüm eklemek için yukarıdaki kutuları doldur; taşımak için sürükle; düzenlemek için düğüme tıkla. Her şey otomatik kaydedilir."
+msgstr "Совет: заполните поля выше, чтобы добавить узел; перетаскивайте для перемещения; нажмите на узел для редактирования. Всё сохраняется автоматически."
+
+msgid "Şemalar ve zihin haritalarıyla en iyi öğreniyorsun. Sayfanın altındaki Kişisel Zihin Haritanı aktif kullan."
+msgstr "Вы лучше учитесь со схемами и картами разума. Активно используйте свою личную карту разума внизу страницы."
+
+msgid "Sesli anlatım senin için ideal. Her modülde 'Bu Modülü Sesli Dinle' butonuyla çalış; değerlendirmede ses kaydı gönderebilirsin."
+msgstr "Звуковое изложение — ваш идеал. Учитесь с кнопкой 'Прослушать модуль' в каждом модуле; для оценки можно отправить аудио."
+
+msgid "Yaparak öğreniyorsun. Her modüldeki görevleri gerçekten uygulayarak tamamla — pratik senin yolun."
+msgstr "Вы учитесь через практику. Выполняй задания каждого модуля действительно применяя их — практика ваш путь."
+
+msgid "Bu belge; görev tamamlama ve AI değerlendirme onayı sonrası Atahorse tarafından düzenlenmiştir. Sağlıklı doğrulama için sertifika üzerindeki QR kodu kullanın."
+msgstr "Этот документ выдан Atahorse после выполнения заданий и AI-подтверждения оценки. Для надёжной проверки используйте QR-код на сертификате."
+
+msgid "Sertifika almak için tüm görevleri tamamlayıp AI onayını (değerlendirme) geçmeniz gerekiyor."
+msgstr "Чтобы получить сертификат, нужно выполнить все задания и пройти AI-подтверждение (оценку)."
+
+msgid "Lob"
+msgstr "Доля"
+
+msgid "Gün Serisi"
+msgstr "Дней серии"
+
+msgid "Müfredat"
+msgstr "Программа"
+
+msgid "Sertifika Hedefi"
+msgstr "Цель — сертификат"
+
+msgid "Tüm görevler tamamlandı"
+msgstr "Все задания выполнены"
+
+msgid "Quiz / Ses-Not ödevi"
+msgstr "Тест / голосовое задание"
+
+msgid "AI onayı & kurs bitişi"
+msgstr "AI-одобрение и завершение курса"
+
+msgid "Değerlendirmeye Git →"
+msgstr "Перейти к оценке →"
+
+msgid "Okuma"
+msgstr "Чтение"
+
+msgid "Podcast"
+msgstr "Подкаст"
+
+msgid "Anlık Pekiştirme"
+msgstr "Мгновенное повторение"
+
+msgid "Kontrol Et ve +25 XP Kazan"
+msgstr "Проверить и получить +25 XP"
+
+msgid "Bu modülün kavram şeması. Kendi haritanı sayfanın altından düzenleyebilirsin."
+msgstr "Схема концепций этого модуля. Свою карту можно редактировать внизу страницы."
+
+msgid "Sesli anlatım tarayıcının sesiyle çalışır; hızını seç, dinlerken sayfada gezinebilirsin."
+msgstr "Озвучка работает через речь браузера; выбери скорость и листай страницу во время прослушивания."
+
+msgid "Doğrulanmış Kaynaklar"
+msgstr "Проверенные источники"
+
+msgid "Bilişsel Asistan"
+msgstr "Когнитивный ассистент"
+
+msgid "Örneklerle Açıkla"
+msgstr "Объяснить на примерах"
+
+msgid "Şemaya Dönüştür"
+msgstr "Превратить в схему"
+
+msgid "30sn Sesli Özet"
+msgstr "30-секундное озвученное резюме"
+
+msgid "Hızlı Not Ekle"
+msgstr "Добавить заметку"
+
+msgid "Kurs Tamamlandı!"
+msgstr "Курс завершён!"
+
+msgid "AI onaylı sertifikanı indir, QR kod ile her yerde doğrulatabilirsin."
+msgstr "Скачай сертификат с AI-одобрением — проверяемый по QR-коду где угодно."
+
+msgid "Kendi notlarını ekle, sürükle, düzenle — harita seninle birlikte kaydedilir."
+msgstr "Добавляй, перетаскивай и редактируй свои заметки — карта сохраняется вместе с тобой."
+
+msgid "Başlık ekle..."
+msgstr "Добавить заголовок..."
+
+msgid "Not / açıklama (isteğe bağlı)..."
+msgstr "Заметка / описание (необязательно)..."
+
+msgid "Ekle"
+msgstr "Добавить"
+
+msgid "Kaydet"
+msgstr "Сохранить"
+
+msgid "Düğümleri sürükleyerek yerleştir; bir düğüme tıklayarak düzenleyebilir veya silebilirsin."
+msgstr "Перетаскивай узлы, чтобы разместить; нажми на узел, чтобы отредактировать или удалить."
+
+msgid "Slayt"
+msgstr "Слайды"
+
+msgid "Dinle"
+msgstr "Слушать"
+
+msgid "Görsel mod aktif: kavram haritaları, şemalar ve slaytlar öne çıkıyor. Renkli yapılarla öğren."
+msgstr "Визуальный режим: на первый план выходят карты, схемы и слайды. Учись с помощью цветных структур."
+
+msgid "İşitsel mod aktif: podcast bölümünü aç, içeriği dinleyerek öğren. Hızını kendin ayarla."
+msgstr "Аудиальный режим: открой подкаст и учись на слух. Скорость выбираешь сам."
+
+msgid "Kinestetik mod aktif: görevleri uygulayarak, not alarak ve haritayı düzenleyerek öğren."
+msgstr "Кинестетический режим: учись через выполнение заданий, заметки и редактирование карты."
+
+msgid "Önce tüm görevleri tamamla."
+msgstr "Сначала выполни все задания."
+
+msgid "Değerlendirme sayfasında AI onayını geçmen gerek."
+msgstr "Нужно пройти AI-одобрение на странице оценки."
+
+msgid "Tarayıcın sesli anlatımı desteklemiyor."
+msgstr "Ваш браузер не поддерживает озвучку."
+
+msgid "Doğru! Harika gidiyorsun."
+msgstr "Верно! Отлично идёшь."
+
+msgid "Yanlış — doğru cevap işaretlendi, bir sonraki soruda devam et!"
+msgstr "Неверно — правильный ответ отмечен, продолжай со следующим вопросом!"
+
+msgid "AI düşünüyor..."
+msgstr "AI думает..."
+
+msgid "AI yanıtı alınamadı, tekrar dene."
+msgstr "Не удалось получить ответ AI, попробуйте снова."
+
+msgid "Not başlığı:"
+msgstr "Заголовок заметки:"
+
+msgid "Bu modül için slayt içeriği yakında."
+msgstr "Содержимое слайдов для этого модуля скоро появится."
+
+msgid "Bu modülde hangi kavram işleniyor?"
+msgstr "Какая концепция рассматривается в этом модуле?"
+
+msgid "Not / açıklama (isteğe bağlı):"
+msgstr "Заметка / описание (необязательно):"
+#: templates/assessment.html:156
+msgid "\"Lütfen bir seçenek işaretle.\""
+msgstr "\"Пожалуйста, выберите вариант.\""
+
+#: templates/assessment.html:161
+msgid "\"Lütfen tüm soruları cevapla.\""
+msgstr "\"Пожалуйста, ответьте на все вопросы.\""
+
+#: templates/index.html:139
+msgid "1. Fidanı güneşli ve gölgeli iki güne böl"
+msgstr "1. Поставьте росток на два дня на солнце, затем на два дня в тень"
+
+#: templates/index.html:395
+msgid "1. Modül Özeti"
+msgstr "Резюме Модуля 1"
+
+#: templates/index.html:268
+msgid "1. Modül — Örnek Kavram Haritası"
+msgstr "Модуль 1 — Пример Карты Понятий"
+
+#: templates/index.html:140
+msgid "2. Yaprak rengini her gün not al"
+msgstr "2. Записывайте цвет листьев каждый день"
+
+#: templates/index.html:32
+msgid "3 Tam Kapsamlı Kurs Hediye"
+msgstr "3 Полных Курса в Подарок"
+
+#: templates/index.html:141
+msgid "3. Sonucu kendi cümlelerinle özetle"
+msgstr "3. Перескажите результат своими словами"
+
+#: app.py:1044
+msgid "AI şu an kapalı. Ollama başlatıldığında bu özellik çalışır."
+msgstr "AI сейчас недоступен. Эта функция заработает после запуска Ollama."
+
+#: app.py:800
+msgid "Adım adım sesli anlatım ve ritmik tekrarlarla detaylı bilgiyi işler."
+msgstr "Обрабатывает подробную информацию с помощью пошагового рассказа и ритмичных повторений."
+
+#: templates/course_view.html:815
+msgid "Alt Başlık"
+msgstr "Подзаголовок"
+
+#: templates/course_view.html:278
+msgid "Analitik Kurgu"
+msgstr "Аналитическое Построение"
+
+#: app.py:798
+msgid "Analitik Zihin Mimarı"
+msgstr "Архитектор Аналитического Разума"
+
+#: templates/index.html:18
+msgid "Aramayı Bırak."
+msgstr "Хватит Искать."
+
+#: templates/index.html:385
+msgid "Assessment & Certification"
+msgstr "Оценка и Сертификация"
+
+#: templates/course_generator.html:43 templates/dashboard.html:15
+msgid "Bilişsel Kimlik Kartın"
+msgstr "Твоя Карта Когнитивной Идентичности"
+
+#: templates/course_view.html:182
+msgid "Bilişsel Profiline Optimize Edildi"
+msgstr "Оптимизировано под Твой Когнитивный Профиль"
+
+#: templates/course_view.html:286
+msgid "Büyük Resim & Metafor"
+msgstr "Общая Картина и Метафора"
+
+#: templates/index.html:17
+msgid "BİLİŞSEL ÖĞRENME MOTORU • DOĞRULANMIŞ AKADEMİK KAYNAK AĞI"
+msgstr "КОГНИТИВНЫЙ ДВИЖОК ОБУЧЕНИЯ • СЕТЬ ПРОВЕРЕННЫХ АКАДЕМИЧЕСКИХ ИСТОЧНИКОВ"
+
+#: templates/index.html:385
+msgid "Deep Analysis"
+msgstr "Глубокий Анализ"
+
+#: app.py:803
+msgid "Deneyimsel Kaşif"
+msgstr "Исследователь Опыта"
+
+#: app.py:805
+msgid "Dengeli Bilişsel Profil"
+msgstr "Сбалансированный Когнитивный Профиль"
+
+#: templates/index.html:383
+msgid "Derinlemesine Analiz"
+msgstr "Глубокий Анализ"
+
+#: templates/index.html:383
+msgid "Değerlendirme ve Sertifika"
+msgstr "Оценка и Сертификация"
+
+#: templates/index.html:115 templates/index.html:122 templates/index.html:135
+msgid "Fotosentez"
+msgstr "Фотосинтез"
+
+#: app.py:1055
+msgid "Geçersiz istek."
+msgstr "Неверный запрос."
+
+#: templates/course_view.html:406
+msgid "Gönder"
+msgstr "Отправить"
+
+#: app.py:799
+msgid "Görsel Hikâye Anlatıcısı"
+msgstr "Визуальный Рассказчик"
+
+#: templates/index.html:115
+msgid "Görsel Zihine Anlatım"
+msgstr "Подача для Визуального Ума"
+
+#: templates/index.html:18
+msgid "Kendi Zihin Dilinle"
+msgstr "На Языке Твоего Разума"
+
+#: templates/index.html:135
+msgid "Kinestetik Zihine Anlatım"
+msgstr "Подача для Кинестетического Ума"
+
+#: templates/index.html:382
+msgid "Kişisel Yol Haritan"
+msgstr "Твой Персональный Путь"
+
+#: templates/index.html:31
+msgid "Kredi kartı gerekmez"
+msgstr "Кредитная карта не нужна"
+
+#: templates/index.html:137
+msgid "Mini Vaka"
+msgstr "Мини-Кейс"
+
+#: app.py:1041
+msgid "Modül bulunamadı."
+msgstr "Модуль не найден."
+
+#: templates/course_view.html:439
+msgid "Not..."
+msgstr "Заметка..."
+
+#: templates/index.html:383
+msgid "Pratik Uygulama ve Örnekler"
+msgstr "Практическое Применение и Примеры"
+
+#: templates/course_view.html:403
+msgid "Proje Dosyası"
+msgstr "Проектный Файл"
+
+#: templates/index.html:33
+msgid "QR/Kod Doğrulamalı PDF Sertifika"
+msgstr "PDF-сертификат с проверкой по QR/коду"
+
+#: templates/course_view.html:402
+msgid "Quiz Cevabı"
+msgstr "Ответ на Квиз"
+
+#: templates/course_view.html:286
+msgid "Sağ Lob"
+msgstr "Правое Полушарие"
+
+#: templates/course_view.html:401
+msgid "Ses Notu / Ödev"
+msgstr "Голосовая Заметка / Задание"
+
+#: app.py:801
+msgid "Sezgisel Dinleyici"
+msgstr "Интуитивный Слушатель"
+
+#: templates/admin/dashboard.html:90
+msgid "Silinsin mi?"
+msgstr "Удалить?"
+
+#: app.py:800
+msgid "Sistematik Dinleyici"
+msgstr "Системный Слушатель"
+
+#: app.py:801
+msgid "Sohbet havasında anlatılan konuları konuşarak ve dinleyerek içselleştirir."
+msgstr "Усваивает материал, рассказанный в разговорной форме, через говорение и слушание."
+
+#: templates/course_view.html:278
+msgid "Sol Lob"
+msgstr "Левое Полушарие"
+
+#: templates/course_view.html:182
+msgid "Stil"
+msgstr "Стиль"
+
+#: templates/index.html:423
+msgid "Tanım"
+msgstr "Определение"
+
+#: templates/index.html:423
+msgid "Tarihçe"
+msgstr "История"
+
+#: templates/index.html:383
+msgid "Temel Kavramlar ve Tanımlar"
+msgstr "Основные Понятия и Определения"
+
+#: templates/index.html:423
+msgid "Uygulama"
+msgstr "Применение"
+
+#: app.py:802
+msgid "Uygulayıcı Mühendis"
+msgstr "Практикующий Инженер"
+
+#: templates/index.html:19
+msgid "Uzmanlaş."
+msgstr "Стань Экспертом."
+
+#: templates/course_view.html:396
+msgid "Ödevini Hızla Gönder"
+msgstr "Быстро Отправь Задание"
+
+#: templates/index.html:115 templates/index.html:122 templates/index.html:135
+msgid "Örnek Konu"
+msgstr "Пример Темы"
+
+#: templates/index.html:383
+msgid "İleri Seviye Teknikler"
+msgstr "Продвинутые Техники"
+
+#: templates/index.html:122
+msgid "İşitsel Zihine Anlatım"
+msgstr "Подача для Слухового Ума"
+
+#: app.py:798
+msgid "Kavram haritaları ve yapılandırılmış şemalarla %60 daha hızlı öğrenir."
+msgstr "Учится на 60% быстрее с картами понятий и структурированными схемами."
+
+#: templates/index.html:385
+msgid "Advanced Techniques"
+msgstr "Продвинутые Техники"
+
+#: templates/index.html:423
+msgid "Definition"
+msgstr "Определение"
+
+#: templates/index.html:423
+msgid "Application"
+msgstr "Применение"
+
+#: templates/index.html:423
+msgid "History"
+msgstr "История"
+
+#: templates/index.html:385
+msgid "Fundamentals & Definitions"
+msgstr "Основы и Определения"
+
+#: templates/index.html:396
+msgid "Module 1 Summary"
+msgstr "Резюме Модуля 1"
+
+#: templates/index.html:384
+msgid "Your Personal Roadmap"
+msgstr "Твой Персональный Путь"
+
+#: templates/index.html:385
+msgid "Practical Application & Examples"
+msgstr "Практическое Применение и Примеры"
+
+#: templates/index.html:387
+msgid "Глубокий Анализ"
+msgstr "Глубокий Анализ"
+
+#: templates/index.html:423
+msgid "История"
+msgstr "История"
+
+#: templates/index.html:423
+msgid "Определение"
+msgstr "Определение"
+
+#: templates/index.html:387
+msgid "Основы и Определения"
+msgstr "Основы и Определения"
+
+#: templates/index.html:387
+msgid "Оценка и Сертификация"
+msgstr "Оценка и Сертификация"
+
+#: templates/index.html:387
+msgid "Практическое Применение"
+msgstr "Практическое Применение"
+
+#: templates/index.html:423
+msgid "Применение"
+msgstr "Применение"
+
+#: templates/index.html:387
+msgid "Продвинутые Техники"
+msgstr "Продвинутые Техники"
+
+#: templates/index.html:397
+msgid "Резюме Модуля 1"
+msgstr "Резюме Модуля 1"
+
+#: templates/index.html:386
+msgid "Твой Персональный Путь"
+msgstr "Твой Персональный Путь"
+
+#: templates/index.html:397
+msgid "определение, история и современное применение, изложенные простым языком."
+msgstr "определение, история и современное применение, изложенные простым языком."
+

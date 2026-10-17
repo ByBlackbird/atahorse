@@ -3,29 +3,207 @@
 {% block title %}{{ course.title }} - Atahorse{% endblock %}
 
 {% block content %}
+<style>
+/* === OYUNLAŞTIRMA === */
+.xp-badge{display:inline-flex;align-items:center;gap:.4rem;background:linear-gradient(135deg,#1E1B4B,#5B2DE6);color:#F5B942;font-weight:800;padding:.45rem .9rem;border-radius:999px;font-size:.85rem;box-shadow:0 4px 14px rgba(91,45,230,.35)}
+.streak-badge{display:inline-flex;align-items:center;gap:.35rem;background:#fff7ed;border:1px solid #fdba74;color:#c2410c;font-weight:800;padding:.45rem .9rem;border-radius:999px;font-size:.85rem}
+.style-badge{display:inline-flex;align-items:center;gap:.4rem;background:linear-gradient(135deg,#F5B942,#D97706);color:#1a1206;font-weight:800;padding:.45rem .9rem;border-radius:999px;font-size:.82rem}
+.xp-float{position:fixed;z-index:9999;font-weight:800;color:#D97706;font-size:1.1rem;pointer-events:none;animation:xpFloat 1.1s ease-out forwards;text-shadow:0 1px 0 #fff}
+@keyframes xpFloat{0%{opacity:1;transform:translateY(0) scale(1)}100%{opacity:0;transform:translateY(-60px) scale(1.25)}}
+.task-check{accent-color:#5B2DE6;width:18px;height:18px;cursor:pointer}
+.task-item.done .task-text{text-decoration:line-through;color:var(--gray-400)}
+.task-item{transition:all .2s}
+.task-item.done{background:linear-gradient(90deg,rgba(245,185,66,.12),transparent);border-radius:8px}
+.module-star{color:#F5B942;margin-left:auto;font-size:.85rem}
+.tasks-progress-line{height:5px;background:var(--gray-100);border-radius:99px;overflow:hidden;margin-top:.35rem}
+.tasks-progress-fill{height:100%;background:linear-gradient(90deg,#5B2DE6,#F5B942);border-radius:99px;transition:width .4s}
+.mode-pills{display:flex;gap:.5rem;flex-wrap:wrap;margin:.9rem 0 .4rem}
+.mode-pill{border:2px solid var(--gray-200);background:#fff;border-radius:999px;padding:.5rem 1.1rem;font-weight:700;font-size:.88rem;cursor:pointer;color:var(--gray-600);transition:all .2s}
+.mode-pill.active{border-color:#5B2DE6;background:linear-gradient(135deg,#5B2DE6,#8B5CF6);color:#fff;box-shadow:0 5px 16px rgba(91,45,230,.35)}
+.mode-hint{display:flex;gap:.6rem;align-items:flex-start;background:linear-gradient(135deg,rgba(30,27,75,.05),rgba(245,185,66,.08));border:1px solid rgba(245,185,66,.4);border-radius:14px;padding:.8rem 1rem;font-size:.9rem;color:var(--gray-700)}
+.mode-hint .ico{color:#D97706;margin-top:.15rem}
+.ai-gate-note{display:flex;gap:.6rem;align-items:center;background:#fffbeb;border:1px solid #F5B942;border-radius:12px;padding:.7rem 1rem;font-size:.85rem;color:#92600a;margin-top:.8rem}
+.confetti-piece{position:fixed;z-index:99999;font-size:1.4rem;pointer-events:none;animation:confettiFall 1.8s ease-in forwards}
+@keyframes confettiFall{0%{opacity:1;transform:translateY(0) rotate(0)}100%{opacity:0;transform:translateY(60vh) rotate(540deg)}}
+.course-main{min-width:0}
+.course-main .btn-success{background:linear-gradient(135deg,#059669,#10b981);border:none}
+/* 3 kolon yerlesim */
+.course-content-wrapper.three-col{grid-template-columns:260px 1fr 280px}
+@media (max-width:1100px){.course-content-wrapper.three-col{grid-template-columns:1fr}}
+.course-side-right{display:flex;flex-direction:column;gap:1rem;min-width:0}
+.side-card{background:#fff;border:1px solid var(--gray-100);border-radius:var(--radius-lg);box-shadow:var(--shadow);padding:1.1rem}
+.side-card h3{font-size:.95rem;font-weight:800;color:var(--gray-800);margin:0 0 .8rem;display:flex;align-items:center;gap:.5rem}
+.side-sources-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:.55rem}
+.side-sources-list a{display:flex;gap:.5rem;align-items:center;color:var(--primary);font-size:.85rem;text-decoration:none;font-weight:600}
+.side-sources-list a:hover{text-decoration:underline}
+.side-sources-list small{color:var(--gray-400)}
+.assist-btn{display:flex;align-items:center;gap:.6rem;width:100%;border:1.5px solid var(--gray-100);background:#fff;border-radius:12px;padding:.65rem .8rem;font-weight:700;font-size:.84rem;color:var(--gray-700);cursor:pointer;transition:all .2s;margin-bottom:.5rem;text-align:left}
+.assist-btn:hover{border-color:#5B2DE6;background:linear-gradient(135deg,rgba(91,45,230,.06),rgba(245,185,66,.06));color:#1E1B4B}
+.assist-btn .ico{color:#5B2DE6;width:18px;text-align:center}
+#assistResult{background:#0b1030;color:#e2e8f0;border-radius:12px;padding:.9rem;font-size:.83rem;line-height:1.6;white-space:pre-wrap;max-height:260px;overflow:auto;display:none}
+#assistResult.show{display:block}
+#assistResult.loading{display:block;color:#94a3b8}
+/* Kilitli modul */
+.module-tab.locked{opacity:.55}
+.module-tab.locked .module-tab-title{color:var(--gray-400)}
+.lock-ico{margin-left:auto;color:var(--gray-300)}
+/* Sertifika hedefi */
+.cert-goal{background:linear-gradient(160deg,#1E1B4B,#312e6e);border-radius:var(--radius-lg);padding:1.1rem;color:#fff}
+.cert-goal h4{margin:0 0 .7rem;font-size:.9rem;color:#F5B942;display:flex;align-items:center;gap:.5rem}
+.cert-goal ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:.5rem}
+.cert-goal li{display:flex;gap:.55rem;align-items:center;font-size:.83rem;color:#cbd5e1}
+.cert-goal li .ico{width:16px;text-align:center}
+.cert-goal li.done{color:#86efac}
+.cert-goal li.pending{color:#cbd5e1}
+.cert-goal a{color:#F5B942;font-weight:700;font-size:.8rem;display:inline-block;margin-top:.7rem}
+/* Modul ici sekmeler */
+.mod-tabs{display:flex;gap:.4rem;flex-wrap:wrap;margin:0 0 1rem}
+.mod-tab{border:1.5px solid var(--gray-100);background:#fff;border-radius:10px;padding:.45rem .9rem;font-weight:700;font-size:.82rem;color:var(--gray-600);cursor:pointer;transition:all .2s}
+.mod-tab.active{border-color:#5B2DE6;background:linear-gradient(135deg,#5B2DE6,#8B5CF6);color:#fff}
+.mod-view{display:none}
+.mod-view.active{display:block}
+/* Podcast calar */
+.podcast-bar{display:flex;align-items:center;gap:1rem;background:linear-gradient(135deg,#0b1030,#1E1B4B);border-radius:16px;padding:1rem 1.2rem;color:#fff}
+.pod-play{width:46px;height:46px;border-radius:50%;border:none;background:linear-gradient(135deg,#F5B942,#D97706);color:#1a1206;font-size:1rem;cursor:pointer;flex-shrink:0}
+.pod-wave{display:flex;align-items:center;gap:3px;height:34px;flex:1;overflow:hidden}
+.pod-wave span{width:3px;background:#8B5CF6;border-radius:2px;height:20%;transition:height .3s}
+.podcast-bar.playing .pod-wave span{animation:wave .9s ease-in-out infinite}
+@keyframes wave{0%,100%{height:18%}50%{height:95%}}
+.pod-speed{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);color:#fff;border-radius:8px;padding:.35rem .5rem;font-size:.8rem}
+.pod-time{font-size:.8rem;color:#cbd5e1;min-width:48px;text-align:right}
+.module-map-view{background:#0b1030;border-radius:16px;padding:1.2rem;text-align:center}
+.module-map-view img{width:100%;max-height:240px;object-fit:contain;background:#fff;border-radius:12px;padding:10px}
+.module-map-view p{color:#cbd5e1;font-size:.82rem;margin:.7rem 0 0}
+/* Anlik pekistirme karti */
+.review-card{margin-top:1.4rem;background:linear-gradient(135deg,#fff,#fdf8ee);border:1.5px solid #F5B942;border-radius:16px;padding:1.2rem}
+.review-card h4{margin:0 0 .4rem;font-size:.92rem;color:#92600a;display:flex;align-items:center;gap:.5rem}
+.review-q{font-weight:800;color:var(--gray-800);font-size:1.02rem;margin:.4rem 0 .9rem}
+.review-opts{display:grid;grid-template-columns:1fr 1fr;gap:.6rem}
+@media (max-width:640px){.review-opts{grid-template-columns:1fr}}
+.review-opt{border:2px solid var(--gray-200);background:#fff;border-radius:12px;padding:.7rem .9rem;font-weight:700;font-size:.88rem;cursor:pointer;color:var(--gray-700);transition:all .2s;text-align:left}
+.review-opt:hover{border-color:#8B5CF6}
+.review-opt.correct{border-color:#059669;background:#ecfdf5;color:#065f46}
+.review-opt.wrong{border-color:#dc2626;background:#fef2f2;color:#991b1b}
+.review-opt:disabled{cursor:default}
+.review-check{margin-top:.9rem;width:100%;border:none;border-radius:12px;padding:.75rem;font-weight:800;font-size:.92rem;cursor:pointer;background:linear-gradient(90deg,#5B2DE6,#D97706);color:#fff;transition:opacity .2s}
+.review-check:disabled{opacity:.5;cursor:default}
+.review-fb{margin-top:.7rem;font-size:.88rem;font-weight:700;display:none}
+.review-fb.ok{display:block;color:#059669}
+.review-fb.no{display:block;color:#dc2626}
+/* Zihin haritasi */
+.mindmap-section{margin-top:2.5rem;background:linear-gradient(160deg,#0b1030,#1E1B4B);border-radius:24px;padding:1.8rem;color:#fff;position:relative;overflow:hidden}
+.mindmap-section::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 20% 20%,rgba(139,92,246,.18),transparent 55%),radial-gradient(circle at 85% 80%,rgba(245,185,66,.12),transparent 50%);pointer-events:none}
+.mm-head{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:.8rem;position:relative}
+.mm-head h2{color:#F5B942;font-size:1.3rem;margin:0}
+.mm-head p{color:#cbd5e1;font-size:.88rem;margin:.2rem 0 0}
+.mm-toolbar{display:flex;gap:.5rem;flex-wrap:wrap;margin:1rem 0;position:relative}
+.mm-toolbar input{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.18);border-radius:10px;padding:.6rem .9rem;color:#fff;font-size:.88rem;min-width:180px}
+.mm-toolbar input::placeholder{color:#94a3b8}
+.mm-toolbar .btn-add{background:linear-gradient(135deg,#F5B942,#D97706);color:#1a1206;border:none;border-radius:10px;padding:.6rem 1.2rem;font-weight:800;cursor:pointer;font-size:.88rem}
+.mm-canvas{position:relative;height:520px;background:rgba(6,6,12,.55);border:1px solid rgba(139,92,246,.3);border-radius:18px;overflow:hidden;touch-action:none}
+.mm-lines{position:absolute;inset:0;width:100%;height:100%}
+.mm-lines line{stroke:rgba(139,92,246,.55);stroke-width:2;vector-effect:non-scaling-stroke}
+.mm-node{position:absolute;transform:translate(-50%,-50%);background:linear-gradient(135deg,#5B2DE6,#8B5CF6);border:1.5px solid rgba(245,185,66,.6);color:#fff;border-radius:14px;padding:.55rem .95rem;font-size:.85rem;font-weight:700;cursor:grab;box-shadow:0 8px 22px rgba(0,0,0,.45);max-width:210px;user-select:none;z-index:2}
+.mm-node:active{cursor:grabbing}
+.mm-node .mm-note{display:block;font-weight:400;font-size:.75rem;color:#e9d5ff;margin-top:.2rem;line-height:1.4}
+.mm-node.mm-center{background:linear-gradient(135deg,#F5B942,#D97706);color:#1a1206;font-size:1.02rem;cursor:default;border-color:#fff;z-index:3}
+.mm-node.mm-selected{outline:3px solid #F5B942;outline-offset:2px}
+.mm-editor{position:absolute;right:14px;top:14px;z-index:5;background:#fff;color:var(--gray-800);border-radius:14px;padding:1rem;width:250px;box-shadow:0 14px 40px rgba(0,0,0,.5);display:none}
+.mm-editor.open{display:block}
+.mm-editor h4{margin:0 0 .6rem;font-size:.95rem;color:#1E1B4B}
+.mm-editor input{width:100%;box-sizing:border-box;border:1px solid var(--gray-200);border-radius:8px;padding:.5rem .7rem;margin-bottom:.5rem;font-size:.85rem}
+.mm-editor .row{display:flex;gap:.5rem}
+.mm-editor button{flex:1;border:none;border-radius:8px;padding:.55rem;font-weight:700;cursor:pointer;font-size:.82rem}
+.mm-save{background:linear-gradient(135deg,#5B2DE6,#8B5CF6);color:#fff}
+.mm-del{background:#fee2e2;color:#b91c1c}
+.mm-hintline{color:#94a3b8;font-size:.78rem;margin-top:.7rem;position:relative}
+/* === Sayfa iskeleti === */
+.course-content-wrapper{display:grid;grid-template-columns:300px 1fr;gap:1.6rem;margin-top:1.6rem;align-items:start}
+@media (max-width:1100px){.course-content-wrapper{grid-template-columns:1fr}}
+.modules-sidebar{background:#fff;border:1px solid var(--gray-100);border-radius:var(--radius-lg);box-shadow:var(--shadow);padding:1.1rem;position:sticky;top:90px}
+.modules-sidebar>h3{font-size:.95rem;font-weight:800;color:var(--gray-800);margin:0 0 .8rem;display:flex;align-items:center;gap:.5rem}
+.modules-list{display:flex;flex-direction:column;gap:.5rem}
+.module-tab{display:flex;gap:.7rem;align-items:flex-start;width:100%;border:1.5px solid var(--gray-100);background:#fff;border-radius:14px;padding:.7rem .8rem;cursor:pointer;text-align:left;transition:all .2s}
+.module-tab:hover{border-color:#c4b5fd}
+.module-tab.active{border-color:#5B2DE6;background:linear-gradient(135deg,rgba(91,45,230,.08),rgba(245,185,66,.08));box-shadow:0 6px 18px rgba(91,45,230,.15)}
+.module-num{width:26px;height:26px;border-radius:50%;background:linear-gradient(135deg,#1E1B4B,#5B2DE6);color:#F5B942;font-weight:800;font-size:.8rem;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.module-tab-info{flex:1;min-width:0}
+.module-tab-title{display:block;font-weight:700;font-size:.87rem;color:var(--gray-800)}
+.module-tab-duration{display:flex;align-items:center;gap:.35rem;font-size:.75rem;color:var(--gray-400);margin-top:.2rem}
+.module-panel{display:none}
+.module-panel.active{display:block;animation:fadeUp .3s ease}
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.module-panel-header{display:flex;justify-content:space-between;align-items:center;gap:1rem;margin-bottom:.6rem}
+.module-panel-header h2{margin:0;font-size:1.25rem;color:#1E1B4B}
+.module-duration{color:var(--gray-400);font-size:.82rem;white-space:nowrap}
+.module-text{background:#fff;border:1px solid var(--gray-100);border-radius:var(--radius-lg);box-shadow:var(--shadow);padding:1.3rem 1.4rem;line-height:1.75;color:var(--gray-700);font-size:.95rem}
+.tasks-section{margin-top:1.2rem;background:#fff;border:1px solid var(--gray-100);border-radius:var(--radius-lg);box-shadow:var(--shadow);padding:1.1rem 1.2rem}
+.tasks-section h3{margin:0 0 .7rem;font-size:.95rem;color:var(--gray-800);display:flex;align-items:center;gap:.5rem}
+.tasks-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:.3rem}
+.task-item{padding:.35rem .4rem}
+.task-checkbox{display:flex;gap:.6rem;align-items:flex-start;cursor:pointer;font-size:.9rem;color:var(--gray-700)}
+.module-nav{display:flex;justify-content:space-between;align-items:center;margin-top:1.4rem;gap:1rem}
+.slide-stage{background:#fff;border:1px solid var(--gray-100);border-radius:var(--radius-lg);box-shadow:var(--shadow);padding:2rem;min-height:220px}
+.slide-stage h3{margin:0 0 .8rem;color:#1E1B4B;font-size:1.2rem}
+.slide-stage p{line-height:1.75;color:var(--gray-700)}
+.slide-controls{display:flex;align-items:center;justify-content:center;gap:1rem;margin-top:1rem}
+.slide-counter{font-weight:700;color:var(--gray-600);font-size:.9rem}
+.slide-hint{text-align:center;color:var(--gray-400);font-size:.78rem;margin-top:.5rem}
+/* Modul XP rozetleri */
+.mod-xp{background:linear-gradient(135deg,#1E1B4B,#5B2DE6);color:#F5B942;font-size:.66rem;font-weight:800;padding:.14rem .5rem;border-radius:999px;margin-left:.35rem}
+.cert-goal-links{display:flex;gap:.5rem;margin-top:.7rem}
+.cert-goal-links a{display:inline-flex;align-items:center;gap:.35rem;background:rgba(245,185,66,.12);border:1px solid rgba(245,185,66,.4);color:#F5B942;font-weight:700;font-size:.78rem;padding:.4rem .7rem;border-radius:10px;margin:0;text-decoration:none}
+.cert-goal-links a:hover{background:rgba(245,185,66,.22)}
+/* Lob kutulari (derin okuma) */
+.lobe-boxes{display:grid;grid-template-columns:1fr 1fr;gap:.9rem;margin-bottom:1.1rem}
+@media (max-width:720px){.lobe-boxes{grid-template-columns:1fr}}
+.lobe-box{border-radius:14px;padding:.9rem 1.05rem;font-size:.85rem}
+.lobe-box h4{margin:0 0 .5rem;font-size:.85rem;display:flex;align-items:center;gap:.45rem}
+.lobe-box ul{margin:0;padding-left:1.1rem;line-height:1.65}
+.lobe-box p{margin:0;line-height:1.65}
+.lobe-left{background:linear-gradient(135deg,rgba(37,99,235,.08),rgba(30,64,175,.05));border:1px solid rgba(37,99,235,.3)}
+.lobe-left h4{color:#1e40af}
+.lobe-right{background:linear-gradient(135deg,rgba(245,185,66,.12),rgba(217,119,6,.06));border:1px solid rgba(245,185,66,.45)}
+.lobe-right h4{color:#92600a}
+/* Slayt noktalari */
+.slide-dots{display:flex;gap:.45rem;justify-content:center;margin-top:.7rem}
+.slide-dots span{width:8px;height:8px;border-radius:50%;background:var(--gray-200);cursor:pointer;transition:all .2s}
+.slide-dots span.active{background:#5B2DE6;transform:scale(1.25)}
+</style>
+
 <div class="course-view">
     <div class="course-view-header">
         <div class="course-view-info">
-            <div style="display:flex;gap:.5rem;margin-bottom:.75rem">
-                <button class="btn btn-sm btn-primary" onclick="toggleMode('read')" id="btnRead"><i class="fas fa-book-open"></i> {{ tr('reading_mode') }}</button>
-                <button class="btn btn-sm btn-outline" onclick="toggleMode('slides')" id="btnSlides"><i class="fas fa-tv"></i> {{ tr('slideshow') }}</button>
-                <a href="{{ url_for('course_assessment', course_id=course.id) }}" class="btn btn-sm btn-outline"><i class="fas fa-clipboard-check"></i> {{ _("Değerlendirme") }}</a>
+            <div style="display:flex;gap:.5rem;margin-bottom:.75rem;flex-wrap:wrap">
+                <a href="{{ url_for('dashboard') }}" class="btn btn-sm btn-outline"><svg class="ico"><use href="#i-arrow-left"/></svg> {{ _("Panel") }}</a>
+                <a href="{{ url_for('course_assessment', course_id=course.id) }}" class="btn btn-sm btn-outline"><svg class="ico"><use href="#i-clipboard-check"/></svg> {{ _("Değerlendirme") }}</a>
+            </div>
+            <div style="display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:.6rem">
+                <span class="style-badge"><svg class="ico"><use href="#i-brain"/></svg> {{ (course.mode_override or current_user.learning_style).capitalize() }} {{ _("Stil") }} + {{ current_user.brain_lobe.upper() }} {{ _("Lob") }} — {{ _("Bilişsel Profiline Optimize Edildi") }}</span>
+                <span class="streak-badge"><svg class="ico"><use href="#i-fire"/></svg> {{ streak }} {{ _("Gün Serisi") }}</span>
+                <span class="xp-badge"><svg class="ico"><use href="#i-bolt"/></svg> <span id="xpText">0</span> XP</span>
             </div>
             <span class="course-badge">{{ course.level.upper() }}</span>
             <h1>{{ course.title }}</h1>
             <p class="course-desc">{{ course.content }}</p>
             <div class="course-meta-row">
-                <span><i class="fas fa-tag"></i> {{ course.topic }}</span>
-                <span><i class="fas fa-brain"></i> {{ current_user.learning_style.upper() }} {{ _("Stili") }}</span>
-                <span><i class="fas fa-calendar"></i> {{ course.created_at[:10] }}</span>
+                <span><svg class="ico"><use href="#i-tag"/></svg> {{ course.topic }}</span>
+                <span><svg class="ico"><use href="#i-calendar"/></svg> {{ course.created_at[:10] }}</span>
             </div>
+
+            <div class="mode-pills" id="modePills">
+                <button type="button" class="mode-pill" data-mode="gorsel" onclick="setMode('gorsel')"><svg class="ico"><use href="#i-project-diagram"/></svg> {{ _("Görsel") }}</button>
+                <button type="button" class="mode-pill" data-mode="isitsel" onclick="setMode('isitsel')"><svg class="ico"><use href="#i-headphones"/></svg> {{ _("İşitsel") }}</button>
+                <button type="button" class="mode-pill" data-mode="kinestetik" onclick="setMode('kinestetik')"><svg class="ico"><use href="#i-tools"/></svg> {{ _("Kinestetik") }}</button>
+            </div>
+            <div class="mode-hint" id="modeHint"><svg class="ico"><use href="#i-lightbulb"/></svg><span id="modeHintText"></span></div>
         </div>
         <div class="course-progress-circle">
             <div class="progress-ring">
                 <svg viewBox="0 0 100 100">
                     <circle class="progress-ring-bg" cx="50" cy="50" r="45"/>
-                    <circle class="progress-ring-fill" cx="50" cy="50" r="45" 
-                            stroke-dasharray="283" 
+                    <circle class="progress-ring-fill" cx="50" cy="50" r="45"
+                            stroke-dasharray="283"
                             stroke-dashoffset="{{ 283 - (283 * course.progress / 100) }}"/>
                 </svg>
                 <div class="progress-text-circle">%{{ course.progress }}</div>
@@ -33,265 +211,661 @@
         </div>
     </div>
 
-    <div class="course-content-wrapper">
+    <div class="ai-gate-note"><svg class="ico"><use href="#i-shield-halved"/></svg><span>{{ _("Sertifika güvenilirliği için: tüm görevleri tamamla → değerlendirme sayfasında AI onayını geç → kursu bitir.") }}</span></div>
+
+    <div class="course-content-wrapper three-col">
         <div class="modules-sidebar">
-            <h3><i class="fas fa-list"></i> {{ _("Modüller") }}</h3>
+            <h3><svg class="ico"><use href="#i-list"/></svg> {{ _("Müfredat") }}</h3>
             <div class="modules-list">
                 {% for module in modules %}
-                <button class="module-tab {% if loop.index0 == 0 %}active{% endif %}" 
+                <button class="module-tab {% if loop.index0 == 0 %}active {% endif %}{% if locked[loop.index0] %}locked{% endif %}"
                         onclick="showModule({{ loop.index0 }})" data-index="{{ loop.index0 }}">
                     <span class="module-num">{{ loop.index }}</span>
                     <div class="module-tab-info">
                         <span class="module-tab-title">{{ module.title }}</span>
-                        <span class="module-tab-duration"><i class="fas fa-clock"></i> {{ module.duration }}</span>
+                        <span class="module-tab-duration"><svg class="ico"><use href="#i-clock"/></svg> {{ module.duration }}
+                            <span class="mod-xp">+100 XP</span>
+                            {% if module.tasks %}<span class="module-star" id="star-{{ loop.index0 }}"><svg class="ico"><use href="#i-star"/></svg></span>{% endif %}
+                            {% if locked[loop.index0] %}<span class="lock-ico"><svg class="ico"><use href="#i-lock"/></svg></span>{% endif %}
+                        </span>
+                        {% if module.tasks %}
+                        <div class="tasks-progress-line"><div class="tasks-progress-fill" id="tline-{{ loop.index0 }}" style="width:0%"></div></div>
+                        {% endif %}
                     </div>
                 </button>
                 {% endfor %}
             </div>
-        </div>
-
-        <div class="course-smart-tools" style="display:flex; gap:10px; margin:20px 0; flex-wrap:wrap;">
-            <button type="button" onclick="toggleSpeech()" id="btn-tts" class="btn btn-primary" style="padding:10px 18px; font-size:0.9rem;">
-                <i class="fas fa-headphones"></i> <span id="tts-label">{{ _("Bu Modülü Sesli Dinle") }}</span>
-            </button>
-            <button type="button" onclick="toggleMindmap()" class="btn btn-outline" style="background:#1E1B4B; color:#F5B942; padding:10px 18px; font-size:0.9rem;">
-                <i class="fas fa-project-diagram"></i> {{ _("Zihin Haritası Görünümü") }}
-            </button>
-        </div>
-        <div id="mindmap-box" style="display:none; background:#0b1030; border:1px solid #5B2DE6; border-radius:16px; padding:20px; margin-bottom:24px; color:#fff;">
-            <h4 style="color:#F5B942; margin-bottom:12px;"><i class="fas fa-sitemap"></i> {{ _("Modül Kavram Haritası") }}</h4>
-            <img src="{{ url_for('static', filename='img/markmap.svg') }}" alt="Mindmap" style="width:100%; background:#fff; border-radius:12px; padding:12px;">
-        </div>
-        <script>
-        var isSpeaking = false;
-        var ttsListen = {{ _("Bu Modülü Sesli Dinle") | tojson }};
-        var ttsStop = {{ _("Dinlemeyi Durdur") | tojson }};
-        var ttsUnsupported = {{ _("Tarayıcınız sesli okumayı desteklemiyor.") | tojson }};
-        function toggleSpeech() {
-            if (!('speechSynthesis' in window)) { alert(ttsUnsupported); return; }
-            var btnLabel = document.getElementById('tts-label');
-            if (isSpeaking) { window.speechSynthesis.cancel(); isSpeaking = false; btnLabel.textContent = ttsListen; return; }
-            var activeContent = document.querySelector('.module-panel.active') || document.querySelector('.module-content') || document.body;
-            var utter = new SpeechSynthesisUtterance(activeContent.innerText);
-            utter.lang = "{{ get_locale() }}-{{ 'TR' if get_locale() == 'tr' else ('RU' if get_locale() == 'ru' else 'US') }}";
-            utter.onend = function() { isSpeaking = false; btnLabel.textContent = ttsListen; };
-            isSpeaking = true; btnLabel.textContent = ttsStop;
-            window.speechSynthesis.speak(utter);
-        }
-        function toggleMindmap() {
-            var box = document.getElementById('mindmap-box');
-            box.style.display = box.style.display === 'none' ? 'block' : 'none';
-        }
-        </script>
-
-        <div class="module-content">
-            {% for module in modules %}
-            <div class="module-panel {% if loop.index0 == 0 %}active{% endif %}" data-index="{{ loop.index0 }}">
-                <div class="module-panel-header">
-                    <h2>{{ module.title }}</h2>
-                    <span class="module-duration"><i class="fas fa-clock"></i> {{ module.duration }}</span>
-                </div>
-
-                <div class="module-body">
-                    <div class="module-text">
-                        {{ module.content | replace("\n", "<br>") | safe }}
-                    </div>
-
-                    {% if module.tasks %}
-                    <div class="tasks-section">
-                        <h3><i class="fas fa-tasks"></i> {{ _("Görevler") }}</h3>
-                        <ul class="tasks-list">
-                            {% for task in module.tasks %}
-                            <li class="task-item">
-                                <label class="task-checkbox">
-                                    <input type="checkbox" class="task-check" onchange="updateTaskProgress()">
-                                    <span class="task-text">{{ task }}</span>
-                                </label>
-                            </li>
-                            {% endfor %}
-                        </ul>
-                    </div>
-                    {% endif %}
-                </div>
-
-                <div class="slideshow" id="slideshow" style="display:none">
-                    <div class="slide-stage" id="slideStage"></div>
-                    <div class="slide-controls">
-                        <button class="btn btn-outline btn-sm" onclick="prevSlide()"><i class="fas fa-chevron-left"></i></button>
-                        <span class="slide-counter"><span id="slideNow">1</span> / <span id="slideTotal">1</span> {{ tr('slides_of') }}</span>
-                        <button class="btn btn-outline btn-sm" onclick="nextSlide()"><i class="fas fa-chevron-right"></i></button>
-                    </div>
-                    <p class="slide-hint"><i class="fas fa-keyboard"></i> {{ tr('press_nav') }}</p>
-                </div>
-                <div class="module-nav">
-                    {% if not loop.first %}
-                    <button class="btn btn-outline" onclick="prevModule()">
-                        <i class="fas fa-arrow-left"></i> {{ _("Önceki") }}
-                    </button>
-                    {% else %}
-                    <div></div>
-                    {% endif %}
-
-                    {% if not loop.last %}
-                    <button class="btn btn-primary" onclick="nextModule()">
-                        {{ _("Sonraki") }} <i class="fas fa-arrow-right"></i>
-                    </button>
-                    {% else %}
-                    <button class="btn btn-success" onclick="completeCourse()">
-                        <i class="fas fa-check-circle"></i> {{ _("Kursu Tamamla") }}
-                    </button>
-                    {% endif %}
+            <div class="cert-goal" style="margin-top:1rem">
+                <h4><svg class="ico"><use href="#i-graduation-cap"/></svg> {{ _("Sertifika Hedefi") }}</h4>
+                <ul>
+                    <li class="{{ 'done' if all_tasks_done else 'pending' }}"><svg class="ico"><use href="#i-{{ 'circle-check' if all_tasks_done else 'circle' }}"/></svg> {{ _("Tüm görevler tamamlandı") }}</li>
+                    <li class="{{ 'done' if assessment_done else 'pending' }}"><svg class="ico"><use href="#i-{{ 'circle-check' if assessment_done else 'circle' }}"/></svg> {{ _("Quiz / Ses-Not ödevi") }}</li>
+                    <li class="{{ 'done' if course.ai_approved else 'pending' }}"><svg class="ico"><use href="#i-{{ 'circle-check' if course.ai_approved else 'circle' }}"/></svg> {{ _("AI onayı & kurs bitişi") }}</li>
+                </ul>
+                {% if not assessment_done %}<a href="{{ url_for('course_assessment', course_id=course.id) }}">{{ _("Değerlendirmeye Git →") }}</a>{% endif %}
+                <div class="cert-goal-links">
+                    <a href="{{ url_for('course_assessment', course_id=course.id) }}"><svg class="ico"><use href="#i-clipboard-check"/></svg> {{ _("Değerlendirme") }}</a>
+                    {% if course.completed %}<a href="{{ url_for('certificate', course_id=course.id) }}"><svg class="ico"><use href="#i-award"/></svg> {{ _("Sertifika") }}</a>{% endif %}
                 </div>
             </div>
-            {% endfor %}
+        </div>
+
+        <div class="course-main">
+            <div class="course-smart-tools" style="display:flex; gap:10px; margin:20px 0; flex-wrap:wrap;">
+                <button type="button" onclick="document.getElementById('mindmapSection').scrollIntoView({behavior:'smooth'})" class="btn btn-outline" style="background:#1E1B4B; color:#F5B942; padding:10px 18px; font-size:0.9rem;">
+                    <svg class="ico"><use href="#i-project-diagram"/></svg> {{ _("Zihin Haritama Git") }}
+                </button>
+            </div>
+
+            <div class="module-content">
+                {% for module in modules %}
+                <div class="module-panel {% if loop.index0 == 0 %}active{% endif %}" data-index="{{ loop.index0 }}">
+                    <div class="module-panel-header">
+                        <h2>{{ module.title }}</h2>
+                        <span class="module-duration"><svg class="ico"><use href="#i-clock"/></svg> {{ module.duration }}</span>
+                    </div>
+
+                    <div class="mod-tabs">
+                        <button class="mod-tab active" onclick="setView({{ loop.index0 }}, 'read', this)"><svg class="ico"><use href="#i-book-open"/></svg> {{ _("Okuma") }}</button>
+                        <button class="mod-tab" onclick="setView({{ loop.index0 }}, 'map', this)"><svg class="ico"><use href="#i-sitemap"/></svg> {{ _("Zihin Haritası") }}</button>
+                        <button class="mod-tab" onclick="setView({{ loop.index0 }}, 'podcast', this)"><svg class="ico"><use href="#i-headphones"/></svg> {{ _("Podcast") }}</button>
+                        <button class="mod-tab" onclick="setView({{ loop.index0 }}, 'slides', this)"><svg class="ico"><use href="#i-tv"/></svg> {{ _("Slayt") }}</button>
+                    </div>
+
+                    <div class="mod-view active" data-view="read">
+                        <div class="lobe-boxes">
+                            <div class="lobe-box lobe-left">
+                                <h4><svg class="ico"><use href="#i-list"/></svg> {{ _("Sol Lob") }} — {{ _("Analitik Kurgu") }}</h4>
+                                <ul>
+                                    {% for line in module.content.replace("\r", "").strip().split("\n")[:3] %}
+                                    {% if line.strip() %}<li>{{ line.strip() | truncate(90, true) }}</li>{% endif %}
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                            <div class="lobe-box lobe-right">
+                                <h4><svg class="ico"><use href="#i-lightbulb"/></svg> {{ _("Sağ Lob") }} — {{ _("Büyük Resim & Metafor") }}</h4>
+                                <p>{{ _("Bu modülü bir bütün olarak gör: '%(title)s' kavramını günlük hayatından bir örnekle bağdaştır; ana fikri bir cümleyle kendi kelimelerinle özetlemeyi dene.", title=module.title) }}</p>
+                            </div>
+                        </div>
+                        <div class="module-text">{{ module.content | replace("\n", "<br>") | safe }}</div>
+
+                        {% if module.tasks %}
+                        <div class="tasks-section">
+                            <h3><svg class="ico"><use href="#i-gamepad"/></svg> {{ _("Görevler") }} <small style="color:var(--gray-400);font-weight:400;font-size:.78rem">+20 XP / {{ _("görev") }}</small></h3>
+                            <ul class="tasks-list">
+                                {% set mi = loop.index0 %}
+                                {% for task in module.tasks %}
+                                <li class="task-item" data-mi="{{ mi }}" data-ti="{{ loop.index0 }}">
+                                    <label class="task-checkbox">
+                                        <input type="checkbox" class="task-check" data-mi="{{ mi }}" data-ti="{{ loop.index0 }}" onchange="onTaskChange(this)">
+                                        <span class="task-text">{{ task }}</span>
+                                    </label>
+                                </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                        {% endif %}
+
+                        {% set rmi = loop.index0 %}
+                        {% set rev = reviews | selectattr('mi', 'equalto', rmi) | first | default(none) %}
+                        {% if rev %}
+                        <div class="review-card" id="review-{{ rmi }}">
+                            <h4><svg class="ico"><use href="#i-bullseye"/></svg> {{ _("Anlık Pekiştirme") }} · +25 XP</h4>
+                            <p class="review-q">{{ rev.question }}</p>
+                            <div class="review-opts">
+                                {% for opt in rev.options %}
+                                <button type="button" class="review-opt" data-oi="{{ loop.index0 }}" onclick="pickOption({{ rmi }}, {{ loop.index0 }}, this)"><strong>{{ ['A','B'][loop.index0] }})</strong> {{ opt }}</button>
+                                {% endfor %}
+                            </div>
+                            <button type="button" class="review-check" id="rcheck-{{ rmi }}" onclick="checkReview({{ rmi }})" disabled>{{ _("Kontrol Et ve +25 XP Kazan") }}</button>
+                            <p class="review-fb" id="rfb-{{ rmi }}"></p>
+                        </div>
+                        {% endif %}
+                    </div>
+
+                    <div class="mod-view" data-view="map">
+                        <div class="module-map-view">
+                            <svg id="conceptMap-{{ loop.index0 }}" viewBox="0 0 640 300" style="width:100%;height:auto;background:#fff;border-radius:12px"></svg>
+                            <p><svg class="ico"><use href="#i-circle-info"/></svg> {{ _("Bu modülün canlı kavram ağacı — modül içeriğinden otomatik çizilir. Kendi haritanı sayfanın altından düzenleyebilirsin.") }}</p>
+                        </div>
+                    </div>
+
+                    <div class="mod-view" data-view="podcast">
+                        <div class="podcast-bar" id="pod-{{ loop.index0 }}">
+                            <button class="pod-play" onclick="togglePodcast({{ loop.index0 }}, this)" title="{{ _("Dinle") }}"><svg class="ico"><use href="#i-play"/></svg></button>
+                            <div class="pod-wave">{% for i in range(28) %}<span style="animation-delay:{{ (i % 7) * 0.12 }}s"></span>{% endfor %}</div>
+                            <select class="pod-speed" onchange="setPodSpeed(this.value)">
+                                <option value="0.75">0.75x</option>
+                                <option value="1" selected>1x</option>
+                                <option value="1.25">1.25x</option>
+                                <option value="1.5">1.5x</option>
+                            </select>
+                            <span class="pod-time">{{ module.duration }}</span>
+                        </div>
+                        <p style="color:var(--gray-500);font-size:.83rem;margin-top:.6rem"><svg class="ico"><use href="#i-wand-magic-sparkles"/></svg> {{ _("Sesli anlatım tarayıcının sesiyle çalışır; hızını seç, dinlerken sayfada gezinebilirsin.") }}</p>
+                    </div>
+
+                    <div class="mod-view" data-view="slides">
+                        <div class="slideshow" style="display:block">
+                            <div class="slide-stage" id="slideStage-{{ loop.index0 }}"></div>
+                            <div class="slide-controls">
+                                <button class="btn btn-outline btn-sm" onclick="prevSlide()"><svg class="ico"><use href="#i-chevron-left"/></svg></button>
+                                <span class="slide-counter"><span id="slideNow-{{ loop.index0 }}">1</span> / <span id="slideTotal-{{ loop.index0 }}">1</span> {{ tr('slides_of') }}</span>
+                                <button class="btn btn-outline btn-sm" onclick="nextSlide()"><svg class="ico"><use href="#i-chevron-right"/></svg></button>
+                            </div>
+                            <div class="slide-dots" id="slideDots-{{ loop.index0 }}"></div>
+                            <p class="slide-hint"><svg class="ico"><use href="#i-keyboard"/></svg> {{ tr('press_nav') }}</p>
+                        </div>
+                    </div>
+
+                    <div class="module-nav">
+                        {% if not loop.first %}
+                        <button class="btn btn-outline" onclick="prevModule()"><svg class="ico"><use href="#i-arrow-left"/></svg> {{ _("Önceki") }}</button>
+                        {% else %}<div></div>{% endif %}
+                        {% if not loop.last %}
+                        <button class="btn btn-primary" onclick="nextModule()">{{ _("Sonraki") }} <svg class="ico"><use href="#i-arrow-right"/></svg></button>
+                        {% else %}
+                        <button class="btn btn-success" onclick="completeCourse()"><svg class="ico"><use href="#i-check-circle"/></svg> {{ _("Kursu Tamamla") }}</button>
+                        {% endif %}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="course-side-right">
+            {% if sources %}
+            <div class="side-card">
+                <h3><svg class="ico" style="color:#059669"><use href="#i-shield-halved"/></svg> {{ _("Doğrulanmış Kaynaklar") }}</h3>
+                <ul class="side-sources-list">
+                    {% for s in sources %}
+                    <li><a href="{{ s.url }}" target="_blank" rel="noopener"><svg class="ico"><use href="#i-external-link-alt"/></svg> {{ s.title }}</a></li>
+                    {% endfor %}
+                </ul>
+            </div>
+            {% endif %}
+            <div class="side-card">
+                <h3><svg class="ico" style="color:#5B2DE6"><use href="#i-robot"/></svg> {{ _("Bilişsel Asistan") }}</h3>
+                <button class="assist-btn" onclick="assist('explain')"><svg class="ico"><use href="#i-lightbulb"/></svg> {{ _("Örneklerle Açıkla") }}</button>
+                <button class="assist-btn" onclick="assist('schema')"><svg class="ico"><use href="#i-sitemap"/></svg> {{ _("Şemaya Dönüştür") }}</button>
+                <button class="assist-btn" onclick="assist('summary')"><svg class="ico"><use href="#i-clock"/></svg> {{ _("30sn Sesli Özet") }}</button>
+                <button class="assist-btn" onclick="quickNote()"><svg class="ico"><use href="#i-note-sticky"/></svg> {{ _("Hızlı Not Ekle") }}</button>
+                <div id="assistResult"></div>
+            </div>
+            <div class="side-card">
+                <h3><svg class="ico"><use href="#i-upload"/></svg> {{ _("Ödevini Hızla Gönder") }}</h3>
+                <p style="font-size:.8rem;color:var(--gray-500);margin:0 0 .7rem">{{ _("Ses notu veya dosyanı buradan yükle; AI incelemesi değerlendirme sayfasında yapılır.") }}</p>
+                <form method="POST" action="{{ url_for('course_assessment', course_id=course.id) }}" enctype="multipart/form-data">
+                    <input type="hidden" name="action" value="upload">
+                    <select name="kind" class="pod-speed" style="width:100%;background:#fff;color:var(--gray-700);border:1px solid var(--gray-200);margin-bottom:.5rem">
+                        <option value="note">{{ _("Ses Notu / Ödev") }}</option>
+                        <option value="quiz">{{ _("Quiz Cevabı") }}</option>
+                        <option value="project">{{ _("Proje Dosyası") }}</option>
+                    </select>
+                    <input type="file" name="file" required style="width:100%;font-size:.78rem;margin-bottom:.6rem">
+                    <button type="submit" class="assist-btn" style="justify-content:center;margin:0"><svg class="ico"><use href="#i-upload"/></svg> {{ _("Gönder") }}</button>
+                </form>
+            </div>
         </div>
     </div>
-
-    {% if sources %}
-    <div class="setup-section" style="margin-top:2rem">
-        <h2><i class="fas fa-link"></i> {{ tr('sources') }} ({{ sources|length }})</h2>
-        <p style="color:var(--gray-500);font-size:.9rem;margin-bottom:1rem">{{ _("Bu kurs hazırlanırken taranan güvenilir kaynaklar:") }}</p>
-        <ul class="sources-list">
-            {% for s in sources %}
-            <li><a href="{{ s.url }}" target="_blank" rel="noopener"><i class="fas fa-external-link-alt"></i> {{ s.title }}</a></li>
-            {% endfor %}
-        </ul>
-    </div>
-    {% endif %}
 
     {% if course.completed %}
-    <div class="certificate-banner">
-        <i class="fas fa-trophy"></i>
+    <div style="margin-top:2rem;background:linear-gradient(135deg,#1E1B4B,#312e6e);border-radius:20px;padding:1.6rem 2rem;display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap;color:#fff">
         <div>
-            <h3>{{ _("Tebrikler! Bu kursu tamamladın.") }}</h3>
-            <a href="{{ url_for('certificate', course_id=course.id) }}" class="btn btn-success">
-                <i class="fas fa-download"></i> {{ _("Sertifikamı İndir") }}
-            </a>
+            <h3 style="margin:0;color:#F5B942"><svg class="ico"><use href="#i-award"/></svg> {{ _("Kurs Tamamlandı!") }}</h3>
+            <p style="margin:.3rem 0 0;color:#cbd5e1;font-size:.9rem">{{ _("AI onaylı sertifikanı indir, QR kod ile her yerde doğrulatabilirsin.") }}</p>
         </div>
+        <a href="{{ url_for('certificate', course_id=course.id) }}" class="btn btn-lg" style="background:linear-gradient(135deg,#F5B942,#D97706);color:#1a1206;font-weight:800"><svg class="ico"><use href="#i-download"/></svg> {{ _("Sertifikamı İndir") }}</a>
     </div>
     {% endif %}
+
+    <section class="mindmap-section" id="mindmapSection">
+        <div class="mm-head">
+            <div>
+                <h2><svg class="ico"><use href="#i-project-diagram"/></svg> {{ _("Kişisel Zihin Haritam") }}</h2>
+                <p>{{ _("Kendi notlarını ekle, sürükle, düzenle — harita seninle birlikte kaydedilir.") }}</p>
+            </div>
+        </div>
+        <div class="mm-toolbar">
+            <input type="text" id="mmTitle" placeholder="{{ _('Başlık ekle...') }}" maxlength="60">
+            <input type="text" id="mmNote" placeholder="{{ _('Not / açıklama (isteğe bağlı)...') }}" maxlength="200" style="min-width:220px">
+            <button class="btn-add" onclick="addNode()"><svg class="ico"><use href="#i-plus"/></svg> {{ _("Ekle") }}</button>
+        </div>
+        <div class="mm-canvas" id="mmCanvas">
+            <svg class="mm-lines" id="mmLines"></svg>
+            <div class="mm-editor" id="mmEditor">
+                <h4>{{ _("Düğümü Düzenle") }}</h4>
+                <input type="text" id="mmEditTitle" maxlength="60">
+                <input type="text" id="mmEditNote" maxlength="200" placeholder="{{ _('Not...') }}">
+                <div class="row">
+                    <button class="mm-save" onclick="saveNodeEdit()">{{ _("Kaydet") }}</button>
+                    <button class="mm-del" onclick="deleteNode()"><svg class="ico"><use href="#i-trash"/></svg></button>
+                </div>
+            </div>
+        </div>
+        <p class="mm-hintline"><svg class="ico"><use href="#i-hand-pointer"/></svg> {{ _("Düğümleri sürükleyerek yerleştir; bir düğüme tıklayarak düzenleyebilir veya silebilirsin.") }}</p>
+    </section>
 </div>
 
 <script>
-let currentModule = 0;
-const totalModules = {{ modules | length }};
 const courseId = {{ course.id }};
+const modulesData = {{ modules | tojson }};
+let taskState = {{ tasks_state | tojson }};
+let mmNodes = {{ mindmap | tojson }};
+const lockedFlags = {{ locked | tojson }};
+const reviewData = {{ reviews | tojson }};
+let currentMode = {{ (course.mode_override or current_user.learning_style) | tojson }};
+const assessmentDone = {{ 'true' if assessment_done else 'false' }};
+const courseCompleted = {{ 'true' if course.completed else 'false' }};
+let currentModule = 0;
+let totalXP = 0;
 
-function showModule(index) {
-    currentModule = index;
-    document.querySelectorAll('.slideshow').forEach(s => s.style.display = 'none');
-    document.querySelectorAll('.module-body').forEach(b => b.style.display = 'block');
-    document.querySelectorAll('.module-tab').forEach((tab, i) => {
-        tab.classList.toggle('active', i === index);
+const MODE_HINTS = {
+  gorsel: {{ _("Görsel mod aktif: kavram haritaları, şemalar ve slaytlar öne çıkıyor. Renkli yapılarla öğren.") | tojson }},
+  isitsel: {{ _("İşitsel mod aktif: podcast bölümünü aç, içeriği dinleyerek öğren. Hızını kendin ayarla.") | tojson }},
+  kinestetik: {{ _("Kinestetik mod aktif: görevleri uygulayarak, not alarak ve haritayı düzenleyerek öğren.") | tojson }}
+};
+
+function spawnXP(amount, x, y){
+  totalXP += amount;
+  document.getElementById('xpText').textContent = totalXP;
+  const el = document.createElement('span');
+  el.className = 'xp-float'; el.textContent = '+' + amount + ' XP';
+  el.style.left = (x || window.innerWidth/2) + 'px';
+  el.style.top = (y || 120) + 'px';
+  document.body.appendChild(el);
+  setTimeout(()=>el.remove(), 1200);
+}
+
+function saveState(payload){
+  const body = Object.assign({tasks: taskState}, payload || {});
+  fetch('/api/course-state/' + courseId, {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(body)});
+}
+let saveTimer = null;
+function saveStateDebounced(payload){ clearTimeout(saveTimer); saveTimer = setTimeout(()=>saveState(payload), 600); }
+
+/* === Mod (öğrenme stili) === */
+function setMode(m, save){
+  currentMode = m;
+  document.querySelectorAll('.mode-pill').forEach(p=>p.classList.toggle('active', p.dataset.mode===m));
+  document.getElementById('modeHintText').textContent = MODE_HINTS[m] || '';
+  if(save !== false) saveStateDebounced({mode: m});
+}
+
+/* === Modül görünüm sekmeleri === */
+function setView(mi, view, btn){
+  const panel = document.querySelectorAll('.module-panel')[mi];
+  panel.querySelectorAll('.mod-view').forEach(v=>v.classList.toggle('active', v.dataset.view===view));
+  panel.querySelectorAll('.mod-tab').forEach(t=>t.classList.remove('active'));
+  btn.classList.add('active');
+}
+
+/* === Modül geçişi (kilit korumalı) === */
+function showModule(mi){
+  if (lockedFlags[mi]){
+    const tab = document.querySelector('.module-tab[data-index="'+mi+'"]');
+    tab.style.animation='none'; void tab.offsetWidth;
+    tab.style.animation='shakeX .4s';
+    return;
+  }
+  currentModule = mi;
+  document.querySelectorAll('.module-panel').forEach((p,i)=>p.classList.toggle('active', i===mi));
+  document.querySelectorAll('.module-tab').forEach((t,i)=>t.classList.toggle('active', i===mi));
+  const done = document.querySelectorAll('.module-panel .task-check:checked').length;
+  updateProgress();
+}
+function nextModule(){ showModule(Math.min(currentModule+1, modulesData.length-1)); }
+function prevModule(){ showModule(Math.max(currentModule-1, 0)); }
+
+/* === Görevler / XP / ilerleme === */
+function totalTasks(){ return modulesData.reduce((a,m)=>a+(m.tasks?m.tasks.length:0),0); }
+function countDone(){
+  let n=0;
+  document.querySelectorAll('.module-panel').forEach((p,mi)=>{
+    p.querySelectorAll('.task-check').forEach(cb=>{ if(cb.checked) n++; });
+  });
+  return n;
+}
+function refreshTaskUI(){
+  document.querySelectorAll('.module-panel').forEach((p,mi)=>{
+    const boxes = p.querySelectorAll('.task-check');
+    if(!boxes.length) return;
+    let done=0;
+    boxes.forEach(cb=>{
+      const li = cb.closest('.task-item');
+      const ti = +cb.dataset.ti;
+      if(cb.checked){ done++; li.classList.add('done'); }
+      else li.classList.remove('done');
+      if(!taskState[String(mi)]) taskState[String(mi)] = {};
+      taskState[String(mi)][String(ti)] = cb.checked;
     });
-    document.querySelectorAll('.module-panel').forEach((panel, i) => {
-        panel.classList.toggle('active', i === index);
-    });
-    updateProgress();
+    const line = document.getElementById('tline-'+mi);
+    if(line) line.style.width = (boxes.length? Math.round(done/boxes.length*100):0) + '%';
+    const star = document.getElementById('star-'+mi);
+    if(star) star.innerHTML = done===boxes.length ? '<svg class="ico"><use href="#i-star"/></svg>' : '<svg class="ico"><use href="#i-star"/></svg>';
+  });
+}
+function onTaskChange(cb){
+  refreshTaskUI();
+  if(cb.checked){
+    const r = cb.getBoundingClientRect();
+    spawnXP(20, r.left + r.width/2, r.top);
+  }
+  checkModuleAward(+cb.dataset.mi);
+  saveStateDebounced({});
+  updateProgress();
+}
+function updateProgress(){
+  const t = totalTasks();
+  const pct = t ? Math.round(countDone()/t*100) : Math.round((currentModule+1)/modulesData.length*100);
+  fetch('/api/update-progress/' + courseId, {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({progress: pct, completed: courseCompleted?1:0})});
+  const ring = document.querySelector('.progress-ring-fill');
+  if(ring) ring.style.strokeDashoffset = 283 - (283*pct/100);
+  const pt = document.querySelector('.progress-text-circle');
+  if(pt) pt.textContent = '%' + pct;
 }
 
-function nextModule() {
-    if (currentModule < totalModules - 1) showModule(currentModule + 1);
-}
-
-function prevModule() {
-    if (currentModule > 0) showModule(currentModule - 1);
-}
-
-function updateTaskProgress() {
-    updateProgress();
-}
-
-function updateProgress() {
-    const allTasks = document.querySelectorAll('.task-check');
-    const checkedTasks = document.querySelectorAll('.task-check:checked');
-    const moduleProgress = (currentModule / totalModules) * 100;
-    const taskProgress = allTasks.length > 0 ? (checkedTasks.length / allTasks.length) * 100 : 0;
-    const totalProgress = Math.round((moduleProgress * 0.6) + (taskProgress * 0.4));
-
-    document.querySelector('.progress-fill').style.width = totalProgress + '%';
-    document.querySelector('.progress-text-circle').textContent = '%' + totalProgress;
-    document.querySelector('.progress-ring-fill').style.strokeDashoffset = 283 - (283 * totalProgress / 100);
-
-    fetch(`/api/update-progress/${courseId}`, {
-        method: 'POST',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({progress: totalProgress, completed: 0})
-    });
-}
-
-function completeCourse() {
-    if (!confirm('{{ _("Kursu tamamlamak istediğine emin misin?") }}')) return;
-
-    fetch(`/api/update-progress/${courseId}`, {
-        method: 'POST',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({progress: 100, completed: 1})
-    }).then(() => {
-        window.location.reload();
+/* === Kurs tamamlama (AI korumalı) === */
+function completeCourse(){
+  fetch('/api/complete-course/' + courseId, {method:'POST', headers:{'Content-Type':'application/json'}})
+    .then(r=>r.json()).then(d=>{
+      if(d.ok){ launchConfetti(); setTimeout(()=>location.reload(), 1600); }
+      else {
+        const msg = d.reason==='tasks' ? {{ _("Önce tüm görevleri tamamla.") | tojson }} : {{ _("Değerlendirme sayfasında AI onayını geçmen gerek.") | tojson }};
+        alert(msg);
+        if(d.reason==='assessment') window.location.href = '/course/' + courseId + '/assessment';
+      }
     });
 }
-
-// === SLAYT MODU ===
-let slides = [], curSlide = 0;
-
-function mdToSlides(md) {
-    const lines = md.split('\n');
-    const result = []; let title = '', bullets = [];
-    const push = () => { if (title || bullets.length) result.push({title, bullets}); title=''; bullets=[]; };
-    for (const line of lines) {
-        const h = line.match(/^#{1,3}\s+(.+)/);
-        const li = line.match(/^[-*]\s+(.+)/);
-        if (h) { push(); title = h[1]; }
-        else if (li) bullets.push(li[1]);
-        else if (line.trim()) bullets.push(line.trim());
-    }
-    push(); return result;
+function launchConfetti(){
+  const icons = ['🎉','⭐','🏆','🎓','✨','🐴'];
+  for(let i=0;i<50;i++){
+    const el = document.createElement('span');
+    el.className='confetti-piece';
+    el.textContent = icons[i%icons.length];
+    el.style.left = Math.random()*100+'vw';
+    el.style.top = (-10 - Math.random()*10)+'vh';
+    el.style.animationDelay = (Math.random()*0.6)+'s';
+    document.body.appendChild(el);
+    setTimeout(()=>el.remove(), 2600);
+  }
 }
 
-function toggleMode(mode) {
-    const body = document.querySelector('.module-panel.active .module-body');
-    const ss = document.querySelector('.module-panel.active .slideshow');
-    const bR = document.getElementById('btnRead'), bS = document.getElementById('btnSlides');
-    if (!body || !ss) return;
-    if (mode === 'slides') {
-        body.style.display = 'none'; ss.style.display = 'block';
-        bS.className = 'btn btn-sm btn-primary'; bR.className = 'btn btn-sm btn-outline';
-        const md = moduleData[currentModule].content || '';
-        slides = mdToSlides(md); curSlide = 0; renderSlide();
-    } else {
-        body.style.display = 'block'; ss.style.display = 'none';
-        bR.className = 'btn btn-sm btn-primary'; bS.className = 'btn btn-sm btn-outline';
-    }
+/* === Podcast (tarayıcı TTS) === */
+let podUtter = null;
+let podModule = -1;
+function podText(mi){
+  const m = modulesData[mi];
+  return (m.title + '. ' + (m.content||'')).slice(0, 1800);
+}
+function togglePodcast(mi, btn){
+  const bar = document.getElementById('pod-'+mi);
+  if(podModule===mi && window.speechSynthesis && window.speechSynthesis.speaking){
+    window.speechSynthesis.cancel();
+    podModule=-1; bar.classList.remove('playing');
+    btn.innerHTML='<svg class="ico"><use href="#i-play"/></svg>';
+    return;
+  }
+  if(!('speechSynthesis' in window)){ alert({{ _("Tarayıcın sesli anlatımı desteklemiyor.") | tojson }}); return; }
+  window.speechSynthesis.cancel();
+  document.querySelectorAll('.podcast-bar').forEach(b=>b.classList.remove('playing'));
+  document.querySelectorAll('.pod-play').forEach(b=>b.innerHTML='<svg class="ico"><use href="#i-play"/></svg>');
+  podUtter = new SpeechSynthesisUtterance(podText(mi));
+  podUtter.lang = 'tr-TR';
+  podUtter.rate = parseFloat(document.querySelector('#pod-'+mi+' .pod-speed').value) || 1;
+  podUtter.onend = ()=>{ bar.classList.remove('playing'); btn.innerHTML='<svg class="ico"><use href="#i-play"/></svg>'; podModule=-1; };
+  window.speechSynthesis.speak(podUtter);
+  podModule = mi;
+  bar.classList.add('playing');
+  btn.innerHTML='<svg class="ico"><use href="#i-pause"/></svg>';
+}
+function setPodSpeed(v){
+  if(podUtter){ podUtter.rate = parseFloat(v)||1; }
 }
 
-function renderSlide() {
-    const stage = document.getElementById('slideStage');
-    if (!slides.length) { stage.innerHTML = '<div class="slide"><p>{{ _("İçerik yok") }}</p></div>'; return; }
-    const s = slides[Math.min(curSlide, slides.length-1)];
-    stage.innerHTML = `<div class="slide active-slide">
-        ${s.title ? `<h2>${s.title}</h2>` : ''}
-        ${s.bullets.length ? '<ul>' + s.bullets.slice(0,6).map(b=>`<li>${b}</li>`).join('') + '</ul>' : ''}
-    </div>`;
-    document.getElementById('slideNow').textContent = curSlide + 1;
-    document.getElementById('slideTotal').textContent = slides.length;
+/* === Anlık pekiştirme === */
+const picked = {};
+function pickOption(mi, oi, el){
+  picked[mi] = oi;
+  document.querySelectorAll('#review-'+mi+' .review-opt').forEach(b=>b.classList.remove('correct','wrong'));
+  el.classList.add('selected');
+  document.getElementById('rcheck-'+mi).disabled = false;
+}
+function checkReview(mi){
+  const rev = reviewData.find(r=>r.mi===mi);
+  const fb = document.getElementById('rfb-'+mi);
+  const btn = document.getElementById('rcheck-'+mi);
+  document.querySelectorAll('#review-'+mi+' .review-opt').forEach(b=>{
+    b.disabled = true;
+    if(+b.dataset.oi === rev.correct_index) b.classList.add('correct');
+  });
+  if(picked[mi] === rev.correct_index){
+    fb.textContent = {{ _("Doğru! Harika gidiyorsun.") | tojson }};
+    fb.className = 'review-fb ok';
+    const r = btn.getBoundingClientRect();
+    spawnXP(25, r.left + r.width/2, r.top);
+  } else {
+    fb.textContent = {{ _("Yanlış — doğru cevap işaretlendi, bir sonraki soruda devam et!") | tojson }};
+    fb.className = 'review-fb no';
+    const wrong = document.querySelector('#review-'+mi+' .review-opt[data-oi="'+picked[mi]+'"]');
+    if(wrong) wrong.classList.add('wrong');
+  }
+  btn.disabled = true; btn.textContent = {{ _("Tamamlandı") | tojson }};
 }
 
-function nextSlide() { if (curSlide < slides.length - 1) { curSlide++; renderSlide(); } }
-function prevSlide() { if (curSlide > 0) { curSlide--; renderSlide(); } }
+/* === Bilişsel Asistan === */
+function assist(action){
+  const box = document.getElementById('assistResult');
+  box.className='show loading';
+  box.textContent = {{ _("AI düşünüyor...") | tojson }};
+  fetch('/api/assist', {method:'POST', headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({action: action, course_id: courseId, module: currentModule})})
+    .then(r=>r.json()).then(d=>{
+      box.classList.remove('loading');
+      if(d.ok){
+        box.textContent = d.text;
+        if(action==='summary' && 'speechSynthesis' in window){
+          const u = new SpeechSynthesisUtterance(d.text.slice(0,600));
+          u.lang='tr-TR'; u.rate=1.15;
+          window.speechSynthesis.speak(u);
+        }
+      } else {
+        box.textContent = d.msg || {{ _("AI yanıtı alınamadı, tekrar dene.") | tojson }};
+      }
+    })
+    .catch(()=>{ box.classList.remove('loading'); box.textContent = {{ _("AI yanıtı alınamadı, tekrar dene.") | tojson }}; });
+}
+function quickNote(){
+  const t = prompt({{ _("Not başlığı:") | tojson }});
+  if(!t) return;
+  const n = prompt({{ _("Not / açıklama (isteğe bağlı):") | tojson }}) || '';
+  mmNodes.push({title:t, note:n, x:20+Math.random()*60, y:25+Math.random()*50});
+  mmRender(); saveStateDebounced({mindmap: mmNodes});
+  document.getElementById('mindmapSection').scrollIntoView({behavior:'smooth'});
+}
 
-document.addEventListener('keydown', e => {
-    const ss = document.querySelector('.module-panel.active .slideshow');
-    if (!ss || ss.style.display === 'none') return;
-    if (e.key === 'ArrowRight') nextSlide();
-    if (e.key === 'ArrowLeft') prevSlide();
+/* === Zihin haritası === */
+function escapeHtml(s){ return (s||'').replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+function mmDrawLines(){
+  const svg = document.getElementById('mmLines');
+  const canvas = document.getElementById('mmCanvas');
+  const W = canvas.clientWidth, H = canvas.clientHeight;
+  svg.setAttribute('viewBox','0 0 '+W+' '+H);
+  let html = '<line x1="'+W/2+'" y1="'+H/2+'" x2="'+W/2+'" y2="'+H/2+'" style="display:none"/>';
+  mmNodes.forEach(n=>{
+    html += '<line x1="'+(W/2)+'" y1="'+(H/2)+'" x2="'+(n.x/100*W)+'" y2="'+(n.y/100*H)+'"/>';
+  });
+  svg.innerHTML = html;
+}
+let selectedNode = -1;
+function mmRender(){
+  const canvas = document.getElementById('mmCanvas');
+  canvas.querySelectorAll('.mm-node').forEach(e=>e.remove());
+  const W = canvas.clientWidth, H = canvas.clientHeight;
+  const center = document.createElement('div');
+  center.className = 'mm-node mm-center';
+  center.style.left = '50%'; center.style.top = '50%';
+  center.textContent = {{ (course.title[:40]) | tojson }};
+  canvas.appendChild(center);
+  mmNodes.forEach((n,i)=>{
+    const el = document.createElement('div');
+    el.className = 'mm-node' + (i===selectedNode ? ' mm-selected' : '');
+    el.style.left = n.x+'%'; el.style.top = n.y+'%';
+    el.innerHTML = escapeHtml(n.title) + (n.note ? '<span class="mm-note">'+escapeHtml(n.note)+'</span>' : '');
+    el.addEventListener('pointerdown', ev=>startDrag(ev, i));
+    el.addEventListener('click', ()=>selectNode(i));
+    canvas.appendChild(el);
+  });
+  mmDrawLines();
+}
+function addNode(){
+  const t = document.getElementById('mmTitle').value.trim();
+  if(!t) return;
+  const n = document.getElementById('mmNote').value.trim();
+  mmNodes.push({title:t, note:n, x:20+Math.random()*60, y:25+Math.random()*50});
+  document.getElementById('mmTitle').value='';
+  document.getElementById('mmNote').value='';
+  mmRender(); saveStateDebounced({mindmap: mmNodes});
+  spawnXP(10);
+}
+function selectNode(i){
+  selectedNode = i;
+  document.querySelectorAll('.mm-node').forEach((e,j)=>e.classList.toggle('mm-selected', j-1===i));
+  const ed = document.getElementById('mmEditor');
+  ed.classList.add('open');
+  document.getElementById('mmEditTitle').value = mmNodes[i].title;
+  document.getElementById('mmEditNote').value = mmNodes[i].note || '';
+}
+function saveNodeEdit(){
+  if(selectedNode<0) return;
+  mmNodes[selectedNode].title = document.getElementById('mmEditTitle').value.trim() || mmNodes[selectedNode].title;
+  mmNodes[selectedNode].note = document.getElementById('mmEditNote').value.trim();
+  document.getElementById('mmEditor').classList.remove('open');
+  mmRender(); saveStateDebounced({mindmap: mmNodes});
+}
+function deleteNode(){
+  if(selectedNode<0) return;
+  mmNodes.splice(selectedNode,1);
+  selectedNode = -1;
+  document.getElementById('mmEditor').classList.remove('open');
+  mmRender(); saveStateDebounced({mindmap: mmNodes});
+}
+function startDrag(ev, i){
+  if(ev.button!==undefined && ev.button!==0) return;
+  ev.preventDefault();
+  const canvas = document.getElementById('mmCanvas');
+  const move = e=>{
+    const r = canvas.getBoundingClientRect();
+    mmNodes[i].x = Math.min(96, Math.max(4, (e.clientX - r.left)/r.width*100));
+    mmNodes[i].y = Math.min(94, Math.max(6, (e.clientY - r.top)/r.height*100));
+    mmRender();
+  };
+  const up = ()=>{
+    document.removeEventListener('pointermove', move);
+    document.removeEventListener('pointerup', up);
+    saveStateDebounced({mindmap: mmNodes});
+  };
+  document.addEventListener('pointermove', move);
+  document.addEventListener('pointerup', up);
+}
+
+/* === Slaytlar === */
+const slideState = {};
+function mdToSlides(text){
+  const chunks = (text||'').split(/\n{2,}/).map(s=>s.trim()).filter(Boolean);
+  return chunks.length ? chunks : [{{ _("Bu modül için slayt içeriği yakında.") | tojson }}];
+}
+function renderSlide(mi){
+  const m = modulesData[mi];
+  const slides = mdToSlides(m.content);
+  const st = slideState[mi] = slideState[mi] || {i:0, slides: slides};
+  st.slides = slides;
+  st.i = Math.min(st.i, slides.length-1);
+  const stage = document.getElementById('slideStage-'+mi);
+  if(!stage) return;
+  const parts = slides[st.i].split('\n');
+  const title = parts[0].replace(/^#+\s*/,'');
+  const body = parts.slice(1).join('<br>') || '';
+  stage.innerHTML = '<h3>'+escapeHtml(title)+'</h3><p>'+escapeHtml(body).replace(/&lt;br&gt;/g,'<br>')+'</p>';
+  const now = document.getElementById('slideNow-'+mi);
+  const tot = document.getElementById('slideTotal-'+mi);
+  if(now) now.textContent = st.i+1;
+  if(tot) tot.textContent = slides.length;
+  const dots = document.getElementById('slideDots-'+mi);
+  if(dots){
+    dots.innerHTML = slides.map((_,di)=>'<span class="'+(di===st.i?'active':'')+'" onclick="goSlide('+mi+','+di+')"></span>').join('');
+  }
+}
+function goSlide(mi, di){ const st=slideState[mi]; if(!st) return; st.i=Math.max(0, Math.min(di, st.slides.length-1)); renderSlide(mi); }
+function nextSlide(){ const st=slideState[currentModule]; if(!st) return; st.i=Math.min(st.i+1, st.slides.length-1); renderSlide(currentModule); }
+function prevSlide(){ const st=slideState[currentModule]; if(!st) return; st.i=Math.max(st.i-1, 0); renderSlide(currentModule); }
+document.addEventListener('keydown', e=>{
+  if(['INPUT','TEXTAREA','SELECT'].includes(document.activeElement.tagName)) return;
+  if(e.key==='ArrowRight') nextSlide();
+  if(e.key==='ArrowLeft') prevSlide();
 });
 
-// Modül verisi JS'e aktarılır
-const moduleData = {{ modules | tojson }};
+/* === Modul kavram agaci (dinamik SVG) === */
+function drawConceptMap(mi){
+  const svg = document.getElementById('conceptMap-'+mi);
+  if(!svg) return;
+  const m = modulesData[mi];
+  const title = (m.title||'').replace(/^\d+\.\s*/,'').slice(0,26) || ('Modul '+(mi+1));
+  const lines = (m.content||'').split(/\n+/).map(s=>s.trim()).filter(Boolean).slice(0,4);
+  while(lines.length < 3){ lines.push({{ _("Alt Başlık") | tojson }}+' '+(lines.length+1)); }
+  const W=640, H=300;
+  let h = '<line x1="'+W/2+'" y1="'+H/2+'" x2="'+W/2+'" y2="'+H/2+'" style="display:none"/>';
+  const pos = [[40,40],[40,210],[420,60],[420,190]];
+  lines.forEach((ln,i)=>{
+    const label = ln.replace(/^#+\s*/,'').slice(0,30);
+    const x = pos[i%4][0], y = pos[i%4][1];
+    h += '<line x1="'+(W/2)+'" y1="'+(H/2)+'" x2="'+(x+100)+'" y2="'+(y+22)+'" stroke="'+(i%2?'#F5B942':'#5B2DE6')+'" stroke-width="1.6" opacity=".55"/>';
+  });
+  h += '<rect x="'+(W/2-105)+'" y="'+(H/2-26)+'" rx="13" width="210" height="52" fill="#1E1B4B"/>'
+     + '<text x="'+(W/2)+'" y="'+(H/2+5)+'" text-anchor="middle" font-size="13" font-weight="800" fill="#F5B942">'+escapeHtml(title)+'</text>';
+  lines.forEach((ln,i)=>{
+    const label = ln.replace(/^#+\s*/,'').slice(0,30);
+    const x = pos[i%4][0], y = pos[i%4][1];
+    h += '<rect x="'+x+'" y="'+y+'" rx="10" width="200" height="42" fill="#fff" stroke="'+(i%2?'#D97706':'#5B2DE6')+'" stroke-width="1.6"/>'
+       + '<text x="'+(x+100)+'" y="'+(y+26)+'" text-anchor="middle" font-size="12" font-weight="700" fill="#312e81">'+escapeHtml(label)+'</text>';
+  });
+  svg.innerHTML = h;
+}
 
-document.addEventListener('DOMContentLoaded', () => {
-    showModule(0);
+/* === Modul tamamlama +100 XP (ilk kez) === */
+const moduleAwarded = {};
+function checkModuleAward(mi){
+  const panel = document.querySelectorAll('.module-panel')[mi];
+  if(!panel || moduleAwarded[mi]) return;
+  const boxes = panel.querySelectorAll('.task-check');
+  if(!boxes.length) return;
+  const allDone = Array.from(boxes).every(cb=>cb.checked);
+  if(allDone){
+    moduleAwarded[mi] = true;
+    const star = document.getElementById('star-'+mi);
+    if(star) star.innerHTML = '<svg class="ico"><use href="#i-star"/></svg>';
+    spawnXP(100);
+  }
+}
+
+/* === Başlangıç === */
+document.addEventListener('DOMContentLoaded', ()=>{
+  setMode(currentMode, false);
+  document.querySelectorAll('.task-check').forEach(cb=>{
+    const mi = cb.dataset.mi, ti = cb.dataset.ti;
+    if(taskState[mi] && taskState[mi][ti]) cb.checked = true;
+  });
+  refreshTaskUI();
+  updateProgress();
+  modulesData.forEach((m,mi)=>{
+    if(document.getElementById('slideStage-'+mi)) renderSlide(mi);
+    drawConceptMap(mi);
+  });
+  mmRender();
+  window.addEventListener('resize', mmDrawLines);
+  const st = {{ streak }};
+  if(st>=3) spawnXP(st*2);
 });
 </script>
+<style>@keyframes shakeX{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}</style>
 {% endblock %}

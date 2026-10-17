@@ -2,7 +2,7 @@
 {% block title %}{{ tr('upgrade') }} - Atahorse{% endblock %}
 {% block content %}
 <div class="auth-container"><div class="auth-card">
-    <div class="auth-header"><i class="fas fa-crown auth-logo" style="color:var(--warning)"></i>
+    <div class="auth-header"><svg class="ico" style="color:var(--warning)"><use href="#i-crown"/></svg>
         <h2>{{ tr('upgrade') }}</h2><p>{{ _("Sınırsız öğrenme seni bekliyor") }}</p></div>
     <form method="POST" class="auth-form">
         <div class="form-group"><label>{{ _("Plan Seç") }}</label>
@@ -13,7 +13,7 @@
             </select></div>
         <div class="form-group"><label>{{ _("Kart Numarası") }} ({{ _("demo") }})</label>
             <input class="form-input" placeholder="4242 4242 4242 4242"></div>
-        <button class="btn btn-primary btn-block"><i class="fas fa-lock"></i> {{ _("Ödemeyi Tamamla") }} ({{ _("simülasyon") }})</button>
+        <button class="btn btn-primary btn-block"><svg class="ico"><use href="#i-lock"/></svg> {{ _("Ödemeyi Tamamla") }} ({{ _("simülasyon") }})</button>
     </form>
     <p style="text-align:center;margin-top:1rem;color:var(--gray-400);font-size:.85rem">{{ _("Bu bir demo ödemesidir; kartınızdan ücret çekilmez.") }}</p>
 </div></div>

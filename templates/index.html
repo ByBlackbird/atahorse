@@ -6,26 +6,31 @@
 
 <!-- HERO -->
 <section class="hero v3">
-    <img src="{{ url_for('static', filename='img/icons/book.png') }}" alt="" class="float-icon fi-1" aria-hidden="true">
-    <img src="{{ url_for('static', filename='img/icons/bulb.png') }}" alt="" class="float-icon fi-2" aria-hidden="true">
-    <img src="{{ url_for('static', filename='img/icons/atom.png') }}" alt="" class="float-icon fi-3" aria-hidden="true">
-    <img src="{{ url_for('static', filename='img/icons/cap.png') }}" alt="" class="float-icon fi-4" aria-hidden="true">
-    <img src="{{ url_for('static', filename='img/icons/pencil.png') }}" alt="" class="float-icon fi-5" aria-hidden="true">
-    <img src="{{ url_for('static', filename='img/icons/globe.png') }}" alt="" class="float-icon fi-6" aria-hidden="true">
+    <svg class="float-icon ico fi-1" style="color:#8B5CF6" aria-hidden="true"><use href="#i-book-open"/></svg>
+    <svg class="float-icon ico fi-2" style="color:#F5B942" aria-hidden="true"><use href="#i-lightbulb"/></svg>
+    <svg class="float-icon ico fi-3" style="color:#8B5CF6" aria-hidden="true"><use href="#i-project-diagram"/></svg>
+    <svg class="float-icon ico fi-4" style="color:#F5B942" aria-hidden="true"><use href="#i-graduation-cap"/></svg>
+    <svg class="float-icon ico fi-5" style="color:#8B5CF6" aria-hidden="true"><use href="#i-sparkles"/></svg>
+    <svg class="float-icon ico fi-6" style="color:#F5B942" aria-hidden="true"><use href="#i-globe"/></svg>
 
     <img src="{{ url_for('static', filename='img/brand-logo.png') }}" alt="Atahorse" class="hero-brand-logo">
-    <span class="hero-badge"><i class="fas fa-bolt"></i> {{ _("AI destekli kişisel eğitim") }}</span>
-    <h1 class="hero-title">{{ _("Beynin için") }} <span class="text-outline">{{ _("özel müfredat") }}</span><br>
-        <span class="text-purple">{{ _("tek kişisel araştırmacı.") }}</span>
+    <span class="hero-badge">{{ _("BİLİŞSEL ÖĞRENME MOTORU • DOĞRULANMIŞ AKADEMİK KAYNAK AĞI") }}</span>
+    <h1 class="hero-title">{{ _("Aramayı Bırak.") }} <span class="text-outline">{{ _("Kendi Zihin Dilinle") }}</span><br>
+        <span class="text-purple">{{ _("Uzmanlaş.") }}</span>
     </h1>
-    <p class="hero-subtitle">{{ _("Atahorse; tüm güvenilir kaynakları tarar, öğrenme stiline göre yapılandırır ve senin anlayacağın dille öğretir. Araştırma yükünü alır, seni yetkinleştirir.") }}</p>
+    <p class="hero-subtitle">{{ _("Yüzlerce sekme ve saatler süren videolar arasında kaybolma. Atahorse; akademik literatürü ve küresel kaynakları saniyeler içinde tarar, beyninin öğrenme mimarisine (görsel, işitsel veya kinestetik) göre sıfırdan müfredat yazar ve seni sertifikalı yetkinliğe taşır.") }}</p>
     <div class="hero-buttons">
         {% if current_user.is_authenticated %}
-        <a href="{{ url_for('dashboard') }}" class="btn btn-primary btn-lg"><i class="fas fa-rocket"></i> {{ _("Öğrenmeye Devam Et") }}</a>
+        <a href="{{ url_for('dashboard') }}" class="btn btn-primary btn-lg"><svg class="ico"><use href="#i-rocket"/></svg> {{ _("Öğrenmeye Devam Et") }}</a>
         {% else %}
-        <a href="{{ url_for('register') }}" class="btn btn-primary btn-lg"><i class="fas fa-rocket"></i> {{ _("Ücretsiz Başla") }}</a>
+        <a href="{{ url_for('register') }}" class="btn btn-primary btn-lg"><svg class="ico"><use href="#i-rocket"/></svg> {{ _("Ücretsiz Başla") }}</a>
         {% endif %}
-        <a href="#sources" class="btn btn-outline btn-lg"><i class="fas fa-shield-halved"></i> {{ _("Kaynakları Gör") }}</a>
+        <a href="#sources" class="btn btn-outline btn-lg"><svg class="ico"><use href="#i-shield-halved"/></svg> {{ _("Kaynakları Gör") }}</a>
+    </div>
+    <div class="hero-trust">
+        <span><svg class="ico"><use href="#i-check"/></svg> {{ _("Kredi kartı gerekmez") }}</span>
+        <span><svg class="ico"><use href="#i-check"/></svg> {{ _("3 Tam Kapsamlı Kurs Hediye") }}</span>
+        <span><svg class="ico"><use href="#i-check"/></svg> {{ _("QR/Kod Doğrulamalı PDF Sertifika") }}</span>
     </div>
     <div class="hero-stats">
         <div><strong data-count="{{ stats.learners }}">0</strong><span>{{ _("öğrenci") }}</span></div>
@@ -37,7 +42,7 @@
 <!-- KAYAN ŞERİT -->
 <div class="marquee-band" aria-hidden="true">
     <div class="marquee-track" id="marqueeTrack">
-        <span>{{ _("Kişisel Araştırmacı") }} <i class="fas fa-circle"></i> {{ _("Şeffaf Kaynakça") }} <i class="fas fa-circle"></i> {{ _("Deep Learning") }} <i class="fas fa-circle"></i> {{ _("Sertifikalı Öğrenme") }} <i class="fas fa-circle"></i> {{ _("Her Dilde") }} <i class="fas fa-circle"></i> {{ _("Güvenilir Kaynaklar") }} <i class="fas fa-circle"></i></span>
+        <span>{{ _("Kişisel Araştırmacı") }} <svg class="ico"><use href="#i-circle"/></svg> {{ _("Şeffaf Kaynakça") }} <svg class="ico"><use href="#i-circle"/></svg> {{ _("Deep Learning") }} <svg class="ico"><use href="#i-circle"/></svg> {{ _("Sertifikalı Öğrenme") }} <svg class="ico"><use href="#i-circle"/></svg> {{ _("Her Dilde") }} <svg class="ico"><use href="#i-circle"/></svg> {{ _("Güvenilir Kaynaklar") }} <svg class="ico"><use href="#i-circle"/></svg></span>
     </div>
 </div>
 
@@ -49,16 +54,16 @@
         <p>{{ _("Atahorse'ın eriştiği ve her kursa bağladığı kaynaklar — bilgi her zaman izlenebilir") }}</p>
     </div>
     <div class="sources-grid reveal">
-        <div class="source-chip"><div class="sc-icon amber"><i class="fab fa-wikipedia-w"></i></div><div><strong>Wikipedia</strong><small>{{ _("Ansiklopedik temel bilgi") }}</small></div></div>
-        <div class="source-chip"><div class="sc-icon"><i class="fas fa-graduation-cap"></i></div><div><strong>Google Scholar</strong><small>{{ _("Akademik makaleler ve atıflar") }}</small></div></div>
-        <div class="source-chip"><div class="sc-icon"><i class="fas fa-flask"></i></div><div><strong>arXiv</strong><small>{{ _("Açık erişimli bilim ön baskıları") }}</small></div></div>
-        <div class="source-chip"><div class="sc-icon amber"><i class="fas fa-book-medical"></i></div><div><strong>PubMed</strong><small>{{ _("Tıp ve yaşam bilimleri literatürü") }}</small></div></div>
-        <div class="source-chip"><div class="sc-icon"><i class="fas fa-building-columns"></i></div><div><strong>MIT OpenCourseWare</strong><small>{{ _("Üniversite düzeyinde ders materyali") }}</small></div></div>
-        <div class="source-chip"><div class="sc-icon amber"><i class="fas fa-book-open"></i></div><div><strong>Khan Academy</strong><small>{{ _("Adım adım öğretici içerik") }}</small></div></div>
-        <div class="source-chip"><div class="sc-icon"><i class="fas fa-landmark"></i></div><div><strong>Resmî Kurum Belgeleri</strong><small>{{ _("UNESCO, OECD ve kamu kayıtları") }}</small></div></div>
-        <div class="source-chip"><div class="sc-icon amber"><i class="fas fa-newspaper"></i></div><div><strong>Güvenilir Haber Arşivleri</strong><small>{{ _("Doğrulanmış güncel gelişmeler") }}</small></div></div>
+        <div class="source-chip"><div class="sc-icon amber"><svg class="ico"><use href="#i-wikipedia-w"/></svg></div><div><strong>Wikipedia</strong><small>{{ _("Ansiklopedik temel bilgi") }}</small></div></div>
+        <div class="source-chip"><div class="sc-icon"><svg class="ico"><use href="#i-graduation-cap"/></svg></div><div><strong>Google Scholar</strong><small>{{ _("Akademik makaleler ve atıflar") }}</small></div></div>
+        <div class="source-chip"><div class="sc-icon"><svg class="ico"><use href="#i-flask"/></svg></div><div><strong>arXiv</strong><small>{{ _("Açık erişimli bilim ön baskıları") }}</small></div></div>
+        <div class="source-chip"><div class="sc-icon amber"><svg class="ico"><use href="#i-book-medical"/></svg></div><div><strong>PubMed</strong><small>{{ _("Tıp ve yaşam bilimleri literatürü") }}</small></div></div>
+        <div class="source-chip"><div class="sc-icon"><svg class="ico"><use href="#i-building-columns"/></svg></div><div><strong>MIT OpenCourseWare</strong><small>{{ _("Üniversite düzeyinde ders materyali") }}</small></div></div>
+        <div class="source-chip"><div class="sc-icon amber"><svg class="ico"><use href="#i-book-open"/></svg></div><div><strong>Khan Academy</strong><small>{{ _("Adım adım öğretici içerik") }}</small></div></div>
+        <div class="source-chip"><div class="sc-icon"><svg class="ico"><use href="#i-landmark"/></svg></div><div><strong>Resmî Kurum Belgeleri</strong><small>{{ _("UNESCO, OECD ve kamu kayıtları") }}</small></div></div>
+        <div class="source-chip"><div class="sc-icon amber"><svg class="ico"><use href="#i-newspaper"/></svg></div><div><strong>Güvenilir Haber Arşivleri</strong><small>{{ _("Doğrulanmış güncel gelişmeler") }}</small></div></div>
     </div>
-    <p class="sources-note reveal"><i class="fas fa-circle-check"></i> {{ _("Her kursun sonunda taranan tüm kaynaklar şeffaf kaynakça olarak listelenir.") }}</p>
+    <p class="sources-note reveal"><svg class="ico"><use href="#i-circle-check"/></svg> {{ _("Her kursun sonunda taranan tüm kaynaklar şeffaf kaynakça olarak listelenir.") }}</p>
 </section>
 
 <!-- DEEP LEARNING -->
@@ -85,10 +90,10 @@
             <div class="nn-layer l3"><span class="nn-node" style="animation-delay:.4s"></span><span class="nn-node" style="animation-delay:.7s"></span><span class="nn-node" style="animation-delay:1s"></span></div>
         </div>
         <div class="dl-steps">
-            <div class="dl-step"><div class="ds-num"><i class="fas fa-magnifying-glass"></i></div><div><strong>{{ _("Kaynak Tarama") }}</strong><p>{{ _("Wikipedia'dan akademik makalelere milyonlarca güvenilir kaynak taranır; her biri doğruluk için sınıflandırılır.") }}</p></div></div>
-            <div class="dl-step"><div class="ds-num"><i class="fas fa-brain"></i></div><div><strong>{{ _("Derin Analiz") }}</strong><p>{{ _("Sinir ağı katmanları konunun kavram haritasını çıkarır; çelişen bilgileri çapraz kontrol eder, en güncel olanı seçer.") }}</p></div></div>
-            <div class="dl-step"><div class="ds-num"><i class="fas fa-wand-magic-sparkles"></i></div><div><strong>{{ _("Kişiselleştirme") }}</strong><p>{{ _("Senin öğrenme stiline (görsel, işitsel, kinestetik) ve seviyene göre içerik yeniden yazılır — teknik terimler anladığın dile indirgenir.") }}</p></div></div>
-            <div class="dl-step"><div class="ds-num"><i class="fas fa-certificate"></i></div><div><strong>{{ _("Şeffaf Öğretim") }}</strong><p>{{ _("Kurs; modüller, görevler ve doğrulanabilir sertifika ile sunulur. Kaynakça her zaman açık, bilgi her zaman izlenebilir.") }}</p></div></div>
+            <div class="dl-step"><div class="ds-num"><svg class="ico"><use href="#i-magnifying-glass"/></svg></div><div><strong>{{ _("Kaynak Tarama") }}</strong><p>{{ _("Wikipedia'dan akademik makalelere milyonlarca güvenilir kaynak taranır; her biri doğruluk için sınıflandırılır.") }}</p></div></div>
+            <div class="dl-step"><div class="ds-num"><svg class="ico"><use href="#i-brain"/></svg></div><div><strong>{{ _("Derin Analiz") }}</strong><p>{{ _("Sinir ağı katmanları konunun kavram haritasını çıkarır; çelişen bilgileri çapraz kontrol eder, en güncel olanı seçer.") }}</p></div></div>
+            <div class="dl-step"><div class="ds-num"><svg class="ico"><use href="#i-wand-magic-sparkles"/></svg></div><div><strong>{{ _("Kişiselleştirme") }}</strong><p>{{ _("Senin öğrenme stiline (görsel, işitsel, kinestetik) ve seviyene göre içerik yeniden yazılır — teknik terimler anladığın dile indirgenir.") }}</p></div></div>
+            <div class="dl-step"><div class="ds-num"><svg class="ico"><use href="#i-certificate"/></svg></div><div><strong>{{ _("Şeffaf Öğretim") }}</strong><p>{{ _("Kurs; modüller, görevler ve doğrulanabilir sertifika ile sunulur. Kaynakça her zaman açık, bilgi her zaman izlenebilir.") }}</p></div></div>
         </div>
     </div>
 </section>
@@ -102,22 +107,41 @@
     </div>
     <div class="style-switcher-box reveal">
         <div class="style-tabs">
-            <button type="button" class="style-tab-btn active" onclick="switchStyle('gorsel', this)"><i class="fas fa-project-diagram"></i> {{ _("Görsel Zihin (Şema & Zihin Haritası)") }}</button>
-            <button type="button" class="style-tab-btn" onclick="switchStyle('isitsel', this)"><i class="fas fa-headphones"></i> {{ _("İşitsel Zihin (Podcast & Ritim)") }}</button>
-            <button type="button" class="style-tab-btn" onclick="switchStyle('kinestetik', this)"><i class="fas fa-tools"></i> {{ _("Kinestetik Zihin (Vaka & Uygulama)") }}</button>
+            <button type="button" class="style-tab-btn active" onclick="switchStyle('gorsel', this)"><svg class="ico"><use href="#i-project-diagram"/></svg> {{ _("Görsel Zihin (Şema & Zihin Haritası)") }}</button>
+            <button type="button" class="style-tab-btn" onclick="switchStyle('isitsel', this)"><svg class="ico"><use href="#i-headphones"/></svg> {{ _("İşitsel Zihin (Podcast & Ritim)") }}</button>
+            <button type="button" class="style-tab-btn" onclick="switchStyle('kinestetik', this)"><svg class="ico"><use href="#i-tools"/></svg> {{ _("Kinestetik Zihin (Vaka & Uygulama)") }}</button>
         </div>
         <div id="pane-gorsel" class="style-pane active">
-            <h4 style="color:#F5B942; margin-top:0;">{{ _("Görsel Zihin Modülü Nasıl Üretilir?") }}</h4>
-            <p>{{ _("Soyut kavramlar hiyerarşik zihin haritalarına (Mindmap), karşılaştırma tablolarına ve renk kodlu kavramsal bloklara dönüştürülür. Gözün tararken beynin ilişkileri anında kurar.") }}</p>
-            <img src="{{ url_for('static', filename='img/markmap.svg') }}" alt="{{ _("Zihin Haritası") }}" style="width:100%; max-height:220px; object-fit:contain; background:#fff; border-radius:10px; padding:10px; margin-top:10px;" onerror="this.style.display='none'">
+            <div class="pane-topic">{{ _("Örnek Konu") }}: <strong>{{ _("Fotosentez") }}</strong> — {{ _("Görsel Zihine Anlatım") }}</div>
+            <div class="gorsel-demo">
+                <svg id="miniMap" viewBox="0 0 640 240" style="width:100%;height:auto;background:#0b1030;border-radius:12px"></svg>
+                <p class="pane-note">{{ _("Soyut kavramlar hiyerarşik zihin haritalarına dönüştürülür — göz tararken beynin ilişkileri anında kurar.") }}</p>
+            </div>
         </div>
         <div id="pane-isitsel" class="style-pane">
-            <h4 style="color:#F5B942; margin-top:0;">{{ _("İşitsel Modül Nasıl Üretilir?") }}</h4>
-            <p>{{ _("Metinler diyalog akışı, soru-cevap ritmi ve sesli anlatım (TTS Podcast) moduna uygun vurgu yapısıyla yazılır. Değerlendirme aşamasında yazılı sınav yerine konuyu sesli anlatarak mezun olabilirsin.") }}</p>
+            <div class="pane-topic">{{ _("Örnek Konu") }}: <strong>{{ _("Fotosentez") }}</strong> — {{ _("İşitsel Zihine Anlatım") }}</div>
+            <div class="pod-mini" id="podMini">
+                <button class="pod-mini-play" id="podMiniPlay" onclick="demoSpeak()" title="{{ _("Dinle") }}"><svg class="ico"><use href="#i-play"/></svg></button>
+                <div class="pod-mini-wave">{% for i in range(24) %}<span style="animation-delay:{{ (i % 6) * 0.12 }}s"></span>{% endfor %}</div>
+                <select class="pod-mini-speed" id="podMiniSpeed" onchange="demoSpeakRate(this.value)">
+                    <option value="1" selected>1x</option>
+                    <option value="1.25">1.25x</option>
+                    <option value="1.5">1.5x</option>
+                </select>
+            </div>
+            <p class="pane-note">{{ _("Konu; diyalog ritmiyle yazılır ve tek tıkla sesli özet dinlenir. Değerlendirmede konuyu sesli anlatarak mezun olabilirsin.") }}</p>
         </div>
         <div id="pane-kinestetik" class="style-pane">
-            <h4 style="color:#F5B942; margin-top:0;">{{ _("Kinestetik Modül Nasıl Üretilir?") }}</h4>
-            <p>{{ _("Uzun teorik girişler atlanır; ilk dakikadan itibaren gerçek hayat senaryoları, adım adım mikro görevler ve uygulanabilir proje şablonları sunulur.") }}</p>
+            <div class="pane-topic">{{ _("Örnek Konu") }}: <strong>{{ _("Fotosentez") }}</strong> — {{ _("Kinestetik Zihine Anlatım") }}</div>
+            <div class="case-card">
+                <strong>{{ _("Mini Vaka") }}:</strong> {{ _("Balkonundaki fidan iki haftadır soluyor. Görev: Işık, su ve yaprak düzenini inceleyip bir haftalık deney planı kur.") }}
+                <ul class="case-tasks" id="caseTasks">
+                    <li onclick="this.classList.toggle('done')">{{ _("1. Fidanı güneşli ve gölgeli iki güne böl") }}</li>
+                    <li onclick="this.classList.toggle('done')">{{ _("2. Yaprak rengini her gün not al") }}</li>
+                    <li onclick="this.classList.toggle('done')">{{ _("3. Sonucu kendi cümlelerinle özetle") }}</li>
+                </ul>
+                <p class="pane-note" style="margin-bottom:0">{{ _("Tıkla işaretle — kinestetik öğrenen uygulayarak öğrenir. Kurslar gerçek hayat görevleriyle ilerler.") }}</p>
+            </div>
         </div>
     </div>
 </section>
@@ -129,6 +153,37 @@
 .style-pane { display: none; text-align: left; background: rgba(6,6,12,0.75); border-radius: 14px; padding: 22px; border: 1px solid rgba(245,185,66,0.22); color:#e2e8f0; }
 .style-pane.active { display: block; }
 .style-pane p { color:#cbd5e1; line-height:1.7; margin:0; }
+.pane-topic { font-size:.85rem; color:#94a3b8; margin-bottom:14px; }
+.pane-topic strong { color:#F5B942; }
+.pane-note { font-size:.85rem; color:#94a3b8; margin-top:12px; }
+/* Görsel sekme: mini zihin haritası */
+.gorsel-demo svg { display:block; }
+/* İşitsel sekme: mini podcast çalar */
+.pod-mini { display:flex; align-items:center; gap:14px; background:#0b1030; border-radius:14px; padding:14px 18px; }
+.pod-mini-play { width:46px; height:46px; border-radius:50%; border:none; background:linear-gradient(135deg,#F5B942,#D97706); color:#1a1206; cursor:pointer; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+.pod-mini-play .ico { width:1.25em; height:1.25em; }
+.pod-mini-wave { display:flex; align-items:center; gap:3px; height:32px; flex:1; overflow:hidden; }
+.pod-mini-wave span { width:3px; background:#8B5CF6; border-radius:2px; height:22%; }
+.pod-mini.playing .pod-mini-wave span { animation:wave .9s ease-in-out infinite; }
+@keyframes wave { 0%,100%{height:18%} 50%{height:95%} }
+.pod-mini-speed { background:rgba(255,255,255,.1); border:1px solid rgba(255,255,255,.2); color:#fff; border-radius:8px; padding:.35rem .5rem; font-size:.8rem; }
+/* Kinestetik sekme: vaka kartı */
+.case-card { background:rgba(255,255,255,.04); border:1px solid rgba(245,185,66,.3); border-radius:14px; padding:18px 20px; color:#e2e8f0; font-size:.92rem; line-height:1.7; }
+.case-tasks { list-style:none; margin:12px 0 0; padding:0; display:flex; flex-direction:column; gap:8px; }
+.case-tasks li { background:rgba(255,255,255,.05); border:1.5px solid rgba(139,92,246,.35); border-radius:10px; padding:9px 14px; cursor:pointer; font-weight:600; font-size:.88rem; transition:all .2s; user-select:none; }
+.case-tasks li:hover { border-color:#F5B942; }
+.case-tasks li.done { background:rgba(5,150,105,.18); border-color:#059669; color:#86efac; text-decoration:line-through; }
+/* Hero güven rozetleri */
+.hero-trust { display:flex; gap:1.6rem; justify-content:center; flex-wrap:wrap; margin-top:1.3rem; }
+.hero-trust span { display:inline-flex; align-items:center; gap:.45rem; font-size:.83rem; font-weight:700; color:rgba(255,255,255,.65); }
+.hero-trust .ico { color:#F5B942; }
+@media (max-width:640px){ .hero-trust{gap:.8rem} .hero-trust span{font-size:.75rem} }
+/* Demo çıktısı: kaynak çipleri, harita, özet */
+.demo-sources { display:flex; gap:8px; flex-wrap:wrap; margin:14px 0; }
+.demo-src { display:inline-flex; align-items:center; gap:.4rem; background:rgba(5,150,105,.14); border:1px solid rgba(5,150,105,.45); color:#6ee7b7; font-size:.78rem; font-weight:700; padding:.35rem .8rem; border-radius:999px; }
+.demo-map-wrap { background:#0b1030; border:1px solid rgba(139,92,246,.3); border-radius:14px; padding:14px; margin-top:6px; }
+.demo-map-label { display:flex; align-items:center; gap:.5rem; color:#F5B942; font-size:.85rem; font-weight:800; margin-bottom:10px; }
+.demo-summary { background:rgba(245,185,66,.08); border:1px solid rgba(245,185,66,.3); border-radius:12px; padding:12px 16px; color:#e2e8f0; font-size:.88rem; line-height:1.7; margin-top:14px; }
 </style>
 <script>
 function switchStyle(key, btn) {
@@ -137,6 +192,54 @@ function switchStyle(key, btn) {
     btn.classList.add('active');
     document.getElementById('pane-' + key).classList.add('active');
 }
+
+/* --- Görsel sekme: mini zihin haritası çizimi --- */
+const paneLang = "{{ get_locale() }}";
+(function drawMiniMap(){
+    const svg = document.getElementById('miniMap');
+    if(!svg) return;
+    const L = {
+        tr: {root:'Fotosentez', kids:['Işık Reaksiyonu','Karanlık Reaksiyonu','Klorofil','Gaz Değişimi']},
+        en: {root:'Photosynthesis', kids:['Light Reactions','Calvin Cycle','Chlorophyll','Gas Exchange']},
+        ru: {root:'Фотосинтез', kids:['Световые реакции','Тёмный цикл','Хлорофилл','Газообмен']}
+    };
+    const d = L[paneLang] || L.tr;
+    let h = '<line x1="320" y1="120" x2="120" y2="45" stroke="#8B5CF6" stroke-width="1.6" opacity=".6"/>'
+          + '<line x1="320" y1="120" x2="120" y2="120" stroke="#8B5CF6" stroke-width="1.6" opacity=".6"/>'
+          + '<line x1="320" y1="120" x2="120" y2="195" stroke="#8B5CF6" stroke-width="1.6" opacity=".6"/>'
+          + '<line x1="320" y1="120" x2="520" y2="82" stroke="#F5B942" stroke-width="1.6" opacity=".6"/>'
+          + '<line x1="320" y1="120" x2="520" y2="158" stroke="#F5B942" stroke-width="1.6" opacity=".6"/>';
+    h += '<rect x="238" y="98" rx="14" width="164" height="44" fill="#F5B942"/>'
+       + '<text x="320" y="125" text-anchor="middle" font-size="15" font-weight="800" fill="#1a1206">' + d.root + '</text>';
+    const colors = ['#5B2DE6','#5B2DE6','#D97706','#D97706'];
+    d.kids.forEach(function(k,i){
+        const x = i < 3 ? 28 : 408, y = (i % 3) * 75 + 27;
+        h += '<rect x="' + x + '" y="' + y + '" rx="11" width="184" height="38" fill="rgba(91,45,230,.25)" stroke="' + colors[i] + '" stroke-width="1.6"/>'
+           + '<text x="' + (x + 92) + '" y="' + (y + 24) + '" text-anchor="middle" font-size="13" font-weight="700" fill="#e9d5ff">' + k + '</text>';
+    });
+    svg.innerHTML = h;
+})();
+
+/* --- İşitsel sekme: mini podcast çalar --- */
+let demoUtter = null;
+const demoText = {
+    tr: 'Fotosentez, bitkilerin ışık enerjisini kullanarak su ve karbondioksiti glikoza çevirdiği süreçtir. İki aşamadan oluşur: ışıkla başlayan ve karanlıkta süren.',
+    en: 'Photosynthesis is the process by which plants convert light energy, water and carbon dioxide into glucose. It has two stages: light reactions and the Calvin cycle.',
+    ru: 'Фотосинтез — процесс, при котором растения превращают свет, воду и углекислый газ в глюкозу. Две стадии: световые реакции и тёмный цикл.'
+};
+function demoSpeak(){
+    const bar = document.getElementById('podMini'), btn = document.getElementById('podMiniPlay');
+    if(!('speechSynthesis' in window)){ return; }
+    if(window.speechSynthesis.speaking){ window.speechSynthesis.cancel(); bar.classList.remove('playing'); btn.innerHTML = '<svg class="ico"><use href="#i-play"/></svg>'; return; }
+    demoUtter = new SpeechSynthesisUtterance(demoText[paneLang] || demoText.tr);
+    demoUtter.lang = paneLang === 'ru' ? 'ru-RU' : (paneLang === 'en' ? 'en-US' : 'tr-TR');
+    demoUtter.rate = parseFloat(document.getElementById('podMiniSpeed').value) || 1;
+    demoUtter.onend = function(){ bar.classList.remove('playing'); btn.innerHTML = '<svg class="ico"><use href="#i-play"/></svg>'; };
+    window.speechSynthesis.speak(demoUtter);
+    bar.classList.add('playing');
+    btn.innerHTML = '<svg class="ico"><use href="#i-pause"/></svg>';
+}
+function demoSpeakRate(){ if(demoUtter && window.speechSynthesis.speaking){ demoUtter.rate = parseFloat(document.getElementById('podMiniSpeed').value) || 1; } }
 </script>
 
 <!-- İNTERAKTİF DEMO -->
@@ -148,9 +251,9 @@ function switchStyle(key, btn) {
     </div>
     <div class="demo-box">
         <div class="demo-input-row">
-            <i class="fas fa-lightbulb demo-icon"></i>
+            <svg class="ico"><use href="#i-lightbulb"/></svg>
             <input id="demoTopic" class="demo-input" placeholder="{{ _("Örn: Kuantum Fiziği, Dijital Pazarlama, Osmanlı Tarihi...") }}" maxlength="60">
-            <button class="btn btn-primary" onclick="runDemo()"><i class="fas fa-wand-magic-sparkles"></i> {{ _("Kursumu Tasarla") }}</button>
+            <button class="btn btn-primary" onclick="runDemo()"><svg class="ico"><use href="#i-wand-magic-sparkles"/></svg> {{ _("Kursumu Tasarla") }}</button>
         </div>
         <div id="demoResult" class="demo-result" style="display:none">
             <div class="demo-loading" id="demoLoading">
@@ -159,7 +262,13 @@ function switchStyle(key, btn) {
             </div>
             <div id="demoOutput" style="display:none">
                 <div class="demo-mod-title" id="demoTitle"></div>
+                <div class="demo-sources" id="demoSources"></div>
                 <div class="demo-modules" id="demoModules"></div>
+                <div class="demo-map-wrap">
+                    <div class="demo-map-label"><svg class="ico"><use href="#i-project-diagram"/></svg> {{ _("1. Modül — Örnek Kavram Haritası") }}</div>
+                    <svg id="demoMap" viewBox="0 0 640 220" style="width:100%;height:auto"></svg>
+                </div>
+                <div class="demo-summary" id="demoSummary"></div>
                 <a href="{{ url_for('register') }}" class="btn btn-primary btn-block" style="margin-top:1rem">{{ _("Tamamını Öğrenmek İçin Ücretsiz Kayıt Ol") }} →</a>
             </div>
         </div>
@@ -175,16 +284,16 @@ function switchStyle(key, btn) {
     </div>
     <div class="timeline">
     <div class="features-grid">
-        <div class="feature-card reveal"><div class="feature-icon"><i class="fas fa-brain"></i></div>
+        <div class="feature-card reveal"><div class="feature-icon"><svg class="ico"><use href="#i-brain"/></svg></div>
             <span class="fc-num">01</span><h3>{{ _("Zihin Analizi") }}</h3>
             <p>{{ _("Detaylı analizle beyninin hangi lobuyla öğrendiğini keşfet. Görsel, işitsel veya kinestetik — her profile özel içerik.") }}</p></div>
-        <div class="feature-card reveal"><div class="feature-icon"><i class="fas fa-magnifying-glass"></i></div>
+        <div class="feature-card reveal"><div class="feature-icon"><svg class="ico"><use href="#i-magnifying-glass"/></svg></div>
             <span class="fc-num">02</span><h3>{{ _("Kaynak Tarama") }}</h3>
             <p>{{ _("Atahorse internetteki akademik makaleleri, resmi belgeleri ve güvenilir kaynakları tarar, hepsini tek bir müfredatta birleştirir.") }}</p></div>
-        <div class="feature-card reveal"><div class="feature-icon"><i class="fas fa-wand-magic-sparkles"></i></div>
+        <div class="feature-card reveal"><div class="feature-icon"><svg class="ico"><use href="#i-wand-magic-sparkles"/></svg></div>
             <span class="fc-num">03</span><h3>{{ _("Kişisel Kurs") }}</h3>
             <p>{{ _("Senin zihin yapına, seviyene ve hızına göre modüller, görevler ve slaytlar oluşturulur. Kaynakça her zaman şeffaf.") }}</p></div>
-        <div class="feature-card reveal"><div class="feature-icon"><i class="fas fa-certificate"></i></div>
+        <div class="feature-card reveal"><div class="feature-icon"><svg class="ico"><use href="#i-certificate"/></svg></div>
             <span class="fc-num">04</span><h3>{{ _("Sertifika") }}</h3>
             <p>{{ _("Kursu tamamla, Atahorse imzalı PDF sertifikanı indir. Öğrendiğini belgele, kariyerinde kullan.") }}</p></div>
     </div>
@@ -203,13 +312,13 @@ function switchStyle(key, btn) {
         {% for c in popular %}
         <div class="course-card">
             <div class="course-header"><h3>{{ c.title }}</h3><span class="course-level">{{ c.level.upper() }}</span></div>
-            <div class="course-meta"><span><i class="fas fa-user"></i> {{ c.author or "Atahorse" }}</span>
-                {% if c.completed %}<span><i class="fas fa-check-circle" style="color:#f5b942"></i> {{ tr('certified_learners') }}</span>{% endif %}</div>
+            <div class="course-meta"><span><svg class="ico"><use href="#i-user"/></svg> {{ c.author or "Atahorse" }}</span>
+                {% if c.completed %}<span><svg class="ico" style="color:#f5b942"><use href="#i-check-circle"/></svg> {{ tr('certified_learners') }}</span>{% endif %}</div>
         </div>
         {% endfor %}
     </div>
     {% else %}
-    <div class="empty-state"><i class="fas fa-seedling"></i><h3>{{ tr('no_data') }}</h3><p>{{ _("İlk sertifikayı sen al!") }}</p></div>
+    <div class="empty-state"><svg class="ico"><use href="#i-seedling"/></svg><h3>{{ tr('no_data') }}</h3><p>{{ _("İlk sertifikayı sen al!") }}</p></div>
     {% endif %}
 </section>
 
@@ -221,13 +330,13 @@ function switchStyle(key, btn) {
         <p>{{ _("Arama motoru değil, kişisel araştırmacın") }}</p>
     </div>
     <div class="features-grid">
-        <div class="feature-card reveal"><div class="feature-icon"><i class="fas fa-bullseye"></i></div>
+        <div class="feature-card reveal"><div class="feature-icon"><svg class="ico"><use href="#i-bullseye"/></svg></div>
             <h3>{{ _("Tek Kaynak, Tam Resim") }}</h3><p>{{ _("Wikipedia'dan akademik makalelere, resmi evraklardan uzman bloglarına — her şey tek entegre müfredatta.") }}</p></div>
-        <div class="feature-card reveal"><div class="feature-icon"><i class="fas fa-language"></i></div>
+        <div class="feature-card reveal"><div class="feature-icon"><svg class="ico"><use href="#i-language"/></svg></div>
             <h3>{{ _("Senin Dilin") }}</h3><p>{{ _("İster teknik ister sade dille. AI karmaşık konuları senin seviyene indirger, anladığın dille anlatır.") }}</p></div>
-        <div class="feature-card reveal"><div class="feature-icon"><i class="fas fa-layer-group"></i></div>
+        <div class="feature-card reveal"><div class="feature-icon"><svg class="ico"><use href="#i-layer-group"/></svg></div>
             <h3>{{ _("Çoklu Format") }}</h3><p>{{ _("Okuma modu, slayt gösterisi, görev listeleri. Görsel zekâna sahipsen slaytlar, okuyarak öğreniyorsan detaylı metinler.") }}</p></div>
-        <div class="feature-card reveal"><div class="feature-icon"><i class="fas fa-shield-halved"></i></div>
+        <div class="feature-card reveal"><div class="feature-icon"><svg class="ico"><use href="#i-shield-halved"/></svg></div>
             <h3>{{ _("Şeffaf Kaynakça") }}</h3><p>{{ _("Her kursun sonunda taranan tüm kaynaklar listelenir. Bilginin nereden geldiğini her zaman bilirsin.") }}</p></div>
     </div>
 </section>
@@ -270,9 +379,22 @@ const statIO = new IntersectionObserver((entries)=>{
 document.querySelectorAll('.hero-stats strong').forEach(el=>statIO.observe(el));
 
 const demoTemplates = {
-    tr: (t)=>{const topics=["Temel Kavramlar ve Tanımlar","Derinlemesine Analiz","Pratik Uygulama ve Örnekler","İleri Seviye Teknikler","Değerlendirme ve Sertifika"];return {title:t+" — Kişisel Yol Haritan",mods:topics}},
-    en: (t)=>{const topics=["Fundamentals & Definitions","Deep Analysis","Practical Application & Examples","Advanced Techniques","Assessment & Certification"];return {title:t+" — Your Personal Roadmap",mods:topics}},
-    ru: (t)=>{const topics=["Основы и Определения","Глубокий Анализ","Практическое Применение","Продвинутые Техники","Оценка и Сертификация"];return {title:t+" — Твой Персональный Путь",mods:topics}}
+    tr: (t)=>({title:t+" — {{ _('Kişisel Yol Haritan') }}",
+        mods:["{{ _('Temel Kavramlar ve Tanımlar') }}","{{ _('Derinlemesine Analiz') }}","{{ _('Pratik Uygulama ve Örnekler') }}","{{ _('İleri Seviye Teknikler') }}","{{ _('Değerlendirme ve Sertifika') }}"]}),
+    en: (t)=>({title:t+" — {{ _('Your Personal Roadmap') }}",
+        mods:["{{ _('Fundamentals & Definitions') }}","{{ _('Deep Analysis') }}","{{ _('Practical Application & Examples') }}","{{ _('Advanced Techniques') }}","{{ _('Assessment & Certification') }}"]}),
+    ru: (t)=>({title:t+" — {{ _('Твой Персональный Путь') }}",
+        mods:["{{ _('Основы и Определения') }}","{{ _('Глубокий Анализ') }}","{{ _('Практическое Применение') }}","{{ _('Продвинутые Техники') }}","{{ _('Оценка и Сертификация') }}"]})
+};
+const demoSources = {
+    tr:["Wikipedia","Google Scholar","arXiv","Khan Academy"],
+    en:["Wikipedia","Google Scholar","arXiv","Khan Academy"],
+    ru:["Wikipedia","Google Scholar","arXiv","Khan Academy"]
+};
+const demoSummaries = {
+    tr:(t)=>`<strong>{{ _('1. Modül Özeti') }}:</strong> ${t} — {{ _('kavramın tanımı, tarihsel gelişimi ve bugünkü kullanım alanları; senin seviyene göre sadeleştirilmiş dille.') }}`,
+    en:(t)=>`<strong>{{ _('Module 1 Summary') }}:</strong> ${t} — {{ _('the definition, historical development and current applications, written in language simplified to your level.') }}`,
+    ru:(t)=>`<strong>{{ _('Резюме Модуля 1') }}:</strong> ${t} — {{ _('определение, история и современное применение, изложенные простым языком.') }}`
 };
 const lang = "{{ get_locale() }}";
 const steps = ["{{ _("Güvenilir kaynaklar taranıyor...") }}","{{ _("Akademik makaleler analiz ediliyor...") }}","{{ _("Müfredat kişiselleştiriliyor...") }}","{{ _("Slaytlar hazırlanıyor...") }}"];
@@ -286,10 +408,31 @@ function runDemo(){
     setTimeout(()=>{
         clearInterval(iv);load.style.display='none';out.style.display='block';
         const tpl=(demoTemplates[lang]||demoTemplates.tr)(topic);
-        document.getElementById('demoTitle').innerHTML='<i class="fas fa-route"></i> '+tpl.title;
+        document.getElementById('demoTitle').innerHTML='<svg class="ico"><use href="#i-route"/></svg> '+tpl.title;
+        document.getElementById('demoSources').innerHTML=(demoSources[lang]||demoSources.tr)
+            .map(s=>`<span class="demo-src"><svg class="ico"><use href="#i-shield-halved"/></svg> ${s}</span>`).join('');
         document.getElementById('demoModules').innerHTML=tpl.mods.map((m,idx)=>
-            `<div class="demo-mod"><span class="dm-num">${idx+1}</span><span>${m}</span><i class="fas fa-check" style="color:#f5b942;margin-left:auto"></i></div>`).join('');
+            `<div class="demo-mod"><span class="dm-num">${idx+1}</span><span>${m}</span><svg class="ico" style="color:#f5b942;margin-left:auto"><use href="#i-check"/></svg></div>`).join('');
+        document.getElementById('demoSummary').innerHTML=(demoSummaries[lang]||demoSummaries.tr)(topic);
+        drawDemoMap(topic);
     },3200);
+}
+function drawDemoMap(topic){
+    const svg=document.getElementById('demoMap');
+    if(!svg) return;
+    const labels={tr:[ "{{ _('Tanım') }}", "{{ _('Tarihçe') }}", "{{ _('Uygulama') }}" ], en:[ "{{ _('Definition') }}", "{{ _('History') }}", "{{ _('Application') }}" ], ru:[ "{{ _('Определение') }}", "{{ _('История') }}", "{{ _('Применение') }}" ]};
+    const L=(labels[lang]||labels.tr);
+    let h='<line x1="320" y1="110" x2="120" y2="45" stroke="#8B5CF6" stroke-width="1.6" opacity=".6"/>'
+        +'<line x1="320" y1="110" x2="120" y2="175" stroke="#8B5CF6" stroke-width="1.6" opacity=".6"/>'
+        +'<line x1="320" y1="110" x2="520" y2="110" stroke="#F5B942" stroke-width="1.6" opacity=".6"/>';
+    h+='<rect x="238" y="88" rx="14" width="164" height="44" fill="#F5B942"/>'
+      +'<text x="320" y="115" text-anchor="middle" font-size="14" font-weight="800" fill="#1a1206">'+(topic.length>22?topic.slice(0,21)+'…':topic)+'</text>';
+    const pos=[[28,27],[28,157],[408,91]];
+    L.forEach(function(k,i){
+        h+='<rect x="'+pos[i][0]+'" y="'+pos[i][1]+'" rx="11" width="184" height="38" fill="rgba(91,45,230,.25)" stroke="'+(i===2?'#D97706':'#5B2DE6')+'" stroke-width="1.6"/>'
+          +'<text x="'+(pos[i][0]+92)+'" y="'+(pos[i][1]+24)+'" text-anchor="middle" font-size="13" font-weight="700" fill="#e9d5ff">'+k+'</text>';
+    });
+    svg.innerHTML=h;
 }
 document.getElementById('demoTopic').addEventListener('keydown',e=>{if(e.key==='Enter')runDemo();});
 </script>

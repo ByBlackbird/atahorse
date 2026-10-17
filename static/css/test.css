@@ -122,3 +122,6 @@ body.test-page footer { background: #0b1030; }
     .test-q { font-size: 1.05rem; }
     .test-shell { padding-top: 32px; }
 }
+
+/* Navbar marka yazisi koyu zeminde okunsun */
+.test-page .nav-brand-text { color: #fff !important; }

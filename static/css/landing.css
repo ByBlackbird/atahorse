@@ -231,7 +231,7 @@ body {
     align-items: center;
     gap: 3rem;
 }
-.marquee-track span i { color: rgba(245, 185, 66, 0.55); font-size: 0.6rem; }
+.marquee-track span .ico { color: rgba(245, 185, 66, 0.55); font-size: 0.6rem; }
 @keyframes marquee {
     from { transform: translateX(0); }
     to { transform: translateX(-50%); }
@@ -299,7 +299,7 @@ body {
     color: rgba(255, 255, 255, 0.45);
     font-size: 0.9rem;
 }
-.sources-note i { color: #f5b942; margin-right: 0.35rem; }
+.sources-note .ico { color: #f5b942; margin-right: 0.35rem; }
 
 /* ============ DEEP LEARNING ============ */
 .dl-wrap {

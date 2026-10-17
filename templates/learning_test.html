@@ -12,7 +12,7 @@
 <div class="test-shell">
     <div class="test-top">
         <img src="{{ url_for('static', filename='img/logo.png') }}" alt="Atahorse" class="test-logo" onerror="this.style.display='none'">
-        <h1><i class="fas fa-brain" style="color:#2563eb"></i> {{ _("Beyin Analizi") }}</h1>
+        <h1><svg class="ico" style="color:#2563eb"><use href="#i-brain"/></svg> {{ _("Beyin Analizi") }}</h1>
         <p>{{ _("Sana en uygun öğrenme yolunu bulmak için hazırlanmış 12 soruluk kısa analiz.") }}</p>
     </div>
 
@@ -168,13 +168,13 @@
 
         <div class="test-nav">
             <button type="button" class="btn-test btn-test-ghost" id="btn-prev" style="visibility:hidden">
-                <i class="fas fa-arrow-left"></i> {{ _("Geri") }}
+                <svg class="ico"><use href="#i-arrow-left"/></svg> {{ _("Geri") }}
             </button>
             <button type="button" class="btn-test btn-test-primary" id="btn-next">
-                {{ _("Devam") }} <i class="fas fa-arrow-right"></i>
+                {{ _("Devam") }} <svg class="ico"><use href="#i-arrow-right"/></svg>
             </button>
             <button type="submit" class="btn-test btn-test-final" id="btn-final" style="display:none">
-                <i class="fas fa-check-circle"></i> {{ _("Analizi Tamamla") }}
+                <svg class="ico"><use href="#i-check-circle"/></svg> {{ _("Analizi Tamamla") }}
             </button>
         </div>
     </form>
