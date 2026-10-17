@@ -246,9 +246,12 @@ def load_user(user_id):
     c.execute("SELECT * FROM users WHERE id = ?", (user_id,))
     u = c.fetchone(); conn.close()
     if u:
-        return User(u["id"], u["username"], u["email"], u["full_name"],
-                    u["learning_style"], u["brain_lobe"], u["plan"],
-                    u["is_admin"], u["courses_used"], u["onboarded"])
+        # NULL alanlari varsayilanlara normalize et — 500 hatasini onler
+        return User(u["id"], u["username"], u["email"], u["full_name"] or u["username"],
+                    u["learning_style"] or "karma", u["brain_lobe"] or "karma",
+                    u["plan"] or "free", u["is_admin"] or 0,
+                    u["courses_used"] if u["courses_used"] is not None else 0,
+                    u["onboarded"] or 0)
     return None
 
 def admin_required(f):
@@ -262,12 +265,21 @@ def admin_required(f):
     return decorated
 
 # === AI ENTEGRASYONU ===
-def ollama_chat(prompt, model="llama3", system_prompt=None):
+# OLLAMA_URL ile uzak sunucu/cloud da kullanilabilir (varsayilan: yerel).
+OLLAMA_URL = os.environ.get("OLLAMA_URL", "http://localhost:11434").rstrip("/")
+OLLAMA_API_KEY = os.environ.get("OLLAMA_API_KEY", "").strip()
+
+def _ollama_headers():
+    return {"Authorization": f"Bearer {OLLAMA_API_KEY}"} if OLLAMA_API_KEY else {}
+
+def ollama_chat(prompt, model=None, system_prompt=None):
     try:
+        model = model or os.environ.get("OLLAMA_MODEL", "llama3")
         payload = {"model": model, "prompt": prompt, "stream": False,
                    "options": {"temperature": 0.7, "num_predict": 4000}}
         if system_prompt: payload["system"] = system_prompt
-        r = requests.post("http://localhost:11434/api/generate", json=payload, timeout=180)
+        r = requests.post(f"{OLLAMA_URL}/api/generate", json=payload,
+                          headers=_ollama_headers(), timeout=180)
         if r.status_code == 200:
             return r.json().get("response", "")
         return None
@@ -277,7 +289,7 @@ def ollama_chat(prompt, model="llama3", system_prompt=None):
 
 def ollama_available():
     try:
-        return requests.get("http://localhost:11434/api/tags", timeout=5).status_code == 200
+        return requests.get(f"{OLLAMA_URL}/api/tags", headers=_ollama_headers(), timeout=5).status_code == 200
     except:
         return False
 
@@ -717,8 +729,27 @@ def generate_certificate_pdf(user_name, course_title, cert_code, date_str, lang=
 
 # ================= ROTALAR =================
 
+def _member_home():
+    """Uyelik sonrasi ana sayfa: kurslar, seri, kota, blueprint."""
+    conn = get_db(); c = conn.cursor()
+    c.execute("SELECT * FROM courses WHERE user_id = ? ORDER BY created_at DESC", (current_user.id,))
+    courses = c.fetchall()
+    conn.close()
+    streak = touch_streak(current_user.id)
+    remaining = max(0, FREE_COURSE_LIMIT - (current_user.courses_used or 0)) if current_user.plan == 'free' else None
+    bp = cognitive_blueprint(current_user.learning_style, current_user.brain_lobe)
+    return render_template("home.html", courses=courses,
+                           ollama_status=ollama_available(),
+                           remaining=remaining, free_limit=FREE_COURSE_LIMIT,
+                           blueprint_title=bp[0], blueprint_desc=bp[1], streak=streak)
+
 @app.route("/")
 def index():
+    # Uye giris yaptiysa landing yerine uyelik ana sayfasini goster
+    if current_user.is_authenticated:
+        if not current_user.onboarded:
+            return redirect(url_for("onboarding"))
+        return _member_home()
     conn = get_db(); c = conn.cursor()
     c.execute("""SELECT courses.*, users.full_name as author FROM courses
                  LEFT JOIN users ON courses.user_id = users.id
@@ -763,14 +794,17 @@ def login():
         c.execute("SELECT * FROM users WHERE username = ?", (username,))
         u = c.fetchone(); conn.close()
         if u and check_password_hash(u["password_hash"], password):
-            login_user(User(u["id"],u["username"],u["email"],u["full_name"],u["learning_style"],
-                            u["brain_lobe"],u["plan"],u["is_admin"],u["courses_used"],u["onboarded"]))
+            login_user(User(u["id"],u["username"],u["email"],u["full_name"] or u["username"],
+                            u["learning_style"] or "karma", u["brain_lobe"] or "karma",
+                            u["plan"] or "free", u["is_admin"] or 0,
+                            u["courses_used"] if u["courses_used"] is not None else 0,
+                            u["onboarded"] or 0))
             touch_streak(u["id"])
             # Onboarding: ilk giris → analiz
             if not u["onboarded"]:
                 return redirect(url_for("onboarding"))
             flash(_("Hoş Geldin") + f", {u['full_name'] or u['username']}!", "success")
-            return redirect(url_for("dashboard"))
+            return redirect(url_for("index"))
         flash(_("Kullanıcı adı veya şifre hatalı."), "danger")
     return render_template("login.html")
 
@@ -812,16 +846,9 @@ def cognitive_blueprint(style, lobe):
 @app.route("/dashboard")
 @login_required
 def dashboard():
-    conn = get_db(); c = conn.cursor()
-    c.execute("SELECT * FROM courses WHERE user_id = ? ORDER BY created_at DESC", (current_user.id,))
-    courses = c.fetchall()
-    conn.close()
-    remaining = max(0, FREE_COURSE_LIMIT - current_user.courses_used) if current_user.plan == 'free' else None
-    bp = cognitive_blueprint(current_user.learning_style, current_user.brain_lobe)
-    return render_template("dashboard.html", courses=courses,
-                           ollama_status=ollama_available(),
-                           remaining=remaining, free_limit=FREE_COURSE_LIMIT,
-                           blueprint_title=bp[0], blueprint_desc=bp[1])
+    if not current_user.onboarded:
+        return redirect(url_for("onboarding"))
+    return _member_home()
 
 @app.route("/pricing")
 def pricing():

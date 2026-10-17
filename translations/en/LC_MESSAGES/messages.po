@@ -1647,3 +1647,60 @@ msgstr "Твой Персональный Путь"
 msgid "определение, история и современное применение, изложенные простым языком."
 msgstr "определение, история и современное применение, изложенные простым языком."
 
+msgid "AI Motoru Aktif"
+msgstr "AI Engine Active"
+
+msgid "AI Motoru Pasif (şablon modu)"
+msgstr "AI Engine Offline (template mode)"
+
+msgid "Ana Sayfa"
+msgstr "Home"
+
+msgid "Beyin analizinle kurs üretimi"
+msgstr "Course generation powered by your brain analysis"
+
+msgid "Devam Eden Kurslar"
+msgstr "In-Progress Courses"
+
+msgid "Hızlı Erişim"
+msgstr "Quick Access"
+
+msgid "Kurs Üret"
+msgstr "Generate Course"
+
+msgid "Premium'a Yükselt"
+msgstr "Upgrade to Premium"
+
+msgid "Profilini güncelle"
+msgstr "Update your profile"
+
+msgid "Stil ve lob profiline göre AI müfredat yazar."
+msgstr "AI writes the curriculum based on your style and lobe profile."
+
+msgid "Tamamlanan Kurslar"
+msgstr "Completed Courses"
+
+msgid "Teste Git"
+msgstr "Go to Test"
+
+msgid "günlük seri"
+msgstr "day streak"
+
+msgid "Öğrenme stilin değişti mi? Testi tekrarla."
+msgstr "Has your learning style changed? Retake the test."
+
+msgid "Öğrenme yolculuğuna kaldığın yerden devam et."
+msgstr "Continue your learning journey where you left off."
+
+msgid "Ücretsiz Plan"
+msgstr "Free Plan"
+
+msgid "Ücretsiz kurs hakkın:"
+msgstr "Free course credits:"
+
+msgid "İlk Kursunu Oluştur"
+msgstr "Create Your First Course"
+
+msgid "İlk kişisel kursunu saniyeler içinde oluştur. AI, öğrenme profiline göre müfredatı yazar."
+msgstr "Create your first personal course in seconds. AI writes the curriculum based on your learning profile."
+

@@ -1647,3 +1647,60 @@ msgstr "Твой Персональный Путь"
 msgid "определение, история и современное применение, изложенные простым языком."
 msgstr "определение, история и современное применение, изложенные простым языком."
 
+msgid "AI Motoru Aktif"
+msgstr "AI-движок активен"
+
+msgid "AI Motoru Pasif (şablon modu)"
+msgstr "AI-движок неактивен (шаблонный режим)"
+
+msgid "Ana Sayfa"
+msgstr "Главная"
+
+msgid "Beyin analizinle kurs üretimi"
+msgstr "Создание курса на основе анализа мозга"
+
+msgid "Devam Eden Kurslar"
+msgstr "Текущие курсы"
+
+msgid "Hızlı Erişim"
+msgstr "Быстрый доступ"
+
+msgid "Kurs Üret"
+msgstr "Создать курс"
+
+msgid "Premium'a Yükselt"
+msgstr "Перейти на Premium"
+
+msgid "Profilini güncelle"
+msgstr "Обновить профиль"
+
+msgid "Stil ve lob profiline göre AI müfredat yazar."
+msgstr "AI пишет программу на основе твоего стиля и профиля полушарий."
+
+msgid "Tamamlanan Kurslar"
+msgstr "Завершённые курсы"
+
+msgid "Teste Git"
+msgstr "Перейти к тесту"
+
+msgid "günlük seri"
+msgstr "дней подряд"
+
+msgid "Öğrenme stilin değişti mi? Testi tekrarla."
+msgstr "Твой стиль обучения изменился? Пройди тест заново."
+
+msgid "Öğrenme yolculuğuna kaldığın yerden devam et."
+msgstr "Продолжай обучение с того места, где остановился."
+
+msgid "Ücretsiz Plan"
+msgstr "Бесплатный план"
+
+msgid "Ücretsiz kurs hakkın:"
+msgstr "Бесплатные курсы:"
+
+msgid "İlk Kursunu Oluştur"
+msgstr "Создать первый курс"
+
+msgid "İlk kişisel kursunu saniyeler içinde oluştur. AI, öğrenme profiline göre müfredatı yazar."
+msgstr "Создай первый персональный курс за секунды. AI напишет программу по твоему профилю обучения."
+

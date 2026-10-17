@@ -1,109 +1,120 @@
 {% extends "base.html" %}
-{% block title %}{{ tr('admin_panel') }} - Atahorse{% endblock %}
+
+{% block title %}{{ _("Panel") }} - Atahorse{% endblock %}
+
 {% block content %}
 <div class="dashboard">
     <div class="dashboard-header">
-        <div class="welcome-section"><h1><svg class="ico" style="color:var(--warning)"><use href="#i-crown"/></svg> {{ tr('admin_panel') }}</h1>
-            <a href="{{ url_for('admin_change_password') }}" class="btn btn-outline btn-sm" style="margin-top:.6rem"><svg class="ico"><use href="#i-key"/></svg> {{ _("Şifre Değiştir") }}</a>
+        <div class="welcome-section">
+            <h1>{{ _("Hoş Geldin") }}, {{ current_user.full_name or current_user.username }}! 👋</h1>
+            <p>{{ _("Öğrenme yolculuğuna buradan devam edebilirsin.") }}</p>
         </div>
-        <div class="status-cards" style="grid-template-columns:repeat(auto-fit,minmax(180px,1fr))">
-            <div class="status-card"><svg class="ico"><use href="#i-users"/></svg><div><span class="status-label">{{ tr('members') }}</span><span class="status-value">{{ total_users }}</span></div></div>
-            <div class="status-card"><svg class="ico" style="color:var(--warning);background:#fef3c7"><use href="#i-crown"/></svg><div><span class="status-label">{{ tr('premium_users') }}</span><span class="status-value">{{ premium }}</span></div></div>
-            <div class="status-card"><svg class="ico" style="color:var(--info);background:#cffafe"><use href="#i-user"/></svg><div><span class="status-label">{{ tr('free_users') }}</span><span class="status-value">{{ free }}</span></div></div>
-            <div class="status-card"><svg class="ico"><use href="#i-graduation-cap"/></svg><div><span class="status-label">{{ tr('active_courses') }}</span><span class="status-value">{{ total_courses }}</span></div></div>
-            <div class="status-card"><svg class="ico" style="color:var(--success);background:#dcfce7"><use href="#i-check-double"/></svg><div><span class="status-label">{{ tr('completion_rate') }}</span><span class="status-value">%{{ completion_rate }}</span></div></div>
-            <div class="status-card"><svg class="ico"><use href="#i-certificate"/></svg><div><span class="status-label">{{ _("Sertifika") }}</span><span class="status-value">{{ certificates }}</span></div></div>
-            <div class="status-card"><svg class="ico" style="color:var(--success);background:#dcfce7"><use href="#i-wallet"/></svg><div><span class="status-label">{{ tr('revenue') }}</span><span class="status-value">{{ "%.2f"|format(revenue) }} ₺</span></div></div>
+        <div class="blueprint-card">
+            <div class="bp-head">
+                <svg class="ico"><use href="#i-brain"/></svg>
+                <span>{{ _("Bilişsel Kimlik Kartın") }}</span>
+            </div>
+            <div class="bp-title">{{ blueprint_title }}</div>
+            <div class="bp-desc">{{ blueprint_desc }}</div>
+        </div>
+        <div class="status-cards">
+            <div class="status-card">
+                <svg class="ico"><use href="#i-brain"/></svg>
+                <div>
+                    <span class="status-label">{{ _("Öğrenme Stili") }}</span>
+                    <span class="status-value">{{ current_user.learning_style.upper() }}</span>
+                </div>
+            </div>
+            <div class="status-card">
+                <svg class="ico"><use href="#i-microscope"/></svg>
+                <div>
+                    <span class="status-label">{{ _("Beyin Lobu") }}</span>
+                    <span class="status-value">{{ current_user.brain_lobe.upper() }}</span>
+                </div>
+            </div>
+            <div class="status-card {% if not ollama_status %}status-warning{% endif %}">
+                <svg class="ico"><use href="#i-robot"/></svg>
+                <div>
+                    <span class="status-label">{{ _("AI Durumu") }}</span>
+                    <span class="status-value">{% if ollama_status %}{{ _("Aktif") }}{% else %}{{ _("Pasif") }}{% endif %}</span>
+                </div>
+            </div>
         </div>
     </div>
 
-    <!-- Kayıt grafiği -->
-    <div class="setup-section" style="margin-bottom:2rem">
-        <h2><svg class="ico"><use href="#i-chart-bar"/></svg> {{ _("Son 7 Gün Kayıtları") }}</h2>
-        {% if signup_data %}
-        <div class="bar-chart">
-            {% set max = signup_data|map(attribute='cnt')|list|max %}
-            {% for row in signup_data %}
-            <div class="bar-col"><div class="bar" style="height:{{ (row.cnt / max * 100)|round }}%" title="{{ row.cnt }}"></div><span class="bar-label">{{ row.d[5:] }}</span><span class="bar-val">{{ row.cnt }}</span></div>
+    {% if not ollama_status %}
+    <div class="alert alert-warning">
+        <svg class="ico"><use href="#i-exclamation-triangle"/></svg>
+        <strong>Ollama {{ _("Pasif") }}!</strong> AI kurs oluşturma özelliğini kullanmak için Ollama'yı kurun ve başlatın.
+    </div>
+    {% endif %}
+
+    {% if current_user.plan == 'free' %}
+    <div class="free-quota">
+        <svg class="ico"><use href="#i-gift"/></svg>
+        <div><strong>{{ tr('free_plan') }}</strong> — {{ remaining }} {{ tr('courses_remaining') }} ({{ current_user.courses_used }}/{{ free_limit }})</div>
+        <a href="{{ url_for('pricing') }}" class="btn btn-primary btn-sm">{{ tr('upgrade') }}</a>
+    </div>
+    {% else %}
+    <div class="free-quota" style="background:linear-gradient(135deg,#fff,#FEF3C7);border-color:#FDE68A">
+        <svg class="ico" style="color:var(--amber)"><use href="#i-crown"/></svg>
+        <div><strong>{{ tr('premium_plan') }}</strong> — {{ _("Sınırsız kurs, tüm özellikler aktif") }}</div>
+    </div>
+    {% endif %}
+
+    <div class="dashboard-actions">
+        <a href="{{ url_for('generate_course') }}" class="btn btn-primary btn-lg">
+            <svg class="ico"><use href="#i-magic"/></svg> {{ _("Yeni Kurs Oluştur") }}
+        </a>
+        <a href="{{ url_for('learning_test') }}" class="btn btn-outline btn-lg">
+            <svg class="ico"><use href="#i-brain"/></svg> {{ _("Öğrenme Testini Tekrarla") }}
+        </a>
+        {% if current_user.plan == 'free' %}
+        <a href="{{ url_for('pricing') }}" class="btn btn-outline btn-lg"><svg class="ico" style="color:var(--amber)"><use href="#i-crown"/></svg> {{ tr('upgrade') }}</a>
+        {% endif %}
+    </div>
+
+    <div class="courses-section">
+        <h2><svg class="ico"><use href="#i-graduation-cap"/></svg> {{ _("Kurslarım") }}</h2>
+
+        {% if courses %}
+        <div class="courses-grid">
+            {% for course in courses %}
+            <div class="course-card">
+                <div class="course-header">
+                    <h3>{{ course.title }}</h3>
+                    <span class="course-level">{{ course.level.upper() }}</span>
+                </div>
+                <div class="course-meta">
+                    <span><svg class="ico"><use href="#i-tag"/></svg> {{ course.topic }}</span>
+                    <span><svg class="ico"><use href="#i-clock"/></svg> {{ course.created_at[:10] }}</span>
+                </div>
+                <div class="course-progress">
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: {{ course.progress }}%"></div>
+                    </div>
+                    <span class="progress-text">%{{ course.progress }}</span>
+                </div>
+                <div class="course-actions">
+                    <a href="{{ url_for('view_course', course_id=course.id) }}" class="btn btn-primary btn-sm">
+                        <svg class="ico"><use href="#i-play"/></svg> {{ _("Devam Et") }}
+                    </a>
+                    {% if course.completed %}
+                    <a href="{{ url_for('certificate', course_id=course.id) }}" class="btn btn-success btn-sm">
+                        <svg class="ico"><use href="#i-certificate"/></svg> {{ _("Sertifika") }}
+                    </a>
+                    {% endif %}
+                </div>
+            </div>
             {% endfor %}
         </div>
-        {% else %}<p style="color:var(--gray-400)">{{ tr('no_data') }}</p>{% endif %}
-    </div>
-
-    <!-- Ödemeler -->
-    <div class="setup-section" style="margin-bottom:2rem">
-        <h2><svg class="ico"><use href="#i-money-bill-wave"/></svg> {{ tr('recent_payments') }}</h2>
-        {% if payments %}
-        <div class="table-wrap"><table class="admin-table">
-            <thead><tr><th>#</th><th>{{ _("Kullanıcı") }}</th><th>{{ _("Tutar") }}</th><th>{{ _("Tür") }}</th><th>{{ _("Açıklama") }}</th><th>{{ _("Tarih") }}</th></tr></thead>
-            <tbody>{% for p in payments %}<tr>
-                <td>{{ p.id }}</td><td>{{ p.username or "—" }}</td>
-                <td><strong>{{ "%.2f"|format(p.amount) }} {{ p.currency }}</strong></td>
-                <td><span class="badge-{{ p.payment_type }}">{{ p.payment_type }}</span></td>
-                <td>{{ p.description }}</td><td>{{ p.created_at[:16] }}</td></tr>{% endfor %}</tbody>
-        </table></div>
-        {% else %}<p style="color:var(--gray-400)">{{ tr('no_data') }}</p>{% endif %}
-    </div>
-
-    <!-- Kullanıcı yönetimi -->
-    <div class="setup-section" style="margin-bottom:2rem">
-        <h2><svg class="ico"><use href="#i-user-cog"/></svg> {{ tr('user_mgmt') }}</h2>
-        <div class="table-wrap"><table class="admin-table">
-            <thead><tr><th>ID</th><th>{{ _("Kullanıcı") }}</th><th>{{ _("E-posta") }}</th><th>{{ tr('plan') }}</th><th>{{ _("Kurs") }}</th><th>{{ tr('joined') }}</th><th>{{ tr('actions') }}</th></tr></thead>
-            <tbody>{% for u in users %}<tr>
-                <td>{{ u.id }}</td><td><strong>{{ u.full_name or u.username }}</strong><br><small style="color:var(--gray-400)">@{{ u.username }}</small></td>
-                <td>{{ u.email }}</td>
-                <td><span class="plan-badge {{ u.plan }}">{{ u.plan == 'premium' and tr('premium_plan') or tr('free_plan') }}</span></td>
-                <td>{{ u.courses_used }}</td><td>{{ u.created_at[:10] }}</td>
-                <td><form method="POST" action="{{ url_for('admin_toggle_plan', user_id=u.id) }}" style="display:inline">
-                    <input type="hidden" name="plan" value="{{ 'free' if u.plan == 'premium' else 'premium' }}">
-                    <button class="btn btn-sm {{ 'btn-outline' if u.plan == 'premium' else 'btn-success' }}">{{ tr('make_free') if u.plan == 'premium' else tr('make_premium') }}</button>
-                </form></td></tr>{% endfor %}</tbody>
-        </table></div>
-    </div>
-
-    <!-- Quiz sonuçları -->
-    <div class="setup-section" style="margin-bottom:2rem">
-        <h2><svg class="ico"><use href="#i-clipboard-check"/></svg> {{ _("Quiz Sonuçları") }}</h2>
-        {% if quiz_results %}
-        <div class="table-wrap"><table class="admin-table">
-            <thead><tr><th>#</th><th>{{ _("Öğrenci") }}</th><th>{{ _("Kurs") }}</th><th>{{ _("Puan") }}</th><th>{{ _("Durum") }}</th><th>{{ _("Tarih") }}</th></tr></thead>
-            <tbody>{% for qz in quiz_results %}<tr>
-                <td>{{ qz.id }}</td><td>{{ qz.username }}</td><td>{{ qz.course_title }}</td>
-                <td>{% if qz.status == 'graded' %}<strong style="color:{{ '#0f9d58' if qz.score*2 >= qz.max_score else '#dc2626' }}">{{ qz.score }}/{{ qz.max_score }}</strong>{% else %}—{% endif %}</td>
-                <td>{% if qz.status == 'graded' %}<span class="plan-badge premium">✓ {{ _("Değerlendirildi") }}</span>{% else %}<span class="plan-badge free">{{ _("Bekliyor") }}</span>{% endif %}</td>
-                <td>{{ qz.created_at[:16] }}</td></tr>{% endfor %}</tbody>
-        </table></div>
-        {% else %}<p style="color:var(--gray-400)">{{ tr('no_data') }}</p>{% endif %}
-    </div>
-
-    <!-- Öğrenci gönderileri (not / ses) -->
-    <div class="setup-section" style="margin-bottom:2rem">
-        <h2><svg class="ico"><use href="#i-upload"/></svg> {{ _("Öğrenci Gönderileri") }} ({{ _("Not / Ses") }})</h2>
-        {% if all_submissions %}
-        <div class="table-wrap"><table class="admin-table">
-            <thead><tr><th>#</th><th>{{ _("Öğrenci") }}</th><th>{{ _("Kurs") }}</th><th>{{ _("Tür") }}</th><th>{{ _("Dosya") }}</th><th>{{ _("Tarih") }}</th><th>{{ tr('actions') }}</th></tr></thead>
-            <tbody>{% for s in all_submissions %}<tr>
-                <td>{{ s.id }}</td><td>{{ s.username }}</td><td>{{ s.course_title }}</td>
-                <td><span class="plan-badge {{ 'premium' if s.kind == 'audio' else 'free' }}">{{ _("Ses") if s.kind == 'audio' else _("Not") }}</span></td>
-                <td>{{ s.filename }}</td><td>{{ s.created_at[:16] }}</td>
-                <td><form method="POST" action="{{ url_for('admin_delete_submission', sub_id=s.id) }}" style="display:inline" onsubmit="return confirm('{{ _('Silinsin mi?') }}')">
-                    <button class="btn btn-sm btn-outline"><svg class="ico"><use href="#i-trash"/></svg></button>
-                </form></td></tr>{% endfor %}</tbody>
-        </table></div>
-        {% else %}<p style="color:var(--gray-400)">{{ tr('no_data') }}</p>{% endif %}
-    </div>
-
-    <!-- Kurs kataloğu -->
-    <div class="setup-section">
-        <h2><svg class="ico"><use href="#i-book"/></svg> {{ tr('course_catalog') }}</h2>
-        <div class="table-wrap"><table class="admin-table">
-            <thead><tr><th>#</th><th>{{ _("Kurs") }}</th><th>{{ _("Öğrenci") }}</th><th>{{ _("Seviye") }}</th><th>{{ _("İlerleme") }}</th><th>{{ _("Durum") }}</th></tr></thead>
-            <tbody>{% for c in all_courses %}<tr>
-                <td>{{ c.id }}</td><td>{{ c.title }}</td><td>{{ c.username }}</td><td>{{ c.level }}</td>
-                <td><div class="progress-bar" style="width:80px;display:inline-block"><div class="progress-fill" style="width:{{ c.progress }}%"></div></div> %{{ c.progress }}</td>
-                <td>{% if c.completed %}<span class="plan-badge premium">✓ {{ _("Tamamlandı") }}</span>{% else %}<span class="plan-badge free">{{ _("Devam ediyor") }}</span>{% endif %}</td></tr>{% endfor %}</tbody>
-        </table></div>
+        {% else %}
+        <div class="empty-state">
+            <svg class="ico"><use href="#i-book-open"/></svg>
+            <h3>{{ _("Henüz kursun yok") }}</h3>
+            <p>{{ _("İlk kişiselleştirilmiş kursunu oluşturmak için yukarıdaki butona tıkla.") }}</p>
+        </div>
+        {% endif %}
     </div>
 </div>
 {% endblock %}

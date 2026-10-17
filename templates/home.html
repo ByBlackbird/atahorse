@@ -1,0 +1,181 @@
+{% extends "base.html" %}
+
+{% block title %}{{ _("Ana Sayfa") }} - Atahorse{% endblock %}
+
+{% block extra_css %}
+<style>
+.member-home{max-width:1120px;margin:0 auto;padding:28px 20px 60px}
+.mh-hero{display:flex;flex-wrap:wrap;gap:18px;align-items:stretch;justify-content:space-between;
+    background:linear-gradient(135deg,#1E1B4B 0%,#2d2470 60%,#3b2a8f 100%);
+    border:1px solid rgba(245,185,66,.35);border-radius:18px;padding:26px 28px;color:#FDFCF8}
+.mh-hero h1{margin:0 0 6px;font-size:26px}
+.mh-hero p{margin:0;color:#c9c4ee;font-size:14px}
+.mh-chips{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}
+.mh-chip{display:inline-flex;align-items:center;gap:7px;background:rgba(255,255,255,.08);
+    border:1px solid rgba(255,255,255,.16);border-radius:999px;padding:7px 14px;font-size:13px;font-weight:600}
+.mh-chip .ico{color:#F5B942}
+.mh-chip.plan{background:rgba(245,185,66,.16);border-color:rgba(245,185,66,.5);color:#FCD34D}
+.mh-side{display:flex;flex-direction:column;justify-content:center;gap:10px;min-width:220px}
+.mh-ai{font-size:13px;display:flex;align-items:center;gap:8px;color:#c9c4ee}
+.mh-ai .dot{width:9px;height:9px;border-radius:50%;background:#22c55e;box-shadow:0 0 8px #22c55e}
+.mh-ai.off .dot{background:#ef4444;box-shadow:0 0 8px #ef4444}
+.mh-quota{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.14);
+    border-radius:12px;padding:10px 14px;font-size:13px}
+.mh-quota b{color:#FCD34D}
+.mh-actions{display:flex;gap:12px;flex-wrap:wrap;margin:22px 0}
+.mh-btn{display:inline-flex;align-items:center;gap:9px;border-radius:12px;padding:13px 22px;
+    font-size:14.5px;font-weight:700;text-decoration:none;transition:transform .12s,box-shadow .12s}
+.mh-btn:hover{transform:translateY(-2px)}
+.mh-btn.primary{background:linear-gradient(135deg,#F5B942,#D97706);color:#1a1206;box-shadow:0 6px 18px rgba(245,185,66,.35)}
+.mh-btn.ghost{background:#fff;border:1.5px solid #ddd9f3;color:#1E1B4B}
+.mh-btn.ghost:hover{border-color:#8B5CF6}
+.blueprint-card{max-width:none;margin:0}
+.mh-grid{display:grid;grid-template-columns:1.5fr 1fr;gap:22px;align-items:start}
+@media(max-width:900px){.mh-grid{grid-template-columns:1fr}}
+.mh-section{margin-top:26px}
+.mh-section h2{display:flex;align-items:center;gap:10px;font-size:19px;margin:0 0 14px;color:#1E1B4B}
+.mh-section h2 .ico{color:#5B2DE6}
+.course-row{display:flex;align-items:center;gap:16px;background:#fff;border:1px solid #e9e6f7;
+    border-radius:14px;padding:16px 18px;margin-bottom:12px;transition:box-shadow .12s}
+.course-row:hover{box-shadow:0 6px 20px rgba(30,27,75,.08)}
+.cr-icon{width:44px;height:44px;flex:none;border-radius:12px;display:flex;align-items:center;justify-content:center;
+    background:linear-gradient(135deg,#5B2DE6,#8B5CF6);color:#fff}
+.cr-icon.done{background:linear-gradient(135deg,#F5B942,#D97706);color:#1a1206}
+.cr-body{flex:1;min-width:0}
+.cr-title{font-weight:700;color:#1E1B4B;font-size:15px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cr-meta{font-size:12.5px;color:#77779a;margin-top:3px;display:flex;gap:12px;flex-wrap:wrap}
+.cr-bar{height:7px;background:#efedf9;border-radius:99px;margin-top:9px;overflow:hidden}
+.cr-bar span{display:block;height:100%;border-radius:99px;background:linear-gradient(90deg,#5B2DE6,#8B5CF6)}
+.cr-bar.full span{background:linear-gradient(90deg,#F5B942,#D97706)}
+.cr-cta{flex:none;display:flex;gap:8px}
+.mh-empty{text-align:center;padding:44px 20px;background:#fff;border:1.5px dashed #cfc9ee;border-radius:16px;color:#77779a}
+.mh-empty .ico{font-size:34px;color:#8B5CF6;margin-bottom:10px}
+.mh-empty b{display:block;color:#1E1B4B;font-size:17px;margin-bottom:6px}
+.cert-mini{display:inline-flex;align-items:center;gap:6px;background:#ECFDF5;color:#047857;
+    border:1px solid #A7F3D0;border-radius:999px;padding:6px 12px;font-size:12.5px;font-weight:700;text-decoration:none}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="member-home">
+    <div class="mh-hero">
+        <div>
+            <h1>{{ _("Hoş Geldin") }}, {{ current_user.full_name or current_user.username }}!</h1>
+            <p>{{ _("Öğrenme yolculuğuna kaldığın yerden devam et.") }}</p>
+            <div class="mh-chips">
+                <span class="mh-chip"><svg class="ico"><use href="#i-fire"/></svg> {{ streak }} {{ _("günlük seri") }}</span>
+                <span class="mh-chip"><svg class="ico"><use href="#i-brain"/></svg> {{ current_user.learning_style.upper() }} {{ _("Stil") }} · {{ current_user.brain_lobe.upper() }} {{ _("Lob") }}</span>
+                {% if current_user.plan == 'premium' %}
+                <span class="mh-chip plan"><svg class="ico"><use href="#i-crown"/></svg> Premium</span>
+                {% else %}
+                <span class="mh-chip"><svg class="ico"><use href="#i-gift"/></svg> {{ _("Ücretsiz Plan") }}</span>
+                {% endif %}
+            </div>
+        </div>
+        <div class="mh-side">
+            <div class="mh-ai {% if not ollama_status %}off{% endif %}">
+                <span class="dot"></span>
+                {% if ollama_status %}{{ _("AI Motoru Aktif") }}{% else %}{{ _("AI Motoru Pasif (şablon modu)") }}{% endif %}
+            </div>
+            {% if remaining is not none %}
+            <div class="mh-quota">{{ _("Ücretsiz kurs hakkın:") }} <b>{{ remaining }}/{{ free_limit }}</b></div>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="blueprint-card" style="margin-top:20px">
+        <div class="bp-head">
+            <svg class="ico"><use href="#i-brain"/></svg>
+            <span>{{ _("Bilişsel Kimlik Kartın") }}</span>
+        </div>
+        <div class="bp-title">{{ blueprint_title }}</div>
+        <div class="bp-desc">{{ blueprint_desc }}</div>
+    </div>
+
+    <div class="mh-actions">
+        <a href="{{ url_for('generate_course') }}" class="mh-btn primary"><svg class="ico"><use href="#i-wand-magic-sparkles"/></svg> {{ _("Yeni Kurs Oluştur") }}</a>
+        <a href="{{ url_for('learning_test') }}" class="mh-btn ghost"><svg class="ico"><use href="#i-microscope"/></svg> {{ _("Öğrenme Testini Tekrarla") }}</a>
+        {% if current_user.plan != 'premium' %}
+        <a href="{{ url_for('pricing') }}" class="mh-btn ghost"><svg class="ico" style="color:#D97706"><use href="#i-crown"/></svg> {{ _("Premium'a Yükselt") }}</a>
+        {% endif %}
+    </div>
+
+    {% set active = courses | selectattr('completed', 'equalto', 0) | list %}
+    {% set done = courses | selectattr('completed', 'equalto', 1) | list %}
+
+    {% if courses %}
+    <div class="mh-grid">
+        <div>
+            {% if active %}
+            <div class="mh-section">
+                <h2><svg class="ico"><use href="#i-play"/></svg> {{ _("Devam Eden Kurslar") }}</h2>
+                {% for course in active %}
+                <div class="course-row">
+                    <div class="cr-icon"><svg class="ico"><use href="#i-book-open"/></svg></div>
+                    <div class="cr-body">
+                        <div class="cr-title">{{ course.title }}</div>
+                        <div class="cr-meta">
+                            <span><svg class="ico" style="width:.9em;height:.9em"><use href="#i-tag"/></svg> {{ course.topic }}</span>
+                            <span><svg class="ico" style="width:.9em;height:.9em"><use href="#i-signal"/></svg> {{ course.level }}</span>
+                        </div>
+                        <div class="cr-bar"><span style="width:{{ course.progress or 0 }}%"></span></div>
+                    </div>
+                    <div class="cr-cta">
+                        <a href="{{ url_for('view_course', course_id=course.id) }}" class="btn btn-primary btn-sm">{{ _("Devam Et") }}</a>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+
+            {% if done %}
+            <div class="mh-section">
+                <h2><svg class="ico"><use href="#i-award"/></svg> {{ _("Tamamlanan Kurslar") }}</h2>
+                {% for course in done %}
+                <div class="course-row">
+                    <div class="cr-icon done"><svg class="ico"><use href="#i-check-double"/></svg></div>
+                    <div class="cr-body">
+                        <div class="cr-title">{{ course.title }}</div>
+                        <div class="cr-meta">
+                            <span><svg class="ico" style="width:.9em;height:.9em"><use href="#i-tag"/></svg> {{ course.topic }}</span>
+                            <span><svg class="ico" style="width:.9em;height:.9em"><use href="#i-circle-check"/></svg> %{{ course.progress or 100 }}</span>
+                        </div>
+                        <div class="cr-bar full"><span style="width:100%"></span></div>
+                    </div>
+                    <div class="cr-cta">
+                        <a href="{{ url_for('certificate', course_id=course.id) }}" class="cert-mini"><svg class="ico" style="width:.95em;height:.95em"><use href="#i-download"/></svg> {{ _("Sertifika") }}</a>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+        </div>
+
+        <div>
+            <div class="mh-section" style="margin-top:0">
+                <h2><svg class="ico"><use href="#i-bolt"/></svg> {{ _("Hızlı Erişim") }}</h2>
+                <div class="course-row" style="flex-direction:column;align-items:flex-start;gap:10px">
+                    <div class="cr-title" style="white-space:normal">{{ _("Beyin analizinle kurs üretimi") }}</div>
+                    <div class="cr-meta" style="margin-top:0">{{ _("Stil ve lob profiline göre AI müfredat yazar.") }}</div>
+                    <a href="{{ url_for('generate_course') }}" class="btn btn-primary btn-sm">{{ _("Kurs Üret") }}</a>
+                </div>
+                <div class="course-row" style="flex-direction:column;align-items:flex-start;gap:10px">
+                    <div class="cr-title" style="white-space:normal">{{ _("Profilini güncelle") }}</div>
+                    <div class="cr-meta" style="margin-top:0">{{ _("Öğrenme stilin değişti mi? Testi tekrarla.") }}</div>
+                    <a href="{{ url_for('learning_test') }}" class="btn btn-outline btn-sm">{{ _("Teste Git") }}</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% else %}
+    <div class="mh-empty" style="margin-top:26px">
+        <svg class="ico"><use href="#i-seedling"/></svg>
+        <b>{{ _("Henüz kursun yok") }}</b>
+        {{ _("İlk kişisel kursunu saniyeler içinde oluştur. AI, öğrenme profiline göre müfredatı yazar.") }}
+        <div style="margin-top:16px">
+            <a href="{{ url_for('generate_course') }}" class="mh-btn primary"><svg class="ico"><use href="#i-wand-magic-sparkles"/></svg> {{ _("İlk Kursunu Oluştur") }}</a>
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
