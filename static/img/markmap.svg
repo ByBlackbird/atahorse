@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 320" font-family="Inter, Arial, sans-serif">
+  <!-- Kenar bağlantıları -->
+  <g stroke="#8B5CF6" stroke-width="2" opacity="0.55" fill="none">
+    <path d="M400 160 C 300 160, 260 70, 190 70"/>
+    <path d="M400 160 C 300 160, 260 160, 190 160"/>
+    <path d="M400 160 C 300 160, 260 250, 190 250"/>
+    <path d="M400 160 C 500 160, 540 70, 610 70"/>
+    <path d="M400 160 C 500 160, 540 160, 610 160"/>
+    <path d="M400 160 C 500 160, 540 250, 610 250"/>
+  </g>
+  <!-- Merkez düğüm -->
+  <rect x="320" y="132" width="160" height="56" rx="14" fill="#1E1B4B" stroke="#F5B942" stroke-width="2.5"/>
+  <text x="400" y="158" text-anchor="middle" fill="#F5B942" font-size="16" font-weight="700">KURS KONUSU</text>
+  <text x="400" y="176" text-anchor="middle" fill="#cbd5e1" font-size="11">Merkez Kavram</text>
+  <!-- Sol dal düğümleri -->
+  <g>
+    <rect x="60" y="48" width="130" height="44" rx="10" fill="#5B2DE6" opacity="0.92"/>
+    <text x="125" y="75" text-anchor="middle" fill="#fff" font-size="13" font-weight="600">Temel Kavramlar</text>
+    <rect x="60" y="138" width="130" height="44" rx="10" fill="#8B5CF6" opacity="0.92"/>
+    <text x="125" y="165" text-anchor="middle" fill="#fff" font-size="13" font-weight="600">Yöntemler</text>
+    <rect x="60" y="228" width="130" height="44" rx="10" fill="#5B2DE6" opacity="0.92"/>
+    <text x="125" y="255" text-anchor="middle" fill="#fff" font-size="13" font-weight="600">Tarihçe</text>
+  </g>
+  <!-- Sağ dal düğümleri -->
+  <g>
+    <rect x="610" y="48" width="130" height="44" rx="10" fill="#D97706" opacity="0.92"/>
+    <text x="675" y="75" text-anchor="middle" fill="#fff" font-size="13" font-weight="600">Pratik Uygulama</text>
+    <rect x="610" y="138" width="130" height="44" rx="10" fill="#F5B942" opacity="0.95"/>
+    <text x="675" y="165" text-anchor="middle" fill="#1a1206" font-size="13" font-weight="600">İleri Teknikler</text>
+    <rect x="610" y="228" width="130" height="44" rx="10" fill="#D97706" opacity="0.92"/>
+    <text x="675" y="255" text-anchor="middle" fill="#fff" font-size="13" font-weight="600">Değerlendirme</text>
+  </g>
+</svg>

@@ -93,6 +93,52 @@
     </div>
 </section>
 
+<!-- BİLİŞSEL ADAPTASYON / CANLI STİL ÖNİZLEMESİ -->
+<section class="features">
+    <div class="section-header reveal">
+        <span class="section-eyebrow">{{ _("Bilişsel Adaptasyon") }}</span>
+        <h2>{{ _("Standart Eğitim Herkese Aynı Gömleği Giydirir. Biz Zihnine Göre Dikeriz.") }}</h2>
+        <p>{{ _("Aynı konu, üç farklı zihin tipine göre nasıl yeniden yazılır? Sekmeleri dene.") }}</p>
+    </div>
+    <div class="style-switcher-box reveal">
+        <div class="style-tabs">
+            <button type="button" class="style-tab-btn active" onclick="switchStyle('gorsel', this)"><i class="fas fa-project-diagram"></i> {{ _("Görsel Zihin (Şema & Zihin Haritası)") }}</button>
+            <button type="button" class="style-tab-btn" onclick="switchStyle('isitsel', this)"><i class="fas fa-headphones"></i> {{ _("İşitsel Zihin (Podcast & Ritim)") }}</button>
+            <button type="button" class="style-tab-btn" onclick="switchStyle('kinestetik', this)"><i class="fas fa-tools"></i> {{ _("Kinestetik Zihin (Vaka & Uygulama)") }}</button>
+        </div>
+        <div id="pane-gorsel" class="style-pane active">
+            <h4 style="color:#F5B942; margin-top:0;">{{ _("Görsel Zihin Modülü Nasıl Üretilir?") }}</h4>
+            <p>{{ _("Soyut kavramlar hiyerarşik zihin haritalarına (Mindmap), karşılaştırma tablolarına ve renk kodlu kavramsal bloklara dönüştürülür. Gözün tararken beynin ilişkileri anında kurar.") }}</p>
+            <img src="{{ url_for('static', filename='img/markmap.svg') }}" alt="{{ _("Zihin Haritası") }}" style="width:100%; max-height:220px; object-fit:contain; background:#fff; border-radius:10px; padding:10px; margin-top:10px;" onerror="this.style.display='none'">
+        </div>
+        <div id="pane-isitsel" class="style-pane">
+            <h4 style="color:#F5B942; margin-top:0;">{{ _("İşitsel Modül Nasıl Üretilir?") }}</h4>
+            <p>{{ _("Metinler diyalog akışı, soru-cevap ritmi ve sesli anlatım (TTS Podcast) moduna uygun vurgu yapısıyla yazılır. Değerlendirme aşamasında yazılı sınav yerine konuyu sesli anlatarak mezun olabilirsin.") }}</p>
+        </div>
+        <div id="pane-kinestetik" class="style-pane">
+            <h4 style="color:#F5B942; margin-top:0;">{{ _("Kinestetik Modül Nasıl Üretilir?") }}</h4>
+            <p>{{ _("Uzun teorik girişler atlanır; ilk dakikadan itibaren gerçek hayat senaryoları, adım adım mikro görevler ve uygulanabilir proje şablonları sunulur.") }}</p>
+        </div>
+    </div>
+</section>
+<style>
+.style-switcher-box { max-width: 920px; margin: 36px auto 0; background: rgba(30,27,75,0.55); border: 1px solid rgba(139,92,246,0.35); border-radius: 20px; padding: 28px; backdrop-filter: blur(12px); }
+.style-tabs { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-bottom: 22px; }
+.style-tab-btn { background: rgba(255,255,255,0.06); color: #cbd5e1; border: 1px solid rgba(255,255,255,0.14); padding: 10px 20px; border-radius: 999px; cursor: pointer; font-weight: 700; font-size: 0.9rem; transition: all .2s; }
+.style-tab-btn.active { background: linear-gradient(135deg, #5B2DE6, #8B5CF6); color: #fff; border-color: #F5B942; box-shadow: 0 6px 20px rgba(91,45,230,0.4); }
+.style-pane { display: none; text-align: left; background: rgba(6,6,12,0.75); border-radius: 14px; padding: 22px; border: 1px solid rgba(245,185,66,0.22); color:#e2e8f0; }
+.style-pane.active { display: block; }
+.style-pane p { color:#cbd5e1; line-height:1.7; margin:0; }
+</style>
+<script>
+function switchStyle(key, btn) {
+    document.querySelectorAll('.style-tab-btn').forEach(function(b){ b.classList.remove('active'); });
+    document.querySelectorAll('.style-pane').forEach(function(p){ p.classList.remove('active'); });
+    btn.classList.add('active');
+    document.getElementById('pane-' + key).classList.add('active');
+}
+</script>
+
 <!-- İNTERAKTİF DEMO -->
 <section class="demo-section reveal">
     <div class="section-header">

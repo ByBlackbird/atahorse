@@ -1089,3 +1089,57 @@ msgstr "Прозрачное обучение"
 
 msgid "Şu an vaktin yoksa"
 msgstr "Если сейчас нет времени,"
+
+msgid "Bu Modülü Sesli Dinle"
+msgstr "Прослушать модуль"
+
+msgid "Zihin Haritası Görünümü"
+msgstr "Вид карты разума"
+
+msgid "Modül Kavram Haritası"
+msgstr "Концептуальная карта модуля"
+
+msgid "Dinlemeyi Durdur"
+msgstr "Остановить прослушивание"
+
+msgid "Tarayıcınız sesli okumayı desteklemiyor."
+msgstr "Ваш браузер не поддерживает озвучку."
+
+msgid "Bilişsel Adaptasyon"
+msgstr "Когнитивная адаптация"
+
+msgid "Standart Eğitim Herkese Aynı Gömleği Giydirir. Biz Zihnine Göre Dikeriz."
+msgstr "Стандартное образование надевает всем одну рубашку. Мы шьём по мерке вашего разума."
+
+msgid "Aynı konu, üç farklı zihin tipine göre nasıl yeniden yazılır? Sekmeleri dene."
+msgstr "Посмотрите, как одна тема переписывается для трёх типов мышления. Попробуйте вкладки."
+
+msgid "Görsel Zihin (Şema & Zihin Haritası)"
+msgstr "Зрительный ум (схемы и карты разума)"
+
+msgid "İşitsel Zihin (Podcast & Ritim)"
+msgstr "Слуховой ум (подкаст и ритм)"
+
+msgid "Kinestetik Zihin (Vaka & Uygulama)"
+msgstr "Кинестетический ум (кейсы и практика)"
+
+msgid "Görsel Zihin Modülü Nasıl Üretilir?"
+msgstr "Как создаётся модуль для зрительного ума?"
+
+msgid "Soyut kavramlar hiyerarşik zihin haritalarına (Mindmap), karşılaştırma tablolarına ve renk kodlu kavramsal bloklara dönüştürülür. Gözün tararken beynin ilişkileri anında kurar."
+msgstr "Абстрактные понятия превращаются в иерархические карты разума, сравнительные таблицы и цветовые блоки. Пока глаза сканируют, мозг мгновенно связывает факты."
+
+msgid "Zihin Haritası"
+msgstr "Карта разума"
+
+msgid "İşitsel Modül Nasıl Üretilir?"
+msgstr "Как создаётся слуховой модуль?"
+
+msgid "Metinler diyalog akışı, soru-cevap ritmi ve sesli anlatım (TTS Podcast) moduna uygun vurgu yapısıyla yazılır. Değerlendirme aşamasında yazılı sınav yerine konuyu sesli anlatarak mezun olabilirsin."
+msgstr "Тексты пишутся с диалоговым потоком, ритмом вопросов-ответов и интонацией для озвучки (TTS-подкаст). На оценке можно сдать тему устно вместо письменного экзамена."
+
+msgid "Kinestetik Modül Nasıl Üretilir?"
+msgstr "Как создаётся кинестетический модуль?"
+
+msgid "Uzun teorik girişler atlanır; ilk dakikadan itibaren gerçek hayat senaryoları, adım adım mikro görevler ve uygulanabilir proje şablonları sunulur."
+msgstr "Длинные теоретические вступления пропускаются; с первой минуты — реальные сценарии, пошаговые микрозадачи и готовые шаблоны проектов."

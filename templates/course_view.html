@@ -50,6 +50,40 @@
             </div>
         </div>
 
+        <div class="course-smart-tools" style="display:flex; gap:10px; margin:20px 0; flex-wrap:wrap;">
+            <button type="button" onclick="toggleSpeech()" id="btn-tts" class="btn btn-primary" style="padding:10px 18px; font-size:0.9rem;">
+                <i class="fas fa-headphones"></i> <span id="tts-label">{{ _("Bu Modülü Sesli Dinle") }}</span>
+            </button>
+            <button type="button" onclick="toggleMindmap()" class="btn btn-outline" style="background:#1E1B4B; color:#F5B942; padding:10px 18px; font-size:0.9rem;">
+                <i class="fas fa-project-diagram"></i> {{ _("Zihin Haritası Görünümü") }}
+            </button>
+        </div>
+        <div id="mindmap-box" style="display:none; background:#0b1030; border:1px solid #5B2DE6; border-radius:16px; padding:20px; margin-bottom:24px; color:#fff;">
+            <h4 style="color:#F5B942; margin-bottom:12px;"><i class="fas fa-sitemap"></i> {{ _("Modül Kavram Haritası") }}</h4>
+            <img src="{{ url_for('static', filename='img/markmap.svg') }}" alt="Mindmap" style="width:100%; background:#fff; border-radius:12px; padding:12px;">
+        </div>
+        <script>
+        var isSpeaking = false;
+        var ttsListen = {{ _("Bu Modülü Sesli Dinle") | tojson }};
+        var ttsStop = {{ _("Dinlemeyi Durdur") | tojson }};
+        var ttsUnsupported = {{ _("Tarayıcınız sesli okumayı desteklemiyor.") | tojson }};
+        function toggleSpeech() {
+            if (!('speechSynthesis' in window)) { alert(ttsUnsupported); return; }
+            var btnLabel = document.getElementById('tts-label');
+            if (isSpeaking) { window.speechSynthesis.cancel(); isSpeaking = false; btnLabel.textContent = ttsListen; return; }
+            var activeContent = document.querySelector('.module-panel.active') || document.querySelector('.module-content') || document.body;
+            var utter = new SpeechSynthesisUtterance(activeContent.innerText);
+            utter.lang = "{{ get_locale() }}-{{ 'TR' if get_locale() == 'tr' else ('RU' if get_locale() == 'ru' else 'US') }}";
+            utter.onend = function() { isSpeaking = false; btnLabel.textContent = ttsListen; };
+            isSpeaking = true; btnLabel.textContent = ttsStop;
+            window.speechSynthesis.speak(utter);
+        }
+        function toggleMindmap() {
+            var box = document.getElementById('mindmap-box');
+            box.style.display = box.style.display === 'none' ? 'block' : 'none';
+        }
+        </script>
+
         <div class="module-content">
             {% for module in modules %}
             <div class="module-panel {% if loop.index0 == 0 %}active{% endif %}" data-index="{{ loop.index0 }}">

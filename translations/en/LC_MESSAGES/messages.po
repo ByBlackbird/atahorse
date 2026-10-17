@@ -1089,3 +1089,57 @@ msgstr "Transparent Teaching"
 
 msgid "Şu an vaktin yoksa"
 msgstr "If you don't have time right now,"
+
+msgid "Bu Modülü Sesli Dinle"
+msgstr "Listen to This Module"
+
+msgid "Zihin Haritası Görünümü"
+msgstr "Mind Map View"
+
+msgid "Modül Kavram Haritası"
+msgstr "Module Concept Map"
+
+msgid "Dinlemeyi Durdur"
+msgstr "Stop Listening"
+
+msgid "Tarayıcınız sesli okumayı desteklemiyor."
+msgstr "Your browser does not support text-to-speech."
+
+msgid "Bilişsel Adaptasyon"
+msgstr "Cognitive Adaptation"
+
+msgid "Standart Eğitim Herkese Aynı Gömleği Giydirir. Biz Zihnine Göre Dikeriz."
+msgstr "Standard education gives everyone the same shirt. We tailor it to your mind."
+
+msgid "Aynı konu, üç farklı zihin tipine göre nasıl yeniden yazılır? Sekmeleri dene."
+msgstr "See how the same topic is rewritten for three mind types. Try the tabs."
+
+msgid "Görsel Zihin (Şema & Zihin Haritası)"
+msgstr "Visual Mind (Diagrams & Mind Maps)"
+
+msgid "İşitsel Zihin (Podcast & Ritim)"
+msgstr "Auditory Mind (Podcast & Rhythm)"
+
+msgid "Kinestetik Zihin (Vaka & Uygulama)"
+msgstr "Kinesthetic Mind (Cases & Practice)"
+
+msgid "Görsel Zihin Modülü Nasıl Üretilir?"
+msgstr "How Is the Visual Mind Module Generated?"
+
+msgid "Soyut kavramlar hiyerarşik zihin haritalarına (Mindmap), karşılaştırma tablolarına ve renk kodlu kavramsal bloklara dönüştürülür. Gözün tararken beynin ilişkileri anında kurar."
+msgstr "Abstract concepts become hierarchical mind maps, comparison tables and color-coded concept blocks. As your eyes scan, your brain instantly connects the dots."
+
+msgid "Zihin Haritası"
+msgstr "Mind Map"
+
+msgid "İşitsel Modül Nasıl Üretilir?"
+msgstr "How Is the Auditory Module Generated?"
+
+msgid "Metinler diyalog akışı, soru-cevap ritmi ve sesli anlatım (TTS Podcast) moduna uygun vurgu yapısıyla yazılır. Değerlendirme aşamasında yazılı sınav yerine konuyu sesli anlatarak mezun olabilirsin."
+msgstr "Texts are written with dialog flow, Q&A rhythm and emphasis suited to audio narration (TTS Podcast). At assessment, you can graduate by speaking the topic aloud instead of a written exam."
+
+msgid "Kinestetik Modül Nasıl Üretilir?"
+msgstr "How Is the Kinesthetic Module Generated?"
+
+msgid "Uzun teorik girişler atlanır; ilk dakikadan itibaren gerçek hayat senaryoları, adım adım mikro görevler ve uygulanabilir proje şablonları sunulur."
+msgstr "Long theoretical intros are skipped; from the first minute you get real-life scenarios, step-by-step micro-tasks and ready-to-use project templates."
