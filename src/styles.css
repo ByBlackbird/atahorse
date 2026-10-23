@@ -1,0 +1,190 @@
+@import "tailwindcss";
+
+/* ==========================================================================
+   Atahorse — Cognitive Heritage tasarım sistemi
+   Kural: gradient yok, vurgu gölgesi yok. Düz yüzey, ince çizgi, bol boşluk.
+   Tema: Kağıt (paper, varsayılan) / Mürekkep (ink). Renkler yalnızca token üzerinden.
+   ========================================================================== */
+
+:root,
+[data-theme="paper"] {
+  --c-bg: #f6f7f6;          /* Doğal İnci */
+  --c-surface: #ffffff;
+  --c-surface-2: #eef1ef;
+  --c-line: #dfe4e1;
+  --c-line-strong: #c4ccc8;
+  --c-ink: #121619;         /* Obsidyen Yeşili */
+  --c-ink-2: #4f5b63;
+  --c-ink-3: #7c8891;
+  --c-brand: #4338ca;       /* Oturaklı İndigo — CTA / AI */
+  --c-brand-ink: #ffffff;
+  --c-brand-soft: #e9e8fb;
+  --c-gold: #dca037;        /* Altın Safran — ilerleme / rozet */
+  --c-gold-ink: #6b4a0c;
+  --c-gold-soft: #fbf1dc;
+  --c-night: #0d1a26;       /* Gece Ormanı */
+  --c-ok: #2f7d5b;
+  --c-ok-soft: #e3f1ea;
+  --c-bad: #b4462f;
+  --c-bad-soft: #f8e6e1;
+  --c-dot: #cfd6d2;
+  color-scheme: light;
+}
+
+[data-theme="ink"] {
+  --c-bg: #0d1a26;          /* Gece Ormanı gövde */
+  --c-surface: #121619;     /* Obsidyen kart */
+  --c-surface-2: #17212b;
+  --c-line: #243241;
+  --c-line-strong: #33465a;
+  --c-ink: #eef0ee;
+  --c-ink-2: #a9b6c1;
+  --c-ink-3: #7d8c99;
+  --c-brand: #7c74f0;
+  --c-brand-ink: #0d1a26;
+  --c-brand-soft: #1f2140;
+  --c-gold: #e3b25a;
+  --c-gold-ink: #f3d79f;
+  --c-gold-soft: #2a2416;
+  --c-night: #070f17;
+  --c-ok: #5fbf93;
+  --c-ok-soft: #13291f;
+  --c-bad: #e48a74;
+  --c-bad-soft: #2d1a16;
+  --c-dot: #233243;
+  color-scheme: dark;
+}
+
+@theme inline {
+  --color-bg: var(--c-bg);
+  --color-surface: var(--c-surface);
+  --color-surface-2: var(--c-surface-2);
+  --color-line: var(--c-line);
+  --color-line-strong: var(--c-line-strong);
+  --color-ink: var(--c-ink);
+  --color-ink-2: var(--c-ink-2);
+  --color-ink-3: var(--c-ink-3);
+  --color-brand: var(--c-brand);
+  --color-brand-ink: var(--c-brand-ink);
+  --color-brand-soft: var(--c-brand-soft);
+  --color-gold: var(--c-gold);
+  --color-gold-ink: var(--c-gold-ink);
+  --color-gold-soft: var(--c-gold-soft);
+  --color-night: var(--c-night);
+  --color-ok: var(--c-ok);
+  --color-ok-soft: var(--c-ok-soft);
+  --color-bad: var(--c-bad);
+  --color-bad-soft: var(--c-bad-soft);
+  --font-display: "Cinzel", Georgia, "Times New Roman", serif;
+  --font-sans: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --radius-card: 14px;
+  --ease-out-soft: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@layer base {
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    background: var(--c-bg);
+    color: var(--c-ink);
+    font-family: var(--font-sans);
+    font-feature-settings: "cv11", "ss01";
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+  ::selection { background: var(--c-gold); color: #0d1a26; }
+  :focus-visible { outline: 2px solid var(--c-brand); outline-offset: 2px; border-radius: 6px; }
+  button { cursor: pointer; }
+  button:disabled { cursor: not-allowed; }
+  h1, h2, h3 { text-wrap: balance; }
+  p { text-wrap: pretty; }
+}
+
+@layer components {
+  .wrap { margin-inline: auto; width: 100%; max-width: 76rem; padding-inline: 1rem; }
+  @media (min-width: 768px) { .wrap { padding-inline: 2rem; } }
+
+  .h-display { font-family: var(--font-display); font-weight: 600; letter-spacing: 0.01em; line-height: 1.12; }
+  .eyebrow { font-size: 11px; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; color: var(--c-ink-3); }
+
+  .card { background: var(--c-surface); border: 1px solid var(--c-line); border-radius: var(--radius-card); }
+  .card-flat { background: var(--c-surface-2); border-radius: var(--radius-card); }
+
+  .btn {
+    display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem;
+    height: 2.5rem; padding-inline: 1rem; border-radius: 10px; font-size: 14px; font-weight: 600;
+    border: 1px solid transparent; transition: background-color .15s, border-color .15s, color .15s, transform .1s;
+    white-space: nowrap; user-select: none;
+  }
+  .btn:active:not(:disabled) { transform: translateY(1px); }
+  .btn:disabled { opacity: .45; }
+  .btn-primary { background: var(--c-brand); color: var(--c-brand-ink); }
+  .btn-primary:hover:not(:disabled) { filter: brightness(1.08); }
+  .btn-outline { background: var(--c-surface); color: var(--c-ink); border-color: var(--c-line-strong); }
+  .btn-outline:hover:not(:disabled) { border-color: var(--c-ink-2); }
+  .btn-ghost { background: transparent; color: var(--c-ink-2); }
+  .btn-ghost:hover:not(:disabled) { background: var(--c-surface-2); color: var(--c-ink); }
+  .btn-gold { background: var(--c-gold); color: #1d1405; }
+  .btn-sm { height: 2rem; padding-inline: .75rem; font-size: 13px; border-radius: 8px; }
+  .btn-lg { height: 3rem; padding-inline: 1.5rem; font-size: 15px; border-radius: 12px; }
+  .btn-icon { width: 2.25rem; height: 2.25rem; padding: 0; }
+
+  .chip {
+    display: inline-flex; align-items: center; gap: .375rem; height: 1.75rem; padding-inline: .625rem;
+    border-radius: 999px; font-size: 12px; font-weight: 500; color: var(--c-ink-2);
+    background: var(--c-surface); border: 1px solid var(--c-line);
+  }
+  .chip-gold { background: var(--c-gold-soft); border-color: transparent; color: var(--c-gold-ink); }
+  .chip-brand { background: var(--c-brand-soft); border-color: transparent; color: var(--c-brand); }
+
+  .input {
+    width: 100%; height: 2.75rem; padding-inline: .875rem; border-radius: 10px;
+    background: var(--c-surface); border: 1px solid var(--c-line-strong); color: var(--c-ink); font-size: 15px;
+  }
+  .input::placeholder { color: var(--c-ink-3); }
+  .input:focus { outline: none; border-color: var(--c-brand); }
+  textarea.input { height: auto; padding-block: .75rem; line-height: 1.55; resize: vertical; }
+
+  .seg { display: inline-flex; padding: 3px; gap: 2px; border-radius: 12px; background: var(--c-surface-2); border: 1px solid var(--c-line); }
+  .seg > button { height: 2.125rem; padding-inline: .875rem; border-radius: 9px; font-size: 13px; font-weight: 600; color: var(--c-ink-2); display: inline-flex; align-items: center; gap: .4rem; transition: background-color .15s, color .15s; }
+  .seg > button[aria-pressed="true"] { background: var(--c-surface); color: var(--c-ink); box-shadow: inset 0 0 0 1px var(--c-line-strong); }
+
+  /* Zihin haritası imzası: inci zemin + noktalı ızgara */
+  .dotgrid { background-color: var(--c-bg); background-image: radial-gradient(var(--c-dot) 1px, transparent 1.2px); background-size: 22px 22px; }
+
+  .prose-learn { font-size: 17px; line-height: 1.75; color: var(--c-ink); }
+  .prose-learn p + p { margin-top: 1rem; }
+
+  .kbd { display: inline-flex; min-width: 1.4rem; height: 1.4rem; align-items: center; justify-content: center; padding-inline: .3rem; border-radius: 6px; border: 1px solid var(--c-line-strong); font-size: 11px; font-weight: 600; color: var(--c-ink-2); background: var(--c-surface); }
+
+  .scrollbar-thin { scrollbar-width: thin; scrollbar-color: var(--c-line-strong) transparent; }
+}
+
+/* Hareket — saygılı: azaltılmış hareket tercihinde kapalı */
+@keyframes rise { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+@keyframes pop { 0% { transform: scale(.96); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
+@keyframes pulse-dot { 0%, 100% { opacity: .35; } 50% { opacity: 1; } }
+@keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+@keyframes bar { from { transform: scaleY(.3); } to { transform: scaleY(1); } }
+.anim-rise { animation: rise .45s var(--ease-out-soft) both; }
+.anim-pop { animation: pop .25s var(--ease-out-soft) both; }
+.anim-pulse { animation: pulse-dot 1.4s ease-in-out infinite; }
+.anim-marquee { animation: marquee 40s linear infinite; }
+.eq-bar { transform-origin: bottom; animation: bar .6s ease-in-out infinite alternate; }
+@media (prefers-reduced-motion: reduce) {
+  .anim-rise, .anim-pop, .anim-pulse, .anim-marquee, .eq-bar { animation: none !important; }
+  html { scroll-behavior: auto; }
+}
+
+/* Karaoke metin takibi */
+.kw { transition: color .12s, background-color .12s; border-radius: 4px; }
+.kw-past { color: var(--c-ink); }
+.kw-now { background: var(--c-gold-soft); color: var(--c-gold-ink); box-shadow: 0 0 0 2px var(--c-gold-soft); }
+.kw-future { color: var(--c-ink-3); }
+
+/* Yazdırma: sertifika */
+@media print {
+  body { background: #fff !important; }
+  .no-print { display: none !important; }
+  .print-sheet { border: none !important; }
+  @page { size: A4 landscape; margin: 0; }
+}
