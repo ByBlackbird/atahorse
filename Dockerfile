@@ -3,7 +3,9 @@
 FROM node:22-bookworm-slim AS build
 WORKDIR /app
 COPY package.json package-lock.json* ./
-RUN npm ci --no-audit --no-fund || npm install --no-audit --no-fund
+# npm 10.9.9'da "Exit handler never called!" çöküşü görülüyor: önce npm 11'e yükselt, sonra
+# geçici ağ/bellek arızalarına karşı ci'ı iki kez dene, son çare olarak install'a düş.
+RUN npm install -g npm@11.19.0 --no-audit --no-fund; npm ci --no-audit --no-fund || npm ci --no-audit --no-fund || npm install --no-audit --no-fund
 COPY . .
 RUN npm run build && npm prune --omit=dev
 
