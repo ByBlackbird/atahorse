@@ -43,13 +43,16 @@ export const OutlineSchema = z.object({
 });
 export type Outline = z.infer<typeof OutlineSchema>;
 
-export function outlinePrompt(o: { topic: string; level: Level; locale: Locale; meb?: { grade: string; subjectName: string; unit?: string; units?: string[] } }) {
+export function outlinePrompt(o: { topic: string; level: Level; locale: Locale; meb?: { grade: string; subjectName: string; unit?: string; units?: string[] }; learner?: { why?: string; prior?: string; goal?: string; goalType?: string } }) {
+  const learner = o.learner ? `
+Learner context (metalearning — use to shape objectives, order and emphasis; do NOT mention these notes to the learner):
+${o.learner.why ? `- Why they are learning: ${o.learner.why}\n` : ''}${o.learner.prior ? `- What they already know: ${o.learner.prior}\n` : ''}${o.learner.goal ? `- Their target outcome: ${o.learner.goal}\n` : ''}${o.learner.goalType ? `- Primary gap to close (Dirksen): ${o.learner.goalType} → ${o.learner.goalType === 'skill' ? 'weight worked practice and transfer tasks' : o.learner.goalType === 'motivation' ? 'open each module with a vivid hook tied to their why' : o.learner.goalType === 'habit' ? 'keep modules short and end with a concrete next-step routine' : 'emphasize retrieval and spaced checkpoints'}\n` : ''}` : '';
   const scope = o.meb
     ? o.meb.unit
       ? `Turkish national curriculum (MEB), grade ${o.meb.grade}, subject "${o.meb.subjectName}", unit "${o.meb.unit}". Align with the official learning outcomes (kazanımlar) for this grade; use age-appropriate language. Create exactly 6 modules: outcomes & prior knowledge, core concepts, worked examples, practice & problem solving, common mistakes, mixed review.`
       : `Turkish national curriculum (MEB), grade ${o.meb.grade}, subject "${o.meb.subjectName}". Create one module per unit, in this order: ${(o.meb.units ?? []).map((u) => `"${u}"`).join(', ')}.`
     : `Topic: "${o.topic}". Create exactly 6 modules progressing from foundations to synthesis (foundations → core concepts → mechanisms → worked application → mistakes/edge cases → synthesis project).`;
-  return `${scope}
+  return `${scope}${learner}
 Level: ${LEVEL_DESC[o.level]}.
 Return JSON:
 {
@@ -73,8 +76,8 @@ export const ModuleBodySchema = z.object({
 });
 export type ModuleBody = z.infer<typeof ModuleBodySchema>;
 
-export function modulePrompt(o: { courseTitle: string; level: Level; idx: number; total: number; mod: Outline['modules'][number]; previous: string[] }) {
-  return `Course: "${o.courseTitle}" — module ${o.idx + 1} of ${o.total}: "${o.mod.title}".
+export function modulePrompt(o: { courseTitle: string; level: Level; idx: number; total: number; mod: Outline['modules'][number]; previous: string[]; learnerGoal?: string }) {
+  return `Course: "${o.courseTitle}" — module ${o.idx + 1} of ${o.total}: "${o.mod.title}".${o.learnerGoal ? ` Learner's target outcome: ${o.learnerGoal}` : ''}
 Module objectives: ${o.mod.objectives.join(' | ')}
 Section headings to write, in order: ${o.mod.sections.map((s) => `"${s}"`).join(', ')}
 Already covered in previous modules (do not repeat, build on it): ${o.previous.join(' | ') || 'nothing yet'}

@@ -5,7 +5,7 @@ import { trpc, errCode } from '../lib/trpc';
 import { useErr, useI18n } from '../i18n/index';
 import { Shell } from '../app/Shell';
 import { Bar, ErrorBox, Field, Spinner, cx } from '../ui/kit';
-import { LOCALES, METHOD_KEYS, type Level, type Locale, type MethodKey } from '../../shared/types';
+import { LOCALES, METHOD_KEYS, type GoalType, type Level, type Locale, type MethodKey } from '../../shared/types';
 import { METHODS } from '../../shared/engine/methods';
 import type { MebGrade } from '../../shared/engine/meb';
 
@@ -62,6 +62,11 @@ export default function CourseNew() {
   const [scope, setScope] = useState<'unit' | 'all'>('unit');
   const [unit, setUnit] = useState('');
   const [jobId, setJobId] = useState<string | null>(null);
+  // Metalearning bağlamı + Dirksen gap teşhisi (opsiyonel, üretimi kişiselleştirir)
+  const [why, setWhy] = useState('');
+  const [prior, setPrior] = useState('');
+  const [goal, setGoal] = useState('');
+  const [goalType, setGoalType] = useState<GoalType | ''>('');
 
   const gradeRow = meb.data?.catalog.find((g) => g.grade === grade);
   const subj = gradeRow?.subjects.find((s) => s.key === subject);
@@ -77,8 +82,11 @@ export default function CourseNew() {
 
   const submit = () => {
     const m = method || undefined;
-    if (tab === 'free') create.mutate({ topic: topic.trim(), level, locale, method: m });
-    else create.mutate({ level, locale, method: m, meb: { grade, subject, unit: scope === 'unit' ? unit : undefined } });
+    const meta = why.trim() || prior.trim() || goal.trim() || goalType
+      ? { why: why.trim() || undefined, prior: prior.trim() || undefined, goal: goal.trim() || undefined, goalType: goalType || undefined }
+      : undefined;
+    if (tab === 'free') create.mutate({ topic: topic.trim(), level, locale, method: m, meta });
+    else create.mutate({ level, locale, method: m, meb: { grade, subject, unit: scope === 'unit' ? unit : undefined }, meta });
   };
   const canSubmit = tab === 'free' ? topic.trim().length >= 2 : !!subj?.available && (scope === 'all' || !!unit);
   const levels = useMemo(() => (['beginner', 'intermediate', 'advanced'] as const), []);
@@ -156,6 +164,31 @@ export default function CourseNew() {
               {METHOD_KEYS.map((k) => <option key={k} value={k}>{METHODS[k].name[lang]} — {METHODS[k].short[lang]}</option>)}
             </select>
           </Field>
+
+          <details className="rounded-xl border border-line bg-surface-2 p-4">
+            <summary className="cursor-pointer text-sm font-semibold">{t('n_meta_title')}</summary>
+            <div className="mt-4 space-y-4">
+              <p className="flex gap-2 text-xs text-ink-3"><LuInfo className="mt-0.5 shrink-0" />{t('n_meta_hint')}</p>
+              <Field label={t('n_gap')}>
+                <div className="flex flex-wrap gap-2">
+                  {(['knowledge', 'skill', 'motivation', 'habit'] as const).map((g) => (
+                    <button key={g} className={cx('btn btn-sm', goalType === g ? 'btn-primary' : 'btn-outline')} onClick={() => setGoalType(goalType === g ? '' : g)}>{t(`n_gap_${g}`)}</button>
+                  ))}
+                </div>
+              </Field>
+              <div className="grid gap-4 sm:grid-cols-3">
+                <Field label={t('n_why')}>
+                  <input className="input" value={why} maxLength={300} onChange={(e) => setWhy(e.target.value)} placeholder={t('n_why_ph')} />
+                </Field>
+                <Field label={t('n_prior')}>
+                  <input className="input" value={prior} maxLength={300} onChange={(e) => setPrior(e.target.value)} placeholder={t('n_prior_ph')} />
+                </Field>
+                <Field label={t('n_goal')}>
+                  <input className="input" value={goal} maxLength={300} onChange={(e) => setGoal(e.target.value)} placeholder={t('n_goal_ph')} />
+                </Field>
+              </div>
+            </div>
+          </details>
 
           {engine.data && !engine.data.ai.enabled && <p className="flex gap-2 rounded-xl bg-surface-2 p-3 text-xs text-ink-2"><LuInfo className="mt-0.5 shrink-0" />{t('n_ai_off')}</p>}
           {create.error && (

@@ -20,6 +20,7 @@ export const users = sqliteTable('users', {
   streak: integer('streak').notNull().default(0),
   longestStreak: integer('longest_streak').notNull().default(0),
   lastActiveDay: text('last_active_day'),
+  planPrefs: text('plan_prefs'), // PlanPrefs JSON (haftalık plan)
   createdAt: ts('created_at'),
 });
 
@@ -63,6 +64,7 @@ export const courses = sqliteTable('courses', {
   mebUnit: text('meb_unit'),
   status: text('status', { enum: ['queued', 'generating', 'ready', 'failed'] }).notNull().default('queued'),
   generator: text('generator', { enum: ['ai', 'template'] }),
+  meta: text('meta'), // CourseMeta JSON (metalearning bağlamı)
   doc: text('doc'), // CourseDoc JSON
   moduleCount: integer('module_count').notNull().default(0),
   shareSlug: text('share_slug').unique(),

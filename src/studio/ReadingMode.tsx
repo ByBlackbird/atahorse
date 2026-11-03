@@ -32,7 +32,7 @@ function Boxes({ s, order }: { s: SSection; order: readonly ('analytic' | 'holis
   return <div className="grid gap-3 md:grid-cols-2">{order.map((k) => boxes[k])}</div>;
 }
 
-export default function ReadingMode({ view, mod, onSection, onCheck }: { view: View; mod: SModule; onSection: (i: number) => void; onCheck: (ok: boolean) => void }) {
+export default function ReadingMode({ view, mod, onSection, onCheck, focusSection }: { view: View; mod: SModule; onSection: (i: number) => void; onCheck: (ok: boolean) => void; focusSection?: number | null }) {
   const { t } = useI18n();
   const order = PROFILES[view.course.profileKey as ProfileKey]?.boxOrder ?? ['analytic', 'holistic'];
   const total = useMemo(() => mod.sections.reduce((n, s) => n + words(s.paragraphs.join(' ')) + words(s.holistic.text) + words(s.analytic.points.join(' ')), 0), [mod]);
@@ -41,6 +41,13 @@ export default function ReadingMode({ view, mod, onSection, onCheck }: { view: V
   const seen = useRef(new Set<number>());
   const refs = useRef<(HTMLElement | null)[]>([]);
   const ends = useRef<(HTMLDivElement | null)[]>([]);
+
+  // Hedefli tekrar (drill): dışarıdan bölüm istenirse oraya kaydır
+  useEffect(() => {
+    if (focusSection == null) return;
+    const el = refs.current[focusSection];
+    if (el) window.setTimeout(() => el.scrollIntoView({ behavior: 'smooth', block: 'start' }), 60);
+  }, [focusSection]);
 
   // İçindekiler için kaydırma izleme
   useEffect(() => {

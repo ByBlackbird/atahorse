@@ -19,6 +19,11 @@ export default function Profile() {
   const navigate = useNavigate();
   const utils = trpc.useUtils();
   const q = trpc.profile.page.useQuery({ locale: lang });
+  const planQ = trpc.profile.plan.useQuery();
+  const savePlan = trpc.profile.savePlan.useMutation({
+    onSuccess: () => { void utils.profile.plan.invalidate(); toast.push('ok', t('saved')); },
+  });
+  const [planDraft, setPlanDraft] = useState<{ days: number; minutes: number } | null>(null);
   const settings = trpc.profile.settings.useMutation({ onSuccess: () => { void utils.auth.me.invalidate(); toast.push('ok', t('saved')); } });
   const logoutAll = trpc.auth.logoutAll.useMutation({ onSuccess: async () => { await utils.invalidate(); navigate('/'); } });
   const del = trpc.profile.deleteAccount.useMutation({ onSuccess: async () => { await utils.invalidate(); navigate('/'); } });
@@ -102,6 +107,35 @@ export default function Profile() {
             <div className="mt-2 flex flex-wrap gap-2">{d.cognitive.modes.map((m) => <span key={m.mode} className="chip">{m.mode === 'mindmap' ? t('s_map') : t(`s_mode_${m.mode}`)} · {t('minutes_short', { n: m.minutes })}</span>)}</div>
           ) : <p className="mt-2 text-sm text-ink-3">{t('pr_no_data')}</p>}
           <Link to="/profil-testi" className="btn btn-ghost btn-sm mt-4 -ml-2">{t('t_retake')} <LuArrowRight /></Link>
+        </div>
+
+        {/* Haftalık plan */}
+        <div className="card p-5">
+          <h2 className="font-semibold">{t('pr_plan')}</h2>
+          <p className="mt-1 text-sm text-ink-2">{t('pr_plan_s')}</p>
+          {(() => {
+            const prefs = planQ.data?.prefs;
+            const draft = planDraft ?? { days: prefs?.daysPerWeek ?? 4, minutes: prefs?.minutes ?? 20 };
+            return (
+              <div className="mt-4 space-y-4">
+                <Field label={t('pr_plan_days')}>
+                  <div className="seg w-full">
+                    {[3, 4, 5, 6, 7].map((d) => <button key={d} className="flex-1 justify-center" aria-pressed={draft.days === d} onClick={() => setPlanDraft({ ...draft, days: d })}>{d}</button>)}
+                  </div>
+                </Field>
+                <Field label={t('pr_plan_minutes')}>
+                  <div className="seg w-full">
+                    {[15, 20, 30, 45, 60].map((m) => <button key={m} className="flex-1 justify-center" aria-pressed={draft.minutes === m} onClick={() => setPlanDraft({ ...draft, minutes: m })}>{m}</button>)}
+                  </div>
+                </Field>
+                {planQ.data && <p className="text-xs text-ink-3">{t('d_plan_prog', { a: planQ.data.week.daysDone, b: prefs?.daysPerWeek ?? draft.days, c: planQ.data.week.minutesDone, d: (prefs?.daysPerWeek ?? draft.days) * (prefs?.minutes ?? draft.minutes) })}</p>}
+                <button className="btn btn-primary btn-sm" disabled={savePlan.isPending || (!!prefs && prefs.daysPerWeek === draft.days && prefs.minutes === draft.minutes)}
+                  onClick={() => savePlan.mutate({ daysPerWeek: draft.days, minutes: draft.minutes })}>
+                  {t('save')}
+                </button>
+              </div>
+            );
+          })()}
         </div>
 
         {/* Sertifikalar */}

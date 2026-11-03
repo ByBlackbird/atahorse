@@ -4,7 +4,7 @@ import crypto from 'node:crypto';
 import { and, count, desc, eq, inArray } from 'drizzle-orm';
 import { db } from '../db/client';
 import { cognitiveProfiles, courseTranslations, courses, jobs, methodStats } from '../db/schema';
-import { CourseDoc, type Level, type Locale, type MethodKey, type Module, type ProfileKey } from '../../shared/types';
+import { CourseDoc, CourseMeta, GOAL_TYPE_METHOD, type Level, type Locale, type MethodKey, type Module, type ProfileKey } from '../../shared/types';
 import { completeModule, generateTemplateCourse, templateModule, type GenInput } from '../../shared/engine/generate';
 import { DEFAULT_PROFILE, PROFILES } from '../../shared/engine/profiles';
 import { chooseMethod, type MethodStat } from '../../shared/engine/science';
@@ -39,6 +39,7 @@ export interface CreateInput {
   locale: Locale;
   method?: MethodKey;
   meb?: { grade: MebGrade; subject: string; unit?: string };
+  meta?: CourseMeta;
 }
 
 export async function createCourse(user: User, input: CreateInput) {
@@ -61,10 +62,14 @@ export async function createCourse(user: User, input: CreateInput) {
   if (topic.length < 2 || topic.length > 120) throw new AppError('bad_topic');
 
   const profileKey = await userProfileKey(user.id);
-  const { method } = await pickMethod(user.id, profileKey, input.method);
+  // Dirksen gap teşhisi: metot seçilmediyse ve gap tipi verildiyse, gap'e uygun metot önerilir
+  const meta = input.meta ? CourseMeta.parse(input.meta) : undefined;
+  const methodOverride = input.method ?? (meta?.goalType ? GOAL_TYPE_METHOD[meta.goalType] : undefined);
+  const { method } = await pickMethod(user.id, profileKey, methodOverride);
   const [c] = await db.insert(courses).values({
     userId: user.id, title: topic, topic, level: input.level, locale: input.locale, profileKey, method,
     source: input.meb ? 'meb' : 'free', mebGrade: input.meb?.grade, mebSubject: input.meb?.subject, mebUnit: input.meb?.unit,
+    meta: meta ? JSON.stringify(meta) : null,
     status: 'queued',
   }).returning().all();
   const jobId = crypto.randomUUID();
@@ -111,6 +116,7 @@ async function runJob(jobId: string) {
   const input: GenInput = {
     topic: c.topic, level: c.level, locale: c.locale, profileKey: c.profileKey as ProfileKey, method: c.method as MethodKey,
     meb: c.mebGrade && c.mebSubject ? { grade: c.mebGrade as MebGrade, subject: c.mebSubject, unit: c.mebUnit ?? undefined } : undefined,
+    learner: c.meta ? CourseMeta.parse(JSON.parse(c.meta)) : undefined,
   };
   try {
     await stage(jobId, 'profile', 8);
@@ -139,6 +145,7 @@ async function generateWithAi(jobId: string, input: GenInput, userId: number): P
       prompt: outlinePrompt({
         topic: input.topic, level: input.level, locale: input.locale,
         meb: input.meb && subj ? { grade: input.meb.grade, subjectName: subj.name(input.meb.grade), unit: input.meb.unit, units: subj.units[input.meb.grade] } : undefined,
+        learner: input.learner,
       }),
     }, OutlineSchema)).data;
   } catch (e) {
@@ -154,7 +161,7 @@ async function generateWithAi(jobId: string, input: GenInput, userId: number): P
     try {
       const body = (await completeJSON({
         task: 'course.module', system, userId,
-        prompt: modulePrompt({ courseTitle: outline.title, level: input.level, idx: i, total, mod: om, previous: outline.modules.slice(0, i).map((m) => m.title) }),
+        prompt: modulePrompt({ courseTitle: outline.title, level: input.level, idx: i, total, mod: om, previous: outline.modules.slice(0, i).map((m) => m.title), learnerGoal: input.learner?.goal }),
       }, ModuleBodySchema)).data;
       modules.push(completeModule(toModule(i, om.title, om.objectives, body), input));
       aiModules++;

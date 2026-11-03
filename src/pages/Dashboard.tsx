@@ -1,4 +1,5 @@
-import { LuArrowRight, LuBookOpen, LuFlame, LuPlus, LuRepeat, LuRotateCw, LuTrash2, LuGraduationCap, LuSparkles } from 'react-icons/lu';
+import type { ReactNode } from 'react';
+import { LuArrowRight, LuBookOpen, LuBrain, LuCalendarCheck, LuFlame, LuLayers, LuPlus, LuRepeat, LuRotateCw, LuTarget, LuTrendingUp, LuTrash2, LuGraduationCap, LuSparkles } from 'react-icons/lu';
 import { Link } from '../lib/router';
 import { trpc } from '../lib/trpc';
 import { useI18n } from '../i18n/index';
@@ -53,10 +54,11 @@ function CourseCard({ c }: { c: Course }) {
 }
 
 export default function Dashboard() {
-  const { t } = useI18n();
+  const { t, lang } = useI18n();
   const { me } = useMe();
-  const dash = trpc.profile.dashboard.useQuery(undefined, { refetchInterval: (q) => (q.state.data?.courses.some((c) => c.status === 'queued' || c.status === 'generating') ? 2000 : false) });
+  const dash = trpc.profile.dashboard.useQuery({ locale: lang }, { refetchInterval: (q) => (q.state.data?.courses.some((c) => c.status === 'queued' || c.status === 'generating') ? 2000 : false) });
   const cog = trpc.profile.cognitive.useQuery();
+  const plan = trpc.profile.plan.useQuery();
   if (!dash.data) return <Shell><PageLoader /></Shell>;
   const d = dash.data;
   const cont = d.courses.find((c) => c.id === d.continueId);
@@ -109,6 +111,46 @@ export default function Dashboard() {
         </div>
       </div>
 
+
+      {(() => {
+        const ins = d.insight;
+        const modeKey = ins.topMode ? ({ read: 's_mode_read', podcast: 's_mode_podcast', slides: 's_mode_slides', mindmap: 's_map' } as const)[ins.topMode.mode] : null;
+        const rows: { icon: ReactNode; label: string; value: string }[] = [];
+        if (ins.topMethod) rows.push({ icon: <LuTrendingUp />, label: t('d_insight_top'), value: `${ins.topMethod.name} · %${ins.topMethod.accuracy}` });
+        if (ins.weakMethod) rows.push({ icon: <LuTarget />, label: t('d_insight_weak'), value: `${ins.weakMethod.name} · %${ins.weakMethod.accuracy}` });
+        if (ins.topMode && ins.topMode.minutes > 0 && modeKey) rows.push({ icon: <LuLayers />, label: t('d_insight_mode'), value: `${t(modeKey)} · ${ins.topMode.minutes} dk` });
+        if (ins.highConfAcc !== null) rows.push({ icon: <LuBrain />, label: t('d_insight_conf'), value: `%${ins.highConfAcc}` });
+        if (!rows.length) return null;
+        return (
+          <div className="card mt-4 p-5">
+            <p className="flex items-center gap-2 text-sm font-semibold"><LuBrain className="text-brand" /> {t('d_insight')}</p>
+            {rows.length ? (
+              <div className="mt-3 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+                {rows.map((r, i) => (
+                  <div key={i} className="rounded-xl bg-surface-2 p-3">
+                    <p className="flex items-center gap-1.5 text-xs text-ink-3">{r.icon}{r.label}</p>
+                    <p className="mt-1 truncate text-sm font-semibold">{r.value}</p>
+                  </div>
+                ))}
+              </div>
+            ) : <p className="mt-2 text-sm text-ink-2">{t('d_insight_none')}</p>}
+          </div>
+        );
+      })()}
+
+      {plan.data?.prefs && (
+        <div className="card mt-4 flex flex-wrap items-center gap-4 p-5">
+          <div className="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-brand-soft text-brand"><LuCalendarCheck /></div>
+          <div className="min-w-0 flex-1">
+            <p className="text-sm font-semibold">{t('d_plan')}</p>
+            <p className="mt-0.5 text-sm text-ink-2">
+              {t('d_plan_prog', { a: plan.data.week.daysDone, b: plan.data.prefs.daysPerWeek, c: plan.data.week.minutesDone, d: plan.data.prefs.minutes * plan.data.prefs.daysPerWeek })}
+            </p>
+          </div>
+          <Bar value={Math.min(1, plan.data.week.minutesDone / Math.max(1, plan.data.prefs.minutes * plan.data.prefs.daysPerWeek))} className="w-full sm:w-56" />
+          <Link to="/profil" className="btn btn-ghost btn-sm">{t('d_plan_edit')}</Link>
+        </div>
+      )}
 
       <h2 className="t-headline mt-10 !text-xl">{t('d_courses')}</h2>
       <div className="mt-4">

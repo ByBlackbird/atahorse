@@ -30,7 +30,16 @@ export const ROUTES: Record<Task, Route> = {
 
 const provider: ProviderName = resolveProvider();
 const models = modelsFor(provider);
-export const aiInfo = () => ({ provider, models, enabled: provider !== 'none', embeddings: !!env.AI_EMBED_MODEL && (provider === 'openai' || provider === 'ollama') });
+export const aiInfo = () => ({
+  provider, models, enabled: provider !== 'none',
+  embeddings: !!env.AI_EMBED_MODEL && (provider === 'openai' || provider === 'ollama'),
+  // Yapılandırma durumu (sır değil — yalnızca anahtar VAR/YOK): hangi sağlayıcı hazır görülüyor
+  configured: {
+    anthropic: !!env.ANTHROPIC_API_KEY,
+    openai: !!env.OPENAI_API_KEY,
+    ollama: !!env.OLLAMA_URL,
+  },
+});
 export const aiEnabled = () => provider !== 'none';
 
 /* ---------------- eşzamanlılık sınırlayıcı ---------------- */

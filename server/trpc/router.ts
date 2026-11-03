@@ -4,7 +4,7 @@ import { eq } from 'drizzle-orm';
 import { TRPCError } from '@trpc/server';
 import { db } from '../db/client';
 import { users } from '../db/schema';
-import { AssistAction, Level, Locale, MethodKey, MindNode } from '../../shared/types';
+import { AssistAction, CourseMeta, Level, Locale, MethodKey, MindNode, PlanPrefs } from '../../shared/types';
 import { MEB_GRADES, mebCatalog, MEB_SOURCE_NOTE } from '../../shared/engine/meb';
 import { PROFILES, PROFILE_TEST } from '../../shared/engine/profiles';
 import { METHODS } from '../../shared/engine/methods';
@@ -13,10 +13,10 @@ import { BADGES, XP, levelFromXp } from '../../shared/engine/gamification';
 import { router, publicProcedure, authed, adminProcedure, limited } from './core';
 import { clearCookie, createSession, destroyAllSessions, destroySession, hashPassword, publicUser, verifyPassword } from '../services/auth';
 import { AppError, createCourse, deleteCourse, jobStatus, requestTranslation, retryCourse, shareCourse, parseDoc } from '../services/courses';
-import { answerCheck, answerReview, approveTask, courseView, dueReviews, getFinal, heartbeat, myCertificates, submitFinal, submitModuleQuiz, verifyCertificate } from '../services/learning';
+import { answerCheck, answerReview, approveTask, courseView, dueReviews, getFinal, getPretest, heartbeat, myCertificates, submitFinal, submitModuleQuiz, submitPretest, verifyCertificate } from '../services/learning';
 import { assist, getMindmap, layoutMindmap, saveMindmap, suggestBranches } from '../services/assistant';
-import { dashboard, deleteAccount, getCognitive, profilePage, saveProfileTest, updateSettings } from '../services/profile';
-import { adminCourses, adminSetPlan, adminStats, adminUsers } from '../services/admin';
+import { dashboard, deleteAccount, getCognitive, getPlan, profilePage, savePlan, saveProfileTest, updateSettings } from '../services/profile';
+import { adminCourses, adminSetPlan, adminStats, adminUsers, aiSelfTest } from '../services/admin';
 import { aiInfo } from '../ai/provider';
 import { env } from '../env';
 import { courses, waitlist } from '../db/schema';
@@ -85,7 +85,9 @@ const catalogRouter = router({
 const profileRouter = router({
   saveTest: authed.input(z.object({ answers: z.record(z.string(), z.string()) })).mutation(({ input, ctx }) => saveProfileTest(ctx.user, input.answers)),
   cognitive: authed.query(({ ctx }) => getCognitive(ctx.user.id)),
-  dashboard: authed.query(({ ctx }) => dashboard(ctx.user)),
+  plan: authed.query(({ ctx }) => getPlan(ctx.user)),
+  savePlan: authed.input(PlanPrefs).mutation(({ input, ctx }) => savePlan(ctx.user, input)),
+  dashboard: authed.input(z.object({ locale: Locale.optional() }).optional()).query(({ input, ctx }) => dashboard(ctx.user, input?.locale)),
   page: authed.input(z.object({ locale: Locale })).query(({ input, ctx }) => profilePage(ctx.user, input.locale)),
   settings: authed.input(z.object({ fullName: z.string().max(80).optional(), locale: Locale.optional(), theme: z.enum(['paper', 'ink']).optional() })).mutation(({ input, ctx }) => updateSettings(ctx.user, input)),
   deleteAccount: authed.input(z.object({ confirm: z.literal('DELETE') })).mutation(async ({ ctx }) => {
@@ -106,6 +108,7 @@ const courseRouter = router({
     .input(z.object({
       topic: z.string().trim().min(2).max(120).optional(), level: Level, locale: Locale, method: MethodKey.optional(),
       meb: z.object({ grade: z.enum(MEB_GRADES), subject: z.string().max(40), unit: z.string().max(160).optional() }).optional(),
+      meta: CourseMeta.optional(),
     }))
     .mutation(({ input, ctx }) => createCourse(ctx.user, input)),
   job: authed.input(z.object({ jobId: z.string().uuid() })).query(({ input, ctx }) => jobStatus(ctx.user.id, input.jobId)),
@@ -129,6 +132,9 @@ const learnRouter = router({
   submitFinal: authed.input(z.object({ courseId: id, answers: z.record(z.string(), z.number().int()), locale: Locale }))
     .mutation(({ input, ctx }) => submitFinal(ctx.user, input.courseId, input.answers, input.locale)),
   reviews: authed.query(({ ctx }) => dueReviews(ctx.user)),
+  pretest: authed.input(z.object({ courseId: id })).query(({ input, ctx }) => getPretest(ctx.user, input.courseId)),
+  pretestSubmit: authed.input(z.object({ courseId: id, answers: z.array(z.number().int().min(-1).max(4)).max(8) }))
+    .mutation(({ input, ctx }) => submitPretest(ctx.user, input.courseId, input.answers)),
   review: authed.input(z.object({ cardId: id, choice: z.number().int().min(0).max(4), confidence: z.union([z.literal(1), z.literal(2), z.literal(3)]).default(2) }))
     .mutation(({ input, ctx }) => answerReview(ctx.user, input.cardId, input.choice, input.confidence)),
 });
@@ -169,6 +175,7 @@ const publicRouter = router({
 
 const adminRouter = router({
   stats: adminProcedure.query(() => adminStats()),
+  aiTest: adminProcedure.mutation(() => aiSelfTest()),
   users: adminProcedure.query(() => adminUsers()),
   courses: adminProcedure.query(() => adminCourses()),
   setPlan: adminProcedure.input(z.object({ userId: id, plan: z.enum(['free', 'premium']) })).mutation(async ({ input }) => { await adminSetPlan(input.userId, input.plan); return { ok: true }; }),

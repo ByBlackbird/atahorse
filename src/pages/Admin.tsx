@@ -1,8 +1,9 @@
-import { LuUsers, LuBookOpen, LuAward, LuTarget, LuCpu, LuDatabase, LuMail } from 'react-icons/lu';
+import { useState } from 'react';
+import { LuUsers, LuBookOpen, LuAward, LuTarget, LuCpu, LuDatabase, LuMail, LuPlug, LuPlugZap } from 'react-icons/lu';
 import { trpc } from '../lib/trpc';
 import { fmtDate, useI18n } from '../i18n/index';
 import { Shell } from '../app/Shell';
-import { PageLoader, Stat } from '../ui/kit';
+import { PageLoader, Stat, cx } from '../ui/kit';
 
 export default function Admin() {
   const { t, lang } = useI18n();
@@ -10,6 +11,8 @@ export default function Admin() {
   const users = trpc.admin.users.useQuery();
   const utils = trpc.useUtils();
   const setPlan = trpc.admin.setPlan.useMutation({ onSuccess: () => utils.admin.users.invalidate() });
+  const aiTest = trpc.admin.aiTest.useMutation();
+  const [aiResult, setAiResult] = useState<{ ok: boolean; text: string } | null>(null);
   if (!s.data) return <Shell><PageLoader /></Shell>;
   const d = s.data;
   const hitRate = d.ai.calls ? Math.round((d.ai.cachedCalls / d.ai.calls) * 100) : 0;
@@ -26,16 +29,48 @@ export default function Admin() {
         <Stat label={t('ad_pass')} value={`%${d.quizPassRate}`} icon={<LuTarget />} />
       </div>
 
+      <div className="card mt-6 overflow-x-auto p-5">
+        <h2 className="font-semibold">{t('ad_funnel')}</h2>
+        <table className="mt-3 w-full text-sm">
+          <thead className="text-left text-xs text-ink-3"><tr><th className="py-2">{t('ad_f_module')}</th><th className="text-right">{t('ad_f_opened')}</th><th className="text-right">{t('ad_f_tasks')}</th><th className="text-right">{t('ad_f_quizpass')}</th><th className="text-right">{t('ad_f_done')}</th><th className="text-right">{t('ad_f_rate')}</th></tr></thead>
+          <tbody className="divide-y divide-line">
+            {d.funnel.map((f) => (
+              <tr key={f.moduleIdx}>
+                <td className="py-2 font-medium">{f.moduleIdx + 1}</td>
+                <td className="text-right tabular-nums">{f.opened}</td>
+                <td className="text-right tabular-nums">{f.tasks}</td>
+                <td className="text-right tabular-nums">{f.quizPassed}</td>
+                <td className="text-right tabular-nums">{f.completed}</td>
+                <td className="text-right tabular-nums">{f.passRate === null ? '—' : `%${f.passRate}`}</td>
+              </tr>
+            ))}
+            {d.funnel.length === 0 && <tr><td colSpan={6} className="py-4 text-center text-ink-3">{t('pr_no_data')}</td></tr>}
+          </tbody>
+        </table>
+      </div>
+
       <div className="card mt-6 p-5">
         <div className="flex flex-wrap items-center justify-between gap-3">
           <h2 className="flex items-center gap-2 font-semibold"><LuCpu /> {t('ad_ai')}</h2>
           <div className="flex flex-wrap gap-2 text-xs">
             <span className="chip">{d.ai.provider} · {d.ai.models.light} / {d.ai.models.heavy}</span>
+            {(['anthropic', 'openai', 'ollama'] as const).map((p) => (
+              <span key={p} className={cx('chip', d.ai.configured[p] ? 'chip-gold' : '')}>{p}: {d.ai.configured[p] ? '✓' : '—'}</span>
+            ))}
             <span className="chip chip-gold">{t('ad_cache_rate')}: %{hitRate}</span>
             <span className="chip"><LuDatabase /> {d.ai.cacheEntries} · {d.ai.cacheHits} hit</span>
             <span className="chip">{t('ad_tokens')}: {d.ai.inTokens.toLocaleString()} / {d.ai.outTokens.toLocaleString()}</span>
+            <button className="btn btn-outline btn-sm" disabled={aiTest.isPending}
+              onClick={() => aiTest.mutate(undefined, { onSuccess: (r) => setAiResult({ ok: r.ok, text: r.ok ? `${r.provider}/${r.model} · ${r.ms} ms` : `${r.error} · ${r.ms} ms` }) })}>
+              {aiTest.isPending ? '…' : <><LuPlug /> {t('ad_aitest')}</>}
+            </button>
           </div>
         </div>
+        {aiResult && (
+          <p className={cx('mt-3 flex items-center gap-2 rounded-xl p-3 text-sm', aiResult.ok ? 'bg-ok-soft text-ok' : 'bg-bad-soft text-bad')}>
+            {aiResult.ok ? <LuPlugZap /> : <LuPlug />} {aiResult.ok ? t('ad_aitest_ok') : t('ad_aitest_fail')}: {aiResult.text}
+          </p>
+        )}
         <div className="mt-4 overflow-x-auto">
           <table className="w-full text-sm">
             <thead className="text-left text-xs text-ink-3"><tr><th className="py-2">task</th><th>tier</th><th className="text-right">calls</th><th className="text-right">cached</th><th className="text-right">failed</th><th className="text-right">in</th><th className="text-right">out</th><th className="text-right">ms</th></tr></thead>

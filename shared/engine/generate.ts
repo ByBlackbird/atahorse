@@ -32,6 +32,8 @@ export interface GenInput {
   profileKey: ProfileKey;
   method: MethodKey;
   meb?: { grade: MebGrade; subject: string; unit?: string };
+  /** Metalearning bağlamı (opsiyonel) — yalnızca AI üretim yolunda prompt'a eklenir. */
+  learner?: import('../types').CourseMeta;
 }
 
 const bankFor = (l: Locale): Bank => BANKS[l];

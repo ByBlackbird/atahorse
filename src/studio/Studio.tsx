@@ -76,6 +76,7 @@ export default function Studio({ courseId }: { courseId: number }) {
   const [sectionIdx, setSectionIdx] = useState(0);
   const [aiDeck, setAiDeck] = useState<SSlide[] | null>(null);
   const [lastWrong, setLastWrong] = useState(false);
+  const [focusSec, setFocusSec] = useState<number | null>(null);
   const share = trpc.course.share.useMutation({
     onSuccess: async ({ slug }) => {
       const url = `${window.location.origin}/p/${slug}`;
@@ -112,7 +113,10 @@ export default function Studio({ courseId }: { courseId: number }) {
 
   useEffect(() => { window.scrollTo({ top: 0 }); }, [mode, map]);
 
-  const selectModule = useCallback((i: number) => { setModuleIdx(i); setSectionIdx(0); setAiDeck(null); setRailOpen(false); window.scrollTo({ top: 0 }); }, []);
+  const selectModule = useCallback((i: number) => { setModuleIdx(i); setSectionIdx(0); setAiDeck(null); setFocusSec(null); setLastWrong(false); setRailOpen(false); window.scrollTo({ top: 0 }); }, []);
+
+  // Bölüm değişince bayrak sıfırlanır (AI panelindeki "son yanlış" önerisi bayatlamasın)
+  useEffect(() => { setLastWrong(false); }, [sectionIdx]);
 
   const mod = v && moduleIdx !== null ? v.doc.modules[moduleIdx] : null;
   const prog = v && moduleIdx !== null ? v.progress[moduleIdx] : null;
@@ -184,14 +188,15 @@ export default function Studio({ courseId }: { courseId: number }) {
             {map ? (
               <MindMap courseId={courseId} />
             ) : mode === 'read' ? (
-              <ReadingMode key={`${moduleIdx}-${v.course.shownLocale}`} view={v} mod={mod} onSection={setSectionIdx} onCheck={(ok) => setLastWrong(!ok)} />
+              <ReadingMode key={`${moduleIdx}-${v.course.shownLocale}`} view={v} mod={mod} onSection={setSectionIdx} onCheck={(ok) => setLastWrong(!ok)} focusSection={focusSec} />
             ) : mode === 'podcast' ? (
               <PodcastMode key={`${moduleIdx}-${v.course.shownLocale}`} mod={mod} locale={v.course.shownLocale} onSection={setSectionIdx} />
             ) : (
               <SlideMode key={`${moduleIdx}-${aiDeck ? 'ai' : 'm'}`} slides={aiDeck ?? mod.slides} isAiDeck={!!aiDeck} onExitAiDeck={() => setAiDeck(null)} onSection={setSectionIdx} />
             )}
           </Suspense>
-          {!map && <ModuleFooter key={moduleIdx} view={v} mod={mod} prog={prog} onNext={() => selectModule(moduleIdx + 1)} />}
+          {!map && <ModuleFooter key={moduleIdx} view={v} mod={mod} prog={prog} onNext={() => selectModule(moduleIdx + 1)}
+            onDrill={(i) => { setMode('read'); setMap(false); setFocusSec(i); window.scrollTo({ top: 0 }); }} />}
         </section>
 
         {/* AI paneli */}
