@@ -1,7 +1,7 @@
 // Uygulama bağlamları: tema, oturum, bildirim (XP / rozet / seviye).
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import { LuAward, LuCircleCheck, LuCircleAlert, LuZap } from 'react-icons/lu';
-import { applyTheme, storedTheme, type Theme } from '../lib/theme';
+import { applyTheme, savedTheme, storedTheme, watchSystemTheme, type Theme } from '../lib/theme';
 import { trpc, type RouterOutputs } from '../lib/trpc';
 import { useI18n } from '../i18n/index';
 
@@ -11,10 +11,14 @@ const ThemeCtx = createContext<{ theme: Theme; setTheme: SetTheme }>({ theme: 'p
 export function ThemeProvider({ children }: { children: ReactNode }) {
   const [theme, set] = useState<Theme>(storedTheme);
   const touched = useRef(false);
-  useEffect(() => { applyTheme(theme); }, [theme]);
+  const persist = useRef(savedTheme() !== null);
+  useEffect(() => { applyTheme(theme, persist.current); }, [theme]);
+  // Kullanıcı seçim yapmadıkça sistem görünümünü izle.
+  useEffect(() => watchSystemTheme((t) => { if (!persist.current) set(t); }), []);
   const setTheme = useCallback<SetTheme>((t, opts) => {
     if (opts?.remote && touched.current) return;
     if (!opts?.remote) touched.current = true;
+    persist.current = true;
     set(t);
   }, []);
   const value = useMemo(() => ({ theme, setTheme }), [theme, setTheme]);

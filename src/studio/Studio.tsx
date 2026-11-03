@@ -139,7 +139,7 @@ export default function Studio({ courseId }: { courseId: number }) {
   return (
     <Shell wide>
       {/* Üst şerit */}
-      <div className="no-print sticky top-14 z-40 -mx-4 -mt-6 mb-5 border-b border-line bg-bg/95 px-4 py-3 backdrop-blur md:-mx-6 md:-mt-8 md:px-6">
+      <div className="material no-print sticky top-14 z-20 -mx-4 -mt-6 mb-5 border-b border-line px-4 py-3 md:-mx-6 md:-mt-8 md:px-6 lg:top-0 lg:-mt-10">
         <div className="flex flex-wrap items-center gap-2">
           <button className="btn btn-ghost btn-icon lg:hidden" onClick={() => setRailOpen(true)} aria-label={t('s_modules')}><LuMenu /></button>
           <Link to="/panel" className="btn btn-ghost btn-icon hidden lg:inline-flex" aria-label={t('back')}><LuArrowLeft /></Link>
@@ -165,7 +165,7 @@ export default function Studio({ courseId }: { courseId: number }) {
       <div className={cx('grid gap-6', ai ? 'lg:grid-cols-[250px_minmax(0,1fr)] xl:grid-cols-[250px_minmax(0,1fr)_360px]' : 'lg:grid-cols-[250px_minmax(0,1fr)]')}>
         {/* Sol ray */}
         <aside className="hidden lg:block">
-          <div className="sticky top-[8.5rem] max-h-[calc(100dvh-10rem)] overflow-auto scrollbar-thin pr-1">
+          <div className="sticky top-[8.5rem] max-h-[calc(100dvh-10rem)] lg:top-[5.5rem] lg:max-h-[calc(100dvh-7rem)] overflow-auto scrollbar-thin pr-1">
             <ModuleRail view={v} current={moduleIdx} onSelect={selectModule} />
           </div>
         </aside>
@@ -197,7 +197,7 @@ export default function Studio({ courseId }: { courseId: number }) {
         {/* AI paneli */}
         {ai && (
           <aside className="fixed inset-x-0 bottom-0 z-[70] max-h-[75dvh] overflow-auto rounded-t-2xl border-t border-line bg-bg p-4 xl:static xl:z-auto xl:max-h-none xl:overflow-visible xl:rounded-none xl:border-0 xl:bg-transparent xl:p-0">
-            <div className="xl:sticky xl:top-[8.5rem] xl:max-h-[calc(100dvh-10rem)] xl:overflow-auto scrollbar-thin">
+            <div className="xl:sticky xl:top-[5.5rem] xl:max-h-[calc(100dvh-7rem)] xl:overflow-auto scrollbar-thin">
               <AiPanel
                 courseId={courseId} mod={mod} moduleIdx={moduleIdx} sectionIdx={sectionIdx} lastWrong={lastWrong} method={v.course.method}
                 onClose={() => setAi(false)}

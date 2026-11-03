@@ -172,7 +172,7 @@ export default function PodcastMode({ mod, locale, onSection }: { mod: SModule; 
           </label>
           {voices.length > 1 && (
             <label className="flex items-center gap-2"><LuMic /><span>{t('p_voice')}</span>
-              <select className="input !h-8 !w-44 !text-xs" value={voiceName} onChange={(e) => setVoiceName(e.target.value)}>{voices.map((v) => <option key={v.name} value={v.name}>{v.name}</option>)}</select>
+              <select className="input input-sm !w-44 !text-xs" value={voiceName} onChange={(e) => setVoiceName(e.target.value)}>{voices.map((v) => <option key={v.name} value={v.name}>{v.name}</option>)}</select>
             </label>
           )}
         </div>

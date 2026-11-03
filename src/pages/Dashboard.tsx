@@ -33,7 +33,7 @@ function CourseCard({ c }: { c: Course }) {
     <article className="card group flex flex-col p-5">
       <div className="flex items-start justify-between gap-3">
         <span className={cx('chip', tone)}>{status === 'generating' || status === 'queued' ? <Spinner className="h-3 w-3" /> : null}{t(`st_${status}`)}</span>
-        <button className="btn btn-ghost btn-icon -mr-2 -mt-1 opacity-0 transition-opacity group-hover:opacity-100 focus:opacity-100" aria-label={t('delete')}
+        <button className="btn btn-ghost btn-icon btn-sm reveal-on-hover -mr-2 -mt-1" aria-label={t('delete')}
           onClick={() => { if (window.confirm(t('confirm_delete'))) remove.mutate({ courseId: c.id }); }}><LuTrash2 /></button>
       </div>
       <h3 className="mt-3 line-clamp-2 font-semibold leading-snug">{c.title}</h3>
@@ -64,10 +64,10 @@ export default function Dashboard() {
     <Shell>
       <div className="flex flex-wrap items-end justify-between gap-4">
         <div>
-          <h1 className="h-display text-3xl">{t('d_hello', { name: me?.fullName?.split(' ')[0] || me?.username || '' })}</h1>
+          <h1 className="h-display t-title">{t('d_hello', { name: me?.fullName?.split(' ')[0] || me?.username || '' })}</h1>
           <p className="mt-1 text-ink-2">{t('d_sub')}</p>
         </div>
-        <Link to="/kurs-olustur" className="btn btn-primary"><LuPlus /> {t('nav_new')}</Link>
+        <Link to="/kurs-olustur" className="btn btn-primary lg:hidden"><LuPlus /> {t('nav_new')}</Link>
       </div>
 
       {cog.data && !cog.data.profile && (
@@ -77,6 +77,16 @@ export default function Dashboard() {
         </div>
       )}
 
+      {cont && cont.status === 'ready' && !cont.completedAt && (
+        <Link to={`/kurs/${cont.id}`} className="card elev-1 mt-6 flex min-h-20 items-center gap-4 border-brand/25 p-5 transition-colors active:bg-surface-2">
+          <div className="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-gold-soft text-gold-ink"><LuBookOpen /></div>
+          <div className="min-w-0 flex-1">
+            <p className="text-xs text-ink-3">{t('d_continue')}</p>
+            <p className="t-headline truncate">{cont.title}</p>
+          </div>
+          <Ring value={cont.percent / 100} size={44} stroke={4}><span className="text-[11px] font-semibold">{cont.percent}%</span></Ring>
+        </Link>
+      )}
       <div className="mt-6 grid gap-4 lg:grid-cols-[1.3fr_1fr_1fr]">
         <div className="card flex items-center gap-5 p-5">
           <Ring value={d.level.progress} size={84} stroke={6}>
@@ -99,18 +109,8 @@ export default function Dashboard() {
         </div>
       </div>
 
-      {cont && cont.status === 'ready' && !cont.completedAt && (
-        <Link to={`/kurs/${cont.id}`} className="card mt-4 flex items-center gap-4 p-5 transition-colors hover:border-line-strong">
-          <div className="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-gold-soft text-gold-ink"><LuBookOpen /></div>
-          <div className="min-w-0 flex-1">
-            <p className="text-xs text-ink-3">{t('d_continue')}</p>
-            <p className="truncate font-semibold">{cont.title}</p>
-          </div>
-          <Ring value={cont.percent / 100} size={44} stroke={4}><span className="text-[11px] font-semibold">{cont.percent}%</span></Ring>
-        </Link>
-      )}
 
-      <h2 className="mt-10 text-lg font-semibold">{t('d_courses')}</h2>
+      <h2 className="t-headline mt-10 !text-xl">{t('d_courses')}</h2>
       <div className="mt-4">
         {d.courses.length === 0 ? (
           <Empty icon={<LuGraduationCap />} title={t('d_empty_t')} body={t('d_empty_s')} action={<Link to="/kurs-olustur" className="btn btn-primary"><LuPlus /> {t('nav_new')}</Link>} />

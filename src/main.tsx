@@ -6,13 +6,13 @@ import { RouterProvider, Routes, type RouteDef } from './lib/router';
 import { I18nProvider } from './i18n/index';
 import { SessionSync, ThemeProvider, ToastProvider } from './ui/providers';
 import { PageLoader } from './ui/kit';
-import { applyTheme, storedTheme } from './lib/theme';
+import { applyTheme, savedTheme, storedTheme } from './lib/theme';
 import { RequireAuth, Shell } from './app/Shell';
 import Landing from './pages/Landing';
 import { Login, Register } from './pages/Auth';
 import NotFound from './pages/NotFound';
 
-applyTheme(storedTheme());
+applyTheme(storedTheme(), savedTheme() !== null);
 
 // Kod bölme: ağır sayfalar (stüdyo + three.js) yalnızca gerektiğinde yüklenir.
 const Dashboard = lazy(() => import('./pages/Dashboard'));

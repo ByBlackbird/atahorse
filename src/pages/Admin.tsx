@@ -1,4 +1,4 @@
-import { LuUsers, LuBookOpen, LuAward, LuTarget, LuCpu, LuDatabase } from 'react-icons/lu';
+import { LuUsers, LuBookOpen, LuAward, LuTarget, LuCpu, LuDatabase, LuMail } from 'react-icons/lu';
 import { trpc } from '../lib/trpc';
 import { fmtDate, useI18n } from '../i18n/index';
 import { Shell } from '../app/Shell';
@@ -16,7 +16,8 @@ export default function Admin() {
   return (
     <Shell wide>
       <h1 className="h-display text-3xl">{t('ad_title')}</h1>
-      <div className="mt-6 grid grid-cols-2 gap-3 md:grid-cols-6">
+      <div className="mt-6 grid grid-cols-2 gap-3 md:grid-cols-4 xl:grid-cols-7">
+        <Stat label={t('ad_waitlist')} value={d.waitlist} icon={<LuMail />} />
         <Stat label={t('ad_users')} value={d.users} icon={<LuUsers />} />
         <Stat label={t('ad_new7')} value={d.newUsers7d} icon={<LuUsers />} />
         <Stat label={t('ad_courses')} value={d.courses} icon={<LuBookOpen />} />
@@ -59,7 +60,7 @@ export default function Admin() {
               <tr key={u.id}>
                 <td className="py-2 text-ink-3">{u.id}</td><td>{u.fullName || u.username}{u.role === 'admin' && <span className="chip chip-brand ml-2 !h-5">admin</span>}</td><td className="text-ink-2">{u.email}</td>
                 <td className="text-right tabular-nums">{u.xp}</td><td className="text-right tabular-nums">{u.streak}</td>
-                <td><select className="input !h-8 !w-28 !text-xs" value={u.plan} onChange={(e) => setPlan.mutate({ userId: u.id, plan: e.target.value as 'free' | 'premium' })}><option value="free">free</option><option value="premium">premium</option></select></td>
+                <td><select className="input input-sm !w-28 !text-xs" value={u.plan} onChange={(e) => setPlan.mutate({ userId: u.id, plan: e.target.value as 'free' | 'premium' })}><option value="free">free</option><option value="premium">premium</option></select></td>
                 <td className="text-xs text-ink-3">{fmtDate(u.createdAt, lang)}</td>
               </tr>
             ))}

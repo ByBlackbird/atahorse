@@ -89,7 +89,7 @@ export default function AiPanel({ courseId, mod, moduleIdx, sectionIdx, lastWron
         </div>
         <label className="block text-xs text-ink-3">
           {t('ai_reteach')}:
-          <select className="input mt-1 !h-9 !text-sm" value={alt} onChange={(e) => setAlt(e.target.value as MethodKey)}>
+          <select className="input input-sm mt-1 !text-sm" value={alt} onChange={(e) => setAlt(e.target.value as MethodKey)}>
             {METHOD_KEYS.map((k) => <option key={k} value={k}>{METHODS[k].name[lang]}</option>)}
           </select>
         </label>

@@ -72,7 +72,16 @@ export function Modal({ open, onClose, title, children, wide }: { open: boolean;
   useEffect(() => {
     if (!open) return;
     const prev = document.activeElement as HTMLElement | null;
-    const on = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose(); };
+    const on = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') { onClose(); return; }
+      if (e.key !== 'Tab' || !ref.current) return;
+      // Odak tuzağı: Tab diyalog içinde döner
+      const f = [...ref.current.querySelectorAll<HTMLElement>('a[href], button:not([disabled]), input:not([disabled]), select, textarea, [tabindex]:not([tabindex="-1"])')];
+      if (!f.length) return;
+      const first = f[0]!, last = f[f.length - 1]!;
+      if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+      else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+    };
     window.addEventListener('keydown', on);
     ref.current?.querySelector<HTMLElement>('button, input, textarea, [tabindex]')?.focus();
     document.body.style.overflow = 'hidden';
@@ -80,8 +89,8 @@ export function Modal({ open, onClose, title, children, wide }: { open: boolean;
   }, [open, onClose]);
   if (!open) return null;
   return (
-    <div className="fixed inset-0 z-[90] grid place-items-center bg-night/55 p-4" onMouseDown={(e) => { if (e.target === e.currentTarget) onClose(); }}>
-      <div ref={ref} role="dialog" aria-modal="true" aria-label={title} className={cx('card anim-pop max-h-[90vh] w-full overflow-auto', wide ? 'max-w-2xl' : 'max-w-lg')}>
+    <div className="anim-fade fixed inset-0 z-[90] grid place-items-end p-0 sm:place-items-center sm:p-4" style={{ background: 'var(--c-scrim)' }} onMouseDown={(e) => { if (e.target === e.currentTarget) onClose(); }}>
+      <div ref={ref} role="dialog" aria-modal="true" aria-label={title} className={cx('card elev-3 anim-pop max-h-[90dvh] w-full overflow-auto rounded-b-none sm:rounded-b-[16px]', wide ? 'sm:max-w-2xl' : 'sm:max-w-lg')}>
         {title && (
           <div className="flex items-center justify-between border-b border-line px-5 py-3.5">
             <h2 className="font-semibold">{title}</h2>

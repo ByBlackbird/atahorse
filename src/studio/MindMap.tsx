@@ -140,7 +140,7 @@ export default function MindMap({ courseId }: { courseId: number }) {
       <div className="card flex flex-wrap items-center gap-2 p-2">
         <button className="btn btn-outline btn-sm" disabled={!selected} onClick={() => { const id = sel && addChild(sel); if (id) setSel(id); }}><LuPlus /> {t('m_add')}</button>
         <button className="btn btn-ghost btn-sm" disabled={!selected || selected.kind === 'root'} onClick={removeSel}><LuTrash2 /> {t('m_delete')}</button>
-        <input ref={labelInput} className="input !h-8 min-w-40 max-w-64 flex-1 !text-sm" placeholder={t('m_select')} disabled={!selected} value={selected?.label ?? ''} maxLength={78}
+        <input ref={labelInput} className="input input-sm min-w-40 max-w-64 flex-1 !text-sm" placeholder={t('m_select')} disabled={!selected} value={selected?.label ?? ''} maxLength={78}
           onChange={(e) => { const v = e.target.value; update((s) => s.map((n) => (n.id === sel ? { ...n, label: v || '·' } : n))); }} />
         <button className="btn btn-outline btn-sm" disabled={!selected || suggest.isPending} onClick={() => sel && suggest.mutate({ courseId, nodeId: sel, nodes, locale: lang })}>
           {suggest.isPending ? <Spinner className="h-3.5 w-3.5" /> : <LuSparkles />} {t('m_suggest')}
