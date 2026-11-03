@@ -32,4 +32,5 @@ export const LIMITS = {
   assist: { limit: 60, windowMs: 60 * 60_000 },
   translate: { limit: 10, windowMs: 60 * 60_000 },
   upload: { limit: 30, windowMs: 60 * 60_000 },
+  waitlist: { limit: 5, windowMs: 60 * 60_000 },
 } as const;

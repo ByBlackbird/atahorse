@@ -1,13 +1,13 @@
 // Yönetim paneli verileri: büyüme, öğrenme sonuçları ve AI maliyet/önbellek görünürlüğü.
 import { count, desc, eq, isNotNull, sql } from 'drizzle-orm';
 import { db } from '../db/client';
-import { aiCache, aiUsage, certificates, courses, quizAttempts, users } from '../db/schema';
+import { aiCache, aiUsage, certificates, courses, quizAttempts, users, waitlist } from '../db/schema';
 import { aiInfo } from '../ai/provider';
 
 export async function adminStats() {
   const one = async <T>(q: Promise<T | undefined>) => q;
   const weekAgo = Date.now() - 7 * 86_400_000;
-  const [u, u7, p, c, cDone, certs, qa, ai, aiCached, cacheRows] = await Promise.all([
+  const [u, u7, p, c, cDone, certs, qa, ai, aiCached, cacheRows, wl] = await Promise.all([
     one(db.select({ n: count() }).from(users).get()),
     one(db.select({ n: count() }).from(users).where(sql`${users.createdAt} >= ${weekAgo}`).get()),
     one(db.select({ n: count() }).from(users).where(eq(users.plan, 'premium')).get()),
@@ -18,6 +18,7 @@ export async function adminStats() {
     one(db.select({ n: count(), inT: sql<number>`coalesce(sum(${aiUsage.inTokens}),0)`, outT: sql<number>`coalesce(sum(${aiUsage.outTokens}),0)` }).from(aiUsage).get()),
     one(db.select({ n: count() }).from(aiUsage).where(eq(aiUsage.cached, true)).get()),
     one(db.select({ n: count(), hits: sql<number>`coalesce(sum(${aiCache.hits}),0)` }).from(aiCache).get()),
+    one(db.select({ n: count() }).from(waitlist).get()),
   ]);
   const byTask = await db.select({
     task: aiUsage.task, tier: aiUsage.tier, calls: count(),
@@ -25,6 +26,7 @@ export async function adminStats() {
     inT: sql<number>`sum(${aiUsage.inTokens})`, outT: sql<number>`sum(${aiUsage.outTokens})`, ms: sql<number>`avg(${aiUsage.ms})`,
   }).from(aiUsage).groupBy(aiUsage.task, aiUsage.tier).orderBy(desc(count())).all();
   return {
+    waitlist: wl?.n ?? 0,
     users: u?.n ?? 0, newUsers7d: u7?.n ?? 0, premium: p?.n ?? 0,
     courses: c?.n ?? 0, completedCourses: cDone?.n ?? 0, certificates: certs?.n ?? 0,
     quizAttempts: qa?.n ?? 0, quizPassRate: qa?.n ? Math.round(((qa.passed ?? 0) / qa.n) * 100) : 0,

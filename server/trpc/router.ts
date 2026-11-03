@@ -19,7 +19,7 @@ import { dashboard, deleteAccount, getCognitive, profilePage, saveProfileTest, u
 import { adminCourses, adminSetPlan, adminStats, adminUsers } from '../services/admin';
 import { aiInfo } from '../ai/provider';
 import { env } from '../env';
-import { courses } from '../db/schema';
+import { courses, waitlist } from '../db/schema';
 
 const id = z.number().int().positive();
 const Username = z.string().trim().toLowerCase().regex(/^[a-z0-9_]{3,24}$/);
@@ -158,6 +158,13 @@ const publicRouter = router({
     };
   }),
   level: publicProcedure.input(z.object({ xp: z.number().int().min(0) })).query(({ input }) => levelFromXp(input.xp)),
+  /** Bekleme listesi: aynı e-posta ikinci kez eklenmez, yine de başarılı döner (e-posta varlığını sızdırmaz). */
+  joinWaitlist: publicProcedure.use(limited('waitlist'))
+    .input(z.object({ email: z.string().trim().toLowerCase().email().max(160), role: z.enum(['learner', 'parent', 'teacher', 'school']).default('learner'), locale: Locale }))
+    .mutation(async ({ input }) => {
+      await db.insert(waitlist).values({ email: input.email, role: input.role, locale: input.locale }).onConflictDoNothing().run();
+      return { ok: true };
+    }),
 });
 
 const adminRouter = router({

@@ -222,3 +222,13 @@ export const aiUsage = sqliteTable('ai_usage', {
   ok: integer('ok', { mode: 'boolean' }).notNull().default(true),
   createdAt: ts('created_at'),
 });
+
+/** Bekleme listesi — açılış sayfasından gelen gerçek kayıtlar (e-posta başına tek satır). */
+export const waitlist = sqliteTable('waitlist', {
+  id: integer('id').primaryKey({ autoIncrement: true }),
+  email: text('email').notNull().unique(),
+  role: text('role', { enum: ['learner', 'parent', 'teacher', 'school'] }).notNull().default('learner'),
+  locale: text('locale').notNull().default('tr'),
+  source: text('source').notNull().default('landing'),
+  createdAt: ts('created_at'),
+});
