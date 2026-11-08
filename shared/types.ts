@@ -152,32 +152,3 @@ export const AssistResult = z.object({
 export type AssistResult = z.infer<typeof AssistResult>;
 
 export type JobStage = 'queued' | 'profile' | 'outline' | 'writing' | 'saving' | 'done' | 'failed';
-
-/* ---------------- metalearning bağlamı + gap teşhisi (Dirksen) ---------------- */
-
-export const GoalType = z.enum(['knowledge', 'skill', 'motivation', 'habit']);
-export type GoalType = z.infer<typeof GoalType>;
-
-/** Kurs oluştururken alınan öğrenen bağlamı — üretim prompt'una gider, içerik kişiselleşir. */
-export const CourseMeta = z.object({
-  why: z.string().trim().max(300).optional(),
-  prior: z.string().trim().max(300).optional(),
-  goal: z.string().trim().max(300).optional(),
-  goalType: GoalType.optional(),
-});
-export type CourseMeta = z.infer<typeof CourseMeta>;
-
-/** Dirksen gap tipi → varsayılan öğretim metodu (kullanıcı metot seçmediyse). */
-export const GOAL_TYPE_METHOD: Record<GoalType, MethodKey> = {
-  knowledge: 'retrieval',
-  skill: 'case_study',
-  motivation: 'feynman',
-  habit: 'retrieval',
-};
-
-/** Haftalık öğrenme planı (implementation intention). */
-export const PlanPrefs = z.object({
-  daysPerWeek: z.number().int().min(1).max(7),
-  minutes: z.number().int().min(5).max(240),
-});
-export type PlanPrefs = z.infer<typeof PlanPrefs>;

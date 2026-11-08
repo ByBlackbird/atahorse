@@ -32,8 +32,6 @@ export interface GenInput {
   profileKey: ProfileKey;
   method: MethodKey;
   meb?: { grade: MebGrade; subject: string; unit?: string };
-  /** Metalearning bağlamı (opsiyonel) — yalnızca AI üretim yolunda prompt'a eklenir. */
-  learner?: import('../types').CourseMeta;
 }
 
 const bankFor = (l: Locale): Bank => BANKS[l];
@@ -45,11 +43,11 @@ function checkFrom(b: Bank, k: number, t: string, f: string, id: string, bloom: 
   return { id, q: c.q(t, f), options: s.options, correct: s.correct, explain: c.explain, bloom };
 }
 
-function visualFor(type: VisualType, title: string, labels: string[], seed: string): Visual {
-  const r = rng(hash(seed));
-  const ls = labels.map((l) => l.slice(0, 46)).slice(0, 6);
-  while (ls.length < 3) ls.push(['A', 'B', 'C'][ls.length]);
-  return { type, title: title.slice(0, 118), labels: ls, values: ls.map(() => Math.round(30 + r() * 65)) };
+/** Şablon görseli: yalnız içerikteki gerçek etiketler; uydurma sayı yok (çubuk grafiği değersizse ağa döner). */
+function visualFor(type: VisualType, title: string, labels: string[], _seed: string): Visual {
+  const ls = labels.map((l) => l.replace(/[“”"]/g, '').trim().split(/\s+/).slice(0, 5).join(' ').slice(0, 46)).filter(Boolean).slice(0, 6);
+  while (ls.length < 3) ls.push('…');
+  return { type: type === 'bars' ? 'network' : type, title: title.slice(0, 118), labels: ls };
 }
 
 function paragraphs(b: Bank, method: MethodKey, level: Level, t: string, f: string) {
@@ -107,7 +105,7 @@ export function buildSlides(mod: Omit<Module, 'slides'>, topic: string, locale: 
     bullets: mod.task.steps.slice(0, 4).map((x) => x.slice(0, 198)),
     highlight: b.slide.taskHighlight,
     notes: b.slide.notesTask(mod.task.title),
-    visual: visualFor('flow', mod.task.title, mod.task.steps.map((_, i) => `${i + 1}`), mod.task.title),
+    visual: visualFor('flow', mod.task.title, mod.task.steps, mod.task.title),
   });
   slides.push({
     id: `m${mod.idx}-recap`,
@@ -116,7 +114,7 @@ export function buildSlides(mod: Omit<Module, 'slides'>, topic: string, locale: 
     bullets: mod.keyPoints.slice(0, 3).map((x) => x.slice(0, 198)),
     highlight: mod.summary.slice(0, 238),
     notes: b.slide.notesRecap,
-    visual: visualFor('pyramid', b.slide.recapTitle, mod.keyPoints.map((_, i) => `${i + 1}`), mod.summary),
+    visual: visualFor('pyramid', b.slide.recapTitle, mod.keyPoints, mod.summary),
   });
   return slides;
 }
