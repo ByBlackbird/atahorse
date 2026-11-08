@@ -1,11 +1,11 @@
 // Bilişsel profil, kişisel panel özeti ve ayarlar.
+import { titleCase } from '../../shared/engine/text';
 import { and, count, desc, eq, isNotNull, sql } from 'drizzle-orm';
 import { db } from '../db/client';
-import { activityDays, checkAnswers, cognitiveProfiles, courses, methodStats, modeUsage, moduleProgress, users } from '../db/schema';
+import { checkAnswers, cognitiveProfiles, courses, methodStats, modeUsage, moduleProgress, users } from '../db/schema';
 import { PROFILE_TEST, PROFILES, scoreProfile, type ProfileAnswer } from '../../shared/engine/profiles';
-import { METHODS } from '../../shared/engine/methods';
 import { levelFromXp } from '../../shared/engine/gamification';
-import { PlanPrefs, type Locale } from '../../shared/types';
+import type { Locale } from '../../shared/types';
 import { AppError, listCourses } from './courses';
 import { activityHeatmap, badgeBoard } from './gamification';
 import { dueCount, myCertificates } from './learning';
@@ -38,7 +38,7 @@ export async function getCognitive(userId: number) {
   };
 }
 
-export async function dashboard(user: User, locale: Locale = 'tr') {
+export async function dashboard(user: User) {
   const rows = await listCourses(user.id);
   const prog = await db.select({ courseId: moduleProgress.courseId, done: count() }).from(moduleProgress)
     .where(and(eq(moduleProgress.userId, user.id), isNotNull(moduleProgress.completedAt))).groupBy(moduleProgress.courseId).all();
@@ -53,37 +53,11 @@ export async function dashboard(user: User, locale: Locale = 'tr') {
   const xp = u?.xp ?? 0;
   return {
     xp, level: levelFromXp(xp), streak: u?.streak ?? 0, longestStreak: u?.longestStreak ?? 0,
+    dailyGoal: u?.dailyGoal ?? 30,
     dueReviews: await dueCount(user.id),
     heatmap: await activityHeatmap(user.id),
-    insight: await learningInsight(user.id, locale),
     courses: list,
     continueId: last?.courseId ?? list.find((c) => c.status === 'ready' && !c.completedAt)?.id ?? null,
-  };
-}
-
-/** Öğrenme analizi (learning analytics + metacognition): metot isabeti, mod tercihi, özgüven kalibrasyonu.
- *  Kaynak: zaten yazılan methodStats / modeUsage / checkAnswers satırları — şema değişikliği yok. */
-async function learningInsight(userId: number, locale: Locale) {
-  const [methods, modes, conf] = await Promise.all([
-    db.select().from(methodStats).where(eq(methodStats.userId, userId)).all(),
-    db.select().from(modeUsage).where(eq(modeUsage.userId, userId)).all(),
-    db.select({ confidence: checkAnswers.confidence, correct: checkAnswers.correct })
-      .from(checkAnswers)
-      .where(and(eq(checkAnswers.userId, userId), sql`${checkAnswers.itemId} not like 'rv:%'`)).all(),
-  ]);
-  const named = methods
-    .filter((m) => m.attempts >= 5)
-    .map((m) => ({ method: m.method, accuracy: Math.round((m.correct / m.attempts) * 100), name: METHODS[m.method as keyof typeof METHODS]?.name[locale] ?? m.method }))
-    .sort((a, b) => b.accuracy - a.accuracy);
-  const topMode = modes.map((m) => ({ mode: m.mode, minutes: Math.round(m.seconds / 60) })).sort((a, b) => b.minutes - a.minutes)[0] ?? null;
-  const high = conf.filter((c) => c.confidence === 3);
-  const highConfAcc = high.length >= 5 ? Math.round((high.filter((c) => c.correct).length / high.length) * 100) : null;
-  return {
-    topMethod: named[0] ?? null,
-    weakMethod: named.length > 1 ? named[named.length - 1] : null,
-    topMode,
-    highConfAcc,
-    answers: conf.length,
   };
 }
 
@@ -103,11 +77,12 @@ export async function profilePage(user: User, locale: Locale) {
   };
 }
 
-export async function updateSettings(user: User, s: { fullName?: string; locale?: Locale; theme?: 'paper' | 'ink' }) {
+export async function updateSettings(user: User, s: { fullName?: string; locale?: Locale; theme?: 'paper' | 'ink'; dailyGoal?: number }) {
   const set: Partial<typeof users.$inferInsert> = {};
-  if (s.fullName !== undefined) set.fullName = s.fullName.trim().slice(0, 80);
+  if (s.fullName !== undefined) set.fullName = titleCase(s.fullName, s.locale ?? user.locale).slice(0, 80);
   if (s.locale) set.locale = s.locale;
   if (s.theme) set.theme = s.theme;
+  if (s.dailyGoal) set.dailyGoal = s.dailyGoal;
   if (Object.keys(set).length) await db.update(users).set(set).where(eq(users.id, user.id)).run();
   return { ok: true };
 }
@@ -115,31 +90,4 @@ export async function updateSettings(user: User, s: { fullName?: string; locale?
 /** KVKK/GDPR: tek tıkla hesap ve tüm öğrenme verisini silme (cascade). */
 export async function deleteAccount(user: User) {
   await db.delete(users).where(eq(users.id, user.id)).run();
-}
-
-/* ---------------- haftalık öğrenme planı (implementation intention) ---------------- */
-
-function mondayUtc(): string {
-  const d = new Date();
-  const day = (d.getUTCDay() + 6) % 7; // Pazartesi = 0
-  d.setUTCDate(d.getUTCDate() - day);
-  return d.toISOString().slice(0, 10);
-}
-
-export async function getPlan(user: User) {
-  const u = await db.select({ planPrefs: users.planPrefs }).from(users).where(eq(users.id, user.id)).get();
-  let prefs: PlanPrefs | null = null;
-  if (u?.planPrefs) { try { prefs = PlanPrefs.parse(JSON.parse(u.planPrefs)); } catch { prefs = null; } }
-  const since = mondayUtc();
-  const week = await db.select({ day: activityDays.day, seconds: activityDays.seconds })
-    .from(activityDays).where(and(eq(activityDays.userId, user.id), sql`${activityDays.day} >= ${since}`)).all();
-  const daysDone = week.filter((w) => w.seconds >= 60).length;
-  const minutesDone = Math.round(week.reduce((s, w) => s + w.seconds, 0) / 60);
-  return { prefs, week: { daysDone, minutesDone, since } };
-}
-
-export async function savePlan(user: User, input: PlanPrefs) {
-  const prefs = PlanPrefs.parse(input);
-  await db.update(users).set({ planPrefs: JSON.stringify(prefs) }).where(eq(users.id, user.id)).run();
-  return { ok: true as const, prefs };
 }

@@ -10,7 +10,7 @@ export type Tier = 'light' | 'heavy';
 export type Task =
   | 'course.outline' | 'course.module'
   | 'assist.explain' | 'assist.summarize' | 'assist.diagram' | 'assist.reteach' | 'assist.slides'
-  | 'mindmap.suggest' | 'translate.module' | 'translate.meta';
+  | 'mindmap.suggest' | 'translate.module' | 'translate.meta' | 'lesson.visual';
 
 interface Route { tier: Tier; maxTokens: number; temperature: number; cacheDays: number; semantic: boolean }
 
@@ -26,20 +26,12 @@ export const ROUTES: Record<Task, Route> = {
   'mindmap.suggest':  { tier: 'light', maxTokens: 500,   temperature: 0.7, cacheDays: 7,  semantic: false },
   'translate.module': { tier: 'light', maxTokens: 9000,  temperature: 0.2, cacheDays: 90, semantic: false },
   'translate.meta':   { tier: 'light', maxTokens: 1500,  temperature: 0.2, cacheDays: 90, semantic: false },
+  'lesson.visual':    { tier: 'heavy', maxTokens: 7000,  temperature: 0.4, cacheDays: 90, semantic: false },
 };
 
 const provider: ProviderName = resolveProvider();
 const models = modelsFor(provider);
-export const aiInfo = () => ({
-  provider, models, enabled: provider !== 'none',
-  embeddings: !!env.AI_EMBED_MODEL && (provider === 'openai' || provider === 'ollama'),
-  // Yapılandırma durumu (sır değil — yalnızca anahtar VAR/YOK): hangi sağlayıcı hazır görülüyor
-  configured: {
-    anthropic: !!env.ANTHROPIC_API_KEY,
-    openai: !!env.OPENAI_API_KEY,
-    ollama: !!env.OLLAMA_URL,
-  },
-});
+export const aiInfo = () => ({ provider, models, enabled: provider !== 'none', embeddings: !!env.AI_EMBED_MODEL && (provider === 'openai' || provider === 'ollama') });
 export const aiEnabled = () => provider !== 'none';
 
 /* ---------------- eşzamanlılık sınırlayıcı ---------------- */

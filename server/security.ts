@@ -33,4 +33,5 @@ export const LIMITS = {
   translate: { limit: 10, windowMs: 60 * 60_000 },
   upload: { limit: 30, windowMs: 60 * 60_000 },
   waitlist: { limit: 5, windowMs: 60 * 60_000 },
+  report: { limit: 20, windowMs: 60 * 60_000 },
 } as const;

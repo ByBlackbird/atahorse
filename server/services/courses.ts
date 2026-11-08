@@ -1,10 +1,11 @@
 // Kurs üretimi: istek anında job_id döner; üretim kuyrukta koşar; aşama yüzdeleri gerçektir.
 // AI yoksa veya bir adım başarısız olursa deterministik motor devreye girer — boş kurs üretilmez.
+import { titleCase, titleDoc } from '../../shared/engine/text';
 import crypto from 'node:crypto';
 import { and, count, desc, eq, inArray } from 'drizzle-orm';
 import { db } from '../db/client';
 import { cognitiveProfiles, courseTranslations, courses, jobs, methodStats } from '../db/schema';
-import { CourseDoc, CourseMeta, GOAL_TYPE_METHOD, type Level, type Locale, type MethodKey, type Module, type ProfileKey } from '../../shared/types';
+import { CourseDoc, type Level, type Locale, type MethodKey, type Module, type ProfileKey } from '../../shared/types';
 import { completeModule, generateTemplateCourse, templateModule, type GenInput } from '../../shared/engine/generate';
 import { DEFAULT_PROFILE, PROFILES } from '../../shared/engine/profiles';
 import { chooseMethod, type MethodStat } from '../../shared/engine/science';
@@ -39,7 +40,8 @@ export interface CreateInput {
   locale: Locale;
   method?: MethodKey;
   meb?: { grade: MebGrade; subject: string; unit?: string };
-  meta?: CourseMeta;
+  /** Metaöğrenme hedefi (opsiyonel): neden, hedef tarih (YYYY-MM-DD), günlük dakika. */
+  goal?: { why?: string; targetDate?: string | null; minutesPerDay?: number };
 }
 
 export async function createCourse(user: User, input: CreateInput) {
@@ -60,16 +62,14 @@ export async function createCourse(user: User, input: CreateInput) {
     topic = input.meb.unit ?? `${input.meb.grade}. Sınıf ${s.name(input.meb.grade)}`;
   }
   if (topic.length < 2 || topic.length > 120) throw new AppError('bad_topic');
+  topic = titleCase(topic, input.locale);
 
   const profileKey = await userProfileKey(user.id);
-  // Dirksen gap teşhisi: metot seçilmediyse ve gap tipi verildiyse, gap'e uygun metot önerilir
-  const meta = input.meta ? CourseMeta.parse(input.meta) : undefined;
-  const methodOverride = input.method ?? (meta?.goalType ? GOAL_TYPE_METHOD[meta.goalType] : undefined);
-  const { method } = await pickMethod(user.id, profileKey, methodOverride);
+  const { method } = await pickMethod(user.id, profileKey, input.method);
   const [c] = await db.insert(courses).values({
     userId: user.id, title: topic, topic, level: input.level, locale: input.locale, profileKey, method,
     source: input.meb ? 'meb' : 'free', mebGrade: input.meb?.grade, mebSubject: input.meb?.subject, mebUnit: input.meb?.unit,
-    meta: meta ? JSON.stringify(meta) : null,
+    goalWhy: input.goal?.why?.trim() || null, targetDate: input.goal?.targetDate || null, minutesPerDay: input.goal?.minutesPerDay ?? 30,
     status: 'queued',
   }).returning().all();
   const jobId = crypto.randomUUID();
@@ -116,7 +116,6 @@ async function runJob(jobId: string) {
   const input: GenInput = {
     topic: c.topic, level: c.level, locale: c.locale, profileKey: c.profileKey as ProfileKey, method: c.method as MethodKey,
     meb: c.mebGrade && c.mebSubject ? { grade: c.mebGrade as MebGrade, subject: c.mebSubject, unit: c.mebUnit ?? undefined } : undefined,
-    learner: c.meta ? CourseMeta.parse(JSON.parse(c.meta)) : undefined,
   };
   try {
     await stage(jobId, 'profile', 8);
@@ -124,7 +123,7 @@ async function runJob(jobId: string) {
     if (aiEnabled()) doc = await generateWithAi(jobId, input, c.userId);
     else doc = generateTemplateCourse(input);
     await stage(jobId, 'saving', 95);
-    const valid = CourseDoc.parse(doc);
+    const valid = titleDoc(CourseDoc.parse(doc));
     await db.update(courses).set({ title: valid.title, doc: JSON.stringify(valid), moduleCount: valid.modules.length, generator: valid.generator, status: 'ready', updatedAt: Date.now() }).where(eq(courses.id, c.id)).run();
     await stage(jobId, 'done', 100);
   } catch (e) {
@@ -145,7 +144,6 @@ async function generateWithAi(jobId: string, input: GenInput, userId: number): P
       prompt: outlinePrompt({
         topic: input.topic, level: input.level, locale: input.locale,
         meb: input.meb && subj ? { grade: input.meb.grade, subjectName: subj.name(input.meb.grade), unit: input.meb.unit, units: subj.units[input.meb.grade] } : undefined,
-        learner: input.learner,
       }),
     }, OutlineSchema)).data;
   } catch (e) {
@@ -161,7 +159,7 @@ async function generateWithAi(jobId: string, input: GenInput, userId: number): P
     try {
       const body = (await completeJSON({
         task: 'course.module', system, userId,
-        prompt: modulePrompt({ courseTitle: outline.title, level: input.level, idx: i, total, mod: om, previous: outline.modules.slice(0, i).map((m) => m.title), learnerGoal: input.learner?.goal }),
+        prompt: modulePrompt({ courseTitle: outline.title, level: input.level, idx: i, total, mod: om, previous: outline.modules.slice(0, i).map((m) => m.title) }),
       }, ModuleBodySchema)).data;
       modules.push(completeModule(toModule(i, om.title, om.objectives, body), input));
       aiModules++;
@@ -260,7 +258,7 @@ export async function requestTranslation(user: User, courseId: number, to: Local
   const doc = parseDoc(c.doc);
   if (doc.generator === 'template') {
     const tdoc = translateTemplate(c, to);
-    await db.insert(courseTranslations).values({ courseId: c.id, locale: to, doc: JSON.stringify(tdoc) }).onConflictDoNothing().run();
+    await db.insert(courseTranslations).values({ courseId: c.id, locale: to, doc: JSON.stringify(titleDoc(tdoc)) }).onConflictDoNothing().run();
     return { ready: true as const };
   }
   const open = await db.select({ id: jobs.id }).from(jobs)
@@ -284,7 +282,7 @@ async function runTranslate(jobId: string, c: CourseRow, to: Locale) {
   try {
     const src = parseDoc(c.doc);
     if (!aiEnabled()) {
-      await db.insert(courseTranslations).values({ courseId: c.id, locale: to, doc: JSON.stringify(translateTemplate(c, to)) }).onConflictDoNothing().run();
+      await db.insert(courseTranslations).values({ courseId: c.id, locale: to, doc: JSON.stringify(titleDoc(translateTemplate(c, to))) }).onConflictDoNothing().run();
       await stage(jobId, 'done', 100);
       return;
     }
@@ -307,7 +305,7 @@ async function runTranslate(jobId: string, c: CourseRow, to: Locale) {
       await stage(jobId, 'writing', 10 + Math.round(((i + 1) / src.modules.length) * 85));
     }
     const doc = CourseDoc.parse({ ...src, ...meta, locale: to, modules });
-    await db.insert(courseTranslations).values({ courseId: c.id, locale: to, doc: JSON.stringify(doc) })
+    await db.insert(courseTranslations).values({ courseId: c.id, locale: to, doc: JSON.stringify(titleDoc(doc)) })
       .onConflictDoUpdate({ target: [courseTranslations.courseId, courseTranslations.locale], set: { doc: JSON.stringify(doc) } }).run();
     await stage(jobId, 'done', 100);
   } catch (e) {

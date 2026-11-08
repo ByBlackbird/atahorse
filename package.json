@@ -1,7 +1,7 @@
 {
   "name": "atahorse",
   "private": true,
-  "version": "3.3.0",
+  "version": "3.5.0",
   "description": "Atahorse — kişisel okul sistemi: öğrenme bilimine dayalı, profile göre açılan kurs motoru.",
   "type": "module",
   "engines": {
@@ -16,11 +16,12 @@
     "build:api": "tsx scripts/build-api.ts",
     "start": "NODE_ENV=production node --disable-warning=ExperimentalWarning dist-server/index.js",
     "typecheck": "tsc -p tsconfig.json --noEmit",
+    "lint:design": "tsx scripts/check-design.ts",
     "test": "tsx --test tests/*.test.ts",
     "test:e2e": "node tests/e2e.mjs",
     "db:migration": "tsx scripts/gen-migration.ts",
     "db:studio": "drizzle-kit studio",
-    "ci": "npm run typecheck && npm test && npm run build"
+    "ci": "npm run typecheck && npm run lint:design && npm test && npm run build"
   },
   "dependencies": {
     "@hono/node-server": "^1.19.0",

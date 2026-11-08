@@ -1,7 +1,7 @@
 // Öğrenme döngüsü: kilit → okuma/dinleme/slayt → anlık kontrol → görev onayı → modül quizi →
 // modül tamamlama → kurs tamamlama → karma final → sertifika. Her ödül sunucu otoriter ve idempotent.
 import crypto from 'node:crypto';
-import { and, asc, count, desc, eq, lte, sql } from 'drizzle-orm';
+import { and, asc, count, eq, lte, sql } from 'drizzle-orm';
 import { db } from '../db/client';
 import { certificates, checkAnswers, courses, methodStats, moduleProgress, quizAttempts, reviewCards, users } from '../db/schema';
 import type { CourseDoc, Locale, QuizItem } from '../../shared/types';
@@ -22,9 +22,9 @@ export function itemsOf(doc: CourseDoc) {
   return map;
 }
 
-const strip = (q: QuizItem) => ({ id: q.id, q: q.q, options: q.options, bloom: q.bloom });
+export const strip = (q: QuizItem) => ({ id: q.id, q: q.q, options: q.options, bloom: q.bloom });
 
-async function progressRows(userId: number, courseId: number) {
+export async function progressRows(userId: number, courseId: number) {
   return db.select().from(moduleProgress).where(and(eq(moduleProgress.userId, userId), eq(moduleProgress.courseId, courseId))).all();
 }
 
@@ -37,7 +37,7 @@ export function unlockedList(n: number, rows: (typeof moduleProgress.$inferSelec
   return Array.from({ length: n }, (_, i) => i === 0 || passed.has(i - 1));
 }
 
-async function assertUnlocked(userId: number, c: CourseRow, moduleIdx: number) {
+export async function assertUnlocked(userId: number, c: CourseRow, moduleIdx: number) {
   const doc = parseDoc(c.doc);
   if (moduleIdx < 0 || moduleIdx >= doc.modules.length) throw new AppError('bad_module');
   const rows = await progressRows(userId, c.id);
@@ -97,8 +97,6 @@ export async function courseView(user: User, courseId: number, locale?: Locale) 
   const cert = await db.select().from(certificates).where(and(eq(certificates.userId, user.id), eq(certificates.courseId, c.id))).get();
   const final = await db.select().from(quizAttempts)
     .where(and(eq(quizAttempts.userId, user.id), eq(quizAttempts.courseId, c.id), eq(quizAttempts.moduleIdx, -1))).orderBy(sql`${quizAttempts.score} desc`).get();
-  const pretest = await db.select().from(quizAttempts)
-    .where(and(eq(quizAttempts.userId, user.id), eq(quizAttempts.courseId, c.id), eq(quizAttempts.moduleIdx, -2))).orderBy(desc(quizAttempts.id)).limit(1).get();
   // Öğrenciye giden belgede doğru cevaplar yok — kontrol soruları sunucuda puanlanır.
   const safeDoc = {
     ...doc,
@@ -124,7 +122,6 @@ export async function courseView(user: User, courseId: number, locale?: Locale) 
     checks,
     percent: Math.round((completedModules / doc.modules.length) * 100),
     final: final ? { score: final.score, total: final.total, passed: final.passed } : null,
-    pretest: { done: !!pretest, score: pretest?.score ?? null, total: pretest?.total ?? doc.modules[0]?.quiz.length ?? 0 },
     certificate: cert ? { code: cert.code, issuedAt: cert.issuedAt, scorePct: cert.scorePct } : null,
     goals: [
       { key: 'tasks', done: progress.filter((p) => p.taskDone).length, total: doc.modules.length },
@@ -194,47 +191,8 @@ export async function submitModuleQuiz(user: User, courseId: number, moduleIdx: 
   return { score, total: quiz.length, passed, results, xp: merge(rs), unlockedNext: passed && moduleIdx + 1 < doc.modules.length };
 }
 
-/* ---------------- ön test (soğuk geri çağırma, taban çizgisi) ---------------- */
-// quizAttempts.moduleIdx = -2: XP yok, FSRS kartı yok, kilit açmaz — yalnızca kalibrasyon tabanı.
-// Lean "validated learning": final skoru − ön test skoru = gerçek kazanım.
-
-function pretestItems(doc: CourseDoc) {
-  return doc.modules[0]?.quiz ?? [];
-}
-
-export async function getPretest(user: User, courseId: number) {
-  const c = await ownCourse(user, courseId);
-  const doc = parseDoc(c.doc);
-  const items = pretestItems(doc);
-  const done = await db.select().from(quizAttempts)
-    .where(and(eq(quizAttempts.userId, user.id), eq(quizAttempts.courseId, c.id), eq(quizAttempts.moduleIdx, -2)))
-    .orderBy(desc(quizAttempts.id)).limit(1).get();
-  return {
-    total: items.length,
-    done: !!done,
-    score: done?.score ?? null,
-    items: done ? [] : items.map(strip),
-  };
-}
-
-export async function submitPretest(user: User, courseId: number, answers: number[]) {
-  const c = await ownCourse(user, courseId);
-  const doc = parseDoc(c.doc);
-  const quiz = pretestItems(doc);
-  if (!quiz.length) throw new AppError('bad_state', 'CONFLICT');
-  if (answers.length !== quiz.length) throw new AppError('bad_answers');
-  const existing = await db.select().from(quizAttempts)
-    .where(and(eq(quizAttempts.userId, user.id), eq(quizAttempts.courseId, c.id), eq(quizAttempts.moduleIdx, -2)))
-    .orderBy(desc(quizAttempts.id)).limit(1).get();
-  if (existing) return { score: existing.score, total: existing.total }; // idempotent
-  const score = quiz.reduce((s, q, i) => s + (answers[i] === q.correct ? 1 : 0), 0);
-  await db.insert(quizAttempts).values({ userId: user.id, courseId: c.id, moduleIdx: -2, answers, score, total: quiz.length, passed: false }).run();
-  await touchActivity(user.id);
-  return { score, total: quiz.length };
-}
-
 /* ---------------- final değerlendirme (karma) + sertifika ---------------- */
-function finalItems(doc: CourseDoc, courseId: number, userId: number) {
+export function finalItems(doc: CourseDoc, courseId: number, userId: number) {
   const all = [...itemsOf(doc).values()];
   const r = rng(hash(`final:${courseId}:${userId}`));
   // Karma tekrar: her modülden en az bir soru, sonra karıştır (interleaving)

@@ -18,9 +18,12 @@ export const users = sqliteTable('users', {
   onboardedAt: integer('onboarded_at'),
   xp: integer('xp').notNull().default(0),
   streak: integer('streak').notNull().default(0),
+  /** Günlük XP hedefi (10 · 20 · 30 · 50) — yormayan, seçilebilir tempo */
+  dailyGoal: integer('daily_goal').notNull().default(30),
   longestStreak: integer('longest_streak').notNull().default(0),
   lastActiveDay: text('last_active_day'),
-  planPrefs: text('plan_prefs'), // PlanPrefs JSON (haftalık plan)
+  /** Kaydı getiren atıf kodu (creator / elçi / kullanıcı daveti). */
+  refCode: text('ref_code'),
   createdAt: ts('created_at'),
 });
 
@@ -64,11 +67,14 @@ export const courses = sqliteTable('courses', {
   mebUnit: text('meb_unit'),
   status: text('status', { enum: ['queued', 'generating', 'ready', 'failed'] }).notNull().default('queued'),
   generator: text('generator', { enum: ['ai', 'template'] }),
-  meta: text('meta'), // CourseMeta JSON (metalearning bağlamı)
   doc: text('doc'), // CourseDoc JSON
   moduleCount: integer('module_count').notNull().default(0),
   shareSlug: text('share_slug').unique(),
   completedAt: integer('completed_at'),
+  /** Metaöğrenme: neden öğreniyor, ne zamana, günde kaç dakika. Plan bunlardan türetilir. */
+  goalWhy: text('goal_why'),
+  targetDate: text('target_date'),
+  minutesPerDay: integer('minutes_per_day').notNull().default(30),
   createdAt: ts('created_at'),
   updatedAt: ts('updated_at'),
 }, (t) => [index('courses_user_idx').on(t.userId)]);
@@ -234,3 +240,46 @@ export const waitlist = sqliteTable('waitlist', {
   source: text('source').notNull().default('landing'),
   createdAt: ts('created_at'),
 });
+
+/** Ön test: kurs başında, cevap göstermeden. Finaldeki aynı sorularla eşleşir → öğrenme kazancı. */
+export const pretests = sqliteTable('pretests', {
+  userId: integer('user_id').notNull().references(() => users.id, { onDelete: 'cascade' }),
+  courseId: integer('course_id').notNull().references(() => courses.id, { onDelete: 'cascade' }),
+  itemIds: text('item_ids', { mode: 'json' }).$type<string[]>().notNull(),
+  answers: text('answers', { mode: 'json' }).$type<number[]>().notNull(),
+  score: integer('score').notNull(),
+  total: integer('total').notNull(),
+  skipped: integer('skipped', { mode: 'boolean' }).notNull().default(false),
+  createdAt: ts('created_at'),
+}, (t) => [primaryKey({ columns: [t.userId, t.courseId] })]);
+
+/** İçerik denetimi: öğrenenin "hatalı/anlaşılmaz" bildirimi → yönetim kuyruğu. */
+export const contentReports = sqliteTable('content_reports', {
+  id: integer('id').primaryKey({ autoIncrement: true }),
+  userId: integer('user_id').notNull().references(() => users.id, { onDelete: 'cascade' }),
+  courseId: integer('course_id').notNull().references(() => courses.id, { onDelete: 'cascade' }),
+  itemId: text('item_id').notNull(),
+  kind: text('kind', { enum: ['wrong_answer', 'unclear', 'factual', 'other'] }).notNull(),
+  note: text('note').notNull().default(''),
+  status: text('status', { enum: ['open', 'resolved', 'dismissed'] }).notNull().default('open'),
+  createdAt: ts('created_at'),
+}, (t) => [uniqueIndex('content_reports_uq').on(t.userId, t.courseId, t.itemId), index('content_reports_status_idx').on(t.status)]);
+
+/** Atıf kodları: creator / elçi / ortak kampanyaları ölçmek için. Kullanıcı davetleri kullanıcı adıyla çalışır. */
+export const refCodes = sqliteTable('ref_codes', {
+  code: text('code').primaryKey(),
+  label: text('label').notNull(),
+  kind: text('kind', { enum: ['creator', 'ambassador', 'partner', 'campaign'] }).notNull().default('creator'),
+  market: text('market').notNull().default(''),
+  createdAt: ts('created_at'),
+});
+
+/** Anlatımlı görsel ders: modül içeriğinden üretilen sahneler (AI veya şablon), dil başına önbellek. */
+export const visualLessons = sqliteTable('visual_lessons', {
+  courseId: integer('course_id').notNull().references(() => courses.id, { onDelete: 'cascade' }),
+  moduleIdx: integer('module_idx').notNull(),
+  locale: text('locale').notNull(),
+  doc: text('doc').notNull(),
+  source: text('source').notNull(),
+  createdAt: ts('created_at'),
+}, (t) => [primaryKey({ columns: [t.courseId, t.moduleIdx, t.locale] })]);

@@ -1,4 +1,5 @@
 // AI Asistan + zihin haritası servisleri. AI varsa yönlendirilmiş model, yoksa/başarısızsa şablon.
+import { titleCase } from '../../shared/engine/text';
 import { and, eq } from 'drizzle-orm';
 import { z } from 'zod';
 import { db } from '../db/client';
@@ -73,7 +74,7 @@ export async function saveMindmap(user: User, courseId: number, nodes: MindNode[
   const ids = new Set(valid.map((n) => n.id));
   if (ids.size !== valid.length) throw new AppError('bad_nodes');
   if (valid.filter((n) => n.parentId === null).length !== 1) throw new AppError('bad_nodes');
-  const clean = valid.map((n) => (n.parentId && !ids.has(n.parentId) ? { ...n, parentId: 'root' } : n));
+  const clean = valid.map((n) => ({ ...n, label: titleCase(n.label, c.locale as Locale) })).map((n) => (n.parentId && !ids.has(n.parentId) ? { ...n, parentId: 'root' } : n));
   const json = JSON.stringify(clean);
   await db.insert(mindmaps).values({ userId: user.id, courseId: c.id, nodes: json, updatedAt: Date.now() })
     .onConflictDoUpdate({ target: [mindmaps.userId, mindmaps.courseId], set: { nodes: json, updatedAt: Date.now() } }).run();

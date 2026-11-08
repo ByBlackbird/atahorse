@@ -1,25 +1,8 @@
 // Yönetim paneli verileri: büyüme, öğrenme sonuçları ve AI maliyet/önbellek görünürlüğü.
-import { asc, count, desc, eq, gte, isNotNull, sql } from 'drizzle-orm';
+import { count, desc, eq, isNotNull, sql } from 'drizzle-orm';
 import { db } from '../db/client';
-import { aiCache, aiUsage, certificates, courses, moduleProgress, quizAttempts, users, waitlist } from '../db/schema';
-import { aiInfo, complete } from '../ai/provider';
-
-/** Tek tıkla AI bağlantı teşhisi: gerçek bir hafif-katman çağrısı atılır, gecikme döner. */
-export async function aiSelfTest() {
-  const info = aiInfo();
-  const t0 = Date.now();
-  if (!info.enabled) return { ok: false as const, provider: info.provider, model: '-', ms: 0, error: 'ai_disabled' };
-  try {
-    const r = await complete({
-      task: 'assist.summarize', noCache: true, userId: null,
-      system: 'You are a connectivity probe. Reply with the single word: OK',
-      prompt: 'Connectivity probe. Reply with: OK',
-    });
-    return { ok: true as const, provider: info.provider, model: r.model, ms: Date.now() - t0, error: null };
-  } catch (e) {
-    return { ok: false as const, provider: info.provider, model: info.models.light, ms: Date.now() - t0, error: (e as Error).message.slice(0, 240) };
-  }
-}
+import { aiCache, aiUsage, certificates, courses, quizAttempts, users, waitlist } from '../db/schema';
+import { aiInfo } from '../ai/provider';
 
 export async function adminStats() {
   const one = async <T>(q: Promise<T | undefined>) => q;
@@ -42,34 +25,7 @@ export async function adminStats() {
     cached: sql<number>`sum(${aiUsage.cached})`, failed: sql<number>`sum(1 - ${aiUsage.ok})`,
     inT: sql<number>`sum(${aiUsage.inTokens})`, outT: sql<number>`sum(${aiUsage.outTokens})`, ms: sql<number>`avg(${aiUsage.ms})`,
   }).from(aiUsage).groupBy(aiUsage.task, aiUsage.tier).orderBy(desc(count())).all();
-  // Lean "innovation accounting": modül hunisi — nerede bırakıyorlar, quizde nerede takılıyorlar
-  const progressByModule = await db.select({
-    moduleIdx: moduleProgress.moduleIdx,
-    opened: count(),
-    tasks: sql<number>`sum(case when ${moduleProgress.taskDoneAt} is not null then 1 else 0 end)`,
-    quizPassed: sql<number>`sum(case when ${moduleProgress.quizPassedAt} is not null then 1 else 0 end)`,
-    completed: sql<number>`sum(case when ${moduleProgress.completedAt} is not null then 1 else 0 end)`,
-  }).from(moduleProgress).groupBy(moduleProgress.moduleIdx).orderBy(asc(moduleProgress.moduleIdx)).all();
-  const quizByModule = await db.select({
-    moduleIdx: quizAttempts.moduleIdx,
-    attempts: count(),
-    passed: sql<number>`sum(${quizAttempts.passed})`,
-  }).from(quizAttempts).where(gte(quizAttempts.moduleIdx, 0)).groupBy(quizAttempts.moduleIdx).orderBy(asc(quizAttempts.moduleIdx)).all();
-  const passMap = new Map(quizByModule.map((q) => [q.moduleIdx, q]));
-  const funnel = progressByModule.map((p) => {
-    const q = passMap.get(p.moduleIdx);
-    return {
-      moduleIdx: p.moduleIdx,
-      opened: p.opened,
-      tasks: Number(p.tasks),
-      quizPassed: Number(p.quizPassed),
-      completed: Number(p.completed),
-      attempts: q?.attempts ?? 0,
-      passRate: q && q.attempts ? Math.round((Number(q.passed) / q.attempts) * 100) : null,
-    };
-  });
   return {
-    funnel,
     waitlist: wl?.n ?? 0,
     users: u?.n ?? 0, newUsers7d: u7?.n ?? 0, premium: p?.n ?? 0,
     courses: c?.n ?? 0, completedCourses: cDone?.n ?? 0, certificates: certs?.n ?? 0,

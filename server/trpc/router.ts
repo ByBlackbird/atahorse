@@ -4,7 +4,7 @@ import { eq } from 'drizzle-orm';
 import { TRPCError } from '@trpc/server';
 import { db } from '../db/client';
 import { users } from '../db/schema';
-import { AssistAction, CourseMeta, Level, Locale, MethodKey, MindNode, PlanPrefs } from '../../shared/types';
+import { AssistAction, Level, Locale, MethodKey, MindNode } from '../../shared/types';
 import { MEB_GRADES, mebCatalog, MEB_SOURCE_NOTE } from '../../shared/engine/meb';
 import { PROFILES, PROFILE_TEST } from '../../shared/engine/profiles';
 import { METHODS } from '../../shared/engine/methods';
@@ -13,10 +13,14 @@ import { BADGES, XP, levelFromXp } from '../../shared/engine/gamification';
 import { router, publicProcedure, authed, adminProcedure, limited } from './core';
 import { clearCookie, createSession, destroyAllSessions, destroySession, hashPassword, publicUser, verifyPassword } from '../services/auth';
 import { AppError, createCourse, deleteCourse, jobStatus, requestTranslation, retryCourse, shareCourse, parseDoc } from '../services/courses';
-import { answerCheck, answerReview, approveTask, courseView, dueReviews, getFinal, getPretest, heartbeat, myCertificates, submitFinal, submitModuleQuiz, submitPretest, verifyCertificate } from '../services/learning';
+import { answerCheck, answerReview, approveTask, courseView, dueReviews, getFinal, heartbeat, myCertificates, submitFinal, submitModuleQuiz, verifyCertificate } from '../services/learning';
 import { assist, getMindmap, layoutMindmap, saveMindmap, suggestBranches } from '../services/assistant';
-import { dashboard, deleteAccount, getCognitive, getPlan, profilePage, savePlan, saveProfileTest, updateSettings } from '../services/profile';
-import { adminCourses, adminSetPlan, adminStats, adminUsers, aiSelfTest } from '../services/admin';
+import { dashboard, deleteAccount, getCognitive, profilePage, saveProfileTest, updateSettings } from '../services/profile';
+import { adminCourses, adminSetPlan, adminStats, adminUsers } from '../services/admin';
+import { adminOutcomes, adminReports, adminSetReport, coursePath, getPretest, myPath, recapSession, reportItem, setGoal, submitPretest } from '../services/path';
+import { getLesson } from '../services/lesson';
+import { titleCase } from '../../shared/engine/text';
+import { adminCreateRef, adminDeleteRef, adminRefStats, myInvites, resolveRef } from '../services/growth';
 import { aiInfo } from '../ai/provider';
 import { env } from '../env';
 import { courses, waitlist } from '../db/schema';
@@ -24,16 +28,20 @@ import { courses, waitlist } from '../db/schema';
 const id = z.number().int().positive();
 const Username = z.string().trim().toLowerCase().regex(/^[a-z0-9_]{3,24}$/);
 const Password = z.string().min(8).max(200);
+const Ref = z.string().trim().max(40).optional();
+const Day = z.string().regex(/^\d{4}-\d{2}-\d{2}$/);
+const Goal = z.object({ why: z.string().trim().max(240).default(''), targetDate: Day.nullable().default(null), minutesPerDay: z.number().int().min(10).max(240).default(30) });
 
 const authRouter = router({
   me: publicProcedure.query(({ ctx }) => (ctx.user ? publicUser(ctx.user) : null)),
   register: publicProcedure.use(limited('auth'))
-    .input(z.object({ username: Username, email: z.string().trim().toLowerCase().email().max(160), password: Password, fullName: z.string().trim().max(80).default(''), locale: Locale.default('tr') }))
+    .input(z.object({ username: Username, email: z.string().trim().toLowerCase().email().max(160), password: Password, fullName: z.string().trim().max(80).default(''), locale: Locale.default('tr'), ref: Ref }))
     .mutation(async ({ input, ctx }) => {
       const taken = await db.select({ id: users.id }).from(users).where(eq(users.username, input.username)).get()
         ?? await db.select({ id: users.id }).from(users).where(eq(users.email, input.email)).get();
       if (taken) throw new AppError('account_exists', 'CONFLICT');
-      const [u] = await db.insert(users).values({ username: input.username, email: input.email, fullName: input.fullName, locale: input.locale, passwordHash: await hashPassword(input.password) }).returning().all();
+      const refCode = await resolveRef(input.ref);
+      const [u] = await db.insert(users).values({ username: input.username, email: input.email, fullName: titleCase(input.fullName, input.locale), locale: input.locale, refCode, passwordHash: await hashPassword(input.password) }).returning().all();
       const s = await createSession(u.id, ctx.req.headers.get('user-agent') ?? '');
       ctx.resHeaders.append('set-cookie', s.cookie);
       return publicUser(u);
@@ -85,17 +93,16 @@ const catalogRouter = router({
 const profileRouter = router({
   saveTest: authed.input(z.object({ answers: z.record(z.string(), z.string()) })).mutation(({ input, ctx }) => saveProfileTest(ctx.user, input.answers)),
   cognitive: authed.query(({ ctx }) => getCognitive(ctx.user.id)),
-  plan: authed.query(({ ctx }) => getPlan(ctx.user)),
-  savePlan: authed.input(PlanPrefs).mutation(({ input, ctx }) => savePlan(ctx.user, input)),
-  dashboard: authed.input(z.object({ locale: Locale.optional() }).optional()).query(({ input, ctx }) => dashboard(ctx.user, input?.locale)),
+  dashboard: authed.query(({ ctx }) => dashboard(ctx.user)),
   page: authed.input(z.object({ locale: Locale })).query(({ input, ctx }) => profilePage(ctx.user, input.locale)),
-  settings: authed.input(z.object({ fullName: z.string().max(80).optional(), locale: Locale.optional(), theme: z.enum(['paper', 'ink']).optional() })).mutation(({ input, ctx }) => updateSettings(ctx.user, input)),
+  settings: authed.input(z.object({ fullName: z.string().max(80).optional(), locale: Locale.optional(), theme: z.enum(['paper', 'ink']).optional(), dailyGoal: z.union([z.literal(10), z.literal(20), z.literal(30), z.literal(50)]).optional() })).mutation(({ input, ctx }) => updateSettings(ctx.user, input)),
   deleteAccount: authed.input(z.object({ confirm: z.literal('DELETE') })).mutation(async ({ ctx }) => {
     await deleteAccount(ctx.user);
     ctx.resHeaders.append('set-cookie', clearCookie());
     return { ok: true };
   }),
   certificates: authed.query(({ ctx }) => myCertificates(ctx.user.id)),
+  invites: authed.query(({ ctx }) => myInvites(ctx.user)),
   upgrade: authed.mutation(async ({ ctx }) => {
     if (!env.ALLOW_SIMULATED_UPGRADE) throw new AppError('payments_disabled', 'FORBIDDEN');
     await db.update(users).set({ plan: 'premium' }).where(eq(users.id, ctx.user.id)).run();
@@ -108,7 +115,7 @@ const courseRouter = router({
     .input(z.object({
       topic: z.string().trim().min(2).max(120).optional(), level: Level, locale: Locale, method: MethodKey.optional(),
       meb: z.object({ grade: z.enum(MEB_GRADES), subject: z.string().max(40), unit: z.string().max(160).optional() }).optional(),
-      meta: CourseMeta.optional(),
+      goal: Goal.optional(),
     }))
     .mutation(({ input, ctx }) => createCourse(ctx.user, input)),
   job: authed.input(z.object({ jobId: z.string().uuid() })).query(({ input, ctx }) => jobStatus(ctx.user.id, input.jobId)),
@@ -117,6 +124,7 @@ const courseRouter = router({
   view: authed.input(z.object({ courseId: id, locale: Locale.optional() })).query(({ input, ctx }) => courseView(ctx.user, input.courseId, input.locale)),
   translate: authed.use(limited('translate')).input(z.object({ courseId: id, to: Locale })).mutation(({ input, ctx }) => requestTranslation(ctx.user, input.courseId, input.to)),
   share: authed.input(z.object({ courseId: id })).mutation(async ({ input, ctx }) => ({ slug: await shareCourse(ctx.user, input.courseId) })),
+  setGoal: authed.input(Goal.extend({ courseId: id })).mutation(({ input, ctx }) => setGoal(ctx.user, input.courseId, input)),
 });
 
 const learnRouter = router({
@@ -132,11 +140,20 @@ const learnRouter = router({
   submitFinal: authed.input(z.object({ courseId: id, answers: z.record(z.string(), z.number().int()), locale: Locale }))
     .mutation(({ input, ctx }) => submitFinal(ctx.user, input.courseId, input.answers, input.locale)),
   reviews: authed.query(({ ctx }) => dueReviews(ctx.user)),
-  pretest: authed.input(z.object({ courseId: id })).query(({ input, ctx }) => getPretest(ctx.user, input.courseId)),
-  pretestSubmit: authed.input(z.object({ courseId: id, answers: z.array(z.number().int().min(-1).max(4)).max(8) }))
-    .mutation(({ input, ctx }) => submitPretest(ctx.user, input.courseId, input.answers)),
   review: authed.input(z.object({ cardId: id, choice: z.number().int().min(0).max(4), confidence: z.union([z.literal(1), z.literal(2), z.literal(3)]).default(2) }))
     .mutation(({ input, ctx }) => answerReview(ctx.user, input.cardId, input.choice, input.confidence)),
+  /** Bugün yolu: tekrar → zayıf nokta → plan baskısına göre modül → final. */
+  path: authed.query(({ ctx }) => myPath(ctx.user)),
+  coursePath: authed.input(z.object({ courseId: id, locale: Locale.optional() })).query(({ input, ctx }) => coursePath(ctx.user, input.courseId, input.locale)),
+  recap: authed.input(z.object({ courseId: id, locale: Locale.optional() })).query(({ input, ctx }) => recapSession(ctx.user, input.courseId, input.locale)),
+  pretest: authed.input(z.object({ courseId: id, locale: Locale.optional() })).query(({ input, ctx }) => getPretest(ctx.user, input.courseId, input.locale)),
+  submitPretest: authed.input(z.object({ courseId: id, answers: z.record(z.string().max(40), z.number().int().min(-1).max(4)).nullable() }))
+    .mutation(({ input, ctx }) => submitPretest(ctx.user, input.courseId, input.answers)),
+  report: authed.use(limited('report')).input(z.object({ courseId: id, itemId: z.string().max(40), kind: z.enum(['wrong_answer', 'unclear', 'factual', 'other']), note: z.string().max(600).default('') }))
+    .mutation(({ input, ctx }) => reportItem(ctx.user, input.courseId, input.itemId, input.kind, input.note)),
+  /** Anlatımlı görsel ders (sahneler + şemalar + bölüm sonu soruları). */
+  lesson: authed.use(limited('assist')).input(z.object({ courseId: id, moduleIdx: z.number().int().min(0), locale: Locale.optional() }))
+    .query(({ input, ctx }) => getLesson(ctx.user, input.courseId, input.moduleIdx, input.locale)),
 });
 
 const aiRouter = router({
@@ -166,19 +183,26 @@ const publicRouter = router({
   level: publicProcedure.input(z.object({ xp: z.number().int().min(0) })).query(({ input }) => levelFromXp(input.xp)),
   /** Bekleme listesi: aynı e-posta ikinci kez eklenmez, yine de başarılı döner (e-posta varlığını sızdırmaz). */
   joinWaitlist: publicProcedure.use(limited('waitlist'))
-    .input(z.object({ email: z.string().trim().toLowerCase().email().max(160), role: z.enum(['learner', 'parent', 'teacher', 'school']).default('learner'), locale: Locale }))
+    .input(z.object({ email: z.string().trim().toLowerCase().email().max(160), role: z.enum(['learner', 'parent', 'teacher', 'school']).default('learner'), locale: Locale, ref: Ref }))
     .mutation(async ({ input }) => {
-      await db.insert(waitlist).values({ email: input.email, role: input.role, locale: input.locale }).onConflictDoNothing().run();
+      const ref = await resolveRef(input.ref);
+      await db.insert(waitlist).values({ email: input.email, role: input.role, locale: input.locale, source: ref ? `ref:${ref}` : 'landing' }).onConflictDoNothing().run();
       return { ok: true };
     }),
 });
 
 const adminRouter = router({
   stats: adminProcedure.query(() => adminStats()),
-  aiTest: adminProcedure.mutation(() => aiSelfTest()),
   users: adminProcedure.query(() => adminUsers()),
   courses: adminProcedure.query(() => adminCourses()),
   setPlan: adminProcedure.input(z.object({ userId: id, plan: z.enum(['free', 'premium']) })).mutation(async ({ input }) => { await adminSetPlan(input.userId, input.plan); return { ok: true }; }),
+  reports: adminProcedure.input(z.object({ status: z.enum(['open', 'resolved', 'dismissed']).default('open') })).query(({ input }) => adminReports(input.status)),
+  setReport: adminProcedure.input(z.object({ id, status: z.enum(['open', 'resolved', 'dismissed']) })).mutation(async ({ input }) => { await adminSetReport(input.id, input.status); return { ok: true }; }),
+  outcomes: adminProcedure.query(() => adminOutcomes()),
+  refs: adminProcedure.query(() => adminRefStats()),
+  createRef: adminProcedure.input(z.object({ code: z.string().trim().min(2).max(32), label: z.string().trim().min(1).max(80), kind: z.enum(['creator', 'ambassador', 'partner', 'campaign']), market: z.string().trim().max(8).default('') }))
+    .mutation(({ input }) => adminCreateRef(input)),
+  deleteRef: adminProcedure.input(z.object({ code: z.string().max(32) })).mutation(async ({ input }) => { await adminDeleteRef(input.code); return { ok: true }; }),
 });
 
 export const appRouter = router({
