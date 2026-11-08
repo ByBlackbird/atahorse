@@ -2,6 +2,7 @@
 // Marka dili: düz (flat) yüzey + ince kenar çizgisi, gradient/gölge yok. Sürükleyerek döndürülebilir.
 import { useEffect, useRef, useState } from 'react';
 import * as THREE from 'three';
+import { BRAND } from '../lib/brand';
 import type { SSlide } from './types';
 import Figure from './Figure';
 
@@ -76,8 +77,8 @@ export default function Scene3D({ visual, themeKey, className }: { visual: Visua
       return;
     }
     const C = {
-      brand: css('--c-brand', '#4338CA'), gold: css('--c-gold', '#DCA037'), ink: css('--c-ink', '#121619'),
-      night: css('--c-night', '#0D1A26'), surface: css('--c-surface', '#FFFFFF'), line: css('--c-line-strong', '#C4CCC8'), ink3: css('--c-ink-3', '#7C8891'),
+      brand: css('--c-brand', BRAND.paper.brand), gold: css('--c-gold', BRAND.paper.gold), ink: css('--c-ink', BRAND.paper.ink),
+      night: css('--c-night', BRAND.paper.night), surface: css('--c-surface', BRAND.paper.surface), line: css('--c-line-strong', BRAND.paper.lineStrong), ink3: css('--c-ink-3', BRAND.paper.ink3), onNightGold: css('--c-on-night-gold', BRAND.paper.onNightGold),
     };
     const lbl = { bg: C.surface, fg: C.ink, line: C.line };
     renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
@@ -101,9 +102,10 @@ export default function Scene3D({ visual, themeKey, className }: { visual: Visua
     const flat = (color: string) => new THREE.MeshLambertMaterial({ color, flatShading: true });
     const anim: ((t: number) => void)[] = [];
 
-    switch (visual.type) {
+    const kind = visual.type === 'bars' && !visual.values?.length ? 'network' : visual.type;
+    switch (kind) {
       case 'bars': {
-        const vals = visual.values?.length ? visual.values : labels.map((_, i) => 40 + ((i * 37) % 55));
+        const vals = visual.values ?? [];
         const span = Math.min(7, n * 1.25);
         const grid = new THREE.GridHelper(span + 1.5, 8, C.line, C.line);
         (grid.material as THREE.Material).transparent = true; (grid.material as THREE.Material).opacity = 0.5;
@@ -115,7 +117,7 @@ export default function Scene3D({ visual, themeKey, className }: { visual: Visua
           m.position.set(x, h / 2, 0);
           root.add(m);
           const sp = labelSprite(l, lbl, 0.8); sp.position.set(x, -0.45, 0.6); root.add(sp);
-          const v = labelSprite(`${Math.round(vals[i] ?? 50)}`, { bg: C.night, fg: '#F5D9A0', line: C.night }, 0.6); v.position.set(x, h + 0.35, 0); root.add(v);
+          const v = labelSprite(`${Math.round(vals[i] ?? 50)}`, { bg: C.night, fg: C.onNightGold, line: C.night }, 0.6); v.position.set(x, h + 0.35, 0); root.add(v);
           anim.push((t) => { const k = Math.min(1, t / 900 - i * 0.08); m.scale.y = Math.max(0.01, 1 - Math.pow(1 - Math.max(0, k), 3)); m.position.y = (h * m.scale.y) / 2; });
         });
         root.position.y = -1.2;
@@ -136,7 +138,7 @@ export default function Scene3D({ visual, themeKey, className }: { visual: Visua
       case 'orbit': {
         const sun = withEdges(new THREE.Mesh(new THREE.IcosahedronGeometry(0.7, 1), flat(C.gold)), C.ink, 0.3);
         root.add(sun);
-        const t0 = labelSprite(visual.title, { bg: C.night, fg: '#F5D9A0', line: C.night }, 0.8); t0.position.set(0, 1.15, 0); root.add(t0);
+        const t0 = labelSprite(visual.title, { bg: C.night, fg: C.onNightGold, line: C.night }, 0.8); t0.position.set(0, 1.15, 0); root.add(t0);
         labels.forEach((l, i) => {
           const R = 1.6 + i * 0.55;
           const ring = new THREE.LineLoop(new THREE.BufferGeometry().setFromPoints(Array.from({ length: 96 }, (_, k) => new THREE.Vector3(Math.cos((k / 96) * Math.PI * 2) * R, 0, Math.sin((k / 96) * Math.PI * 2) * R))), new THREE.LineBasicMaterial({ color: C.line }));
@@ -188,7 +190,7 @@ export default function Scene3D({ visual, themeKey, className }: { visual: Visua
       default: { // network
         const center = withEdges(new THREE.Mesh(new THREE.IcosahedronGeometry(0.55, 1), flat(C.night)), C.gold, 0.6);
         root.add(center);
-        const c0 = labelSprite(labels[0], { bg: C.night, fg: '#F5D9A0', line: C.night }, 0.85); c0.position.set(0, 0.95, 0); root.add(c0);
+        const c0 = labelSprite(labels[0], { bg: C.night, fg: C.onNightGold, line: C.night }, 0.85); c0.position.set(0, 0.95, 0); root.add(c0);
         const rest = labels.slice(1);
         const pts = rest.map((_, i) => {
           const y = 1 - (i / Math.max(1, rest.length - 1)) * 2;

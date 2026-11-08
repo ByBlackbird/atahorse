@@ -1,6 +1,7 @@
 // /profil — istatistikler, 8 kazanım rozeti, öğrenme grafiği, sertifikalar, Kağıt/Mürekkep tema, güvenlik.
+import { openUpgrade } from '../lib/upgrade-bus';
 import { useState } from 'react';
-import { LuFootprints, LuFlame, LuCalendarCheck, LuBrain, LuLayers, LuMap, LuRepeat, LuAward, LuLock, LuBookOpen, LuClock, LuTarget, LuSun, LuMoon, LuLogOut, LuTrash2, LuSparkles, LuArrowRight } from 'react-icons/lu';
+import { LuFootprints, LuFlame, LuCalendarCheck, LuBrain, LuLayers, LuMap, LuRepeat, LuAward, LuLock, LuBookOpen, LuClock, LuTarget, LuSun, LuMoon, LuLogOut, LuTrash2, LuSparkles, LuArrowRight, LuLink, LuCopy } from 'react-icons/lu';
 import { Link, useNavigate } from '../lib/router';
 import { trpc } from '../lib/trpc';
 import { fmtDate, useI18n } from '../i18n/index';
@@ -12,6 +13,28 @@ import type { MethodKey } from '../../shared/types';
 
 const BADGE_ICON = { footprints: <LuFootprints />, flame: <LuFlame />, calendar: <LuCalendarCheck />, brain: <LuBrain />, layers: <LuLayers />, map: <LuMap />, repeat: <LuRepeat />, award: <LuAward /> } as const;
 
+/** Davet bağlantısı: katılanlar kullanıcıya yazılır (büyüme motorunun en küçük birimi). */
+function Invite() {
+  const { t } = useI18n();
+  const toast = useToast();
+  const q = trpc.profile.invites.useQuery();
+  if (!q.data) return null;
+  const url = `${window.location.origin}/?ref=${q.data.code}`;
+  const copy = async () => { try { await navigator.clipboard.writeText(url); toast.push('ok', t('copied')); } catch { window.prompt(t('copy'), url); } };
+  return (
+    <div className="card mt-6 flex flex-wrap items-center gap-4 p-5">
+      <div className="grid h-11 w-11 place-items-center rounded-xl bg-gold-soft text-gold-ink"><LuLink /></div>
+      <div className="min-w-0 flex-1">
+        <p className="font-semibold">{t('iv_title')}</p>
+        <p className="text-sm text-ink-2">{t('iv_sub')}</p>
+        <p className="mt-1 truncate font-mono text-xs text-ink-3">{url}</p>
+      </div>
+      <span className="chip">{t('iv_joined', { n: q.data.joined })}</span>
+      <button className="btn btn-outline btn-sm" onClick={() => void copy()}><LuCopy /> {t('copy')}</button>
+    </div>
+  );
+}
+
 export default function Profile() {
   const { t, lang } = useI18n();
   const { theme, setTheme } = useTheme();
@@ -19,11 +42,6 @@ export default function Profile() {
   const navigate = useNavigate();
   const utils = trpc.useUtils();
   const q = trpc.profile.page.useQuery({ locale: lang });
-  const planQ = trpc.profile.plan.useQuery();
-  const savePlan = trpc.profile.savePlan.useMutation({
-    onSuccess: () => { void utils.profile.plan.invalidate(); toast.push('ok', t('saved')); },
-  });
-  const [planDraft, setPlanDraft] = useState<{ days: number; minutes: number } | null>(null);
   const settings = trpc.profile.settings.useMutation({ onSuccess: () => { void utils.auth.me.invalidate(); toast.push('ok', t('saved')); } });
   const logoutAll = trpc.auth.logoutAll.useMutation({ onSuccess: async () => { await utils.invalidate(); navigate('/'); } });
   const del = trpc.profile.deleteAccount.useMutation({ onSuccess: async () => { await utils.invalidate(); navigate('/'); } });
@@ -51,10 +69,12 @@ export default function Profile() {
             <span className="chip">{d.user.plan === 'premium' ? t('pr_plan_premium') : t('pr_plan_free')}</span>
           </div>
         </div>
-        {d.user.plan !== 'premium' && <Link to="/premium" className="btn btn-outline btn-sm">{t('pr_upgrade')}</Link>}
+        {d.user.plan !== 'premium' && <button className="btn btn-gold btn-sm" onClick={() => openUpgrade('manual')}>{t('pr_upgrade')}</button>}
       </div>
 
       {/* İstatistikler */}
+      <Invite />
+
       <h2 className="mt-8 text-lg font-semibold">{t('pr_stats')}</h2>
       <div className="mt-3 grid grid-cols-2 gap-3 md:grid-cols-6">
         <Stat label={t('pr_courses')} value={d.stats.courses} icon={<LuBookOpen />} />
@@ -74,7 +94,7 @@ export default function Profile() {
         {d.badges.map((b) => (
           <div key={b.key} className={cx('card p-4', b.earned ? 'border-gold/50' : '')}>
             <div className="flex items-center justify-between">
-              <span className={cx('grid h-10 w-10 place-items-center rounded-full text-lg', b.earned ? 'bg-gold text-[#1d1405]' : 'bg-surface-2 text-ink-3')}>{BADGE_ICON[b.icon as keyof typeof BADGE_ICON]}</span>
+              <span className={cx('grid h-10 w-10 place-items-center rounded-full text-lg', b.earned ? 'bg-gold text-on-gold' : 'bg-surface-2 text-ink-3')}>{BADGE_ICON[b.icon as keyof typeof BADGE_ICON]}</span>
               {!b.earned && <LuLock className="text-ink-3" />}
             </div>
             <p className="mt-3 font-semibold">{b.name}</p>
@@ -109,35 +129,6 @@ export default function Profile() {
           <Link to="/profil-testi" className="btn btn-ghost btn-sm mt-4 -ml-2">{t('t_retake')} <LuArrowRight /></Link>
         </div>
 
-        {/* Haftalık plan */}
-        <div className="card p-5">
-          <h2 className="font-semibold">{t('pr_plan')}</h2>
-          <p className="mt-1 text-sm text-ink-2">{t('pr_plan_s')}</p>
-          {(() => {
-            const prefs = planQ.data?.prefs;
-            const draft = planDraft ?? { days: prefs?.daysPerWeek ?? 4, minutes: prefs?.minutes ?? 20 };
-            return (
-              <div className="mt-4 space-y-4">
-                <Field label={t('pr_plan_days')}>
-                  <div className="seg w-full">
-                    {[3, 4, 5, 6, 7].map((d) => <button key={d} className="flex-1 justify-center" aria-pressed={draft.days === d} onClick={() => setPlanDraft({ ...draft, days: d })}>{d}</button>)}
-                  </div>
-                </Field>
-                <Field label={t('pr_plan_minutes')}>
-                  <div className="seg w-full">
-                    {[15, 20, 30, 45, 60].map((m) => <button key={m} className="flex-1 justify-center" aria-pressed={draft.minutes === m} onClick={() => setPlanDraft({ ...draft, minutes: m })}>{m}</button>)}
-                  </div>
-                </Field>
-                {planQ.data && <p className="text-xs text-ink-3">{t('d_plan_prog', { a: planQ.data.week.daysDone, b: prefs?.daysPerWeek ?? draft.days, c: planQ.data.week.minutesDone, d: (prefs?.daysPerWeek ?? draft.days) * (prefs?.minutes ?? draft.minutes) })}</p>}
-                <button className="btn btn-primary btn-sm" disabled={savePlan.isPending || (!!prefs && prefs.daysPerWeek === draft.days && prefs.minutes === draft.minutes)}
-                  onClick={() => savePlan.mutate({ daysPerWeek: draft.days, minutes: draft.minutes })}>
-                  {t('save')}
-                </button>
-              </div>
-            );
-          })()}
-        </div>
-
         {/* Sertifikalar */}
         <div className="card p-5">
           <h2 className="font-semibold">{t('pr_certificates')}</h2>
@@ -162,11 +153,11 @@ export default function Profile() {
             <p className="text-sm font-medium">{t('pr_theme')}</p>
             <p className="text-xs text-ink-3">{t('pr_theme_s')}</p>
             <div className="mt-3 grid grid-cols-2 gap-3">
-              {([['paper', <LuSun key="s" />, '#F6F7F6', '#121619'], ['ink', <LuMoon key="m" />, '#0D1A26', '#EEF0EE']] as const).map(([k, icon, bg, fg]) => (
+              {([['paper', <LuSun key="s" />], ['ink', <LuMoon key="m" />]] as const).map(([k, icon]) => (
                 <button key={k} onClick={() => { setTheme(k); settings.mutate({ theme: k }); }}
                   className={cx('rounded-xl border p-3 text-left transition-colors', theme === k ? 'border-brand ring-1 ring-brand' : 'border-line hover:border-line-strong')}>
-                  <div className="flex h-16 items-end rounded-lg border border-line p-2" style={{ background: bg, color: fg }}>
-                    <span className="h-display text-sm">Aa</span><span className="ml-auto h-2 w-8 rounded-full" style={{ background: '#DCA037' }} />
+                  <div data-sheet={k} className="flex h-16 items-end rounded-lg border border-line bg-bg p-2 text-ink">
+                    <span className="h-display text-sm">Aa</span><span className="ml-auto h-2 w-8 rounded-full bg-gold" />
                   </div>
                   <p className="mt-2 flex items-center gap-1.5 text-sm font-medium">{icon} {t(`theme_${k}`)}</p>
                 </button>

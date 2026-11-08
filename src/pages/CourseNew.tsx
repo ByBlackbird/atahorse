@@ -1,11 +1,12 @@
+import { openUpgrade } from '../lib/upgrade-bus';
 import { useEffect, useMemo, useState } from 'react';
-import { LuArrowRight, LuCheck, LuGraduationCap, LuPencilLine, LuInfo } from 'react-icons/lu';
-import { Link, useNavigate } from '../lib/router';
+import { LuArrowRight, LuCheck, LuGraduationCap, LuPencilLine, LuInfo, LuTarget } from 'react-icons/lu';
+import { useNavigate } from '../lib/router';
 import { trpc, errCode } from '../lib/trpc';
 import { useErr, useI18n } from '../i18n/index';
 import { Shell } from '../app/Shell';
 import { Bar, ErrorBox, Field, Spinner, cx } from '../ui/kit';
-import { LOCALES, METHOD_KEYS, type GoalType, type Level, type Locale, type MethodKey } from '../../shared/types';
+import { LOCALES, METHOD_KEYS, type Level, type Locale, type MethodKey } from '../../shared/types';
 import { METHODS } from '../../shared/engine/methods';
 import type { MebGrade } from '../../shared/engine/meb';
 
@@ -62,11 +63,10 @@ export default function CourseNew() {
   const [scope, setScope] = useState<'unit' | 'all'>('unit');
   const [unit, setUnit] = useState('');
   const [jobId, setJobId] = useState<string | null>(null);
-  // Metalearning bağlamı + Dirksen gap teşhisi (opsiyonel, üretimi kişiselleştirir)
   const [why, setWhy] = useState('');
-  const [prior, setPrior] = useState('');
-  const [goal, setGoal] = useState('');
-  const [goalType, setGoalType] = useState<GoalType | ''>('');
+  const [targetDate, setTargetDate] = useState('');
+  const [perDay, setPerDay] = useState(30);
+  const todayIso = new Date().toISOString().slice(0, 10);
 
   const gradeRow = meb.data?.catalog.find((g) => g.grade === grade);
   const subj = gradeRow?.subjects.find((s) => s.key === subject);
@@ -82,11 +82,9 @@ export default function CourseNew() {
 
   const submit = () => {
     const m = method || undefined;
-    const meta = why.trim() || prior.trim() || goal.trim() || goalType
-      ? { why: why.trim() || undefined, prior: prior.trim() || undefined, goal: goal.trim() || undefined, goalType: goalType || undefined }
-      : undefined;
-    if (tab === 'free') create.mutate({ topic: topic.trim(), level, locale, method: m, meta });
-    else create.mutate({ level, locale, method: m, meb: { grade, subject, unit: scope === 'unit' ? unit : undefined }, meta });
+    const goal = { why: why.trim(), targetDate: targetDate && targetDate >= todayIso ? targetDate : null, minutesPerDay: perDay };
+    if (tab === 'free') create.mutate({ topic: topic.trim(), level, locale, method: m, goal });
+    else create.mutate({ level, locale, method: m, meb: { grade, subject, unit: scope === 'unit' ? unit : undefined }, goal });
   };
   const canSubmit = tab === 'free' ? topic.trim().length >= 2 : !!subj?.available && (scope === 'all' || !!unit);
   const levels = useMemo(() => (['beginner', 'intermediate', 'advanced'] as const), []);
@@ -165,41 +163,34 @@ export default function CourseNew() {
             </select>
           </Field>
 
-          <details className="rounded-xl border border-line bg-surface-2 p-4">
-            <summary className="cursor-pointer text-sm font-semibold">{t('n_meta_title')}</summary>
-            <div className="mt-4 space-y-4">
-              <p className="flex gap-2 text-xs text-ink-3"><LuInfo className="mt-0.5 shrink-0" />{t('n_meta_hint')}</p>
-              <Field label={t('n_gap')}>
-                <div className="flex flex-wrap gap-2">
-                  {(['knowledge', 'skill', 'motivation', 'habit'] as const).map((g) => (
-                    <button key={g} className={cx('btn btn-sm', goalType === g ? 'btn-primary' : 'btn-outline')} onClick={() => setGoalType(goalType === g ? '' : g)}>{t(`n_gap_${g}`)}</button>
-                  ))}
+          <fieldset className="space-y-4 rounded-2xl border border-line p-4">
+            <legend className="flex items-center gap-1.5 px-1 text-sm font-semibold"><LuTarget className="text-brand" /> {t('n_goal_t')}</legend>
+            <p className="-mt-1 text-xs text-ink-3">{t('n_goal_s')}</p>
+            <Field label={t('n_goal_why')}>
+              <input className="input" maxLength={240} placeholder={t('n_goal_why_ph')} value={why} onChange={(e) => setWhy(e.target.value)} />
+            </Field>
+            <div className="grid gap-4 sm:grid-cols-2">
+              <Field label={t('n_goal_date')}>
+                <input className="input" type="date" min={todayIso} value={targetDate} onChange={(e) => setTargetDate(e.target.value)} />
+              </Field>
+              <Field label={t('n_goal_min')}>
+                <div className="seg w-full">
+                  {[15, 30, 45, 60, 90].map((n) => <button key={n} type="button" className="flex-1 justify-center" aria-pressed={perDay === n} onClick={() => setPerDay(n)}>{t('minutes_short', { n })}</button>)}
                 </div>
               </Field>
-              <div className="grid gap-4 sm:grid-cols-3">
-                <Field label={t('n_why')}>
-                  <input className="input" value={why} maxLength={300} onChange={(e) => setWhy(e.target.value)} placeholder={t('n_why_ph')} />
-                </Field>
-                <Field label={t('n_prior')}>
-                  <input className="input" value={prior} maxLength={300} onChange={(e) => setPrior(e.target.value)} placeholder={t('n_prior_ph')} />
-                </Field>
-                <Field label={t('n_goal')}>
-                  <input className="input" value={goal} maxLength={300} onChange={(e) => setGoal(e.target.value)} placeholder={t('n_goal_ph')} />
-                </Field>
-              </div>
             </div>
-          </details>
+          </fieldset>
 
           {engine.data && !engine.data.ai.enabled && <p className="flex gap-2 rounded-xl bg-surface-2 p-3 text-xs text-ink-2"><LuInfo className="mt-0.5 shrink-0" />{t('n_ai_off')}</p>}
           {create.error && (
             <ErrorBox>
-              {err(errCode(create.error))} {errCode(create.error) === 'limit_reached' && <Link to="/premium" className="ml-1 font-semibold underline">{t('pr_upgrade')}</Link>}
+              {err(errCode(create.error))} {errCode(create.error) === 'limit_reached' && <button type="button" className="ml-1 font-semibold underline" onClick={() => openUpgrade('limit')}>{t('pr_upgrade')}</button>}
             </ErrorBox>
           )}
 
           <div className="flex flex-wrap items-center justify-between gap-3 border-t border-line pt-5">
             <span className="text-sm text-ink-3">{left !== null ? t('n_free_left', { n: left }) : ''}</span>
-            <button className="btn btn-primary btn-lg" disabled={!canSubmit || create.isPending} onClick={submit}>
+            <button className="btn btn-primary btn-lg" disabled={!canSubmit || create.isPending} onClick={() => (left === 0 ? openUpgrade('limit') : submit())}>
               {create.isPending ? <Spinner className="h-4 w-4" /> : <>{t('n_create')} <LuArrowRight /></>}
             </button>
           </div>

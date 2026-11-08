@@ -7,6 +7,7 @@ import { useErr, useI18n } from '../i18n/index';
 import { useToast } from '../ui/providers';
 import { PageLoader, Spinner, cx } from '../ui/kit';
 import { autoLayout } from '../../shared/engine/generate';
+import { BRAND } from '../lib/brand';
 import type { MindNode } from '../../shared/types';
 
 const nodeW = (n: MindNode) => Math.min(220, Math.max(70, n.label.length * 7.4 + (n.kind === 'root' ? 44 : 30)));
@@ -113,7 +114,7 @@ export default function MindMap({ courseId }: { courseId: number }) {
     const clone = svg.current.cloneNode(true) as SVGSVGElement;
     const cs = getComputedStyle(document.documentElement);
     let src = new XMLSerializer().serializeToString(clone);
-    src = src.replace(/var\((--[\w-]+)\)/g, (_m, v) => cs.getPropertyValue(v).trim() || '#000');
+    src = src.replace(/var\((--[\w-]+)\)/g, (_m, v) => cs.getPropertyValue(v).trim() || BRAND.paper.ink);
     const a = document.createElement('a');
     a.href = URL.createObjectURL(new Blob([src], { type: 'image/svg+xml' }));
     a.download = 'atahorse-zihin-haritasi.svg';
@@ -176,7 +177,7 @@ export default function MindMap({ courseId }: { courseId: number }) {
               const w = nodeW(n), h = nodeH(n);
               const isSel = n.id === sel;
               const fill = n.kind === 'root' ? 'var(--c-night)' : n.kind === 'ai' ? 'var(--c-brand-soft)' : 'var(--c-surface)';
-              const color = n.kind === 'root' ? '#F5D9A0' : 'var(--c-ink)';
+              const color = n.kind === 'root' ? 'var(--c-on-night-gold)' : 'var(--c-ink)';
               const label = n.label.length > 30 ? `${n.label.slice(0, 29)}…` : n.label;
               return (
                 <g key={n.id} transform={`translate(${n.x - w / 2},${n.y - h / 2})`} className="cursor-grab active:cursor-grabbing"

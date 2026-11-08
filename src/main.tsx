@@ -6,19 +6,24 @@ import { RouterProvider, Routes, type RouteDef } from './lib/router';
 import { I18nProvider } from './i18n/index';
 import { SessionSync, ThemeProvider, ToastProvider } from './ui/providers';
 import { PageLoader } from './ui/kit';
+import { UpgradeHost } from './ui/Upgrade';
+import { InteractionFeedback } from './ui/feedback';
 import { applyTheme, savedTheme, storedTheme } from './lib/theme';
+import { captureRef } from './lib/ref';
 import { RequireAuth, Shell } from './app/Shell';
 import Landing from './pages/Landing';
 import { Login, Register } from './pages/Auth';
 import NotFound from './pages/NotFound';
 
 applyTheme(storedTheme(), savedTheme() !== null);
+captureRef();
 
 // Kod bölme: ağır sayfalar (stüdyo + three.js) yalnızca gerektiğinde yüklenir.
 const Dashboard = lazy(() => import('./pages/Dashboard'));
 const ProfileTest = lazy(() => import('./pages/ProfileTest'));
 const CourseNew = lazy(() => import('./pages/CourseNew'));
 const Studio = lazy(() => import('./studio/Studio'));
+const CoursePath = lazy(() => import('./pages/CoursePath'));
 const Final = lazy(() => import('./pages/Final'));
 const Review = lazy(() => import('./pages/Review'));
 const Profile = lazy(() => import('./pages/Profile'));
@@ -37,7 +42,8 @@ const routes: RouteDef[] = [
   { path: '/profil-testi', render: () => authed(<ProfileTest />) },
   { path: '/panel', render: () => authed(<Dashboard />) },
   { path: '/kurs-olustur', render: () => authed(<CourseNew />) },
-  { path: '/kurs/:id', render: (p) => authed(<Studio courseId={Number(p.id)} />) },
+  { path: '/kurs/:id', render: (p) => authed(<CoursePath courseId={Number(p.id)} />) },
+  { path: '/kurs/:id/m/:m', render: (p) => authed(<Studio courseId={Number(p.id)} initialModule={Number(p.m)} />) },
   { path: '/kurs/:id/final', render: (p) => authed(<Final courseId={Number(p.id)} />) },
   { path: '/tekrar', render: () => authed(<Review />) },
   { path: '/profil', render: () => authed(<Profile />) },
@@ -52,6 +58,8 @@ function App() {
   return (
     <Suspense fallback={<Shell><PageLoader /></Shell>}>
       <SessionSync />
+      <UpgradeHost />
+      <InteractionFeedback />
       <Routes routes={routes} fallback={<NotFound />} />
     </Suspense>
   );

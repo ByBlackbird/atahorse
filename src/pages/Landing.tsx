@@ -6,6 +6,7 @@ import {
   LuNetwork, LuChevronDown, LuPlay, LuPause, LuLayers, LuRepeat, LuLanguages, LuCircleCheck, LuQuote,
 } from 'react-icons/lu';
 import { Link } from '../lib/router';
+import { getRef } from '../lib/ref';
 import { trpc, errCode } from '../lib/trpc';
 import { useI18n } from '../i18n/index';
 import { useMe } from '../ui/providers';
@@ -112,8 +113,8 @@ function SlidesDemo() {
   const { t } = useI18n();
   return (
     <div className="flex h-full flex-col">
-      <div className="flex flex-1 flex-col justify-center rounded-xl bg-night p-6 text-[#EEF1EC]">
-        <p className="eyebrow !text-[#9fbcb7]">01 / 03</p>
+      <div className="flex flex-1 flex-col justify-center rounded-xl bg-night p-6 text-on-night">
+        <p className="eyebrow !text-on-night-2">01 / 03</p>
         <h4 className="h-display mt-2 text-2xl">{t('l_demo_slide_t')}</h4>
         <ul className="mt-4 space-y-2.5 text-[15px]">
           {[t('l_demo_slide_b1'), t('l_demo_slide_b2'), t('l_demo_slide_b3')].map((b) => (
@@ -169,7 +170,7 @@ function Waitlist() {
     e.preventDefault();
     const ok = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email.trim());
     setInvalid(!ok);
-    if (ok) join.mutate({ email: email.trim(), role, locale: lang });
+    if (ok) join.mutate({ email: email.trim(), role, locale: lang, ref: getRef() });
   };
   if (join.isSuccess) {
     return (
@@ -441,7 +442,7 @@ export default function Landing() {
       </Section>
 
       {/* KAPANIŞ */}
-      <section className="bg-night text-[#EEF1EC]">
+      <section className="bg-night text-on-night">
         <div className="wrap flex flex-col items-center py-20 text-center md:py-24">
           <Logo variant="dark" className="h-9" />
           <p className="h-display mt-8 max-w-2xl text-2xl md:text-3xl">{t('l_close')}</p>

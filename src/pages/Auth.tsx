@@ -1,5 +1,6 @@
 import { useState, type FormEvent } from 'react';
 import { Link, useNavigate, useRouter } from '../lib/router';
+import { getRef } from '../lib/ref';
 import { trpc, errCode } from '../lib/trpc';
 import { useErr, useI18n } from '../i18n/index';
 import { ErrorBox, Field, Logo, Spinner } from '../ui/kit';
@@ -68,7 +69,7 @@ export function Register() {
   const valid = /^[a-zA-Z0-9_]{3,24}$/.test(f.username) && /^\S+@\S+\.\S+$/.test(f.email) && f.password.length >= 8;
   return (
     <Frame title={t('a_register_t')} sub={t('a_register_s')}>
-      <form onSubmit={(e) => { e.preventDefault(); reg.mutate({ ...f, locale: lang }); }} className="space-y-4" noValidate>
+      <form onSubmit={(e) => { e.preventDefault(); reg.mutate({ ...f, locale: lang, ref: getRef() }); }} className="space-y-4" noValidate>
         <Field label={t('a_fullname')}><input className="input" autoComplete="name" value={f.fullName} onChange={set('fullName')} /></Field>
         <Field label={t('a_username')} hint={t('a_username_h')}><input className="input" autoComplete="username" value={f.username} onChange={set('username')} required /></Field>
         <Field label={t('a_email')}><input className="input" type="email" autoComplete="email" value={f.email} onChange={set('email')} required /></Field>

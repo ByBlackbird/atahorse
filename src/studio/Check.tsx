@@ -5,6 +5,7 @@ import { trpc } from '../lib/trpc';
 import { useI18n } from '../i18n/index';
 import { Spinner, cx } from '../ui/kit';
 import type { SItem } from './types';
+import ReportButton from '../ui/ReportButton';
 
 export default function Check({ courseId, item, answered, onResult, compact }: { courseId: number; item: SItem; answered?: boolean; onResult?: (ok: boolean) => void; compact?: boolean }) {
   const { t } = useI18n();
@@ -17,7 +18,10 @@ export default function Check({ courseId, item, answered, onResult, compact }: {
     <div className={cx('rounded-[14px] border p-5', res ? (res.correct ? 'border-ok/40 bg-ok-soft' : 'border-bad/30 bg-bad-soft') : 'border-gold/50 bg-gold-soft')}>
       <div className="flex items-center justify-between gap-2">
         <p className="flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-gold-ink"><LuBrain /> {t('s_check')}</p>
-        {answered && !res && <span className="chip"><LuCheck /> {t('s_answered')}</span>}
+        <div className="flex items-center gap-1">
+          {answered && !res && <span className="chip"><LuCheck /> {t('s_answered')}</span>}
+          {res && <ReportButton courseId={courseId} itemId={item.id} className="-my-1 -mr-2" />}
+        </div>
       </div>
       <p className="mt-2 font-semibold leading-snug">{item.q}</p>
       {!compact && !res && <p className="mt-1 text-xs text-ink-2">{t('s_check_hint')}</p>}

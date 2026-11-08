@@ -1,5 +1,6 @@
 import { createTRPCReact, httpBatchLink, type inferReactQueryProcedureOptions } from '@trpc/react-query';
-import { QueryClient } from '@tanstack/react-query';
+import { MutationCache, QueryCache, QueryClient } from '@tanstack/react-query';
+import { isPaymentError, openUpgrade } from './upgrade-bus';
 import type { inferRouterInputs, inferRouterOutputs } from '@trpc/server';
 import type { AppRouter } from '../../server/trpc/router';
 
@@ -9,11 +10,14 @@ export type RouterInputs = inferRouterInputs<AppRouter>;
 export type ReactQueryOptions = inferReactQueryProcedureOptions<AppRouter>;
 
 export const queryClient = new QueryClient({
+  // Premium gerektiren her hata tek yerden şık modala döner (sayfa bazında ayrı ele alma yok)
+  queryCache: new QueryCache({ onError: (e) => { if (isPaymentError(e)) openUpgrade('feature'); } }),
+  mutationCache: new MutationCache({ onError: (e) => { if (isPaymentError(e)) openUpgrade(e.message === 'limit_reached' ? 'limit' : 'feature'); } }),
   defaultOptions: {
     queries: {
       staleTime: 20_000,
       refetchOnWindowFocus: false,
-      retry: (n, err) => n < 2 && !/unauthorized|forbidden|not_found|module_locked/.test((err as Error).message),
+      retry: (n, err) => n < 2 && !/unauthorized|forbidden|not_found|module_locked|limit_reached/.test((err as Error).message),
     },
   },
 });

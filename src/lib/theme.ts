@@ -2,7 +2,8 @@
 // kullanıcı seçim yaptığında tercih saklanır (oturum açıksa sunucuda da).
 export type Theme = 'paper' | 'ink';
 const KEY = 'ah-theme';
-const COLORS: Record<Theme, string> = { paper: '#F6F5F1', ink: '#061A1A' };
+import { BRAND } from './brand';
+const COLORS: Record<Theme, string> = { paper: BRAND.paper.bg, ink: BRAND.ink.bg };
 
 function systemTheme(): Theme {
   try { return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'ink' : 'paper'; } catch { return 'paper'; }

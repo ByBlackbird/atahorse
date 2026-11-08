@@ -1,6 +1,6 @@
 // Modül sonu hesap verebilirlik katmanı: görev onayı (+20) → modül quizi (+25, kilit açar) → modül (+100) → kurs (+150).
 import { useEffect, useRef, useState } from 'react';
-import { LuCheck, LuClipboardCheck, LuPaperclip, LuMic, LuSquare, LuArrowRight, LuTarget, LuTrophy, LuRotateCcw, LuX } from 'react-icons/lu';
+import { LuCheck, LuClipboardCheck, LuPaperclip, LuMic, LuSquare, LuArrowRight, LuTrophy, LuRotateCcw, LuX } from 'react-icons/lu';
 import { Link } from '../lib/router';
 import { trpc, errCode } from '../lib/trpc';
 import { useErr, useI18n } from '../i18n/index';
@@ -98,7 +98,7 @@ function TaskCard({ view, mod, prog }: { view: View; mod: SModule; prog: Progres
   );
 }
 
-function ModuleQuiz({ view, mod, prog, onNext, onDrill }: { view: View; mod: SModule; prog: Progress; onNext: () => void; onDrill: (sectionIdx: number) => void }) {
+function ModuleQuiz({ view, mod, prog, onNext }: { view: View; mod: SModule; prog: Progress; onNext: () => void }) {
   const { t, lang } = useI18n();
   const err = useErr();
   const toast = useToast();
@@ -113,7 +113,7 @@ function ModuleQuiz({ view, mod, prog, onNext, onDrill }: { view: View; mod: SMo
 
   if (prog.quizPassed && !open) {
     return (
-      <div className="card flex flex-wrap items-center justify-between gap-3 border-ok/40 p-5">
+      <div id="quiz" className="card scroll-mt-28 flex flex-wrap items-center justify-between gap-3 border-ok/40 p-5">
         <p className="flex items-center gap-2 font-semibold"><LuCheck className="text-ok" /> {t('s_quiz_passed', { n: prog.quizBest })}</p>
         <div className="flex gap-2">
           <button className="btn btn-ghost btn-sm" onClick={() => setOpen(true)}><LuRotateCcw /> {t('retry')}</button>
@@ -123,7 +123,7 @@ function ModuleQuiz({ view, mod, prog, onNext, onDrill }: { view: View; mod: SMo
     );
   }
   return (
-    <div className="card p-6">
+    <div id="quiz" className="card scroll-mt-28 p-6">
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div>
           <h3 className="text-lg font-semibold">{t('s_quiz')}</h3>
@@ -162,7 +162,6 @@ function ModuleQuiz({ view, mod, prog, onNext, onDrill }: { view: View; mod: SMo
           {quiz.isPending ? <Spinner className="h-4 w-4" /> : t('s_quiz_submit')}
         </button>
       ) : (
-        <>
         <div className={cx('mt-6 flex flex-wrap items-center justify-between gap-3 rounded-xl p-4', r.passed ? 'bg-ok-soft' : 'bg-bad-soft')}>
           <p className="text-sm"><strong>{t('s_quiz_result', { a: r.score, b: r.total })}</strong> — {r.passed ? t('s_quiz_pass') : t('s_quiz_fail')}</p>
           <div className="flex gap-2">
@@ -171,83 +170,17 @@ function ModuleQuiz({ view, mod, prog, onNext, onDrill }: { view: View; mod: SMo
             {r.passed && prog.quizPassed && <button className="btn btn-ghost btn-sm" onClick={() => setOpen(false)}><LuX /></button>}
           </div>
         </div>
-        {!r.passed && (() => {
-          // Ultralearning "drill": yanlış yapılan kontrol sorularının bölümlerine hedefli dönüş
-          const weak = mod.sections
-            .map((s, i) => ({ s, i }))
-            .filter(({ s }) => s.check && view.checks[s.check.id] === false);
-          if (!weak.length) return null;
-          return (
-            <div className="mt-4 rounded-xl border border-gold/40 bg-gold-soft p-4">
-              <p className="text-sm font-semibold">{t('s_drill_title')}</p>
-              <p className="mt-1 text-sm text-ink-2">{t('s_drill_hint')}</p>
-              <div className="mt-3 flex flex-wrap gap-2">
-                {weak.map(({ s, i }) => (
-                  <button key={s.id} className="btn btn-outline btn-sm" onClick={() => onDrill(i)}>{s.heading} → {t('s_drill_go')}</button>
-                ))}
-              </div>
-            </div>
-          );
-        })()}
-        </>
       )}
     </div>
   );
 }
 
-/** Ön test (soğuk geri çağırma): 1. modül quizi aynı sorularla, konuya girmeden önce.
- *  XP/kilit yok — kalibrasyon tabanı; finalle karşılaştırılıp gerçek kazanım ölçülür. */
-function PretestCard({ courseId }: { courseId: number }) {
-  const { t } = useI18n();
-  const [skipped, setSkipped] = useState(false);
-  const [ans, setAns] = useState<number[]>([]);
-  const q = trpc.learn.pretest.useQuery({ courseId });
-  const submit = trpc.learn.pretestSubmit.useMutation({ onSuccess: () => void q.refetch() });
-  if (skipped || !q.data || q.data.done || !q.data.items.length) return null;
-  const items = q.data.items;
-  const ready = ans.length === items.length && ans.every((a) => a >= 0);
-  return (
-    <div className="card border-brand/30 bg-brand-soft p-6">
-      <div className="flex items-start justify-between gap-3">
-        <div>
-          <p className="flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-brand"><LuTarget /> {t('s_pre_title')}</p>
-          <p className="mt-2 text-sm text-ink-2">{t('s_pre_sub')}</p>
-        </div>
-        <button className="btn btn-ghost btn-icon btn-sm" onClick={() => setSkipped(true)} aria-label={t('s_pre_skip')}><LuX /></button>
-      </div>
-      <ol className="mt-4 space-y-4">
-        {items.map((it, qi) => (
-          <li key={it.id}>
-            <p className="text-sm font-medium"><span className="mr-1.5 text-ink-3">{qi + 1}.</span>{it.q}</p>
-            <div className="mt-2 grid gap-1.5">
-              {it.options.map((o, i) => (
-                <label key={i} className={cx('flex cursor-pointer items-start gap-2.5 rounded-xl border px-3 py-2 text-sm transition-colors',
-                  ans[qi] === i ? 'border-brand bg-bg' : 'border-line hover:border-line-strong')}>
-                  <input type="radio" name={`pre-${it.id}`} className="mt-0.5 accent-[var(--c-brand)]" checked={ans[qi] === i}
-                    onChange={() => setAns((a) => a.map((v, j) => (j === qi ? i : v)))} />
-                  <span>{o}</span>
-                </label>
-              ))}
-            </div>
-          </li>
-        ))}
-      </ol>
-      <div className="mt-4 flex items-center gap-3">
-        <button className="btn btn-primary btn-sm" disabled={!ready || submit.isPending} onClick={() => submit.mutate({ courseId, answers: ans })}>
-          {submit.isPending ? <Spinner className="h-3.5 w-3.5" /> : t('s_pre_submit')}
-        </button>
-      </div>
-    </div>
-  );
-}
-
-export default function ModuleFooter({ view, mod, prog, onNext, onDrill }: { view: View; mod: SModule; prog: Progress; onNext: () => void; onDrill: (sectionIdx: number) => void }) {
+export default function ModuleFooter({ view, mod, prog, onNext }: { view: View; mod: SModule; prog: Progress; onNext: () => void }) {
   const { t } = useI18n();
   return (
     <div className="mx-auto mt-14 max-w-3xl space-y-4 border-t border-line pt-10">
-      {mod.idx === 0 && !prog.quizPassed && !view.pretest.done && <PretestCard courseId={view.course.id} />}
       <TaskCard key={`t${mod.idx}${prog.taskDone}`} view={view} mod={mod} prog={prog} />
-      <ModuleQuiz view={view} mod={mod} prog={prog} onNext={onNext} onDrill={onDrill} />
+      <ModuleQuiz view={view} mod={mod} prog={prog} onNext={onNext} />
       {view.course.completedAt && (
         <div className="card flex flex-wrap items-center justify-between gap-4 border-gold/50 bg-gold-soft p-6">
           <div>

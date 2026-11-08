@@ -38,7 +38,7 @@ export default function Shared({ slug }: { slug: string }) {
             </div>
           </section>
         ))}
-        <div className="card mt-10 flex flex-wrap items-center justify-between gap-4 bg-night p-6 text-[#EEF0EE]">
+        <div className="card mt-10 flex flex-wrap items-center justify-between gap-4 bg-night p-6 text-on-night">
           <p className="h-display text-xl">{t('sh_cta')}</p>
           <Link to="/kayit" className="btn btn-gold">{t('l_cta')} <LuArrowRight /></Link>
         </div>

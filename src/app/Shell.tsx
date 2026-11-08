@@ -1,10 +1,12 @@
 // Uygulama iskeleti — Apple HIG düzeni:
-//  · Oturum açık + geniş ekran: solda kenar çubuğu (bölümler + hızlı eylem + ilerleme), içerik sağda.
+//  · Oturum açık + geniş ekran: solda kenar çubuğu — kategori başlığı → ana öğe → girintili alt modül (kurslar doğrudan menüde).
 //  · Stüdyo/yönetim (wide): kenar çubuğu ikon rayına daralır, içerik tam genişlik alır.
 //  · Mobil: üstte yarı saydam araç çubuğu, altta en çok 4 sekmeli sekme çubuğu (44 px hedef, güvenli alan).
 //  · Oturum kapalı: yalnız üst araç çubuğu.
 import type { ReactNode } from 'react';
-import { LuFlame, LuLayoutDashboard, LuPlus, LuRepeat, LuUser, LuLogOut, LuMoon, LuSun, LuShieldCheck, LuZap, LuGlobe } from 'react-icons/lu';
+import { LuFlame, LuLayoutDashboard, LuPlus, LuRepeat, LuUser, LuLogOut, LuMoon, LuSun, LuShieldCheck, LuZap, LuGlobe, LuCrown, LuLibrary } from 'react-icons/lu';
+import { openUpgrade } from '../lib/upgrade-bus';
+import { courseTone } from '../lib/brand';
 import { Link, Navigate, useNavigate, useRouter } from '../lib/router';
 import { trpc } from '../lib/trpc';
 import { useI18n } from '../i18n/index';
@@ -81,6 +83,33 @@ function ProgressCard({ rail }: { rail?: boolean }) {
   );
 }
 
+type Item = { to: string; key: string; icon: React.ReactNode; badge?: number; onClick?: () => void };
+
+/** Kurslarım: hazır kurslar doğrudan menüde (katman katman gezinme yok); ilerleme halkasıyla. */
+function CourseLinks({ path }: { path: string }) {
+  const { t } = useI18n();
+  const dash = trpc.profile.dashboard.useQuery(undefined, { staleTime: 30_000 });
+  const list = (dash.data?.courses ?? []).filter((c) => c.status === 'ready');
+  const top = [...list].sort((a, b) => Number(!!a.completedAt) - Number(!!b.completedAt)).slice(0, 6);
+  if (!dash.data) return <div className="ml-2 mt-1 h-16 animate-pulse rounded-lg bg-surface-2" aria-hidden />;
+  if (!list.length) return <p className="ml-2 px-3 py-2 text-[13px] text-ink-3">{t('nav_no_courses')}</p>;
+  return (
+    <div className="mt-0.5 flex flex-col">
+      {top.map((c) => {
+        const cur = path === `/kurs/${c.id}` || path.startsWith(`/kurs/${c.id}/`);
+        return (
+          <Link key={c.id} to={`/kurs/${c.id}`} aria-current={cur ? 'page' : undefined} className="side-sub" title={c.title} data-k={courseTone(c.id)}>
+            <span className="bg-k h-2.5 w-2.5 shrink-0 rounded-full" aria-hidden />
+            <span className="min-w-0 flex-1 truncate">{c.title}</span>
+            <span className={cx('shrink-0 text-[11px] tabular-nums', c.completedAt ? 'text-gold-ink' : 'text-ink-3')}>{c.completedAt ? '✓' : `${c.percent}%`}</span>
+          </Link>
+        );
+      })}
+      {list.length > top.length && <Link to="/panel#kurslar" className="side-sub !text-accent-ink">{t('nav_all_courses', { n: list.length })}</Link>}
+    </div>
+  );
+}
+
 function Sidebar({ rail }: { rail: boolean }) {
   const { t } = useI18n();
   const { me } = useMe();
@@ -88,28 +117,47 @@ function Sidebar({ rail }: { rail: boolean }) {
   const navigate = useNavigate();
   const utils = trpc.useUtils();
   const logout = trpc.auth.logout.useMutation({ onSuccess: async () => { await utils.invalidate(); navigate('/'); } });
+  const dash = trpc.profile.dashboard.useQuery(undefined, { staleTime: 30_000, enabled: !!me });
   if (!me) return null;
-  const items = [...NAV.filter((n) => rail || n.to !== '/kurs-olustur'), ...(me.role === 'admin' ? [{ to: '/yonetim', key: 'nav_admin', icon: <LuShieldCheck /> } as const] : [])];
+  const premium = me.plan === 'premium' || me.role === 'admin';
+  // Kategori → öğe hiyerarşisi (rail modunda başlıklar gizlenir, ikonlar kalır)
+  const groups: { key: string; items: Item[]; courses?: boolean }[] = [
+    { key: 'nav_g_learn', items: [
+      { to: '/panel', key: 'nav_dashboard', icon: <LuLayoutDashboard /> },
+      { to: '/tekrar', key: 'nav_review', icon: <LuRepeat />, badge: dash.data?.dueReviews || undefined },
+      ...(rail ? [{ to: '/kurs-olustur', key: 'nav_new', icon: <LuPlus /> }] : []),
+    ] },
+    { key: 'nav_g_courses', items: [], courses: true },
+    { key: 'nav_g_account', items: [
+      { to: '/profil', key: 'nav_profile', icon: <LuUser /> },
+      ...(!premium ? [{ to: '/premium', key: 'nav_premium', icon: <LuCrown />, onClick: () => openUpgrade('manual') }] : []),
+      ...(me.role === 'admin' ? [{ to: '/yonetim', key: 'nav_admin', icon: <LuShieldCheck /> }] : []),
+    ] },
+  ];
+  const link = (n: Item) => {
+    const cur = isCurrent(path, n.to);
+    const body = <>{n.icon}{!rail && <span className="flex-1">{t(n.key)}</span>}{rail && <span className="sr-only">{t(n.key)}</span>}
+      {n.badge ? <span className={cx('grid min-w-5 place-items-center rounded-full bg-gold px-1.5 text-[11px] font-bold tabular-nums text-on-gold', rail && 'absolute right-1.5 top-1.5 min-w-4 !px-1 text-[10px]')}>{n.badge}</span> : null}</>;
+    if (n.onClick) return <button key={n.to} type="button" onClick={n.onClick} title={rail ? t(n.key) : undefined} className={cx('side-item w-full text-left', rail && 'justify-center !px-0')}>{body}</button>;
+    return <Link key={n.to} to={n.to} aria-current={cur ? 'page' : undefined} title={rail ? t(n.key) : undefined} className={cx('side-item', rail && 'justify-center !px-0')}>{body}</Link>;
+  };
   return (
-    <aside className={cx('no-print fixed inset-y-0 left-0 z-40 hidden flex-col border-r border-line bg-surface lg:flex', rail ? 'w-[76px] items-center px-2 py-4' : 'w-[264px] px-3 py-5')} aria-label={t('nav_menu')}>
-      <Link to="/panel" aria-label="Atahorse" className={cx('flex min-h-11 items-center', rail ? 'justify-center' : 'px-3')}>
+    <aside className={cx('no-print fixed inset-y-0 left-0 z-40 hidden flex-col border-r border-line bg-surface lg:flex', rail ? 'w-[76px] items-center px-2 py-4' : 'w-[272px] px-3 py-5')} aria-label={t('nav_menu')}>
+      <Link to="/panel" aria-label="Atahorse" className={cx('flex min-h-11 items-center transition-opacity duration-200 hover:opacity-80', rail ? 'justify-center' : 'px-3')}>
         {rail ? <img src="/assets/favicon.png" alt="" className="h-9 w-9 rounded-[10px]" /> : <Logo className="h-7" />}
       </Link>
-      {!rail && (
-        <Link to="/kurs-olustur" className="btn btn-primary mt-6 w-full"><LuPlus /> {t('nav_new')}</Link>
-      )}
-      <nav className={cx('flex flex-col gap-1', rail ? 'mt-6 w-full' : 'mt-6')}>
-        {items.map((n) => {
-          const cur = isCurrent(path, n.to);
-          return (
-            <Link key={n.to} to={n.to} aria-current={cur ? 'page' : undefined} title={rail ? t(n.key) : undefined}
-              className={cx('side-item', rail && 'justify-center !px-0')}>
-              {n.icon}{!rail && <span>{t(n.key)}</span>}{rail && <span className="sr-only">{t(n.key)}</span>}
-            </Link>
-          );
-        })}
+      {!rail && <Link to="/kurs-olustur" className="btn btn-primary mt-6 w-full"><LuPlus /> {t('nav_new')}</Link>}
+      <nav className={cx('flex flex-col overflow-y-auto scrollbar-thin', rail ? 'mt-6 w-full gap-1' : 'mt-1 -mx-1 px-1 pb-4')}>
+        {groups.map((g) => (
+          <div key={g.key} className={cx('flex flex-col', !rail && 'gap-0.5')} role="group" aria-label={t(g.key)}>
+            {!rail && <p className="side-group"><span>{t(g.key)}</span>{g.courses && dash.data ? <span className="side-group-n">{dash.data.courses.filter((c) => c.status === 'ready').length}</span> : null}</p>}
+            {g.items.map(link)}
+            {g.courses && !rail && <CourseLinks path={path} />}
+            {g.courses && rail && <Link to="/panel#kurslar" title={t(g.key)} className="side-item justify-center !px-0"><LuLibrary /><span className="sr-only">{t(g.key)}</span></Link>}
+          </div>
+        ))}
       </nav>
-      <div className={cx('mt-auto flex flex-col gap-2', rail ? 'w-full items-center' : '')}>
+      <div className={cx('mt-auto flex flex-col gap-2 pt-3', rail ? 'w-full items-center' : 'border-t border-line')}>
         <ProgressCard rail={rail} />
         {rail ? (
           <>
@@ -157,7 +205,7 @@ export function Shell({ children, wide, bare, headerNav }: { children: ReactNode
     <div className="min-h-dvh bg-bg">
       <a href="#main" className="skip-link">{t('nav_skip')}</a>
       {appLayout && <Sidebar rail={rail} />}
-      <div className={cx(appLayout && (rail ? 'lg:pl-[76px]' : 'lg:pl-[264px]'))}>
+      <div className={cx(appLayout && (rail ? 'lg:pl-[76px]' : 'lg:pl-[272px]'))}>
         <header className={cx('material no-print sticky top-0 z-30 border-b border-line', appLayout && 'lg:hidden')} style={{ paddingTop: 'env(safe-area-inset-top)' }}>
           <div className={cx('mx-auto flex h-14 items-center gap-2 px-4 md:px-6', maxW)}>
             <Link to={me ? '/panel' : '/'} aria-label="Atahorse" className="flex min-h-11 items-center"><Logo className="h-6" /></Link>

@@ -12,14 +12,16 @@ export default function Figure({ v }: { v: V }) {
     return (
       <g key={`${s}${x}${y}`} transform={`translate(${x - w / 2},${y - 13})`}>
         <rect width={w} height={26} rx={13} fill={hi ? 'var(--c-night)' : 'var(--c-surface)'} stroke={hi ? 'var(--c-night)' : 'var(--c-line-strong)'} />
-        <text x={w / 2} y={17} textAnchor="middle" fontSize="11.5" fontWeight={600} fill={hi ? '#F5D9A0' : 'var(--c-ink)'}>{s.length > 22 ? `${s.slice(0, 21)}…` : s}</text>
+        <text x={w / 2} y={17} textAnchor="middle" fontSize="11.5" fontWeight={600} fill={hi ? 'var(--c-on-night-gold)' : 'var(--c-ink)'}>{s.length > 22 ? `${s.slice(0, 21)}…` : s}</text>
       </g>
     );
   };
   let body: React.ReactNode;
-  switch (v.type) {
+  // Gerçek değer yoksa çubuk grafiği çizilmez (uydurma sayı yok) → ilişki ağına döner
+  const kind = v.type === 'bars' && !v.values?.length ? 'network' : v.type;
+  switch (kind) {
     case 'bars': {
-      const vals = v.values?.length ? v.values : L.map((_, i) => 40 + ((i * 37) % 55));
+      const vals = v.values ?? [];
       const bw = (W - 80) / n;
       body = L.map((s, i) => {
         const h = (vals[i] ?? 50) * 1.6;

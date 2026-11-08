@@ -1,6 +1,6 @@
-// Öğrenme Stüdyosu — üçlü mod (Okuma / Podcast / Slayt) + Zihin Haritası + AI Asistan + hesap verebilirlik.
+// Öğrenme Stüdyosu — üçlü mod (Okuma / Podcast / Görsel ders) + Zihin Haritası + AI Asistan + hesap verebilirlik.
 import { Suspense, lazy, useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { LuArrowLeft, LuBookOpen, LuHeadphones, LuPresentation, LuNetwork, LuSparkles, LuLanguages, LuShare2, LuMenu, LuX } from 'react-icons/lu';
+import { LuArrowLeft, LuBookOpen, LuHeadphones, LuPresentation, LuNetwork, LuSparkles, LuLanguages, LuShare2, LuMenu, LuX, LuRoute } from 'react-icons/lu';
 import { Link } from '../lib/router';
 import { trpc, errCode } from '../lib/trpc';
 import { useErr, useI18n } from '../i18n/index';
@@ -14,9 +14,12 @@ import ModuleRail from './ModuleRail';
 import ReadingMode from './ReadingMode';
 import ModuleFooter from './ModuleFooter';
 import AiPanel from './AiPanel';
+import PathPanel from './PathPanel';
+import Pretest from './Pretest';
 
 const PodcastMode = lazy(() => import('./PodcastMode'));
 const SlideMode = lazy(() => import('./SlideMode'));
+const LessonPlayer = lazy(() => import('./LessonPlayer'));
 const MindMap = lazy(() => import('./MindMap'));
 
 function Translate({ courseId, current, original }: { courseId: number; current: Locale; original: Locale }) {
@@ -58,7 +61,7 @@ function Translate({ courseId, current, original }: { courseId: number; current:
   );
 }
 
-export default function Studio({ courseId }: { courseId: number }) {
+export default function Studio({ courseId, initialModule }: { courseId: number; initialModule?: number }) {
   const { t, lang } = useI18n();
   const err = useErr();
   const { push } = useToast();
@@ -76,7 +79,7 @@ export default function Studio({ courseId }: { courseId: number }) {
   const [sectionIdx, setSectionIdx] = useState(0);
   const [aiDeck, setAiDeck] = useState<SSlide[] | null>(null);
   const [lastWrong, setLastWrong] = useState(false);
-  const [focusSec, setFocusSec] = useState<number | null>(null);
+  const [pathOpen, setPathOpen] = useState(false);
   const share = trpc.course.share.useMutation({
     onSuccess: async ({ slug }) => {
       const url = `${window.location.origin}/p/${slug}`;
@@ -88,12 +91,15 @@ export default function Studio({ courseId }: { courseId: number }) {
   useEffect(() => {
     if (!v) return;
     if (moduleIdx === null) {
-      const i = v.progress.findIndex((p) => p.unlocked && !p.completed);
+      const want = initialModule !== undefined && Number.isFinite(initialModule) && v.progress[initialModule]?.unlocked ? initialModule : -1;
+      const i = want >= 0 ? want : v.progress.findIndex((p) => p.unlocked && !p.completed);
       setModuleIdx(i >= 0 ? i : 0);
+      // Patikadan sınav düğümüyle gelindiyse modül testine kaydır
+      if (window.location.hash === '#quiz') window.setTimeout(() => document.getElementById('quiz')?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 400);
     }
+    // Odak modu: asistan kapalı başlar (yorgunluğu azalt); profil giriş modu
     if (mode === null) setMode(PROFILES[v.course.profileKey as ProfileKey]?.entryMode ?? 'read');
-    if (window.matchMedia('(min-width: 1280px)').matches && ai === false && moduleIdx === null) setAi(true);
-  }, [v, moduleIdx, mode, ai]);
+  }, [v, moduleIdx, mode, initialModule]);
 
   // Kalp atışı: görünür sekmede 30 sn'de bir süre + mod kaydı
   const hb = trpc.learn.heartbeat.useMutation();
@@ -111,12 +117,9 @@ export default function Studio({ courseId }: { courseId: number }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [courseId, moduleIdx, mode, map]);
 
-  useEffect(() => { window.scrollTo({ top: 0 }); }, [mode, map]);
+  useEffect(() => { if (window.location.hash !== '#quiz') window.scrollTo({ top: 0 }); }, [mode, map]);
 
-  const selectModule = useCallback((i: number) => { setModuleIdx(i); setSectionIdx(0); setAiDeck(null); setFocusSec(null); setLastWrong(false); setRailOpen(false); window.scrollTo({ top: 0 }); }, []);
-
-  // Bölüm değişince bayrak sıfırlanır (AI panelindeki "son yanlış" önerisi bayatlamasın)
-  useEffect(() => { setLastWrong(false); }, [sectionIdx]);
+  const selectModule = useCallback((i: number) => { setModuleIdx(i); setSectionIdx(0); setAiDeck(null); setRailOpen(false); window.scrollTo({ top: 0 }); }, []);
 
   const mod = v && moduleIdx !== null ? v.doc.modules[moduleIdx] : null;
   const prog = v && moduleIdx !== null ? v.progress[moduleIdx] : null;
@@ -142,11 +145,13 @@ export default function Studio({ courseId }: { courseId: number }) {
 
   return (
     <Shell wide>
+      <Pretest courseId={courseId} />
+      <PathPanel courseId={courseId} open={pathOpen} onClose={() => setPathOpen(false)} onModule={(i) => { if (v.progress[i]?.unlocked) selectModule(i); }} />
       {/* Üst şerit */}
       <div className="material no-print sticky top-14 z-20 -mx-4 -mt-6 mb-5 border-b border-line px-4 py-3 md:-mx-6 md:-mt-8 md:px-6 lg:top-0 lg:-mt-10">
         <div className="flex flex-wrap items-center gap-2">
           <button className="btn btn-ghost btn-icon lg:hidden" onClick={() => setRailOpen(true)} aria-label={t('s_modules')}><LuMenu /></button>
-          <Link to="/panel" className="btn btn-ghost btn-icon hidden lg:inline-flex" aria-label={t('back')}><LuArrowLeft /></Link>
+          <Link to={`/kurs/${courseId}`} className="btn btn-ghost btn-icon hidden lg:inline-flex" aria-label={t('v4_back_path')} title={t('v4_back_path')}><LuArrowLeft /></Link>
           <div className="min-w-0 flex-1">
             <p className="truncate text-xs text-ink-3">{v.doc.title}</p>
             <p className="truncate font-semibold">{mod.title}</p>
@@ -160,6 +165,7 @@ export default function Studio({ courseId }: { courseId: number }) {
             <button role="tab" className="flex-1 justify-center" aria-pressed={map} onClick={() => setMap((m) => !m)}><LuNetwork /><span className="hidden sm:inline">{t('s_map')}</span></button>
           </div>
           <Translate courseId={courseId} current={v.course.shownLocale} original={v.course.locale} />
+          <button className="btn btn-outline btn-sm" onClick={() => setPathOpen(true)} title={t('s_path')}><LuRoute /><span className="hidden md:inline">{t('s_path')}</span></button>
           <button className="btn btn-ghost btn-sm" onClick={() => share.mutate({ courseId })} title={t('s_share')}><LuShare2 /><span className="hidden xl:inline">{t('s_share')}</span></button>
           <button className={cx('btn btn-sm', ai ? 'btn-primary' : 'btn-outline')} onClick={() => setAi((a) => !a)} aria-pressed={ai}><LuSparkles /><span className="hidden md:inline">{t('s_ai')}</span></button>
           <Ring value={v.percent / 100} size={38} stroke={4} label={t('s_progress')}><span className="text-[10px] font-semibold">{v.percent}</span></Ring>
@@ -188,15 +194,16 @@ export default function Studio({ courseId }: { courseId: number }) {
             {map ? (
               <MindMap courseId={courseId} />
             ) : mode === 'read' ? (
-              <ReadingMode key={`${moduleIdx}-${v.course.shownLocale}`} view={v} mod={mod} onSection={setSectionIdx} onCheck={(ok) => setLastWrong(!ok)} focusSection={focusSec} />
+              <ReadingMode key={`${moduleIdx}-${v.course.shownLocale}`} view={v} mod={mod} onSection={setSectionIdx} onCheck={(ok) => setLastWrong(!ok)} />
             ) : mode === 'podcast' ? (
               <PodcastMode key={`${moduleIdx}-${v.course.shownLocale}`} mod={mod} locale={v.course.shownLocale} onSection={setSectionIdx} />
+            ) : aiDeck ? (
+              <SlideMode key={`${moduleIdx}-ai`} slides={aiDeck} isAiDeck onExitAiDeck={() => setAiDeck(null)} onSection={setSectionIdx} />
             ) : (
-              <SlideMode key={`${moduleIdx}-${aiDeck ? 'ai' : 'm'}`} slides={aiDeck ?? mod.slides} isAiDeck={!!aiDeck} onExitAiDeck={() => setAiDeck(null)} onSection={setSectionIdx} />
+              <LessonPlayer key={`${moduleIdx}-${v.course.shownLocale}`} courseId={courseId} view={v} mod={mod} moduleIdx={moduleIdx} locale={v.course.shownLocale} onSection={setSectionIdx} />
             )}
           </Suspense>
-          {!map && <ModuleFooter key={moduleIdx} view={v} mod={mod} prog={prog} onNext={() => selectModule(moduleIdx + 1)}
-            onDrill={(i) => { setMode('read'); setMap(false); setFocusSec(i); window.scrollTo({ top: 0 }); }} />}
+          {!map && <ModuleFooter key={moduleIdx} view={v} mod={mod} prog={prog} onNext={() => selectModule(moduleIdx + 1)} />}
         </section>
 
         {/* AI paneli */}

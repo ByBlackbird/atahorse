@@ -29,7 +29,7 @@ export function Ring({ value, size = 56, stroke = 5, color = 'var(--c-gold)', ch
 
 export function Bar({ value, className, color = 'bg-gold' }: { value: number; className?: string; color?: string }) {
   return (
-    <div className={cx('h-1.5 w-full overflow-hidden rounded-full bg-surface-2', className)} role="progressbar" aria-valuenow={Math.round(value * 100)} aria-valuemin={0} aria-valuemax={100}>
+    <div className={cx('h-2.5 w-full overflow-hidden rounded-full bg-surface-3', className)} role="progressbar" aria-valuenow={Math.round(value * 100)} aria-valuemin={0} aria-valuemax={100}>
       <div className={cx('h-full rounded-full transition-[width] duration-500', color)} style={{ width: `${Math.max(0, Math.min(1, value)) * 100}%` }} />
     </div>
   );
@@ -67,7 +67,7 @@ export function Empty({ icon, title, body, action }: { icon: ReactNode; title: s
   );
 }
 
-export function Modal({ open, onClose, title, children, wide }: { open: boolean; onClose: () => void; title?: string; children: ReactNode; wide?: boolean }) {
+export function Modal({ open, onClose, title, children, wide, bare, label }: { open: boolean; onClose: () => void; title?: string; children: ReactNode; wide?: boolean; bare?: boolean; label?: string }) {
   const ref = useRef<HTMLDivElement>(null);
   useEffect(() => {
     if (!open) return;
@@ -89,15 +89,15 @@ export function Modal({ open, onClose, title, children, wide }: { open: boolean;
   }, [open, onClose]);
   if (!open) return null;
   return (
-    <div className="anim-fade fixed inset-0 z-[90] grid place-items-end p-0 sm:place-items-center sm:p-4" style={{ background: 'var(--c-scrim)' }} onMouseDown={(e) => { if (e.target === e.currentTarget) onClose(); }}>
-      <div ref={ref} role="dialog" aria-modal="true" aria-label={title} className={cx('card elev-3 anim-pop max-h-[90dvh] w-full overflow-auto rounded-b-none sm:rounded-b-[16px]', wide ? 'sm:max-w-2xl' : 'sm:max-w-lg')}>
+    <div className="scrim-blur anim-fade fixed inset-0 z-[90] grid place-items-end p-0 sm:place-items-center sm:p-4" onMouseDown={(e) => { if (e.target === e.currentTarget) onClose(); }}>
+      <div ref={ref} role="dialog" aria-modal="true" aria-label={title ?? label} className={cx('card elev-3 anim-modal max-h-[90dvh] w-full overflow-auto rounded-b-none sm:rounded-b-[16px]', wide ? 'sm:max-w-2xl' : 'sm:max-w-lg', bare && '!p-0')}>
         {title && (
           <div className="flex items-center justify-between border-b border-line px-5 py-3.5">
             <h2 className="font-semibold">{title}</h2>
             <button className="btn btn-ghost btn-icon" onClick={onClose} aria-label="close"><LuX /></button>
           </div>
         )}
-        <div className="p-5">{children}</div>
+        {bare ? children : <div className="p-5">{children}</div>}
       </div>
     </div>
   );
@@ -115,7 +115,7 @@ export function Field({ label, hint, children }: { label: string; hint?: string;
 
 export function Stat({ label, value, icon }: { label: string; value: ReactNode; icon?: ReactNode }) {
   return (
-    <div className="card px-4 py-3.5">
+    <div className="card-i px-4 py-3.5">
       <div className="flex items-center gap-1.5 text-xs text-ink-3">{icon}{label}</div>
       <div className="mt-1 text-2xl font-semibold tabular-nums">{value}</div>
     </div>
