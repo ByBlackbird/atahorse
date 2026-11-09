@@ -3,6 +3,18 @@
 İnsanlar ve ajanlar için değişiklik özeti (git geçmişini kazmadan). En yeni üstte.
 Biçim: ne değişti → kimi etkiler → gerekirse ne yapılmalı.
 
+## 3.7.0 — Bilimsel Yol Haritası uygulandı (Faz 0 + Faz 1 hızlı işler)
+- **Palet (§6.1):** fildişi #FDFCF8 zemin, gece laciverti #1E1B4B metin, mor #5B2DE6 yalnız birincil eylem, altın #F5B942 yalnız ilerleme/ödül, derin lacivert #06060C koyu bant. Pembe, aurora gradientleri, cam bulanıklığı ve ışıyan gölgeler kaldırıldı. Kurs renkleri mor-lacivert ailesine indirildi. WCAG AA denetlendi; koyu temada mor #9468F7'ye açıldı (yüzeyde 4,9:1).
+- **Düğmeler (§6.3–6.4):** ekranda tek dolu mor; kenar çubuğundaki "Yeni kurs" ikincil oldu; odak halkası, devre dışı ve yükleniyor durumları; zıplama/gölge yok; `btn-gold` yalnız sertifika.
+- **Marka dili (§2.1):** yeni konumlandırma cümlesi; "kanal/zihnine göre" vaatleri kaldırıldı; SSS "öğrenme stili" sorusu dürüst cevapla; profil sonucu "İlk kapın" + tüm kapılar görünür.
+- **Ölçüm (Faz 0):** `events` tablosu ve olaylar (kayıt, kursa başlama, modül/kurs bitirme, quiz, tekrar oturumu, aralıklı cevap, final, ikinci kurs, ücretsiz limit, yükseltme). Yönetimde haftalık kohort tablosu: tamamlama, 7 günde tekrar, 7/30 gün hatırlama, ikinci kurs, ücretliye geçiş.
+- **Serbest yanıt (Faz 0):** bölüm kontrolü ve tekrar kartlarında varsayılan "yaz → örnek cevapla karşılaştır → kendini puanla"; puan FSRS'ye bağlı; doğru cevap yazmadan gönderilmez. `recall_answers` tablosu. Çoktan seçmeli yedek yol olarak kaldı. Kontrol kutusu altından nötr yüzeye alındı.
+- **18+ beyanı (Faz 0):** kayıtta zorunlu onay; `users.adult_confirmed_at`.
+- **Hedefli drill (Faz 1):** kalınan quizden sonra birincil eylem; modülün en zayıf 3–5 sorusu serbest yanıtla, sonra "Quizi yeniden çöz".
+- **Hedef çubuğu + "Farklı anlat" (Faz 1):** ders ekranının üstünde modül hedefi sabit; tek tıkla başka metotla yeniden anlatım.
+- Migration: `0006_roadmap_faz0.sql`.
+- **Yapılmadı:** gerçek ödeme (iyzico/Stripe anahtarı gerekli; simüle yükseltme bayrağı duruyor), hedef sorusuna "haftada kaç gün", Faz 2–3 maddeleri.
+
 ## 3.6.0 — v5 "Aurora" iç uygulama + yeni sertifika
 - **Kenar çubuğu v5:** lacivert panel, altın logo, seçili öğe dolu indigo hap, pembe "Yeni kurs". İçindeki ortak bileşenler `.sidebar` yerel belirteçleriyle koyulaşır.
 - **Masaüstü üst çubuk:** tarih + selamlama, seri, XP/seviye, tema, profil avatarı (stüdyo ray modunda gizli).

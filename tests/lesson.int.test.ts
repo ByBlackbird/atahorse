@@ -19,7 +19,7 @@ const wait = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
 test('görsel ders uç noktası', async () => {
   const reg = caller();
-  await (await reg.make()).auth.register({ username: 'izleyici', email: 'i@example.com', password: 'Sifre12345', locale: 'tr' });
+  await (await reg.make()).auth.register({ username: 'izleyici', email: 'i@example.com', password: 'Sifre12345', adult: true, locale: 'tr' });
   const me = await caller((reg.resHeaders.get('set-cookie') ?? '').split(';')[0]).make();
   const { courseId, jobId } = await me.course.create({ topic: 'Fotosentez', level: 'beginner', locale: 'tr' });
   for (let i = 0; i < 100; i++) { if ((await me.course.job({ jobId })).stage === 'done') break; await wait(50); }
@@ -36,7 +36,7 @@ test('görsel ders uç noktası', async () => {
   await assert.rejects(me.learn.lesson({ courseId, moduleIdx: 99 }), /bad_module/);
 
   const other = caller();
-  await (await other.make()).auth.register({ username: 'yabanci', email: 'y@example.com', password: 'Sifre12345', locale: 'tr' });
+  await (await other.make()).auth.register({ username: 'yabanci', email: 'y@example.com', password: 'Sifre12345', adult: true, locale: 'tr' });
   const stranger = await caller((other.resHeaders.get('set-cookie') ?? '').split(';')[0]).make();
   await assert.rejects(stranger.learn.lesson({ courseId, moduleIdx: 0 }), /forbidden/);
 });

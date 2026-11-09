@@ -25,7 +25,7 @@ const wait = (ms: number) => new Promise((r) => setTimeout(r, ms));
 test('kişisel yol uçtan uca (API)', async () => {
   // yönetici + atıf kodu
   const adminReg = caller();
-  await (await adminReg.make()).auth.register({ username: 'yonetici', email: 'admin@example.com', password: 'Sifre12345', locale: 'tr' });
+  await (await adminReg.make()).auth.register({ username: 'yonetici', email: 'admin@example.com', password: 'Sifre12345', adult: true, locale: 'tr' });
   await db.update(users).set({ role: 'admin' }).where(eq(users.username, 'yonetici')).run();
   const admin = await caller(cookieOf(adminReg.resHeaders)).make();
   await admin.admin.createRef({ code: 'ayse-tr', label: 'Ayşe (TikTok)', kind: 'creator', market: 'TR' });
@@ -35,10 +35,10 @@ test('kişisel yol uçtan uca (API)', async () => {
   const pub = await caller().make();
   await pub.pub.joinWaitlist({ email: 'w@example.com', locale: 'tr', role: 'learner', ref: 'ayse-tr' });
   const reg = caller();
-  await (await reg.make()).auth.register({ username: 'ogrenci', email: 'o@example.com', password: 'Sifre12345', locale: 'tr', ref: 'AYSE-TR' });
+  await (await reg.make()).auth.register({ username: 'ogrenci', email: 'o@example.com', password: 'Sifre12345', adult: true, locale: 'tr', ref: 'AYSE-TR' });
   const me = await caller(cookieOf(reg.resHeaders)).make();
   const inv = caller();
-  await (await inv.make()).auth.register({ username: 'arkadas', email: 'a@example.com', password: 'Sifre12345', locale: 'tr', ref: 'ogrenci' });
+  await (await inv.make()).auth.register({ username: 'arkadas', email: 'a@example.com', password: 'Sifre12345', adult: true, locale: 'tr', ref: 'ogrenci' });
   assert.equal((await me.profile.invites()).joined, 1);
 
   // hedefli kurs (şablon motoru)
