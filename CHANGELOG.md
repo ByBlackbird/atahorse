@@ -3,6 +3,19 @@
 İnsanlar ve ajanlar için değişiklik özeti (git geçmişini kazmadan). En yeni üstte.
 Biçim: ne değişti → kimi etkiler → gerekirse ne yapılmalı.
 
+## 3.6.0 — v5 "Aurora" iç uygulama + yeni sertifika
+- **Kenar çubuğu v5:** lacivert panel, altın logo, seçili öğe dolu indigo hap, pembe "Yeni kurs". İçindeki ortak bileşenler `.sidebar` yerel belirteçleriyle koyulaşır.
+- **Masaüstü üst çubuk:** tarih + selamlama, seri, XP/seviye, tema, profil avatarı (stüdyo ray modunda gizli).
+- **`PageHero`** (kit): iç sayfaların ortak lacivert giriş bandı → Panel, Yeni kurs, Tekrar, Profil, Yönetim.
+- **Panel v5:** "Kaldığın yer" bandı + ilerleme halkası, gerçek verili 4 istatistik kutusu (kurs, biten modül, seri, XP), Bugün listesi müfredat satırı biçiminde, renk başlıklı kurs kartları. Panel ve kurs yolu artık tam kenar çubuğuyla açılır.
+- **Sertifika v5:** iki tasarım — Klasik (krem, altın çerçeve, lacivert kurdele) ve Gece (altın kenarlı lacivert pano). Özgün SVG köşe süsleri, isim çizgisi, amblemli mühür; QR her iki tasarımda okunur. `?stil=klasik|gece` ile seçilir, tercih hatırlanır. A4 yatay baskı ölçüleri `cqw` ile sabit.
+- **Logo kullanım kuralı:** yazılı logo (wordmark) yalnız tanıtım yüzeylerinde — ana sayfa üst çubuğu ve alt bilgisi. Uygulama kenar çubuğu ve mobil üst çubuk: amblem + arayüz yazı tipinde "Atahorse" (`BrandLockup`); ray, giriş/kayıt: yalnız amblem (`Mark`); sertifika: kurdelede dizgi ad, mühürde amblem. Yeni `emblem-ink.png` (lacivert #192639), `emblem-gold.png` kırpıldı.
+- Lora (OFL) yazı tipi kendi sunucumuzdan: sertifika başlık ve isim için (Türkçe/Kiril glifleri dahil).
+
+- Duolingo tarzı dairesel patika düğümleri kaldırıldı → kurs sayfası ve ana sayfa önizlemesi düz müfredat listesi (`LessonRow`, `.lesson-list`) kullanır. `.node`/`.node-ring` CSS'i silindi.
+- Final sınavı düğümü yerine durum kartı (kilitli / açık / sertifika hazır).
+- `src/lib/brand.ts` aynası v5 Aurora belirteçleriyle eşitlendi (tasarım testi yeniden yeşil).
+
 ## 3.5.0 — 2026-11-09 · Tasarım v4: dokunsal ve sıcak, kurs yolu
 
 - **Yeni görsel dil:** gölgeli SaaS kartları yerine düz yüzey + 2px kenar; basılabilir düğmeler (alt kenar, basınca iner); başlıklar 800 kalınlıkta. Her kurs kendi rengini alır (6 renk) — patika, kart, ilerleme halkası, menü noktası.

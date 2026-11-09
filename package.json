@@ -1,7 +1,7 @@
 {
   "name": "atahorse",
   "private": true,
-  "version": "3.5.0",
+  "version": "3.6.0",
   "description": "Atahorse — kişisel okul sistemi: öğrenme bilimine dayalı, profile göre açılan kurs motoru.",
   "type": "module",
   "engines": {
