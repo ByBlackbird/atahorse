@@ -9,7 +9,8 @@ import {
   type AnswerEvent, type PathCourse, type Plan,
 } from '../../shared/engine/path';
 import { AppError, docFor, ownCourse, parseDoc, type CourseRow } from './courses';
-import { dueCount, finalItems, itemsOf, progressRows, strip, unlockedList } from './learning';
+import { assertUnlocked, dueCount, finalItems, itemsOf, progressRows, strip, unlockedList } from './learning';
+import { track } from './metrics';
 import type { User } from './auth';
 import type { Locale } from '../../shared/types';
 
@@ -21,7 +22,7 @@ async function evidence(userId: number, c: CourseRow, doc: CourseDoc) {
   const answers = await db.select({ itemId: checkAnswers.itemId, correct: checkAnswers.correct, at: checkAnswers.createdAt })
     .from(checkAnswers).where(and(eq(checkAnswers.userId, userId), eq(checkAnswers.courseId, c.id))).all();
   for (const a of answers) {
-    const id = a.itemId.startsWith('rv:') ? a.itemId.slice(3) : a.itemId;
+    const id = /^(rv|dr):/.test(a.itemId) ? a.itemId.slice(3) : a.itemId;
     const f = items.get(id);
     if (!f) continue;
     events.push({ moduleIdx: f.moduleIdx, correct: a.correct, at: a.at });
@@ -160,6 +161,46 @@ export async function recapSession(user: User, courseId: number, locale?: Locale
   };
 }
 
+/* ---------------- hedefli drill (yol haritası Faz 1 · Ultralearning: Drill) ----------------
+ * Kilit quizinde kalan öğrenciye aynı quizi hemen yeniden çözdürmek yerine: o modülde en çok yanlış yapılan
+ * 3–5 dar soru (son başarısız deneme ×2, bölüm kontrolü yanlışı ×1, doğrusu −1). Serbest yanıtla çözülür,
+ * bitince quiz yeniden açılır (quiz zaten her zaman açık; drill önerilen yoldur, zorunlu kilit değil). */
+export async function drillSession(user: User, courseId: number, moduleIdx: number, locale?: Locale) {
+  const c = await ownCourse(user, courseId);
+  const doc = await assertUnlocked(user.id, c, moduleIdx);
+  const { doc: shown } = await docFor(c, locale);
+  const mod = doc.modules[moduleIdx];
+  const score = new Map<string, number>();
+  const ids = [...mod.sections.flatMap((x) => (x.check ? [x.check.id] : [])), ...mod.quiz.map((q) => q.id)];
+  for (const id of ids) score.set(id, 0);
+  const last = await db.select().from(quizAttempts)
+    .where(and(eq(quizAttempts.userId, user.id), eq(quizAttempts.courseId, c.id), eq(quizAttempts.moduleIdx, moduleIdx))).orderBy(desc(quizAttempts.createdAt)).get();
+  if (last && !last.passed) mod.quiz.forEach((q, i) => { if (last.answers[i] !== q.correct) score.set(q.id, (score.get(q.id) ?? 0) + 2); });
+  const answers = await db.select({ itemId: checkAnswers.itemId, correct: checkAnswers.correct }).from(checkAnswers)
+    .where(and(eq(checkAnswers.userId, user.id), eq(checkAnswers.courseId, c.id))).all();
+  for (const a of answers) {
+    const id = /^(rv|dr):/.test(a.itemId) ? a.itemId.slice(3) : a.itemId;
+    if (score.has(id)) score.set(id, (score.get(id) ?? 0) + (a.correct ? -1 : 1));
+  }
+  const ranked = [...score.entries()].sort((a, b) => b[1] - a[1]);
+  const picked = ranked.filter(([, v]) => v > 0).slice(0, 5).map(([id]) => id);
+  for (const [id] of ranked) { if (picked.length >= 3) break; if (!picked.includes(id)) picked.push(id); }
+  const shownItems = itemsOf(shown);
+  const top = picked[0];
+  const weakSection = shown.modules[moduleIdx].sections.find((x) => x.check?.id === top);
+  return {
+    courseId: c.id, moduleIdx, title: shown.title, moduleTitle: shown.modules[moduleIdx].title,
+    weakest: weakSection?.heading ?? shown.modules[moduleIdx].title,
+    items: picked.map((id) => ({ ...strip(shownItems.get(id)!.item), moduleIdx, moduleTitle: shown.modules[moduleIdx].title })),
+  };
+}
+
+export async function finishDrill(user: User, courseId: number, moduleIdx: number) {
+  await ownCourse(user, courseId);
+  await track(user.id, 'drill_done', { courseId, meta: { moduleIdx } });
+  return { ok: true };
+}
+
 /* ---------------- ön test ---------------- */
 export async function getPretest(user: User, courseId: number, locale?: Locale) {
   const c = await ownCourse(user, courseId);
@@ -192,7 +233,7 @@ export async function submitPretest(user: User, courseId: number, answers: Recor
 /* ---------------- içerik bildirimi ---------------- */
 export async function reportItem(user: User, courseId: number, itemId: string, kind: 'wrong_answer' | 'unclear' | 'factual' | 'other', note: string) {
   const c = await ownCourse(user, courseId);
-  const id = itemId.startsWith('rv:') ? itemId.slice(3) : itemId;
+  const id = /^(rv|dr):/.test(itemId) ? itemId.slice(3) : itemId;
   const doc = parseDoc(c.doc);
   const known = itemsOf(doc).has(id) || doc.modules.some((m) => m.sections.some((s) => s.id === id));
   if (!known) throw new AppError('bad_item');

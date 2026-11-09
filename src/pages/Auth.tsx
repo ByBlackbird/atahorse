@@ -62,22 +62,29 @@ export function Register() {
   const navigate = useNavigate();
   const utils = trpc.useUtils();
   const [f, setF] = useState({ fullName: '', username: '', email: '', password: '' });
+  const [adult, setAdult] = useState(false);
   const reg = trpc.auth.register.useMutation({
     onSuccess: (u) => { utils.auth.me.setData(undefined, u); navigate('/profil-testi', { replace: true }); },
   });
   const set = (k: keyof typeof f) => (e: React.ChangeEvent<HTMLInputElement>) => setF((s) => ({ ...s, [k]: e.target.value }));
-  const valid = /^[a-zA-Z0-9_]{3,24}$/.test(f.username) && /^\S+@\S+\.\S+$/.test(f.email) && f.password.length >= 8;
+  const valid = /^[a-zA-Z0-9_]{3,24}$/.test(f.username) && /^\S+@\S+\.\S+$/.test(f.email) && f.password.length >= 8 && adult;
   return (
     <Frame title={t('a_register_t')} sub={t('a_register_s')}>
-      <form onSubmit={(e) => { e.preventDefault(); reg.mutate({ ...f, locale: lang, ref: getRef() }); }} className="space-y-4" noValidate>
+      <form onSubmit={(e) => { e.preventDefault(); if (adult) reg.mutate({ ...f, adult: true, locale: lang, ref: getRef() }); }} className="space-y-4" noValidate>
         <Field label={t('a_fullname')}><input className="input" autoComplete="name" value={f.fullName} onChange={set('fullName')} /></Field>
         <Field label={t('a_username')} hint={t('a_username_h')}><input className="input" autoComplete="username" value={f.username} onChange={set('username')} required /></Field>
         <Field label={t('a_email')}><input className="input" type="email" autoComplete="email" value={f.email} onChange={set('email')} required /></Field>
         <Field label={t('a_password')} hint={t('a_password_h')}><input className="input" type="password" autoComplete="new-password" value={f.password} onChange={set('password')} required /></Field>
+        {/* Yol haritası Faz 0: ilk hedef kitle yetişkin (18+); okul/veli onaylı kullanım Faz 3'te */}
+        <label className="flex min-h-11 cursor-pointer items-start gap-3 rounded-xl border border-line bg-surface-2 p-3 text-sm">
+          <input type="checkbox" className="mt-0.5 h-5 w-5 shrink-0 accent-[var(--c-brand)]" checked={adult} onChange={(e) => setAdult(e.target.checked)} />
+          <span><span className="font-semibold">{t('a_adult')}</span><span className="mt-0.5 block text-xs text-ink-3">{t('a_adult_h')}</span></span>
+        </label>
         {reg.error && <ErrorBox>{err(errCode(reg.error))}</ErrorBox>}
-        <button className="btn btn-primary btn-lg w-full" disabled={reg.isPending || !valid}>
+        <button className="btn btn-primary btn-lg w-full" disabled={reg.isPending || !valid} aria-busy={reg.isPending || undefined}>
           {reg.isPending ? <Spinner className="h-4 w-4" /> : t('a_register_btn')}
         </button>
+        {!adult && <p className="text-center text-xs text-ink-3">{t('a_adult_need')}</p>}
         <p className="text-xs leading-relaxed text-ink-3">{t('a_terms')}</p>
       </form>
       <p className="mt-6 text-center text-sm text-ink-2">{t('a_have_account')} <Link to="/giris" className="font-semibold text-brand hover:underline">{t('a_login_btn')}</Link></p>

@@ -85,6 +85,15 @@ export default function ProfileTest() {
                 <p className="mt-1 font-semibold">{METHODS[prof.defaultMethod].name[lang]}</p>
               </div>
             </div>
+            {/* Yol haritası §5 adım 3: sonuç "ilk kapın"dır, kaderin değil — bütün kapılar görünür */}
+            <div className="mt-4">
+              <p className="text-xs text-ink-3">{t('t_all_doors')}</p>
+              <ul className="mt-2 flex flex-wrap gap-2">
+                {(Object.keys(MODE_ICON) as (keyof typeof MODE_ICON)[]).map((m) => (
+                  <li key={m} className={m === prof.entryMode ? 'chip chip-brand' : 'chip'}>{MODE_ICON[m]} {t(`s_mode_${m}`)}</li>
+                ))}
+              </ul>
+            </div>
             <div className="mt-6 space-y-3">
               <p className="text-sm font-medium">{t('t_channels')}</p>
               {(['visual', 'auditory', 'kinesthetic'] as const).map((k) => (

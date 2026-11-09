@@ -69,7 +69,7 @@ export default function Profile() {
             <span className="chip">{d.user.plan === 'premium' ? t('pr_plan_premium') : t('pr_plan_free')}</span>
           </div>
         </div>
-        {d.user.plan !== 'premium' && <button className="btn btn-pink" onClick={() => openUpgrade('manual')}>{t('pr_upgrade')}</button>}
+        {d.user.plan !== 'premium' && <button className="btn btn-primary" onClick={() => openUpgrade('manual')}>{t('pr_upgrade')}</button>}
       </div>
 
       {/* İstatistikler */}

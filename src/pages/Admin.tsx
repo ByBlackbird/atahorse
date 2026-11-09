@@ -10,6 +10,34 @@ import { useErr } from '../i18n/index';
 
 const pctOrDash = (x: number | null) => (x === null ? '—' : `%${Math.round(x * 100)}`);
 
+/** Haftalık kayıt kohortları — yol haritası §7.2'nin beş metriği. Payda yoksa "—" (rakam uydurulmaz). */
+function Cohorts() {
+  const { t } = useI18n();
+  const q = trpc.admin.cohorts.useQuery();
+  const f = (v: number | null) => (v === null ? '—' : `%${v}`);
+  return (
+    <section className="card mt-6 overflow-x-auto p-5">
+      <h2 className="font-semibold">{t('ad_cohorts')}</h2>
+      <p className="mt-1 text-xs text-ink-3">{t('ad_cohorts_s')}</p>
+      {!q.data ? <p className="mt-4 text-sm text-ink-3">…</p> : q.data.rows.length === 0 ? <p className="mt-4 text-sm text-ink-3">{t('ad_cohorts_empty')}</p> : (
+        <table className="mt-4 w-full min-w-[720px] text-sm">
+          <thead><tr className="border-b border-line text-left text-xs text-ink-3">
+            {['ad_c_week', 'ad_c_users', 'ad_c_completion', 'ad_c_return7', 'ad_c_recall', 'ad_c_second', 'ad_c_paid'].map((k) => <th key={k} className="py-2 pr-3 font-semibold">{t(k)}</th>)}
+          </tr></thead>
+          <tbody>{q.data.rows.map((r) => (
+            <tr key={r.week} className="border-b border-line last:border-0 tabular-nums">
+              <td className="py-2 pr-3">{r.week}</td><td className="pr-3">{r.users} <span className="text-ink-3">({r.started})</span></td>
+              <td className="pr-3">{f(r.completion)}</td><td className="pr-3">{f(r.return7)}</td>
+              <td className="pr-3">{f(r.recall7)} / {f(r.recall30)} <span className="text-xs text-ink-3">(n {r.recallN[0]}/{r.recallN[1]})</span></td>
+              <td className="pr-3">{f(r.secondCourse)}</td><td className="pr-3">{f(r.paid)}</td>
+            </tr>
+          ))}</tbody>
+        </table>
+      )}
+    </section>
+  );
+}
+
 /** Ürün kanıtı: ön test → final eşleştirilmiş kazanç (yatırımcıya giden tek gerçek sonuç metriği). */
 function Outcomes() {
   const { t } = useI18n();
@@ -150,6 +178,7 @@ export default function Admin() {
         </div>
       </div>
 
+      <Cohorts />
       <Outcomes />
       <Reports />
       <Refs />

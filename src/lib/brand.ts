@@ -2,8 +2,8 @@
 // three.js / canvas yedek değerleri. Ham renk yalnız iki yerde yaşar: styles.css ve bu dosya.
 // tests/design.test.ts bu değerlerin styles.css ile birebir aynı olduğunu doğrular (kayma = test hatası).
 export const BRAND = {
-  paper: { bg: '#f3f5fb', surface: '#fdfdff', ink: '#192639', ink3: '#6f7890', lineStrong: '#cdd3e6', brand: '#5b5fef', gold: '#ffc700', night: '#192639', onNightGold: '#ffd84d' },
-  ink: { bg: '#0f1626', surface: '#161f33', ink: '#eef1f8', ink3: '#8b95b0', lineStrong: '#34426a', brand: '#8b8ef8', gold: '#ffd23f', night: '#0a1020', onNightGold: '#ffd84d' },
+  paper: { bg: '#fdfcf8', surface: '#ffffff', ink: '#1e1b4b', ink3: '#5e5b84', lineStrong: '#ccc8bc', brand: '#5b2de6', gold: '#f5b942', night: '#06060c', onNightGold: '#f5b942' },
+  ink: { bg: '#06060c', surface: '#12112a', ink: '#fdfcf8', ink3: '#9c99bc', lineStrong: '#3b3870', brand: '#9468f7', gold: '#f5b942', night: '#000000', onNightGold: '#f5b942' },
 } as const;
 
 export type BrandTheme = keyof typeof BRAND;

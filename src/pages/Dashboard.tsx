@@ -125,9 +125,9 @@ export default function Dashboard() {
   const modulesDone = d.courses.reduce((a, c) => a + c.modulesDone, 0);
   const stats = [
     { label: t('v5_st_courses'), value: d.courses.length, icon: <LuLibrary />, cls: 'bg-brand-soft text-brand' },
-    { label: t('v5_st_modules'), value: modulesDone, icon: <LuCircleCheck />, cls: 'bg-pink-soft text-pink' },
+    { label: t('v5_st_modules'), value: modulesDone, icon: <LuCircleCheck />, cls: 'bg-gold-soft text-gold-ink' },
     { label: t('v5_st_streak'), value: d.streak, icon: <LuFlame />, cls: 'bg-gold-soft text-gold-ink' },
-    { label: t('v5_st_xp'), value: d.xp.toLocaleString(), icon: <LuZap />, cls: 'bg-surface-2 text-ink-2' },
+    { label: t('v5_st_xp'), value: d.xp.toLocaleString(), icon: <LuZap />, cls: 'bg-gold-soft text-gold-ink' },
   ];
 
   return (
@@ -141,14 +141,14 @@ export default function Dashboard() {
               title={next?.moduleTitle ?? cont.title}
               sub={cont.title}
               actions={<>
-                <Link to={next ? `/kurs/${cont.id}/m/${next.moduleIdx}` : `/kurs/${cont.id}`} className="btn btn-pink btn-lg"><LuPlay /> {t('v4_continue')}</Link>
+                <Link to={next ? `/kurs/${cont.id}/m/${next.moduleIdx}` : `/kurs/${cont.id}`} className="btn btn-primary btn-lg"><LuPlay /> {t('v4_continue')}</Link>
                 <Link to={`/kurs/${cont.id}`} className="btn btn-lg border border-on-night/25 bg-transparent text-on-night hover:bg-on-night/10">{t('v4_see_path')}</Link>
               </>}
               aside={<div className="hidden sm:block"><Ring value={cont.percent / 100} size={120} stroke={10} color="var(--c-on-night-gold)"><span className="font-display text-3xl font-bold text-on-night">{cont.percent}%</span></Ring></div>}
             />
           ) : (
             <PageHero eyebrow={t('v4_next_up')} title={t('v4_first_title')} sub={t('v4_first_sub')} icon={<LuSparkles />}
-              actions={<Link to="/kurs-olustur" className="btn btn-pink btn-lg"><LuPlus /> {t('nav_new')}</Link>} />
+              actions={<Link to="/kurs-olustur" className="btn btn-primary btn-lg"><LuPlus /> {t('nav_new')}</Link>} />
           )}
 
           {/* Gerçek verili istatistik kutuları */}

@@ -211,7 +211,7 @@ function TopicSearch({ big }: { big?: boolean }) {
         <LuSearch className="ml-3 shrink-0 text-xl text-ink-3" aria-hidden />
         <label htmlFor="topic-q" className="sr-only">{t('v5_search_label')}</label>
         <input id="topic-q" className="min-w-0 flex-1 bg-transparent px-1 py-2.5 text-[16px] outline-none placeholder:text-ink-3" placeholder={t('v5_search_ph')} value={q} onChange={(e) => setQ(e.target.value)} maxLength={120} />
-        <button type="submit" className="btn btn-pink shrink-0">{t('v5_search_go')} <LuArrowRight /></button>
+        <button type="submit" className="btn btn-primary shrink-0">{t('v5_search_go')} <LuArrowRight /></button>
       </form>
       <div className="mt-4 flex flex-wrap items-center gap-2">
         <span className="text-sm font-semibold text-ink-3">{t('v5_try')}</span>
@@ -278,7 +278,7 @@ export default function Landing() {
       <section>
         <div className="wrap grid items-center gap-14 pb-20 pt-12 md:pt-16 lg:grid-cols-[1.05fr_1fr] lg:pb-28 lg:pt-20">
           <div className="anim-rise">
-            <span className="chip chip-pink !min-h-8 !px-3"><span className="h-2 w-2 rounded-full bg-pink" aria-hidden /> {t('v5_badge')}</span>
+            <span className="chip chip-brand !min-h-8 !px-3"><span className="h-2 w-2 rounded-full bg-brand" aria-hidden /> {t('v5_badge')}</span>
             <h1 className="h-display mt-5 text-[clamp(2.75rem,6.4vw,5rem)]">{t('v5_title_a')} <span className="text-brand">{t('v5_title_b')}</span></h1>
             <p className="mt-6 max-w-xl text-lg leading-relaxed text-ink-2">{t('v5_sub')}</p>
             <div className="mt-8"><TopicSearch big /></div>
@@ -409,13 +409,13 @@ export default function Landing() {
             <Link to={start} className="btn btn-outline btn-lg mt-8 w-full">{t('l_cta')}</Link>
           </div>
           <div className="relative flex flex-col overflow-hidden rounded-[16px] bg-night p-7 text-on-night">
-            <span className="chip chip-pink absolute right-5 top-5">{t('v5_soon')}</span>
+            <span className="chip chip-brand absolute right-5 top-5">{t('v5_soon')}</span>
             <p className="text-sm font-bold uppercase tracking-[0.14em] text-on-night-2">Premium</p>
             <p className="h-display mt-3 text-4xl">{t('v5_premium_price')}</p>
             <ul className="mt-6 space-y-3 text-[15px]">
-              {[1, 2, 3, 4].map((n) => <li key={n} className="flex gap-2.5"><LuCheck className="mt-0.5 shrink-0 text-on-night-gold" aria-hidden />{t(`v5_prem_${n}`)}</li>)}
+              {[1, 2, 3, 4].map((n) => <li key={n} className="flex gap-2.5"><LuCheck className="mt-0.5 shrink-0 text-on-night-2" aria-hidden />{t(`v5_prem_${n}`)}</li>)}
             </ul>
-            <a href="#bekleme-listesi" className="btn btn-pink btn-lg mt-8 w-full">{t('l_wl_cta')}</a>
+            <a href="#bekleme-listesi" className="btn btn-primary btn-lg mt-8 w-full">{t('l_wl_cta')}</a>
           </div>
         </div>
       </Section>
@@ -426,7 +426,7 @@ export default function Landing() {
           <div className="flex flex-col">
             <p className="eyebrow !text-brand">{t('l_fd_k')}</p>
             <figure className="mt-5">
-              <LuQuote className="text-3xl text-pink" aria-hidden />
+              <LuQuote className="text-3xl text-brand" aria-hidden />
               <blockquote className="h-display mt-4 text-2xl leading-snug md:text-3xl">{t('l_fd_q')}</blockquote>
               <figcaption className="mt-6 flex items-center gap-3">
                 <img src="/assets/apple-touch-icon.png" alt="" className="h-11 w-11 rounded-full" />
@@ -435,7 +435,7 @@ export default function Landing() {
             </figure>
           </div>
           <div className="glass p-6 md:p-8">
-            <p className="eyebrow !text-pink">{t('l_wl_k')}</p>
+            <p className="eyebrow !text-brand">{t('l_wl_k')}</p>
             <h2 className="h-display t-title mt-3">{t('l_wl_t')}</h2>
             <p className="mt-3 text-[15px] leading-relaxed text-ink-2">{t('l_wl_s')}</p>
             <div className="mt-6"><Waitlist /></div>
@@ -460,7 +460,7 @@ export default function Landing() {
         <div className="wrap py-16 md:py-20">
           <div className="flex flex-col items-start justify-between gap-8 border-b border-on-night/15 pb-12 md:flex-row md:items-center">
             <p className="h-display max-w-xl text-3xl md:text-4xl">{t('l_close')}</p>
-            <Link to={start} className="btn btn-pink btn-lg">{me ? t('nav_dashboard') : t('l_cta')} <LuArrowRight /></Link>
+            <Link to={start} className="btn btn-primary btn-lg">{me ? t('nav_dashboard') : t('l_cta')} <LuArrowRight /></Link>
           </div>
           <div className="grid gap-10 pt-12 md:grid-cols-[1.4fr_1fr_1fr]">
             <div>

@@ -88,7 +88,7 @@ export function PageHero({ eyebrow, title, sub, icon, actions, aside, className 
     <header className={cx('hero-night flex flex-wrap items-center gap-6 p-6 md:p-8', className)}>
       {icon && <span className="grid h-14 w-14 shrink-0 place-items-center rounded-2xl bg-brand text-2xl text-brand-ink" aria-hidden>{icon}</span>}
       <div className="min-w-0 flex-1">
-        {eyebrow && <p className="text-xs font-bold uppercase tracking-[0.14em] text-on-night-gold">{eyebrow}</p>}
+        {eyebrow && <p className="text-xs font-bold uppercase tracking-[0.14em] text-on-night-2">{eyebrow}</p>}
         <h1 className="h-display mt-1.5 text-3xl md:text-4xl">{title}</h1>
         {sub && <p className="hero-sub mt-2 max-w-2xl">{sub}</p>}
         {actions && <div className="mt-5 flex flex-wrap gap-3">{actions}</div>}

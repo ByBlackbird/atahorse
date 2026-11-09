@@ -67,8 +67,8 @@ function Flourish() {
 
 /** Kurdele: logonun taşıyıcısı. Klasikte lacivert (altın logo), gecede altın (lacivert logo). */
 function Ribbon({ style }: { style: CertStyle }) {
-  const fill = style === 'classic' ? 'var(--c-night)' : 'var(--cert-gold)';
-  const fold = style === 'classic' ? 'color-mix(in srgb, var(--c-night) 70%, black)' : 'var(--c-gold-ink)';
+  const fill = style === 'classic' ? 'var(--c-ink)' : 'var(--cert-gold)';
+  const fold = style === 'classic' ? 'color-mix(in srgb, var(--c-ink) 60%, var(--c-night))' : 'var(--c-gold-ink)';
   return (
     <div className="cert-ribbon" aria-hidden>
       <svg viewBox="0 0 300 70" width="100%" fill="none">
@@ -76,7 +76,7 @@ function Ribbon({ style }: { style: CertStyle }) {
         <path d="M300 22h-34v40h34l-12-20z" style={{ fill: fold }} />
         <path d="M22 12h256v44H22z" style={{ fill }} />
         <path d="M22 56l12 6V56zM278 56l-12 6V56z" style={{ fill: fold }} />
-        <path d="M28 18h244M28 50h244" stroke="currentColor" strokeOpacity=".5" strokeWidth="1" style={{ color: style === 'classic' ? 'var(--c-gold)' : 'var(--c-night)' }} />
+        <path d="M28 18h244M28 50h244" stroke="currentColor" strokeOpacity=".5" strokeWidth="1" style={{ color: style === 'classic' ? 'var(--c-gold)' : 'var(--c-ink)' }} />
       </svg>
       <span className="cert-ribbon-name">Atahorse</span>
     </div>
@@ -93,7 +93,7 @@ function Seal({ text, style }: { text: string; style: CertStyle }) {
     <svg className="cert-seal" viewBox="0 0 100 100" aria-hidden>
       <defs><path id="seal-arc" d="M50 50m-33 0a33 33 0 1 1 66 0a33 33 0 1 1-66 0" /></defs>
       <polygon points={pts} style={{ fill: 'var(--cert-gold)' }} />
-      <circle cx="50" cy="50" r="41" style={{ fill: style === 'classic' ? 'var(--c-night)' : 'var(--c-gold-ink)' }} />
+      <circle cx="50" cy="50" r="41" style={{ fill: style === 'classic' ? 'var(--c-ink)' : 'var(--c-gold-ink)' }} />
       <circle cx="50" cy="50" r="38" fill="none" strokeWidth=".8" style={{ stroke: 'var(--c-gold)' }} />
       <circle cx="50" cy="50" r="26" fill="none" strokeWidth=".8" style={{ stroke: 'var(--c-gold)' }} />
       <text fontSize="6.2" fontFamily="Inter, sans-serif" fontWeight="700" letterSpacing="1.2" style={{ fill: 'var(--c-gold)' }}>
@@ -153,7 +153,7 @@ export default function Certificate({ code }: { code: string }) {
             <button role="tab" aria-pressed={style === 'classic'} onClick={() => setStyle('classic')}>{t('c_style_classic')}</button>
             <button role="tab" aria-pressed={style === 'night'} onClick={() => setStyle('night')}>{t('c_style_night')}</button>
           </div>
-          <button className="btn btn-pink btn-sm" onClick={() => window.print()}><LuPrinter /> {t('c_print')}</button>
+          <button className="btn btn-gold btn-sm" onClick={() => window.print()}><LuPrinter /> {t('c_print')}</button>
         </div>
       </div>
       <div className="mx-auto max-w-5xl overflow-hidden elev-3 rounded-2xl print:rounded-none">

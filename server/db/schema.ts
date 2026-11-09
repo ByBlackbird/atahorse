@@ -24,6 +24,8 @@ export const users = sqliteTable('users', {
   lastActiveDay: text('last_active_day'),
   /** Kaydı getiren atıf kodu (creator / elçi / kullanıcı daveti). */
   refCode: text('ref_code'),
+  /** 18+ beyanı (yol haritası Faz 0: ilk hedef kitle yetişkin; KVKK). Kayıtta zorunlu. */
+  adultConfirmedAt: integer('adult_confirmed_at'),
   createdAt: ts('created_at'),
 });
 
@@ -283,3 +285,35 @@ export const visualLessons = sqliteTable('visual_lessons', {
   source: text('source').notNull(),
   createdAt: ts('created_at'),
 }, (t) => [primaryKey({ columns: [t.courseId, t.moduleIdx, t.locale] })]);
+
+/**
+ * Ürün ölçüm olayları (yol haritası §7.2, Ries: eyleme dönük, denetlenebilir metrik).
+ * dedupe doluysa (kullanıcı, dedupe) benzersizdir → "ilk kez" olayları idempotent kaydedilir.
+ * Türler: signup · course_created · course_started · module_completed · quiz_passed · quiz_failed ·
+ * drill_done · review_session · review_answer · final_passed · second_course · upgraded
+ */
+export const events = sqliteTable('events', {
+  id: integer('id').primaryKey({ autoIncrement: true }),
+  userId: integer('user_id').notNull().references(() => users.id, { onDelete: 'cascade' }),
+  kind: text('kind').notNull(),
+  courseId: integer('course_id'),
+  dedupe: text('dedupe'),
+  meta: text('meta', { mode: 'json' }).$type<Record<string, unknown>>(),
+  createdAt: ts('created_at'),
+}, (t) => [index('events_kind_idx').on(t.kind, t.createdAt), index('events_user_idx').on(t.userId, t.kind), uniqueIndex('events_dedupe_uq').on(t.userId, t.dedupe)]);
+
+/**
+ * Serbest yanıtlı hatırlama (Ultralearning: geri çağırma; Dirksen: tanıma yetmez).
+ * Öğrenci önce yazar, sonra örnek cevapla karşılaştırıp kendini puanlar (1 bilemedim · 2 kısmen · 3 bildim).
+ * Puan FSRS'ye bağlanır; yazılan metin yalnız öğrencinin kendisi ve kalite denetimi içindir.
+ */
+export const recallAnswers = sqliteTable('recall_answers', {
+  id: integer('id').primaryKey({ autoIncrement: true }),
+  userId: integer('user_id').notNull().references(() => users.id, { onDelete: 'cascade' }),
+  courseId: integer('course_id').notNull().references(() => courses.id, { onDelete: 'cascade' }),
+  itemId: text('item_id').notNull(),
+  context: text('context', { enum: ['check', 'review', 'drill'] }).notNull(),
+  text: text('text').notNull(),
+  selfGrade: integer('self_grade'),
+  createdAt: ts('created_at'),
+}, (t) => [index('recall_answers_user_idx').on(t.userId, t.courseId)]);

@@ -1,5 +1,6 @@
 // Uygulama API'si (tRPC). İstemci tipleri doğrudan buradan türetilir: `AppRouter`.
 import { z } from 'zod';
+import { adminCohorts, track } from '../services/metrics';
 import { eq } from 'drizzle-orm';
 import { TRPCError } from '@trpc/server';
 import { db } from '../db/client';
@@ -13,11 +14,11 @@ import { BADGES, XP, levelFromXp } from '../../shared/engine/gamification';
 import { router, publicProcedure, authed, adminProcedure, limited } from './core';
 import { clearCookie, createSession, destroyAllSessions, destroySession, hashPassword, publicUser, verifyPassword } from '../services/auth';
 import { AppError, createCourse, deleteCourse, jobStatus, requestTranslation, retryCourse, shareCourse, parseDoc } from '../services/courses';
-import { answerCheck, answerReview, approveTask, courseView, dueReviews, getFinal, heartbeat, myCertificates, submitFinal, submitModuleQuiz, verifyCertificate } from '../services/learning';
+import { answerCheck, answerReview, approveTask, courseView, dueReviews, getFinal, heartbeat, myCertificates, recallGrade, recallReveal, submitFinal, submitModuleQuiz, verifyCertificate } from '../services/learning';
 import { assist, getMindmap, layoutMindmap, saveMindmap, suggestBranches } from '../services/assistant';
 import { dashboard, deleteAccount, getCognitive, profilePage, saveProfileTest, updateSettings } from '../services/profile';
 import { adminCourses, adminSetPlan, adminStats, adminUsers } from '../services/admin';
-import { adminOutcomes, adminReports, adminSetReport, coursePath, getPretest, myPath, recapSession, reportItem, setGoal, submitPretest } from '../services/path';
+import { adminOutcomes, adminReports, adminSetReport, coursePath, drillSession, finishDrill, getPretest, myPath, recapSession, reportItem, setGoal, submitPretest } from '../services/path';
 import { getLesson } from '../services/lesson';
 import { titleCase } from '../../shared/engine/text';
 import { adminCreateRef, adminDeleteRef, adminRefStats, myInvites, resolveRef } from '../services/growth';
@@ -35,13 +36,16 @@ const Goal = z.object({ why: z.string().trim().max(240).default(''), targetDate:
 const authRouter = router({
   me: publicProcedure.query(({ ctx }) => (ctx.user ? publicUser(ctx.user) : null)),
   register: publicProcedure.use(limited('auth'))
-    .input(z.object({ username: Username, email: z.string().trim().toLowerCase().email().max(160), password: Password, fullName: z.string().trim().max(80).default(''), locale: Locale.default('tr'), ref: Ref }))
+    .input(z.object({ username: Username, email: z.string().trim().toLowerCase().email().max(160), password: Password, fullName: z.string().trim().max(80).default(''), locale: Locale.default('tr'), ref: Ref,
+      /** 18+ beyanı zorunlu (yol haritası Faz 0 · KVKK). */
+      adult: z.literal(true, { errorMap: () => ({ message: 'adult_required' }) }) }))
     .mutation(async ({ input, ctx }) => {
       const taken = await db.select({ id: users.id }).from(users).where(eq(users.username, input.username)).get()
         ?? await db.select({ id: users.id }).from(users).where(eq(users.email, input.email)).get();
       if (taken) throw new AppError('account_exists', 'CONFLICT');
       const refCode = await resolveRef(input.ref);
-      const [u] = await db.insert(users).values({ username: input.username, email: input.email, fullName: titleCase(input.fullName, input.locale), locale: input.locale, refCode, passwordHash: await hashPassword(input.password) }).returning().all();
+      const [u] = await db.insert(users).values({ username: input.username, email: input.email, fullName: titleCase(input.fullName, input.locale), locale: input.locale, refCode, adultConfirmedAt: Date.now(), passwordHash: await hashPassword(input.password) }).returning().all();
+      await track(u.id, 'signup', { dedupe: 'signup', meta: { ref: refCode ?? null } });
       const s = await createSession(u.id, ctx.req.headers.get('user-agent') ?? '');
       ctx.resHeaders.append('set-cookie', s.cookie);
       return publicUser(u);
@@ -106,6 +110,7 @@ const profileRouter = router({
   upgrade: authed.mutation(async ({ ctx }) => {
     if (!env.ALLOW_SIMULATED_UPGRADE) throw new AppError('payments_disabled', 'FORBIDDEN');
     await db.update(users).set({ plan: 'premium' }).where(eq(users.id, ctx.user.id)).run();
+    await track(ctx.user.id, 'upgraded', { dedupe: 'upgraded' });
     return { ok: true };
   }),
 });
@@ -139,6 +144,11 @@ const learnRouter = router({
   final: authed.input(z.object({ courseId: id, locale: Locale.optional() })).query(({ input, ctx }) => getFinal(ctx.user, input.courseId, input.locale)),
   submitFinal: authed.input(z.object({ courseId: id, answers: z.record(z.string(), z.number().int()), locale: Locale }))
     .mutation(({ input, ctx }) => submitFinal(ctx.user, input.courseId, input.answers, input.locale)),
+  /** Serbest yanıt: önce yaz → örnek cevabı gör → kendini puanla (FSRS'ye bağlı). */
+  recall: authed.input(z.object({ courseId: id, itemId: z.string().max(40), text: z.string().max(1500), context: z.enum(['check', 'review', 'drill']) }))
+    .mutation(({ input, ctx }) => recallReveal(ctx.user, input.courseId, input.itemId, input.text, input.context)),
+  recallGrade: authed.input(z.object({ recallId: id, grade: z.union([z.literal(1), z.literal(2), z.literal(3)]) }))
+    .mutation(({ input, ctx }) => recallGrade(ctx.user, input.recallId, input.grade)),
   reviews: authed.query(({ ctx }) => dueReviews(ctx.user)),
   review: authed.input(z.object({ cardId: id, choice: z.number().int().min(0).max(4), confidence: z.union([z.literal(1), z.literal(2), z.literal(3)]).default(2) }))
     .mutation(({ input, ctx }) => answerReview(ctx.user, input.cardId, input.choice, input.confidence)),
@@ -146,6 +156,9 @@ const learnRouter = router({
   path: authed.query(({ ctx }) => myPath(ctx.user)),
   coursePath: authed.input(z.object({ courseId: id, locale: Locale.optional() })).query(({ input, ctx }) => coursePath(ctx.user, input.courseId, input.locale)),
   recap: authed.input(z.object({ courseId: id, locale: Locale.optional() })).query(({ input, ctx }) => recapSession(ctx.user, input.courseId, input.locale)),
+  /** Kalınan quizden sonra hedefli drill: modülün en zayıf 3–5 sorusu. */
+  drill: authed.input(z.object({ courseId: id, moduleIdx: z.number().int().min(0), locale: Locale.optional() })).query(({ input, ctx }) => drillSession(ctx.user, input.courseId, input.moduleIdx, input.locale)),
+  drillDone: authed.input(z.object({ courseId: id, moduleIdx: z.number().int().min(0) })).mutation(({ input, ctx }) => finishDrill(ctx.user, input.courseId, input.moduleIdx)),
   pretest: authed.input(z.object({ courseId: id, locale: Locale.optional() })).query(({ input, ctx }) => getPretest(ctx.user, input.courseId, input.locale)),
   submitPretest: authed.input(z.object({ courseId: id, answers: z.record(z.string().max(40), z.number().int().min(-1).max(4)).nullable() }))
     .mutation(({ input, ctx }) => submitPretest(ctx.user, input.courseId, input.answers)),
@@ -199,6 +212,8 @@ const adminRouter = router({
   reports: adminProcedure.input(z.object({ status: z.enum(['open', 'resolved', 'dismissed']).default('open') })).query(({ input }) => adminReports(input.status)),
   setReport: adminProcedure.input(z.object({ id, status: z.enum(['open', 'resolved', 'dismissed']) })).mutation(async ({ input }) => { await adminSetReport(input.id, input.status); return { ok: true }; }),
   outcomes: adminProcedure.query(() => adminOutcomes()),
+  /** Haftalık kayıt kohortları: yol haritası §7.2'deki beş metrik. */
+  cohorts: adminProcedure.query(() => adminCohorts()),
   refs: adminProcedure.query(() => adminRefStats()),
   createRef: adminProcedure.input(z.object({ code: z.string().trim().min(2).max(32), label: z.string().trim().min(1).max(80), kind: z.enum(['creator', 'ambassador', 'partner', 'campaign']), market: z.string().trim().max(8).default('') }))
     .mutation(({ input }) => adminCreateRef(input)),

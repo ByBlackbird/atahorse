@@ -3,7 +3,7 @@
 import crypto from 'node:crypto';
 import { and, asc, count, eq, lte, sql } from 'drizzle-orm';
 import { db } from '../db/client';
-import { certificates, checkAnswers, courses, methodStats, moduleProgress, quizAttempts, reviewCards, users } from '../db/schema';
+import { certificates, checkAnswers, courses, methodStats, moduleProgress, quizAttempts, recallAnswers, reviewCards, users } from '../db/schema';
 import type { CourseDoc, Locale, QuizItem } from '../../shared/types';
 import { FINAL_PASS_RATIO, QUIZ_PASS_RATIO, levelFromXp } from '../../shared/engine/gamification';
 import { gradeFromAnswer, newCard, review, type Grade } from '../../shared/engine/fsrs';
@@ -11,6 +11,18 @@ import { hash, rng } from '../../shared/engine/generate';
 import { AppError, docFor, ownCourse, parseDoc, type CourseRow } from './courses';
 import { awardXp, recordMode, touchActivity, type XpResult } from './gamification';
 import type { User } from './auth';
+import { track } from './metrics';
+
+/* ---------------- ölçüm ---------------- */
+/** Kursa başlama: ilk kontrol / quiz / çalışma süresi (bir kez). */
+export const markStarted = (userId: number, courseId: number) => track(userId, 'course_started', { courseId, dedupe: `started:${courseId}` });
+/** Tekrar oturumu (günde bir) + gecikmeli hatırlama için aralıklı cevap (son tekrardan bu yana geçen gün). */
+export async function trackReview(userId: number, card: { courseId: number; lastReview: number | null; itemId: string }, correct: boolean, free: boolean) {
+  const day = new Date().toISOString().slice(0, 10);
+  await track(userId, 'review_session', { dedupe: `review:${day}` });
+  const elapsedDays = card.lastReview ? Math.round((Date.now() - card.lastReview) / 864e5) : null;
+  await track(userId, 'review_answer', { courseId: card.courseId, meta: { elapsedDays, correct, free, itemId: card.itemId } });
+}
 
 /* ---------------- yardımcılar ---------------- */
 export function itemsOf(doc: CourseDoc) {
@@ -66,12 +78,14 @@ async function settle(user: User, c: CourseRow, doc: CourseDoc, moduleIdx: numbe
     await db.update(moduleProgress).set({ completedAt: Date.now() })
       .where(and(eq(moduleProgress.userId, user.id), eq(moduleProgress.courseId, c.id), eq(moduleProgress.moduleIdx, moduleIdx))).run();
     rewards.push(await awardXp(user.id, 'module', `module:${c.id}:${moduleIdx}`, locale));
+    await track(user.id, 'module_completed', { courseId: c.id, dedupe: `module:${c.id}:${moduleIdx}`, meta: { moduleIdx } });
   }
   const fresh = await progressRows(user.id, c.id);
   const done = fresh.filter((r) => r.completedAt).length;
   if (done === doc.modules.length && !c.completedAt) {
     await db.update(courses).set({ completedAt: Date.now() }).where(eq(courses.id, c.id)).run();
     rewards.push(await awardXp(user.id, 'course', `course:${c.id}`, locale));
+    await track(user.id, 'course_completed', { courseId: c.id, dedupe: `course:${c.id}` });
   }
   return rewards;
 }
@@ -93,7 +107,7 @@ export async function courseView(user: User, courseId: number, locale?: Locale) 
   const answers = await db.select({ itemId: checkAnswers.itemId, correct: checkAnswers.correct }).from(checkAnswers)
     .where(and(eq(checkAnswers.userId, user.id), eq(checkAnswers.courseId, c.id))).all();
   const checks: Record<string, boolean> = {};
-  for (const a of answers) if (!a.itemId.startsWith('rv:')) checks[a.itemId] = checks[a.itemId] || a.correct;
+  for (const a of answers) if (!a.itemId.startsWith('rv:') && !a.itemId.startsWith('dr:')) checks[a.itemId] = checks[a.itemId] || a.correct;
   const cert = await db.select().from(certificates).where(and(eq(certificates.userId, user.id), eq(certificates.courseId, c.id))).get();
   const final = await db.select().from(quizAttempts)
     .where(and(eq(quizAttempts.userId, user.id), eq(quizAttempts.courseId, c.id), eq(quizAttempts.moduleIdx, -1))).orderBy(sql`${quizAttempts.score} desc`).get();
@@ -144,6 +158,7 @@ export async function answerCheck(user: User, courseId: number, itemId: string, 
   await bumpMethod(user.id, c.method, correct);
   await scheduleCard(user.id, c.id, itemId, gradeFromAnswer(correct, confidence));
   await touchActivity(user.id);
+  await markStarted(user.id, c.id);
   return { correct, correctIndex: found.item.correct, explain: found.item.explain };
 }
 
@@ -171,6 +186,8 @@ export async function submitModuleQuiz(user: User, courseId: number, moduleIdx: 
   const score = results.filter((r) => r.ok).length;
   const passed = score / quiz.length >= QUIZ_PASS_RATIO;
   await db.insert(quizAttempts).values({ userId: user.id, courseId: c.id, moduleIdx, answers, score, total: quiz.length, passed }).run();
+  await markStarted(user.id, c.id);
+  await track(user.id, passed ? 'quiz_passed' : 'quiz_failed', { courseId: c.id, meta: { moduleIdx, score, total: quiz.length } });
   for (const r of results) {
     await bumpMethod(user.id, c.method, r.ok);
     await scheduleCard(user.id, c.id, r.id, r.ok ? 3 : 1);
@@ -232,6 +249,7 @@ export async function submitFinal(user: User, courseId: number, answers: Record<
       certificate = { code };
       await touchActivity(user.id);
     }
+    await track(user.id, 'final_passed', { courseId: c.id, dedupe: `final:${c.id}`, meta: { score, total: items.length } });
   }
   const badgeRefresh = passed ? await awardXp(user.id, 'quiz', `final:${c.id}`, locale) : null;
   return { score, total: items.length, passed, results, certificate, xp: badgeRefresh };
@@ -259,6 +277,7 @@ export async function heartbeat(user: User, courseId: number, moduleIdx: number,
     .where(and(eq(moduleProgress.userId, user.id), eq(moduleProgress.courseId, courseId), eq(moduleProgress.moduleIdx, moduleIdx))).run();
   await recordMode(user.id, mode, s);
   await touchActivity(user.id, s);
+  await markStarted(user.id, courseId);
 }
 
 /* ---------------- aralıklı tekrar oturumu ---------------- */
@@ -294,9 +313,55 @@ export async function answerReview(user: User, cardId: number, choice: number, c
   const correct = choice === found.item.correct;
   const next = review(card, gradeFromAnswer(correct, confidence));
   await db.update(reviewCards).set(next).where(eq(reviewCards.id, card.id)).run();
+  await trackReview(user.id, card, correct, false);
   await db.insert(checkAnswers).values({ userId: user.id, courseId: card.courseId, itemId: `rv:${card.itemId}`, correct, confidence, method: c.method }).run();
   await touchActivity(user.id);
   return { correct, correctIndex: found.item.correct, explain: found.item.explain, nextDue: next.due };
+}
+
+/* ---------------- serbest yanıtlı hatırlama (Faz 0) ----------------
+ * Ultralearning (geri çağırma) + Dirksen Böl. 4: tanıma yetmez, hatırlama ölçülür.
+ * Akış: öğrenci yazar → sunucu metni kaydeder ve örnek cevabı döndürür → öğrenci kendini puanlar →
+ * puan FSRS'ye bağlanır (1 bilemedim → again · 2 kısmen → hard · 3 bildim → good).
+ * Doğru cevap, öğrenci yazmadan önce istemciye hiç gönderilmez. */
+export async function recallReveal(user: User, courseId: number, itemId: string, text: string, context: 'check' | 'review' | 'drill') {
+  const c = await ownCourse(user, courseId);
+  const doc = parseDoc(c.doc);
+  const found = itemsOf(doc).get(itemId);
+  if (!found) throw new AppError('bad_item');
+  if (context === 'check') await assertUnlocked(user.id, c, found.moduleIdx);
+  const clean = text.trim();
+  if (clean.length < 3) throw new AppError('recall_short');
+  const [row] = await db.insert(recallAnswers).values({ userId: user.id, courseId: c.id, itemId, context, text: clean }).returning().all();
+  await markStarted(user.id, c.id);
+  return { recallId: row.id, answer: found.item.options[found.item.correct], explain: found.item.explain };
+}
+
+export async function recallGrade(user: User, recallId: number, grade: 1 | 2 | 3) {
+  const r = await db.select().from(recallAnswers).where(and(eq(recallAnswers.id, recallId), eq(recallAnswers.userId, user.id))).get();
+  if (!r) throw new AppError('not_found', 'NOT_FOUND');
+  if (r.selfGrade) return { grade: r.selfGrade as 1 | 2 | 3, nextDue: null };
+  await db.update(recallAnswers).set({ selfGrade: grade }).where(eq(recallAnswers.id, r.id)).run();
+  const c = await db.select({ method: courses.method }).from(courses).where(eq(courses.id, r.courseId)).get();
+  const correct = grade >= 2;
+  const fsrs: Grade = grade === 1 ? 1 : grade === 2 ? 2 : 3;
+  let nextDue: number | null = null;
+  if (r.context === 'review') {
+    const card = await db.select().from(reviewCards).where(and(eq(reviewCards.userId, user.id), eq(reviewCards.courseId, r.courseId), eq(reviewCards.itemId, r.itemId))).get();
+    if (card) {
+      const next = review(card, fsrs);
+      await db.update(reviewCards).set(next).where(eq(reviewCards.id, card.id)).run();
+      await trackReview(user.id, card, correct, true);
+      nextDue = next.due;
+    }
+    await db.insert(checkAnswers).values({ userId: user.id, courseId: r.courseId, itemId: `rv:${r.itemId}`, correct, confidence: grade, method: c?.method ?? 'recall' }).run();
+  } else {
+    await db.insert(checkAnswers).values({ userId: user.id, courseId: r.courseId, itemId: r.context === 'drill' ? `dr:${r.itemId}` : r.itemId, correct, confidence: grade, method: c?.method ?? 'recall' }).run();
+    if (c) await bumpMethod(user.id, c.method, correct);
+    await scheduleCard(user.id, r.courseId, r.itemId, fsrs);
+  }
+  await touchActivity(user.id);
+  return { grade, nextDue };
 }
 
 export const levelOf = levelFromXp;

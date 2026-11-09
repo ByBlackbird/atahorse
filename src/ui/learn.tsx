@@ -100,7 +100,7 @@ export function LessonRow({ n, title, meta, state, quiz, onOpen, action }: {
         {meta && <span className="block text-xs text-ink-3">{meta}</span>}
       </span>
       {action ?? (state === 'current'
-        ? <span className="btn btn-sm btn-pink pointer-events-none shrink-0">{quiz ? t('v4_quiz_go') : t('v4_start')}</span>
+        ? <span className="btn btn-sm btn-primary pointer-events-none shrink-0">{quiz ? t('v4_quiz_go') : t('v4_start')}</span>
         : state === 'done' ? <span className="shrink-0 text-xs font-semibold text-ink-3">{t('v4_done')}</span>
         : state === 'open' ? <LuChevronRight className="shrink-0 text-ink-3" aria-hidden /> : null)}
     </>

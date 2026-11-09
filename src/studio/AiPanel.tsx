@@ -13,9 +13,11 @@ import type { SModule, SSlide } from './types';
 
 type Result = RouterOutputs['ai']['assist'];
 
-export default function AiPanel({ courseId, mod, moduleIdx, sectionIdx, lastWrong, method, onClose, onDeck }: {
+export default function AiPanel({ courseId, mod, moduleIdx, sectionIdx, lastWrong, method, onClose, onDeck, autoRun }: {
   courseId: number; mod: SModule; moduleIdx: number; sectionIdx: number; lastWrong: boolean; method: string;
   onClose: () => void; onDeck: (s: SSlide[]) => void;
+  /** Dışarıdan tetiklenen eylem (ör. üst şeritteki "Farklı anlat"): her yeni nonce bir kez çalışır. */
+  autoRun?: { action: AssistAction; nonce: number } | null;
 }) {
   const { t, lang } = useI18n();
   const err = useErr();
@@ -31,6 +33,8 @@ export default function AiPanel({ courseId, mod, moduleIdx, sectionIdx, lastWron
   useEffect(() => { setResult(null); setIdle(false); const id = window.setTimeout(() => setIdle(true), 4 * 60_000); return () => window.clearTimeout(id); }, [moduleIdx, sectionIdx]);
 
   const run = (action: AssistAction) => assist.mutate({ courseId, moduleIdx, sectionIdx: scope === 'section' ? sectionIdx : null, action, locale: lang, method: action === 'reteach' ? alt : undefined });
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffect(() => { if (autoRun) run(autoRun.action); }, [autoRun?.nonce]);
 
   const addToMap = async () => {
     if (!result?.tree) return;

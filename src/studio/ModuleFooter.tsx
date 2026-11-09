@@ -1,6 +1,6 @@
 // Modül sonu hesap verebilirlik katmanı: görev onayı (+20) → modül quizi (+25, kilit açar) → modül (+100) → kurs (+150).
 import { useEffect, useRef, useState } from 'react';
-import { LuCheck, LuClipboardCheck, LuPaperclip, LuMic, LuSquare, LuArrowRight, LuTrophy, LuRotateCcw, LuX } from 'react-icons/lu';
+import { LuCheck, LuClipboardCheck, LuPaperclip, LuMic, LuSquare, LuArrowRight, LuTrophy, LuRotateCcw, LuX, LuCrosshair } from 'react-icons/lu';
 import { Link } from '../lib/router';
 import { trpc, errCode } from '../lib/trpc';
 import { useErr, useI18n } from '../i18n/index';
@@ -163,9 +163,14 @@ function ModuleQuiz({ view, mod, prog, onNext }: { view: View; mod: SModule; pro
         </button>
       ) : (
         <div className={cx('mt-6 flex flex-wrap items-center justify-between gap-3 rounded-xl p-4', r.passed ? 'bg-ok-soft' : 'bg-bad-soft')}>
-          <p className="text-sm"><strong>{t('s_quiz_result', { a: r.score, b: r.total })}</strong> — {r.passed ? t('s_quiz_pass') : t('s_quiz_fail')}</p>
+          <div className="text-sm">
+            <p className="flex items-center gap-1.5">{r.passed ? <LuCheck className="text-ok" aria-hidden /> : <LuX className="text-bad" aria-hidden />}<strong>{t('s_quiz_result', { a: r.score, b: r.total })}</strong> — {r.passed ? t('s_quiz_pass') : t('s_quiz_fail')}</p>
+            {!r.passed && <p className="mt-1 text-xs text-ink-2">{t('dr_cta_d')}</p>}
+          </div>
           <div className="flex gap-2">
-            {!r.passed && <button className="btn btn-outline btn-sm" onClick={() => { quiz.reset(); setAns(mod.quiz.map(() => -1)); }}><LuRotateCcw /> {t('retry')}</button>}
+            {/* Yol haritası adım 6: kalınca önce hedefli drill (birincil), hemen yeniden deneme ikincil */}
+            {!r.passed && <Link to={`/tekrar?kurs=${view.course.id}&mod=drill&modul=${mod.idx}`} className="btn btn-primary btn-sm" title={t('dr_cta_d')}><LuCrosshair /> {t('dr_cta')}</Link>}
+            {!r.passed && <button className="btn btn-ghost btn-sm" onClick={() => { quiz.reset(); setAns(mod.quiz.map(() => -1)); }}><LuRotateCcw /> {t('retry')}</button>}
             {r.passed && !isLast && <button className="btn btn-primary btn-sm" onClick={onNext}>{t('s_next_module')} <LuArrowRight /></button>}
             {r.passed && prog.quizPassed && <button className="btn btn-ghost btn-sm" onClick={() => setOpen(false)}><LuX /></button>}
           </div>

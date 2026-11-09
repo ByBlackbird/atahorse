@@ -1,6 +1,6 @@
 // Öğrenme Stüdyosu — üçlü mod (Okuma / Podcast / Görsel ders) + Zihin Haritası + AI Asistan + hesap verebilirlik.
 import { Suspense, lazy, useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { LuArrowLeft, LuBookOpen, LuHeadphones, LuPresentation, LuNetwork, LuSparkles, LuLanguages, LuShare2, LuMenu, LuX, LuRoute } from 'react-icons/lu';
+import { LuArrowLeft, LuBookOpen, LuHeadphones, LuPresentation, LuNetwork, LuSparkles, LuLanguages, LuShare2, LuMenu, LuX, LuRoute, LuTarget, LuShuffle } from 'react-icons/lu';
 import { Link } from '../lib/router';
 import { trpc, errCode } from '../lib/trpc';
 import { useErr, useI18n } from '../i18n/index';
@@ -75,6 +75,8 @@ export default function Studio({ courseId, initialModule }: { courseId: number; 
   const [mode, setMode] = useState<Mode | null>(null);
   const [map, setMap] = useState(false);
   const [ai, setAi] = useState(false);
+  const [aiAuto, setAiAuto] = useState<{ action: 'reteach'; nonce: number } | null>(null);
+  const reteach = () => { setAi(true); setAiAuto({ action: 'reteach', nonce: Date.now() }); };
   const [railOpen, setRailOpen] = useState(false);
   const [sectionIdx, setSectionIdx] = useState(0);
   const [aiDeck, setAiDeck] = useState<SSlide[] | null>(null);
@@ -172,6 +174,15 @@ export default function Studio({ courseId, initialModule }: { courseId: number; 
         </div>
       </div>
 
+      {/* Hedef çubuğu (yol haritası §4.2-3 · Norman: bilgiyi dünyaya koy · Ultralearning: Odak) + "Farklı anlat" */}
+      {!map && (
+        <div className="no-print mb-5 flex flex-wrap items-center gap-3 rounded-2xl border border-line bg-surface px-4 py-3">
+          <LuTarget className="shrink-0 text-lg text-brand" aria-hidden />
+          <p className="min-w-0 flex-1 text-sm"><span className="font-semibold">{t('s_goal_bar')}</span> <span className="text-ink-2">{mod.objectives[0] ?? mod.title}</span></p>
+          <button className="btn btn-outline btn-sm" onClick={reteach} title={t('s_reteach_d')}><LuShuffle /> {t('s_reteach')}</button>
+        </div>
+      )}
+
       <div className={cx('grid gap-6', ai ? 'lg:grid-cols-[250px_minmax(0,1fr)] xl:grid-cols-[250px_minmax(0,1fr)_360px]' : 'lg:grid-cols-[250px_minmax(0,1fr)]')}>
         {/* Sol ray */}
         <aside className="hidden lg:block">
@@ -214,6 +225,7 @@ export default function Studio({ courseId, initialModule }: { courseId: number; 
                 courseId={courseId} mod={mod} moduleIdx={moduleIdx} sectionIdx={sectionIdx} lastWrong={lastWrong} method={v.course.method}
                 onClose={() => setAi(false)}
                 onDeck={(s) => { setAiDeck(s); setMode('slides'); setMap(false); }}
+                autoRun={aiAuto}
               />
             </div>
           </aside>

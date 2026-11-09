@@ -146,7 +146,7 @@ function Sidebar({ rail }: { rail: boolean }) {
       <Link to="/panel" aria-label="Atahorse" className={cx('flex min-h-11 items-center transition-opacity duration-200 hover:opacity-80', rail ? 'justify-center' : 'px-3')}>
         {rail ? <Mark className="h-9" variant="dark" /> : <BrandLockup variant="dark" />}
       </Link>
-      {!rail && <Link to="/kurs-olustur" className="btn btn-pink mt-6 w-full"><LuPlus /> {t('nav_new')}</Link>}
+      {!rail && <Link to="/kurs-olustur" className="btn mt-6 w-full border border-on-night/25 bg-transparent text-on-night hover:bg-on-night/10"><LuPlus /> {t('nav_new')}</Link>}
       <nav className={cx('flex flex-col overflow-y-auto scrollbar-thin', rail ? 'mt-6 w-full gap-1' : 'mt-1 -mx-1 px-1 pb-4')}>
         {groups.map((g) => (
           <div key={g.key} className={cx('flex flex-col', !rail && 'gap-0.5')} role="group" aria-label={t(g.key)}>

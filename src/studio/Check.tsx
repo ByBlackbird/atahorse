@@ -1,4 +1,6 @@
-// Anlık pekiştirme: önce hatırla, güven derecesini seç, sonra kontrol et (kalibrasyon + FSRS).
+// Anlık pekiştirme (bölüm sonu). Varsayılan: serbest yanıt (yaz → karşılaştır → kendini puanla).
+// "Seçenekle" yedek yol: güven derecesi + çoktan seçmeli (kalibrasyon). İkisi de FSRS'ye bağlı.
+// Kutu nötr yüzeyde: altın yalnız ilerleme/ödül içindir (yol haritası §6.1).
 import { useState } from 'react';
 import { LuCheck, LuX, LuBrain } from 'react-icons/lu';
 import { trpc } from '../lib/trpc';
@@ -6,23 +8,34 @@ import { useI18n } from '../i18n/index';
 import { Spinner, cx } from '../ui/kit';
 import type { SItem } from './types';
 import ReportButton from '../ui/ReportButton';
+import Recall from './Recall';
 
 export default function Check({ courseId, item, answered, onResult, compact }: { courseId: number; item: SItem; answered?: boolean; onResult?: (ok: boolean) => void; compact?: boolean }) {
   const { t } = useI18n();
   const utils = trpc.useUtils();
+  const [mode, setMode] = useState<'write' | 'choose'>('write');
   const [pick, setPick] = useState<number | null>(null);
   const [conf, setConf] = useState<1 | 2 | 3>(2);
   const m = trpc.learn.check.useMutation({ onSuccess: (r) => { onResult?.(r.correct); void utils.course.view.invalidate(); } });
   const res = m.data;
   return (
-    <div className={cx('rounded-[14px] border p-5', res ? (res.correct ? 'border-ok/40 bg-ok-soft' : 'border-bad/30 bg-bad-soft') : 'border-gold/50 bg-gold-soft')}>
-      <div className="flex items-center justify-between gap-2">
-        <p className="flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-gold-ink"><LuBrain /> {t('s_check')}</p>
-        <div className="flex items-center gap-1">
+    <div className={cx('rounded-[14px] border p-5', res ? (res.correct ? 'border-ok/40 bg-ok-soft' : 'border-bad/30 bg-bad-soft') : 'border-line bg-surface-2')}>
+      <div className="flex flex-wrap items-center justify-between gap-2">
+        <p className="flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-ink-2"><LuBrain className="text-brand" /> {t('s_check')}</p>
+        <div className="flex items-center gap-2">
           {answered && !res && <span className="chip"><LuCheck /> {t('s_answered')}</span>}
+          {!res && (
+            <div className="seg" role="tablist" aria-label={t('s_check')}>
+              <button role="tab" className="!h-7 !px-2.5 !text-xs" aria-pressed={mode === 'write'} onClick={() => setMode('write')}>{t('rc_mode_write')}</button>
+              <button role="tab" className="!h-7 !px-2.5 !text-xs" aria-pressed={mode === 'choose'} onClick={() => setMode('choose')}>{t('rc_mode_choose')}</button>
+            </div>
+          )}
           {res && <ReportButton courseId={courseId} itemId={item.id} className="-my-1 -mr-2" />}
         </div>
       </div>
+      {mode === 'write' && !res ? (
+        <div className="mt-3"><Recall courseId={courseId} itemId={item.id} prompt={item.q} context="check" onDone={(g) => { onResult?.(g >= 2); void utils.course.view.invalidate(); }} /></div>
+      ) : (<>
       <p className="mt-2 font-semibold leading-snug">{item.q}</p>
       {!compact && !res && <p className="mt-1 text-xs text-ink-2">{t('s_check_hint')}</p>}
       <div className="mt-3 grid gap-2">
@@ -54,6 +67,7 @@ export default function Check({ courseId, item, answered, onResult, compact }: {
       ) : (
         <p className="mt-3 text-sm"><strong>{res.correct ? t('s_right') : t('s_wrong')}.</strong> {res.explain}</p>
       )}
+      </>)}
     </div>
   );
 }

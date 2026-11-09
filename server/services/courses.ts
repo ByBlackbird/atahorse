@@ -16,6 +16,7 @@ import { Module as ModuleSchema } from '../../shared/types';
 import { z } from 'zod';
 import { env } from '../env';
 import type { User } from './auth';
+import { hasEvent, track } from './metrics';
 
 export type CourseRow = typeof courses.$inferSelect;
 
@@ -47,7 +48,7 @@ export interface CreateInput {
 export async function createCourse(user: User, input: CreateInput) {
   if (user.plan !== 'premium' && user.role !== 'admin') {
     const used = (await db.select({ n: count() }).from(courses).where(eq(courses.userId, user.id)).get())?.n ?? 0;
-    if (used >= env.FREE_COURSE_LIMIT) throw new AppError('limit_reached', 'PAYMENT_REQUIRED');
+    if (used >= env.FREE_COURSE_LIMIT) { await track(user.id, 'free_limit_hit', { dedupe: 'free_limit_hit' }); throw new AppError('limit_reached', 'PAYMENT_REQUIRED'); }
   }
   const active = await db.select({ id: jobs.id }).from(jobs)
     .where(and(eq(jobs.userId, user.id), eq(jobs.kind, 'generate'), inArray(jobs.stage, ['queued', 'profile', 'outline', 'writing', 'saving']))).get();
@@ -75,6 +76,9 @@ export async function createCourse(user: User, input: CreateInput) {
   const jobId = crypto.randomUUID();
   await db.insert(jobs).values({ id: jobId, userId: user.id, courseId: c.id, stage: 'queued', percent: 2 }).run();
   enqueue(jobId);
+  await track(user.id, 'course_created', { courseId: c.id, meta: { source: c.source } });
+  // İkinci kurs metriği: daha önce sertifika almış biri yeni kurs açtı mı (Ries: tutunma)
+  if (await hasEvent(user.id, 'final_passed')) await track(user.id, 'second_course', { courseId: c.id, dedupe: 'second_course' });
   return { courseId: c.id, jobId };
 }
 

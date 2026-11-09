@@ -162,7 +162,7 @@ export default function CoursePath({ courseId }: { courseId: number }) {
             </div>
             {v.certificate
               ? <Link to={`/sertifika/${v.certificate.code}`} className="btn btn-gold btn-sm"><LuAward /> {t('s_view_cert')}</Link>
-              : allDone && <Link to={`/kurs/${courseId}/final`} className="btn btn-pink btn-sm"><LuTrophy /> {t('v4_final')}</Link>}
+              : allDone && <Link to={`/kurs/${courseId}/final`} className="btn btn-primary btn-sm"><LuTrophy /> {t('v4_final')}</Link>}
           </section>
         </div>
 
