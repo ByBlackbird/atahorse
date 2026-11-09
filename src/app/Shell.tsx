@@ -11,7 +11,7 @@ import { Link, Navigate, useNavigate, useRouter } from '../lib/router';
 import { trpc } from '../lib/trpc';
 import { useI18n } from '../i18n/index';
 import { useMe, useTheme } from '../ui/providers';
-import { Bar, Logo, PageLoader, cx } from '../ui/kit';
+import { Bar, BrandLockup, Logo, Mark, PageLoader, cx } from '../ui/kit';
 import { levelFromXp } from '../../shared/engine/gamification';
 import { LOCALES, type Locale } from '../../shared/types';
 
@@ -142,11 +142,11 @@ function Sidebar({ rail }: { rail: boolean }) {
     return <Link key={n.to} to={n.to} aria-current={cur ? 'page' : undefined} title={rail ? t(n.key) : undefined} className={cx('side-item', rail && 'justify-center !px-0')}>{body}</Link>;
   };
   return (
-    <aside className={cx('no-print fixed inset-y-0 left-0 z-40 hidden flex-col border-r border-line bg-surface lg:flex', rail ? 'w-[76px] items-center px-2 py-4' : 'w-[272px] px-3 py-5')} aria-label={t('nav_menu')}>
+    <aside className={cx('sidebar no-print fixed inset-y-0 left-0 z-40 hidden flex-col lg:flex', rail ? 'w-[76px] items-center px-2 py-4' : 'w-[272px] px-3 py-5')} aria-label={t('nav_menu')}>
       <Link to="/panel" aria-label="Atahorse" className={cx('flex min-h-11 items-center transition-opacity duration-200 hover:opacity-80', rail ? 'justify-center' : 'px-3')}>
-        {rail ? <img src="/assets/favicon.png" alt="" className="h-9 w-9 rounded-[10px]" /> : <Logo className="h-7" />}
+        {rail ? <Mark className="h-9" variant="dark" /> : <BrandLockup variant="dark" />}
       </Link>
-      {!rail && <Link to="/kurs-olustur" className="btn btn-primary mt-6 w-full"><LuPlus /> {t('nav_new')}</Link>}
+      {!rail && <Link to="/kurs-olustur" className="btn btn-pink mt-6 w-full"><LuPlus /> {t('nav_new')}</Link>}
       <nav className={cx('flex flex-col overflow-y-auto scrollbar-thin', rail ? 'mt-6 w-full gap-1' : 'mt-1 -mx-1 px-1 pb-4')}>
         {groups.map((g) => (
           <div key={g.key} className={cx('flex flex-col', !rail && 'gap-0.5')} role="group" aria-label={t(g.key)}>
@@ -173,6 +173,34 @@ function Sidebar({ rail }: { rail: boolean }) {
         )}
       </div>
     </aside>
+  );
+}
+
+/** Masaüstü üst çubuk (v5): tarih + selamlama solda; seri, XP, tema ve profil sağda. Stüdyo (ray) modunda gizli. */
+function TopBar() {
+  const { t, lang } = useI18n();
+  const { me } = useMe();
+  if (!me) return null;
+  const lvl = levelFromXp(me.xp);
+  const name = me.fullName?.split(' ')[0] || me.username;
+  const initials = (me.fullName || me.username).split(' ').map((w) => w[0]).slice(0, 2).join('').toLocaleUpperCase(lang);
+  const today = new Date().toLocaleDateString(lang, { weekday: 'long', day: 'numeric', month: 'long' });
+  return (
+    <div className="material no-print sticky top-0 z-30 hidden border-b border-line lg:block">
+      <div className="mx-auto flex h-16 max-w-[76rem] items-center gap-3 px-6">
+        <div className="min-w-0 flex-1">
+          <p className="truncate text-xs font-semibold capitalize text-ink-3">{today}</p>
+          <p className="truncate font-display text-lg font-bold leading-tight">{t('d_hello', { name })}</p>
+        </div>
+        <span className="chip" title={t('streak_n', { n: me.streak })}><LuFlame className={me.streak ? 'text-gold' : ''} /> {t('streak_n', { n: me.streak })}</span>
+        <span className="chip chip-gold" title={t('level_n', { n: lvl.level })}><LuZap /> {me.xp} XP · L{lvl.level}</span>
+        <ThemeToggle />
+        <Link to="/profil" className="flex min-h-11 items-center gap-2.5 rounded-full py-1 pl-1 pr-3 transition-colors hover:bg-surface-2" aria-label={t('nav_profile')}>
+          <span className="grid h-9 w-9 place-items-center rounded-full bg-brand text-sm font-bold text-brand-ink">{initials}</span>
+          <span className="hidden text-sm font-semibold xl:inline">{me.fullName || me.username}</span>
+        </Link>
+      </div>
+    </div>
   );
 }
 
@@ -208,7 +236,7 @@ export function Shell({ children, wide, bare, headerNav }: { children: ReactNode
       <div className={cx(appLayout && (rail ? 'lg:pl-[76px]' : 'lg:pl-[272px]'))}>
         <header className={cx('material no-print sticky top-0 z-30 border-b border-line', appLayout && 'lg:hidden')} style={{ paddingTop: 'env(safe-area-inset-top)' }}>
           <div className={cx('mx-auto flex h-14 items-center gap-2 px-4 md:px-6', maxW)}>
-            <Link to={me ? '/panel' : '/'} aria-label="Atahorse" className="flex min-h-11 items-center"><Logo className="h-6" /></Link>
+            <Link to={me ? '/panel' : '/'} aria-label="Atahorse" className="flex min-h-11 items-center">{me ? <BrandLockup className="[&_span]:text-lg [&_img]:h-7" /> : <Logo className="h-7" />}</Link>
             {headerNav && <nav className="ml-6 hidden items-center gap-1 md:flex" aria-label={t('nav_menu')}>{headerNav}</nav>}
             <div className="ml-auto flex items-center gap-1.5">
               {me && !bare && (
@@ -230,6 +258,7 @@ export function Shell({ children, wide, bare, headerNav }: { children: ReactNode
             </div>
           </div>
         </header>
+        {appLayout && !rail && <TopBar />}
         <main id="main" tabIndex={-1} className={cx('outline-none', !bare && 'mx-auto w-full px-4 pt-6 md:px-6 md:pt-8 lg:pt-10', !bare && maxW, !bare && (appLayout ? 'pb-28 lg:pb-12' : 'pb-16'))}>{children}</main>
       </div>
       {appLayout && <TabBar />}

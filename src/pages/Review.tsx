@@ -8,7 +8,7 @@ import { Link, useRouter } from '../lib/router';
 import { trpc } from '../lib/trpc';
 import { fmtDate, useI18n } from '../i18n/index';
 import { Shell } from '../app/Shell';
-import { Bar, Empty, PageLoader, Spinner, cx } from '../ui/kit';
+import { Bar, Empty, PageHero, PageLoader, Spinner, cx } from '../ui/kit';
 import ReportButton from '../ui/ReportButton';
 
 interface Card { key: string; courseId: number; label: string; itemId: string; q: string; options: string[]; cardId?: number }
@@ -35,8 +35,7 @@ function Session({ cards, title, sub, icon, emptyText, answer, pending }: {
 
   return (
     <div className="mx-auto max-w-2xl">
-      <h1 className="h-display flex items-center gap-2 text-3xl">{icon} {title}</h1>
-      <p className="mt-2 text-ink-2">{sub}</p>
+      <PageHero icon={icon} title={title} sub={sub} />
       {cards.length === 0 ? (
         <div className="mt-8"><Empty icon={<LuCheck />} title={emptyText} action={<Link to="/panel" className="btn btn-outline">{t('nav_dashboard')}</Link>} /></div>
       ) : !card ? (

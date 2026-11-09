@@ -3,7 +3,7 @@ import { Link, useNavigate, useRouter } from '../lib/router';
 import { getRef } from '../lib/ref';
 import { trpc, errCode } from '../lib/trpc';
 import { useErr, useI18n } from '../i18n/index';
-import { ErrorBox, Field, Logo, Spinner } from '../ui/kit';
+import { ErrorBox, Field, Mark, Spinner } from '../ui/kit';
 import { LangSelect, ThemeToggle } from '../app/Shell';
 
 function Frame({ title, sub, children }: { title: string; sub: string; children: React.ReactNode }) {
@@ -11,7 +11,7 @@ function Frame({ title, sub, children }: { title: string; sub: string; children:
     <div className="dotgrid grid min-h-dvh place-items-center px-4 py-10">
       <div className="w-full max-w-md">
         <div className="mb-6 flex items-center justify-between">
-          <Link to="/"><Logo className="h-7" /></Link>
+          <Link to="/" aria-label="Atahorse"><Mark className="h-12" /></Link>
           <div className="flex items-center gap-1"><LangSelect compact /><ThemeToggle /></div>
         </div>
         <div className="card anim-rise p-6 md:p-8">

@@ -1,9 +1,9 @@
 import { useState } from 'react';
-import { LuUsers, LuBookOpen, LuAward, LuTarget, LuCpu, LuDatabase, LuMail, LuTrendingUp, LuFlag, LuMegaphone, LuTrash2 } from 'react-icons/lu';
+import { LuUsers, LuBookOpen, LuAward, LuTarget, LuCpu, LuDatabase, LuMail, LuTrendingUp, LuFlag, LuMegaphone, LuTrash2, LuShieldCheck } from 'react-icons/lu';
 import { trpc } from '../lib/trpc';
 import { fmtDate, useI18n } from '../i18n/index';
 import { Shell } from '../app/Shell';
-import { ErrorBox, PageLoader, Stat, cx } from '../ui/kit';
+import { ErrorBox, PageHero, PageLoader, Stat, cx } from '../ui/kit';
 import DataTable from '../ui/DataTable';
 import { errCode } from '../lib/trpc';
 import { useErr } from '../i18n/index';
@@ -115,7 +115,7 @@ export default function Admin() {
   const hitRate = d.ai.calls ? Math.round((d.ai.cachedCalls / d.ai.calls) * 100) : 0;
   return (
     <Shell wide>
-      <h1 className="h-display text-3xl md:text-4xl">{t('ad_title')}</h1>
+      <PageHero icon={<LuShieldCheck />} title={t('ad_title')} />
       <div className="mt-6 grid grid-cols-2 gap-3 md:grid-cols-4 xl:grid-cols-7">
         <Stat label={t('ad_waitlist')} value={d.waitlist} icon={<LuMail />} />
         <Stat label={t('ad_users')} value={d.users} icon={<LuUsers />} />

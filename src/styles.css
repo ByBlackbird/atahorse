@@ -1,120 +1,137 @@
 @import "tailwindcss";
 
+@font-face { font-family: "Lora"; font-weight: 400 700; font-style: normal; font-display: swap; src: url("/fonts/lora-roman.woff") format("woff"); }
+@font-face { font-family: "Lora"; font-weight: 400 700; font-style: italic; font-display: swap; src: url("/fonts/lora-italic.woff") format("woff"); }
+@font-face { font-family: "League Spartan"; font-weight: 500; font-style: normal; font-display: swap; src: url("/fonts/league-spartan-Medium.woff") format("woff"); }
+@font-face { font-family: "League Spartan"; font-weight: 600; font-style: normal; font-display: swap; src: url("/fonts/league-spartan-SemiBold.woff") format("woff"); }
+@font-face { font-family: "League Spartan"; font-weight: 700 800; font-style: normal; font-display: swap; src: url("/fonts/league-spartan-Bold.woff") format("woff"); }
+@font-face { font-family: "Inter"; font-weight: 400 500; font-style: normal; font-display: swap; src: url("/fonts/inter-Regular.woff") format("woff"); }
+@font-face { font-family: "Inter"; font-weight: 600; font-style: normal; font-display: swap; src: url("/fonts/inter-SemiBold.woff") format("woff"); }
+@font-face { font-family: "Inter"; font-weight: 700 800; font-style: normal; font-display: swap; src: url("/fonts/inter-Bold.woff") format("woff"); }
+
 /* ==========================================================================
-   Atahorse — Cognitive Heritage tasarım sistemi v4 · "dokunsal ve sıcak"
-   Yön: öğrenme bir oyun alanı gibi davet etsin ama yormasın. Düz yüzey + 2px kenar,
-   basılabilir düğmeler (alt kenar = sert, renkli değil ışımasız "kenar", gölge değil),
-   kurs başına anlam taşıyan renk (k1–k6), cömert boşluk, büyük ve kalın başlık.
-   Marka: derin teal #003333 (kurumsal, birincil eylem) + amber #DC9300 (ilerleme/ödül).
-   Aksan: canlı teal — yalnız etkileşim: odak halkası, seçili/aktif durum, bağlantı, sürükleme.
-   Yazı: başlık Plus Jakarta Sans, gövde Inter; Cinzel yalnız marka imzası (logo, sertifika).
-   Kural: gradient yok, renkli/ışıyan gölge yok. Derinlik = katman + nötr gölge.
-   Yüzeyler saf beyaz değil (#fcfbf8), koyu tema boğucu siyah değil (derin teal-kömür).
-   Tema: Kağıt (paper) / Mürekkep (ink); ilk açılışta sistem görünümü izlenir.
-   Hedef alanı: dokunmatikte her etkileşim en az 44×44 px.
+   Atahorse tasarım sistemi v5 · "Aurora"
+   Kaynak: Nuton (pastel aurora zemin, cam kartlar, League Spartan başlık) + Luma (indigo vurgu,
+   özellik ızgarası, öğrenme yolları, lacivert altbilgi) — kopya değil, Atahorse'un hedeflerine uyarlama.
+   Renk rolleri: ink (lacivert #192639) metin ve koyu yüzey · brand (indigo) birincil eylem ·
+   pink yalnız dönüşüm çağrısı (kayıt, bekleme listesi) · gold ödül/seri/ilerleme · ok/bad sonuç.
+   Yazı: başlık League Spartan, gövde Inter — ikisi de siteye gömülü (dış servise bağlı değil).
+   Zemin: yumuşak aurora (yalnız sayfa zemininde, .aurora); bileşenlerde gradient yok.
+   Gölge: nötr lacivert tonlu, yumuşak; ışıma yok.
+   Tema: Kağıt (paper) / Mürekkep (ink). Hedef alanı: dokunmatikte en az 44×44 px.
    ========================================================================== */
 
 :root,
 [data-theme="paper"],
 [data-sheet="paper"] {
-  --c-bg: #f6f5f1;          /* Kırık beyaz kâğıt */
-  --c-surface: #fcfbf8;     /* Sıcak yüzey — saf beyaz değil */
-  --c-surface-2: #f0efe9;
-  --c-surface-3: #e9e7df;
-  --c-line: #e2dfd6;
-  --c-line-strong: #cbc7bb;
-  --c-ink: #0f1f1f;         /* Teal-siyah mürekkep */
-  --c-ink-2: #465656;
-  --c-ink-3: #637070;
-  --c-brand: #003333;       /* Derin teal — birincil eylem */
+  --c-bg: #f3f5fb;          /* Buz mavisi zemin */
+  --c-surface: #fdfdff;     /* Kart yüzeyi */
+  --c-surface-2: #f1f3fa;
+  --c-surface-3: #e7eaf5;
+  --c-line: #e3e7f2;
+  --c-line-strong: #cdd3e6;
+  --c-ink: #192639;         /* Lacivert mürekkep */
+  --c-ink-2: #4a5468;
+  --c-ink-3: #6f7890;
+  --c-brand: #5b5fef;       /* İndigo — birincil eylem */
   --c-brand-ink: #ffffff;
-  --c-brand-soft: #e2edeb;
-  --c-gold: #dc9300;        /* Amber — ilerleme, rozet, vurgu */
-  --c-gold-ink: #6e4a00;
-  --c-gold-soft: #fbf0d9;
-  --c-night: #002626;       /* Koyu bant */
-  --c-ok: #2c7a58;
-  --c-ok-soft: #e2f1e9;
-  --c-bad: #b0432c;
-  --c-bad-soft: #f8e5e0;
-  --c-on-night: #eef1ec;     /* Koyu bant üstündeki metin (temadan bağımsız) */
-  --c-on-night-2: #9fbcb7;
-  --c-on-night-gold: #f5d9a0;
-  --c-on-gold: #1d1405;      /* Amber dolgu üstündeki metin */
-  --c-accent: #0b7c6f;       /* Canlı teal — etkileşim aksanı (beyaz metinle ≥4.5:1) */
-  --c-accent-ink: #0a6b60;   /* Aksan metni (≥4.5:1) */
-  --c-accent-soft: #dff1ee;
-  --c-brand-edge: #001a1a;   /* Basılabilir düğme alt kenarı */
-  --c-accent-edge: #075a50;
-  --c-gold-edge: #a86f00;
-  --c-line-edge: #d3cfc3;    /* Kart/ikincil düğme alt kenarı */
+  --c-brand-soft: #ecedfe;
+  --c-pink: #e8188f;        /* Dönüşüm çağrısı */
+  --c-pink-soft: #fde4f2;
+  --c-gold: #ffc700;        /* Ödül, seri, ilerleme */
+  --c-gold-ink: #7a5a00;
+  --c-gold-soft: #fff5d1;
+  --c-night: #192639;       /* Lacivert bant / altbilgi */
+  --c-ok: #15925a;
+  --c-ok-soft: #e1f5ea;
+  --c-bad: #d93a45;
+  --c-bad-soft: #fde6e8;
+  --c-on-night: #f3f5fb;
+  --c-on-night-2: #a9b3cc;
+  --c-on-night-gold: #ffd84d;
+  --c-on-gold: #192639;
+  --c-accent: #5b5fef;       /* Etkileşim aksanı (odak, seçili) */
+  --c-accent-ink: #4044c8;
+  --c-accent-soft: #ecedfe;
+  --c-brand-edge: #4245c9;
+  --c-accent-edge: #4245c9;
+  --c-gold-edge: #d9a800;
+  --c-line-edge: #d5dbec;
   /* Kurs renkleri — her kurs bir renk; patika, kutu, ilerleme halkası */
-  --c-k1: #0b8a7a; --c-k1-edge: #066457; --c-k1-soft: #def3ef;  /* teal */
-  --c-k2: #1f86d1; --c-k2-edge: #1563a0; --c-k2-soft: #e1effa;  /* gök */
-  --c-k3: #7a5ad8; --c-k3-edge: #5a3fb0; --c-k3-soft: #ede8fb;  /* menekşe */
-  --c-k4: #e2643a; --c-k4-edge: #b54a26; --c-k4-soft: #fce9e1;  /* mercan */
-  --c-k5: #c98500; --c-k5-edge: #9a6600; --c-k5-soft: #fbefd6;  /* amber */
-  --c-k6: #c94b86; --c-k6-edge: #9e3466; --c-k6-soft: #f9e4ee;  /* gül */
-  --c-kon: #ffffff; --c-k5-on: #1d1405;   /* kurs rengi üstündeki metin/simge */
-  --c-dot: #d6d2c6;
-  --c-scrim: rgb(0 20 20 / 0.45);
-  --c-material: rgb(246 245 241 / 0.78);
-  --shadow-1: 0 1px 2px rgb(15 31 31 / 0.05), 0 1px 1px rgb(15 31 31 / 0.03);
-  --shadow-2: 0 6px 20px rgb(15 31 31 / 0.08), 0 2px 6px rgb(15 31 31 / 0.05);
-  --shadow-3: 0 18px 48px rgb(15 31 31 / 0.14), 0 4px 12px rgb(15 31 31 / 0.06);
-  --c-shadow-md: 0 4px 10px -2px rgb(15 31 31 / 0.07), 0 2px 4px -2px rgb(15 31 31 / 0.05);
-  --c-shadow-lg: 0 14px 28px -8px rgb(15 31 31 / 0.14), 0 4px 10px -4px rgb(15 31 31 / 0.07);
+  --c-k1: #5b5fef; --c-k1-edge: #4245c9; --c-k1-soft: #ecedfe;  /* indigo */
+  --c-k2: #1d8fe0; --c-k2-edge: #146bab; --c-k2-soft: #e2f1fd;  /* gök */
+  --c-k3: #8b5cf6; --c-k3-edge: #6a3fd1; --c-k3-soft: #f0e9fe;  /* menekşe */
+  --c-k4: #f0613a; --c-k4-edge: #c44723; --c-k4-soft: #fde9e2;  /* mercan */
+  --c-k5: #ffc700; --c-k5-edge: #d9a800; --c-k5-soft: #fff5d1;  /* sarı */
+  --c-k6: #e8188f; --c-k6-edge: #b80f70; --c-k6-soft: #fde4f2;  /* pembe */
+  --c-kon: #ffffff; --c-k5-on: #192639;
+  --c-dot: #d7dcea;
+  --c-scrim: rgb(25 38 57 / 0.45);
+  --c-material: rgb(253 253 255 / 0.78);
+  --c-aurora-a: #d9e6fd;    /* aurora: mavi */
+  --c-aurora-b: #fbe0f1;    /* aurora: pembe */
+  --c-aurora-c: #e4f4fd;    /* aurora: buz */
+  --shadow-1: 0 1px 2px rgb(25 38 57 / 0.05), 0 1px 1px rgb(25 38 57 / 0.03);
+  --shadow-2: 0 4px 14px rgb(25 38 57 / 0.07), 0 1px 3px rgb(25 38 57 / 0.04);
+  --shadow-3: 0 18px 48px rgb(25 38 57 / 0.14), 0 4px 12px rgb(25 38 57 / 0.06);
+  --c-shadow-md: 0 6px 18px -4px rgb(25 38 57 / 0.09), 0 2px 4px -2px rgb(25 38 57 / 0.05);
+  --c-shadow-lg: 0 18px 36px -10px rgb(25 38 57 / 0.16), 0 4px 10px -4px rgb(25 38 57 / 0.07);
   color-scheme: light;
 }
 
 [data-theme="ink"],
 [data-sheet="ink"] {
-  --c-bg: #0a1f1f;
-  --c-surface: #0f2828;
-  --c-surface-2: #133030;
-  --c-surface-3: #183838;
-  --c-line: #1b3b3b;
-  --c-line-strong: #2a5151;
-  --c-ink: #eef1ec;
-  --c-ink-2: #aebfbc;
-  --c-ink-3: #869c99;
-  --c-brand: #7cc4b9;       /* Açık teal — koyu zeminde birincil eylem */
-  --c-brand-ink: #041616;
-  --c-brand-soft: #123331;
-  --c-gold: #e8ab3c;
-  --c-gold-ink: #f3d69f;
-  --c-gold-soft: #2b2312;
-  --c-night: #031313;
-  --c-ok: #63c39a;
+  --c-bg: #0f1626;
+  --c-surface: #161f33;
+  --c-surface-2: #1b2640;
+  --c-surface-3: #22304e;
+  --c-line: #26324d;
+  --c-line-strong: #34426a;
+  --c-ink: #eef1f8;
+  --c-ink-2: #b4bdd3;
+  --c-ink-3: #8b95b0;
+  --c-brand: #8b8ef8;
+  --c-brand-ink: #0f1626;
+  --c-brand-soft: #232a52;
+  --c-pink: #ff5cb8;
+  --c-pink-soft: #3a1a33;
+  --c-gold: #ffd23f;
+  --c-gold-ink: #ffe28a;
+  --c-gold-soft: #33290f;
+  --c-night: #0a1020;
+  --c-ok: #4fd18f;
   --c-ok-soft: #10291f;
-  --c-bad: #e98d77;
-  --c-bad-soft: #2e1a15;
-  --c-on-night: #eef1ec;     /* Koyu bant üstündeki metin (temadan bağımsız) */
-  --c-on-night-2: #9fbcb7;
-  --c-on-night-gold: #f5d9a0;
-  --c-on-gold: #1d1405;      /* Amber dolgu üstündeki metin */
-  --c-accent: #3fcfba;
-  --c-accent-ink: #7fe3d3;
-  --c-accent-soft: #123a35;
-  --c-brand-edge: #4f9a8f;
-  --c-accent-edge: #2a9d8b;
-  --c-gold-edge: #b07f22;
-  --c-line-edge: #24494a;
-  --c-k1: #3fc2ae; --c-k1-edge: #2a9180; --c-k1-soft: #12332f;
-  --c-k2: #5cb2f0; --c-k2-edge: #3a86bf; --c-k2-soft: #12283a;
-  --c-k3: #a58cf0; --c-k3-edge: #7c63c7; --c-k3-soft: #221d3a;
-  --c-k4: #f08a63; --c-k4-edge: #c2643f; --c-k4-soft: #33201a;
-  --c-k5: #e8ab3c; --c-k5-edge: #b07f22; --c-k5-soft: #2b2312;
-  --c-k6: #ea82b2; --c-k6-edge: #b95a86; --c-k6-soft: #331b27;
-  --c-kon: #071a1a; --c-k5-on: #071a1a;
-  --c-dot: #1d3d3d;
+  --c-bad: #ff7b84;
+  --c-bad-soft: #3a1a20;
+  --c-on-night: #f3f5fb;
+  --c-on-night-2: #a9b3cc;
+  --c-on-night-gold: #ffd84d;
+  --c-on-gold: #192639;
+  --c-accent: #8b8ef8;
+  --c-accent-ink: #b3b5ff;
+  --c-accent-soft: #232a52;
+  --c-brand-edge: #6466cf;
+  --c-accent-edge: #6466cf;
+  --c-gold-edge: #c9a21c;
+  --c-line-edge: #2c3858;
+  --c-k1: #8b8ef8; --c-k1-edge: #6466cf; --c-k1-soft: #232a52;
+  --c-k2: #5cb2f0; --c-k2-edge: #3a86bf; --c-k2-soft: #142a40;
+  --c-k3: #b197fb; --c-k3-edge: #8a6fd8; --c-k3-soft: #2a2147;
+  --c-k4: #ff8f6b; --c-k4-edge: #d06c4a; --c-k4-soft: #3a2219;
+  --c-k5: #ffd23f; --c-k5-edge: #c9a21c; --c-k5-soft: #33290f;
+  --c-k6: #ff5cb8; --c-k6-edge: #cc3d8f; --c-k6-soft: #3a1a33;
+  --c-kon: #0f1626; --c-k5-on: #0f1626;
+  --c-dot: #222c45;
   --c-scrim: rgb(0 0 0 / 0.6);
-  --c-material: rgb(6 26 26 / 0.74);
+  --c-material: rgb(15 22 38 / 0.76);
+  --c-aurora-a: #1a2550;
+  --c-aurora-b: #351a3e;
+  --c-aurora-c: #12233a;
   --shadow-1: 0 1px 2px rgb(0 0 0 / 0.4);
   --shadow-2: 0 6px 20px rgb(0 0 0 / 0.45), 0 2px 6px rgb(0 0 0 / 0.3);
   --shadow-3: 0 18px 48px rgb(0 0 0 / 0.55), 0 4px 12px rgb(0 0 0 / 0.35);
-  --c-shadow-md: 0 4px 12px -2px rgb(0 0 0 / 0.45);
-  --c-shadow-lg: 0 16px 32px -8px rgb(0 0 0 / 0.6), 0 4px 10px -4px rgb(0 0 0 / 0.4);
+  --c-shadow-md: 0 6px 16px -4px rgb(0 0 0 / 0.45);
+  --c-shadow-lg: 0 18px 36px -10px rgb(0 0 0 / 0.6), 0 4px 10px -4px rgb(0 0 0 / 0.4);
   color-scheme: dark;
 }
 
@@ -133,6 +150,8 @@
   --color-ink-3: var(--c-ink-3);
   --color-brand: var(--c-brand);
   --color-brand-ink: var(--c-brand-ink);
+  --color-pink: var(--c-pink);
+  --color-pink-soft: var(--c-pink-soft);
   --color-brand-soft: var(--c-brand-soft);
   --color-gold: var(--c-gold);
   --color-gold-ink: var(--c-gold-ink);
@@ -146,20 +165,26 @@
   --color-ok-soft: var(--c-ok-soft);
   --color-bad: var(--c-bad);
   --color-bad-soft: var(--c-bad-soft);
-  --font-display: "Plus Jakarta Sans", "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "League Spartan", "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", ui-sans-serif, system-ui, sans-serif;
   --font-brand: "Cinzel", Georgia, "Times New Roman", serif;
   --font-sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", ui-sans-serif, system-ui, sans-serif;
   --shadow-md: var(--c-shadow-md);
   --shadow-lg: var(--c-shadow-lg);
   --ease-ui: cubic-bezier(0.4, 0, 0.2, 1);
-  --radius-card: 20px;
+  --radius-card: 16px;
   --ease-out-soft: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 @layer base {
   html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; scroll-padding-top: 5rem; }
+  /* Aurora zemin (Nuton): sayfa zemininde yumuşak mavi/pembe ışık; bileşenler düz kalır. design-ok: tek gradient istisnası */
   body {
-    background: var(--c-bg);
+    background:
+      radial-gradient(55% 45% at 0% 18%, var(--c-aurora-a) 0%, transparent 70%), /* design-ok: aurora zemin */
+      radial-gradient(50% 50% at 100% 62%, var(--c-aurora-b) 0%, transparent 70%), /* design-ok: aurora zemin */
+      radial-gradient(40% 35% at 30% 100%, var(--c-aurora-c) 0%, transparent 70%), /* design-ok: aurora zemin */
+      var(--c-bg);
+    background-attachment: fixed;
     color: var(--c-ink);
     font-family: var(--font-sans);
     font-size: 16px;
@@ -169,12 +194,12 @@
     -webkit-tap-highlight-color: transparent;
     text-rendering: optimizeLegibility;
   }
-  ::selection { background: var(--c-gold); color: var(--c-on-gold); }
+  ::selection { background: var(--c-brand-soft); color: var(--c-ink); }
   [data-sheet] { background: var(--c-bg); color: var(--c-ink); }
   :focus-visible { outline: 2px solid var(--c-accent); outline-offset: 2px; border-radius: 8px; }
   button { cursor: pointer; }
   button:disabled { cursor: not-allowed; }
-  h1, h2, h3, h4 { text-wrap: balance; font-family: var(--font-display); letter-spacing: -0.015em; }
+  h1, h2, h3, h4 { text-wrap: balance; font-family: var(--font-display); letter-spacing: -0.01em; }
   p { text-wrap: pretty; }
 }
 
@@ -187,7 +212,7 @@
   .skip-link:focus { top: 1rem; }
 
   /* Tip ölçeği (HIG rolleri): large title · title · headline · body · callout · footnote · caption */
-  .h-display { font-family: var(--font-display); font-weight: 800; letter-spacing: -0.03em; line-height: 1.08; }
+  .h-display { font-family: var(--font-display); font-weight: 700; letter-spacing: -0.02em; line-height: 1.04; }
   /* Marka imzası (yalnız sertifika gibi tören yüzeyleri) */
   .h-brand { font-family: var(--font-brand); font-weight: 600; letter-spacing: 0.01em; line-height: 1.12; }
   .t-large { font-size: clamp(2.25rem, 5vw, 3.75rem); }
@@ -198,15 +223,17 @@
   .eyebrow { font-size: 12px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--c-ink-3); }
 
   /* Yüzeyler: içerik katmanı düz; yükseklik yalnız nötr gölge ile */
-  /* Kart: düz yüzey + 2px kenar (gölge yok) */
-  .card { background: var(--c-surface); border: 2px solid var(--c-line); border-radius: var(--radius-card); }
-  /* Basılabilir kart: alt kenar 4px; üzerine gelince hafif kalkar, basınca kenar kapanır (fiziksel düğme hissi) */
+  /* Kart (Nuton/Luma): beyaz yüzey, ince kenar, yumuşak gölge */
+  .card { background: var(--c-surface); border: 1px solid var(--c-line); border-radius: var(--radius-card); box-shadow: var(--shadow-2); }
+  /* Cam kart: aurora zemin üstünde yarı saydam (Nuton custom-block) */
+  .glass { background: var(--c-material); border: 1px solid var(--c-surface); border-radius: var(--radius-card); box-shadow: var(--shadow-2); -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px); }
+  /* Etkileşimli kart: hover'da 2px kalkar, gölge md → lg; basınca iner + indigo halka */
   .card-i {
-    background: var(--c-surface); border: 2px solid var(--c-line); border-bottom-width: 4px; border-bottom-color: var(--c-line-edge); border-radius: var(--radius-card);
-    transition: transform .15s var(--ease-ui), border-color .2s var(--ease-ui), background-color .2s var(--ease-ui);
+    background: var(--c-surface); border: 1px solid var(--c-line); border-radius: var(--radius-card); box-shadow: var(--c-shadow-md);
+    transition: transform .2s var(--ease-ui), box-shadow .2s var(--ease-ui), border-color .2s var(--ease-ui);
   }
-  @media (hover: hover) and (pointer: fine) { .card-i:hover { transform: translateY(-1px); border-color: var(--c-line-strong); border-bottom-color: var(--c-line-edge); background: var(--c-surface); } }
-  a.card-i:active, button.card-i:active, .card-i[role="button"]:active { transform: translateY(2px); border-bottom-width: 2px; margin-bottom: 2px; }
+  @media (hover: hover) and (pointer: fine) { .card-i:hover { transform: translateY(-2px); box-shadow: var(--c-shadow-lg); border-color: var(--c-line-strong); } }
+  a.card-i:active, button.card-i:active, .card-i[role="button"]:active { transform: translateY(0) scale(.995); box-shadow: var(--c-shadow-md), 0 0 0 3px var(--c-accent-soft); }
   .card-i:focus-within { border-color: var(--c-line-strong); }
   /* Çift tık / uzun eylem geri bildirimi: JS kısa süre data-pulse ekler */
   [data-pulse="1"] { animation: pulse-ring .45s var(--ease-ui); }
@@ -219,38 +246,38 @@
   @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) { .material { background: var(--c-bg); } }
 
   /* Düğmeler — varsayılan 44 px; küçük boyut yalnız işaretçili cihazlarda küçülür */
-  /* Basılabilir düğme: alt "kenar" sert ve ışımasız (box-shadow 0 Npx 0) — basınca kenar kapanır */
+  /* Düğme (Luma/Nuton): düz dolgu, 12px köşe, basınca küçülür + halka */
   .btn {
     --edge: transparent;
     position: relative; display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem;
-    min-height: 2.75rem; padding-inline: 1.125rem; border-radius: 14px; font-size: 15px; font-weight: 700; line-height: 1.2; letter-spacing: -0.005em;
-    border: 2px solid transparent; box-shadow: 0 3px 0 var(--edge); transition: transform .1s var(--ease-ui), box-shadow .1s var(--ease-ui), background-color .2s var(--ease-ui), border-color .2s var(--ease-ui), filter .2s var(--ease-ui);
+    min-height: 2.75rem; padding-inline: 1.25rem; border-radius: 12px; font-size: 15px; font-weight: 600; line-height: 1.2;
+    border: 1px solid transparent; transition: all .2s var(--ease-ui);
     white-space: nowrap; user-select: none; touch-action: manipulation;
   }
-  .btn:active:not(:disabled) { transform: translateY(3px); box-shadow: 0 0 0 var(--edge); }
-  .btn:disabled { opacity: .45; }
-  .btn[aria-busy="true"] { pointer-events: none; }
-  .btn-primary { --edge: var(--c-brand-edge); background: var(--c-brand); color: var(--c-brand-ink); }
-  .btn-outline { --edge: var(--c-line-edge); background: var(--c-surface); color: var(--c-ink); border-color: var(--c-line); }
-  .btn-ghost { background: transparent; color: var(--c-ink-2); box-shadow: none; }
+  .btn:active:not(:disabled) { transform: scale(.97); box-shadow: 0 0 0 3px var(--c-accent-soft); }
+  .btn-primary { background: var(--c-brand); color: var(--c-brand-ink); box-shadow: 0 6px 16px -6px rgb(25 38 57 / 0.35); }
+  .btn-pink { background: var(--c-pink); color: #ffffff; box-shadow: 0 6px 16px -6px rgb(25 38 57 / 0.35); }
+  .btn-dark { background: var(--c-night); color: var(--c-on-night); }
+  .btn-outline { background: var(--c-surface); color: var(--c-ink); border-color: var(--c-line-strong); }
+  .btn-ghost { background: transparent; color: var(--c-ink-2); }
   .btn-ghost:active:not(:disabled) { transform: scale(.97); }
   .btn-ghost:active:not(:disabled) { background: var(--c-surface-2); color: var(--c-ink); }
-  .btn-gold { --edge: var(--c-gold-edge); background: var(--c-gold); color: var(--c-on-gold); }
+  .btn-gold { background: var(--c-gold); color: var(--c-on-gold); }
   .btn-tinted { background: var(--c-brand-soft); color: var(--c-brand); box-shadow: none; }
-  .btn-accent { --edge: var(--c-accent-edge); background: var(--c-accent); color: var(--c-brand-ink); }
+  .btn-accent { background: var(--c-accent); color: var(--c-brand-ink); }
   /* Kurs renginde düğme: üst öğe --k / --k-edge verir */
-  .btn-k { --edge: var(--k-edge); background: var(--k); color: var(--k-on); }
+  .btn-k { background: var(--k); color: var(--k-on); }
   .btn-sm { min-height: 2.25rem; padding-inline: .875rem; font-size: 14px; border-radius: 10px; }
-  .btn-lg { min-height: 3.25rem; padding-inline: 1.5rem; font-size: 16px; border-radius: 16px; box-shadow: 0 4px 0 var(--edge); }
-  .btn-lg:active:not(:disabled) { transform: translateY(4px); }
-  .btn-xl { min-height: 3.75rem; padding-inline: 2rem; font-size: 17px; border-radius: 18px; box-shadow: 0 5px 0 var(--edge); text-transform: uppercase; letter-spacing: 0.04em; }
-  .btn-xl:active:not(:disabled) { transform: translateY(5px); }
+  .btn-lg { min-height: 3.25rem; padding-inline: 1.5rem; font-size: 16px; border-radius: 14px; }
+  .btn-xl { min-height: 3.5rem; padding-inline: 2rem; font-size: 17px; border-radius: 14px; }
   .btn-icon { width: 2.75rem; min-height: 2.75rem; padding: 0; }
   .btn-icon.btn-sm { width: 2.25rem; min-height: 2.25rem; }
   @media (hover: hover) and (pointer: fine) {
     .btn-primary:hover:not(:disabled) { filter: brightness(1.15); }
     .btn-accent:hover:not(:disabled), .btn-k:hover:not(:disabled) { filter: brightness(1.07); }
-    .btn-outline:hover:not(:disabled) { background: var(--c-surface-2); }
+    .btn-outline:hover:not(:disabled) { background: var(--c-surface-2); border-color: var(--c-brand); color: var(--c-brand); }
+    .btn-pink:hover:not(:disabled), .btn-dark:hover:not(:disabled) { filter: brightness(1.08); transform: translateY(-1px); }
+    .btn-primary:hover:not(:disabled) { transform: translateY(-1px); }
     .btn-ghost:hover:not(:disabled) { background: var(--c-surface-2); color: var(--c-ink); }
     .btn-gold:hover:not(:disabled) { filter: brightness(1.06); }
     .btn-tinted:hover:not(:disabled) { filter: brightness(.97); }
@@ -261,17 +288,18 @@
     .btn-icon.btn-sm { width: 2.75rem; min-height: 2.75rem; }
   }
 
+  .chip-pink { background: var(--c-pink-soft); color: var(--c-pink); border-color: transparent; }
   .chip {
     display: inline-flex; align-items: center; gap: .375rem; min-height: 1.75rem; padding-inline: .625rem;
     border-radius: 999px; font-size: 12px; font-weight: 700; color: var(--c-ink-2);
-    background: var(--c-surface); border: 2px solid var(--c-line);
+    background: var(--c-surface); border: 1px solid var(--c-line-strong);
   }
   .chip-gold { background: var(--c-gold-soft); border-color: transparent; color: var(--c-gold-ink); }
   .chip-brand { background: var(--c-brand-soft); border-color: transparent; color: var(--c-brand); }
 
   .input {
     width: 100%; min-height: 2.75rem; padding-inline: .875rem; border-radius: 14px;
-    background: var(--c-surface); border: 2px solid var(--c-line); color: var(--c-ink); font-size: 16px;
+    background: var(--c-surface); border: 1px solid var(--c-line-strong); color: var(--c-ink); font-size: 16px;
     transition: all .2s var(--ease-ui);
   }
   .input::placeholder { color: var(--c-ink-3); }
@@ -282,27 +310,37 @@
   @media (pointer: coarse) { .input-sm { min-height: 2.75rem; font-size: 16px; } }
   textarea.input { padding-block: .75rem; line-height: 1.55; resize: vertical; }
 
-  .seg { display: inline-flex; padding: 3px; gap: 2px; border-radius: 14px; background: var(--c-surface-2); border: 2px solid var(--c-line); }
+  .seg { display: inline-flex; padding: 3px; gap: 2px; border-radius: 12px; background: var(--c-surface-2); border: 1px solid var(--c-line); }
   .seg > button { white-space: nowrap; min-height: 2.25rem; padding-inline: .875rem; border-radius: 9px; font-size: 14px; font-weight: 600; color: var(--c-ink-2); display: inline-flex; align-items: center; gap: .4rem; transition: all .2s var(--ease-ui); }
   @media (hover: hover) and (pointer: fine) { .seg > button:hover:not([aria-pressed="true"]) { color: var(--c-ink); background: var(--c-surface-3); } }
   .seg > button[aria-pressed="true"], .seg > button[aria-selected="true"] { background: var(--c-surface); color: var(--c-brand); box-shadow: inset 0 0 0 2px var(--c-line-strong); }
   @media (pointer: coarse) { .seg > button { min-height: 2.75rem; } }
 
-  /* Kenar çubuğu v4 — büyük renkli ikonlu öğeler; seçili öğe 2px kenarlı tintli kutu.
-     .side-group  kategori başlığı (küçük, kalın, büyük harf)
-     .side-item   ana bağlantı (16px, kalın, büyük ikon)
-     .side-sub    alt öğe: kurs (renk noktası + ad + yüzde), girintili */
-  .side-group { display: flex; align-items: center; justify-content: space-between; gap: .5rem; min-height: 2rem; padding-inline: .875rem; margin-top: 1.25rem; font-size: 12px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; color: var(--c-ink-3); }
-  .side-group-n { font-size: 11px; font-weight: 700; letter-spacing: 0; color: var(--c-ink-3); background: var(--c-surface-2); border-radius: 999px; padding: 1px 7px; }
-  .side-item {
-    position: relative; display: flex; align-items: center; gap: .875rem; min-height: 3rem; padding-inline: .875rem; border-radius: 14px; border: 2px solid transparent;
-    font-size: 15.5px; font-weight: 700; color: var(--c-ink-2); transition: background-color .2s var(--ease-ui), border-color .2s var(--ease-ui), transform .1s var(--ease-ui);
+  /* Kenar çubuğu v5 — lacivert panel (Luma/Nuton LMS dili); seçili öğe dolu indigo hap.
+     .sidebar     lacivert zemin; içindeki ortak bileşenler (kart, girdi, düğme) yerel belirteçlerle koyulaşır
+     .side-group  kategori başlığı · .side-item ana bağlantı · .side-sub kurs alt öğesi */
+  .sidebar {
+    background: var(--c-night); color: var(--c-on-night); border-right: 0;
+    --c-surface: var(--c-night); --color-surface: var(--c-night);
+    --c-surface-2: color-mix(in srgb, var(--c-on-night) 8%, transparent); --color-surface-2: var(--c-surface-2);
+    --c-ink: var(--c-on-night); --color-ink: var(--c-on-night);
+    --c-ink-2: var(--c-on-night-2); --color-ink-2: var(--c-on-night-2);
+    --c-ink-3: color-mix(in srgb, var(--c-on-night-2) 75%, transparent); --color-ink-3: var(--c-ink-3);
+    --c-line: color-mix(in srgb, var(--c-on-night) 12%, transparent); --color-line: var(--c-line);
+    --c-line-strong: color-mix(in srgb, var(--c-on-night) 20%, transparent); --color-line-strong: var(--c-line-strong);
+    --c-gold-ink: var(--c-on-night-gold); --color-gold-ink: var(--c-on-night-gold);
   }
-  .side-item > svg { font-size: 1.4rem; flex-shrink: 0; transition: transform .2s var(--ease-ui); }
-  .side-item[aria-current="page"] { background: var(--c-accent-soft); border-color: var(--c-accent); color: var(--c-accent-ink); }
+  .side-group { display: flex; align-items: center; justify-content: space-between; gap: .5rem; min-height: 2rem; padding-inline: .875rem; margin-top: 1.25rem; font-size: 11.5px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--c-ink-3); }
+  .side-group-n { font-size: 11px; font-weight: 700; letter-spacing: 0; color: var(--c-ink-2); background: var(--c-surface-2); border-radius: 999px; padding: 1px 7px; }
+  .side-item {
+    position: relative; display: flex; align-items: center; gap: .875rem; min-height: 2.875rem; padding-inline: .875rem; border-radius: 12px;
+    font-size: 15px; font-weight: 600; color: var(--c-ink-2); transition: background-color .2s var(--ease-ui), color .2s var(--ease-ui), transform .1s var(--ease-ui);
+  }
+  .side-item > svg { font-size: 1.25rem; flex-shrink: 0; transition: transform .2s var(--ease-ui); }
+  .side-item[aria-current="page"] { background: var(--c-brand); color: var(--c-brand-ink); box-shadow: 0 8px 20px -10px var(--c-brand); }
   .side-sub {
-    display: flex; align-items: center; gap: .625rem; min-height: 2.5rem; margin-left: .5rem; padding-inline: .75rem; border-radius: 12px;
-    font-size: 14px; font-weight: 600; color: var(--c-ink-2); transition: background-color .2s var(--ease-ui);
+    display: flex; align-items: center; gap: .625rem; min-height: 2.5rem; margin-left: .5rem; padding-inline: .75rem; border-radius: 10px;
+    font-size: 14px; font-weight: 500; color: var(--c-ink-2); transition: background-color .2s var(--ease-ui);
   }
   .side-sub[aria-current="page"] { background: var(--c-surface-2); color: var(--c-ink); }
   @media (hover: hover) and (pointer: fine) {
@@ -313,6 +351,19 @@
   @media (pointer: coarse) { .side-sub { min-height: 2.75rem; } }
   .side-item:active, .side-sub:active { transform: scale(.98); }
 
+  /* Sayfa başlığı v5 — lacivert bant + yumuşak aurora parıltısı (iç sayfaların ortak girişi) */
+  .hero-night { position: relative; isolation: isolate; overflow: hidden; border-radius: 24px; background: var(--c-night); color: var(--c-on-night); }
+  .hero-night::before {
+    content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none;
+    background: radial-gradient(40rem 18rem at 100% 0%, color-mix(in srgb, var(--c-brand) 45%, transparent), transparent 70%), /* design-ok: aurora parıltı */
+                radial-gradient(28rem 14rem at 0% 100%, color-mix(in srgb, var(--c-pink) 30%, transparent), transparent 70%); /* design-ok: aurora parıltı */
+  }
+  .hero-night .hero-sub { color: var(--c-on-night-2); }
+
+  /* İstatistik kutusu v5 */
+  .stat-tile { display: flex; align-items: center; gap: .875rem; padding: 1rem 1.125rem; border-radius: var(--radius-card); background: var(--c-surface); border: 1px solid var(--c-line); box-shadow: var(--shadow-1); }
+  .stat-ic { display: grid; place-items: center; flex: none; width: 44px; height: 44px; border-radius: 12px; font-size: 1.25rem; }
+
   /* Kurs rengi kapsamı: data-k="1..6" → --k, --k-edge, --k-soft */
   [data-k="1"] { --k-on: var(--c-kon); --k: var(--c-k1); --k-edge: var(--c-k1-edge); --k-soft: var(--c-k1-soft); }
   [data-k="2"] { --k-on: var(--c-kon); --k: var(--c-k2); --k-edge: var(--c-k2-edge); --k-soft: var(--c-k2-soft); }
@@ -321,20 +372,20 @@
   [data-k="5"] { --k-on: var(--c-k5-on); --k: var(--c-k5); --k-edge: var(--c-k5-edge); --k-soft: var(--c-k5-soft); }
   [data-k="6"] { --k-on: var(--c-kon); --k: var(--c-k6); --k-edge: var(--c-k6-edge); --k-soft: var(--c-k6-soft); }
   .bg-k { background: var(--k); color: var(--k-on); }
-  .band-k { background: var(--k); color: var(--k-on); box-shadow: 0 5px 0 var(--k-edge); } .bg-k-soft { background: var(--k-soft); } .text-k { color: var(--k); } .border-k { border-color: var(--k); }
+  .band-k { background: var(--k); color: var(--k-on); box-shadow: var(--shadow-2); } .bg-k-soft { background: var(--k-soft); } .text-k { color: var(--k); } .text-k-on { color: var(--k-on); } .border-k { border-color: var(--k); }
 
   /* Patika düğümü: yuvarlak basılabilir düğme (alt kenar 6px) */
-  .node {
-    --edge: var(--k-edge); position: relative; display: grid; place-items: center; width: 4.5rem; height: 4.5rem; border-radius: 999px;
-    background: var(--k); color: var(--k-on); font-size: 1.75rem; box-shadow: 0 6px 0 var(--edge);
-    transition: transform .1s var(--ease-ui), box-shadow .1s var(--ease-ui), filter .2s var(--ease-ui);
-  }
-  .node:active:not(:disabled) { transform: translateY(6px); box-shadow: 0 0 0 var(--edge); }
-  @media (hover: hover) and (pointer: fine) { .node:hover:not(:disabled) { filter: brightness(1.07); } }
-  .node[data-state="locked"] { --edge: var(--c-line-edge); background: var(--c-surface-3); color: var(--c-ink-3); }
-  .node[data-state="done"] { --edge: var(--c-gold-edge); background: var(--c-gold); color: var(--c-on-gold); }
-  .node-ring { position: absolute; inset: -10px; border-radius: 999px; border: 4px solid var(--k-soft); }
-  .node[data-state="current"] .node-ring { border-color: var(--k); opacity: .35; animation: breathe 2.2s ease-in-out infinite; }
+  /* Ders satırı (v5) — düz müfredat listesi; dairesel patika düğümlerinin yerine */
+  .lesson-list { border: 1px solid var(--c-line); border-radius: var(--radius-card); background: var(--c-surface); overflow: hidden; }
+  .lesson-list > li + li { border-top: 1px solid var(--c-line); }
+  .lesson-row { display: flex; width: 100%; min-height: 56px; align-items: center; gap: 14px; padding: 12px 16px; text-align: left; transition: background-color .15s; }
+  button.lesson-row:hover { background: var(--c-surface-2); }
+  .lesson-row:focus-visible { outline: 2px solid var(--c-brand); outline-offset: -2px; }
+  .lesson-lead { display: grid; place-items: center; flex: none; width: 32px; height: 32px; border-radius: 10px; font-size: 14px; font-weight: 700; background: var(--c-surface-2); color: var(--c-ink-2); }
+  .lesson-row[data-state="done"] .lesson-lead { background: var(--c-gold-soft); color: var(--c-gold-ink); }
+  .lesson-row[data-state="current"] { background: var(--k-soft, var(--c-brand-soft)); }
+  .lesson-row[data-state="current"] .lesson-lead { background: var(--k, var(--c-brand)); color: var(--k-on, #fff); }
+  .lesson-row[data-state="locked"] .lesson-lead { color: var(--c-ink-3); }
 
   /* Bento ızgara: 12 sütun; kart boyutları col-span ile */
   .bento { display: grid; gap: 1rem; grid-template-columns: repeat(1, minmax(0, 1fr)); }
@@ -401,7 +452,7 @@
 .anim-marquee { animation: marquee 40s linear infinite; }
 .eq-bar { transform-origin: bottom; animation: bar .6s ease-in-out infinite alternate; }
 @media (prefers-reduced-motion: reduce) {
-  .anim-rise, .anim-pop, .anim-fade, .anim-pulse, .anim-marquee, .eq-bar, .anim-modal, [data-pulse], .anim-bob, .node-ring { animation: none !important; }
+  .anim-rise, .anim-pop, .anim-fade, .anim-pulse, .anim-marquee, .eq-bar, .anim-modal, [data-pulse], .anim-bob { animation: none !important; }
   .card-i, .card-i:hover, .side-item, .btn { transform: none !important; }
   .btn:active:not(:disabled) { transform: none; }
   html { scroll-behavior: auto; }
@@ -413,10 +464,52 @@
 .kw-now { background: var(--c-gold-soft); color: var(--c-gold-ink); box-shadow: 0 0 0 2px var(--c-gold-soft); }
 .kw-future { color: var(--c-ink-3); }
 
+/* Sertifika v5 — iki tasarım (satın alınan şablonlardan uyarlandı, birebir kopya değil):
+   .cert-classic  krem kâğıt + altın çerçeve + lacivert kurdele (şablon 1'in sıcak, resmi dili)
+   .cert-night    altın kenarlı lacivert pano + altın köşe süsleri (şablon 2'nin koyu, modern dili)
+   Tüm ölçüler kapsayıcı genişliğine göre (cqw): ekranda ve A4 baskıda aynı oran. */
+.cert { --cert-gold: color-mix(in srgb, var(--c-gold) 62%, var(--c-gold-ink)); container-type: inline-size; position: relative; width: 100%; aspect-ratio: 1.414 / 1; overflow: hidden; font-family: "Lora", Georgia, serif; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+.cert * { box-sizing: border-box; }
+.cert-classic { background: color-mix(in srgb, var(--c-gold-soft) 50%, var(--c-surface)); color: var(--c-night); --cert-accent: var(--cert-gold); --cert-deep: var(--c-gold-ink); --cert-name: var(--c-gold-ink); --cert-muted: color-mix(in srgb, var(--c-night) 70%, transparent); }
+.cert-classic::before { content: ""; position: absolute; inset: 0; pointer-events: none; opacity: .5;
+  background: radial-gradient(circle at 50% 50%, color-mix(in srgb, var(--c-gold) 22%, transparent) 0 .12cqw, transparent .14cqw) 0 0 / 1.6cqw 1.6cqw; } /* design-ok: kâğıt dokusu */
+.cert-night { background: linear-gradient(135deg, var(--cert-gold) 0%, color-mix(in srgb, var(--c-gold) 40%, var(--c-surface)) 50%, var(--cert-gold) 100%); color: var(--c-on-night); /* design-ok: altın varak kenar */
+  --cert-accent: var(--c-gold); --cert-deep: var(--c-gold); --cert-name: var(--c-on-night-gold); --cert-muted: var(--c-on-night-2); }
+.cert-panel { position: absolute; inset: 2.6cqw; display: flex; flex-direction: column; align-items: center; padding: 5.2cqw 7cqw 3.6cqw; text-align: center; }
+.cert-classic .cert-panel { border: .55cqw solid var(--cert-accent); box-shadow: inset 0 0 0 .35cqw color-mix(in srgb, var(--c-gold-soft) 50%, var(--c-surface)), inset 0 0 0 .5cqw var(--cert-accent); }
+.cert-night .cert-panel { background: var(--c-night); border: .35cqw solid var(--cert-gold); box-shadow: inset 0 0 0 .8cqw var(--c-night), inset 0 0 0 .95cqw color-mix(in srgb, var(--c-gold) 70%, transparent); }
+.cert-night .cert-panel::before { content: ""; position: absolute; inset: 0; pointer-events: none; opacity: .5;
+  background: radial-gradient(60cqw 30cqw at 50% 35%, color-mix(in srgb, var(--c-brand) 35%, transparent), transparent 70%); } /* design-ok: pano parıltısı */
+.cert-corner { position: absolute; width: 11cqw; height: 11cqw; color: var(--cert-accent); }
+.cert-corner.tl { top: 1.2cqw; left: 1.2cqw; } .cert-corner.tr { top: 1.2cqw; right: 1.2cqw; transform: scaleX(-1); }
+.cert-corner.bl { bottom: 1.2cqw; left: 1.2cqw; transform: scaleY(-1); } .cert-corner.br { bottom: 1.2cqw; right: 1.2cqw; transform: scale(-1, -1); }
+.cert-night .cert-corner { width: 9cqw; height: 9cqw; top: auto; left: auto; right: auto; bottom: auto; } .cert-night .cert-corner.tl { top: 1.6cqw; left: 1.6cqw; } .cert-night .cert-corner.tr { top: 1.6cqw; right: 1.6cqw; } .cert-night .cert-corner.bl { bottom: 1.6cqw; left: 1.6cqw; } .cert-night .cert-corner.br { bottom: 1.6cqw; right: 1.6cqw; }
+.cert-ribbon { position: absolute; top: 0; left: 50%; transform: translate(-50%, -38%); width: 30cqw; }
+.cert-ribbon-name { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -30%); font-weight: 600; font-size: 1.9cqw; letter-spacing: .42em; padding-left: .42em; text-transform: uppercase; white-space: nowrap; }
+.cert-classic .cert-ribbon-name { color: var(--c-gold); } .cert-night .cert-ribbon-name { color: var(--c-night); }
+.cert-big { margin-top: 3.4cqw; font-weight: 600; font-size: 5.4cqw; letter-spacing: .14em; line-height: 1; color: var(--cert-deep); text-transform: uppercase; }
+.cert-night .cert-big { color: var(--c-on-night); font-size: 4.4cqw; }
+.cert-kind { margin-top: 1cqw; font-size: 1.9cqw; letter-spacing: .32em; text-transform: uppercase; color: var(--cert-muted); }
+.cert-presented { margin-top: 2.2cqw; font-style: italic; font-size: 1.55cqw; color: var(--cert-muted); }
+.cert-name { position: relative; margin-top: .6cqw; padding-inline: 9cqw; font-style: italic; font-weight: 600; font-size: 5.6cqw; line-height: 1.15; color: var(--cert-name); }
+.cert-flourish { display: block; width: 58cqw; height: 2.4cqw; margin: .4cqw auto 0; color: var(--cert-accent); }
+.cert-body { margin-top: 1.4cqw; max-width: 62cqw; font-size: 1.4cqw; line-height: 1.55; color: var(--cert-muted); }
+.cert-course { margin-top: .9cqw; font-weight: 700; font-size: 2.3cqw; line-height: 1.25; }
+.cert-level { margin-top: .4cqw; font-size: 1.25cqw; letter-spacing: .18em; text-transform: uppercase; color: var(--cert-muted); }
+.cert-foot { margin-top: auto; display: grid; width: 100%; padding-inline: 4cqw; grid-template-columns: 1fr auto 1fr; align-items: end; gap: 3cqw; font-family: "Inter", sans-serif; }
+.cert-sign { text-align: center; font-size: 1.15cqw; color: var(--cert-muted); }
+.cert-sign b { display: block; margin-bottom: .5cqw; padding-top: .7cqw; border-top: .12cqw solid currentColor; font-size: 1.35cqw; font-weight: 600; color: inherit; }
+.cert-classic .cert-sign b { color: var(--c-night); } .cert-night .cert-sign b { color: var(--c-on-night); }
+.cert-seal { width: 11cqw; height: 11cqw; }
+.cert-qr { display: flex; align-items: center; justify-content: flex-end; gap: 1.2cqw; text-align: left; }
+.cert-qr canvas { width: 8cqw !important; height: 8cqw !important; border-radius: .6cqw; }
+.cert-qr p { font-size: 1cqw; line-height: 1.5; color: var(--cert-muted); }
+.cert-qr strong { display: block; font-size: 1.25cqw; letter-spacing: .12em; color: inherit; }
+
 /* Yazdırma: sertifika */
 @media print {
   body { background: white !important; }
   .no-print { display: none !important; }
-  .print-sheet { border: none !important; }
+  .print-sheet { border: none !important; box-shadow: none !important; border-radius: 0 !important; max-width: none !important; }
   @page { size: A4 landscape; margin: 0; }
 }

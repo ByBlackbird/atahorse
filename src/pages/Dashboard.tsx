@@ -1,17 +1,17 @@
-// Panel v4 — "bugün ne yapacağım" tek bakışta: büyük Devam kartı (kurs renginde), Bugün listesi, renkli kurslar.
-// Sağ rayda seri, günlük hedef, seviye ve tekrar. Yormayan oyunlaştırma: ceza yok, hedefi öğrenen seçer.
+// Panel v5 — Luma/Nuton LMS düzeni: lacivert "Kaldığın yer" bandı → gerçek verili istatistik kutuları →
+// Bugün listesi (müfredat satırları) → renk başlıklı kurs kartları. Sağ rayda seri, günlük hedef, seviye, tekrar.
+// Yormayan oyunlaştırma: ceza yok, hedefi öğrenen seçer. Rakam uydurulmaz: her kutu sunucudaki veriden gelir.
 import { useEffect, useMemo, useState } from 'react';
 import {
   LuArrowRight, LuBookOpen, LuPlus, LuRepeat, LuRotateCw, LuTrash2, LuGraduationCap, LuSparkles, LuTarget, LuAward,
-  LuPlay, LuLayoutGrid, LuTable2, LuChevronRight, LuBrain, LuZap,
+  LuPlay, LuLayoutGrid, LuTable2, LuChevronRight, LuBrain, LuZap, LuFlame, LuLibrary, LuCircleCheck,
 } from 'react-icons/lu';
 import { Link, useNavigate } from '../lib/router';
 import { trpc } from '../lib/trpc';
 import { fmtDate, useI18n } from '../i18n/index';
 import { Shell } from '../app/Shell';
-import { Bar, Empty, PageLoader, Ring, Spinner, cx } from '../ui/kit';
+import { Bar, Empty, PageHero, PageLoader, Ring, Spinner, cx } from '../ui/kit';
 import DataTable, { type Column } from '../ui/DataTable';
-import { useMe } from '../ui/providers';
 import { StreakCard, DailyGoalCard } from '../ui/learn';
 import { courseTone } from '../lib/brand';
 import type { RouterOutputs } from '../lib/trpc';
@@ -37,19 +37,19 @@ function Today({ steps }: { steps: Step[] }) {
   };
   if (!steps.length) return <p className="card p-5 text-sm text-ink-2">{t('p_today_empty')}</p>;
   return (
-    <ol className="grid grid-cols-[minmax(0,1fr)] gap-3">
+    <ol className="lesson-list">
       {steps.map((s, i) => {
         const v = view(s);
         const gold = v.tone === 'gold';
         return (
-          <li key={`${s.kind}-${i}`} className="anim-rise" style={{ animationDelay: `${i * 50}ms` }}>
-            <Link to={v.to} data-k={gold ? undefined : v.tone} className="card-i group flex min-h-16 items-center gap-4 p-3.5 pr-4">
-              <span className={cx('grid h-12 w-12 shrink-0 place-items-center rounded-2xl text-xl', gold ? 'bg-gold-soft text-gold-ink' : 'bg-k-soft text-k')}>{v.icon}</span>
+          <li key={`${s.kind}-${i}`}>
+            <Link to={v.to} data-k={gold ? undefined : v.tone} className="lesson-row group" data-state={i === 0 ? 'current' : 'open'}>
+              <span className={cx('grid h-10 w-10 shrink-0 place-items-center rounded-xl text-lg', gold ? 'bg-gold-soft text-gold-ink' : 'bg-k text-k-on')}>{v.icon}</span>
               <span className="min-w-0 flex-1">
-                <span className="block truncate font-extrabold tracking-tight">{v.title}</span>
+                <span className="block truncate font-semibold">{v.title}</span>
                 <span className={cx('block truncate text-xs font-semibold', s.kind === 'module' && s.reason === 'behind' ? 'text-bad' : 'text-ink-3')}>{v.sub}</span>
               </span>
-              <span className="hidden shrink-0 rounded-full bg-surface-2 px-2.5 py-1 text-xs font-bold tabular-nums text-ink-2 sm:inline">{t('p_min', { n: s.minutes })}</span>
+              <span className="hidden shrink-0 rounded-full bg-surface px-2.5 py-1 text-xs font-bold tabular-nums text-ink-2 sm:inline">{t('p_min', { n: s.minutes })}</span>
               <LuChevronRight className="shrink-0 text-xl text-ink-3 transition-transform duration-200 group-hover:translate-x-0.5" aria-hidden />
             </Link>
           </li>
@@ -66,32 +66,29 @@ function CourseTile({ c }: { c: Course }) {
   const remove = trpc.course.remove.useMutation({ onSuccess: () => utils.profile.dashboard.invalidate() });
   const status = statusOf(c);
   const ready = c.status === 'ready';
-  const body = (
+  const busy = status === 'generating' || status === 'queued';
+  const inner = (
     <>
-      <Ring value={c.percent / 100} size={64} stroke={7} color={c.completedAt ? 'var(--c-gold)' : 'var(--k)'}>
-        {status === 'generating' || status === 'queued' ? <Spinner className="h-5 w-5" /> : c.completedAt ? <LuAward className="text-xl text-gold" /> : <span className="text-sm font-extrabold tabular-nums">{c.percent}%</span>}
-      </Ring>
-      <span className="min-w-0 flex-1">
-        <span className="line-clamp-2 font-extrabold leading-snug tracking-tight">{c.title}</span>
-        <span className="mt-1 block text-xs font-semibold text-ink-3">
-          {ready ? t('modules_n', { a: c.modulesDone, b: c.moduleCount }) : t(`st_${status}`)} · {t(`lv_${c.level}`)}
+      <div className="bg-k flex h-24 items-start justify-between p-4">
+        <span className="grid h-11 w-11 place-items-center rounded-xl bg-surface/20 text-xl" aria-hidden>
+          {busy ? <Spinner className="h-5 w-5" /> : c.completedAt ? <LuAward /> : <LuBookOpen />}
         </span>
-      </span>
+        <span className="rounded-full bg-surface/20 px-2.5 py-1 text-xs font-bold tabular-nums">{ready ? `${c.percent}%` : t(`st_${status}`)}</span>
+      </div>
+      <div className="p-4">
+        <p className="line-clamp-2 min-h-[2.75rem] font-semibold leading-snug">{c.title}</p>
+        <p className="mt-1 text-xs text-ink-3">{ready ? t('modules_n', { a: c.modulesDone, b: c.moduleCount }) : t(`st_${status}`)} · {t(`lv_${c.level}`)}</p>
+        <Bar value={c.percent / 100} className="mt-3" color={c.completedAt ? 'bg-gold' : 'bg-k'} />
+        {c.status === 'failed' && <button className="btn btn-outline btn-sm mt-3" onClick={() => retry.mutate({ courseId: c.id })}><LuRotateCw /> {t('retry')}</button>}
+      </div>
     </>
   );
   return (
-    <div data-k={courseTone(c.id)} className="group relative">
-      {ready ? (
-        <Link to={`/kurs/${c.id}`} className="card-i flex items-center gap-4 p-4 pr-10">{body}</Link>
-      ) : (
-        <div className="card flex items-center gap-4 p-4 pr-10">
-          {body}
-          {c.status === 'failed' && <button className="btn btn-outline btn-sm" onClick={() => retry.mutate({ courseId: c.id })}><LuRotateCw /> {t('retry')}</button>}
-        </div>
-      )}
-      <button className="btn btn-ghost btn-icon btn-sm reveal-on-hover absolute right-1.5 top-1.5 hover:!text-bad" aria-label={t('delete')}
+    <li data-k={courseTone(c.id)} className="group relative">
+      {ready ? <Link to={`/kurs/${c.id}`} className="card-i block h-full overflow-hidden">{inner}</Link> : <div className="card h-full overflow-hidden">{inner}</div>}
+      <button className="btn btn-icon btn-sm reveal-on-hover absolute right-14 top-3 bg-surface/20 text-k-on hover:!bg-bad hover:!text-surface" aria-label={t('delete')}
         onClick={() => { if (window.confirm(t('confirm_delete'))) remove.mutate({ courseId: c.id }); }}><LuTrash2 /></button>
-    </div>
+    </li>
   );
 }
 
@@ -112,7 +109,6 @@ function CourseTable({ rows }: { rows: Course[] }) {
 
 export default function Dashboard() {
   const { t } = useI18n();
-  const { me } = useMe();
   const dash = trpc.profile.dashboard.useQuery(undefined, { refetchInterval: (q) => (q.state.data?.courses.some((c) => c.status === 'queued' || c.status === 'generating') ? 2000 : false) });
   const path = trpc.learn.path.useQuery();
   const cog = trpc.profile.cognitive.useQuery();
@@ -125,38 +121,45 @@ export default function Dashboard() {
   const steps = path.data?.steps ?? [];
   const cont = d.continueId ? d.courses.find((c) => c.id === d.continueId) : undefined;
   const next = steps.find((s) => s.kind === 'module' && cont && s.courseId === cont.id) as Extract<Step, { kind: 'module' }> | undefined;
-  const name = me?.fullName?.split(' ')[0] || me?.username || '';
+
+  const modulesDone = d.courses.reduce((a, c) => a + c.modulesDone, 0);
+  const stats = [
+    { label: t('v5_st_courses'), value: d.courses.length, icon: <LuLibrary />, cls: 'bg-brand-soft text-brand' },
+    { label: t('v5_st_modules'), value: modulesDone, icon: <LuCircleCheck />, cls: 'bg-pink-soft text-pink' },
+    { label: t('v5_st_streak'), value: d.streak, icon: <LuFlame />, cls: 'bg-gold-soft text-gold-ink' },
+    { label: t('v5_st_xp'), value: d.xp.toLocaleString(), icon: <LuZap />, cls: 'bg-surface-2 text-ink-2' },
+  ];
 
   return (
-    <Shell wide>
-      <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_340px]">
+    <Shell>
+      <div className="grid gap-8 xl:grid-cols-[minmax(0,1fr)_320px]">
         <div className="min-w-0 space-y-8">
-          <div>
-            <p className="text-sm font-bold text-ink-3">{t('d_hello', { name })}</p>
-            {/* Devam kartı — kursun renginde */}
-            {cont ? (
-              <section data-k={courseTone(cont.id)} className="band-k mt-3 rounded-[24px] p-6 md:p-8" aria-label={t('d_continue')}>
-                <p className="text-xs font-extrabold uppercase tracking-[0.14em] opacity-85">{t('v4_next_up')}</p>
-                <h1 className="h-display mt-2 text-3xl md:text-4xl">{next?.moduleTitle ?? cont.title}</h1>
-                <p className="mt-2 font-semibold opacity-90">{cont.title}</p>
-                <div className="mt-5 flex items-center gap-3">
-                  <div className="h-3 flex-1 overflow-hidden rounded-full bg-night/20"><div className="h-full rounded-full bg-surface" style={{ width: `${cont.percent}%` }} /></div>
-                  <span className="text-sm font-extrabold tabular-nums">{cont.percent}%</span>
-                </div>
-                <div className="mt-6 flex flex-wrap gap-3">
-                  <Link to={next ? `/kurs/${cont.id}/m/${next.moduleIdx}` : `/kurs/${cont.id}`} className="btn btn-xl bg-surface text-k" style={{ ['--edge' as string]: 'var(--k-edge)' }}><LuPlay /> {t('v4_continue')}</Link>
-                  <Link to={`/kurs/${cont.id}`} className="btn btn-lg border-surface/40 bg-transparent text-inherit hover:bg-night/10" style={{ ['--edge' as string]: 'transparent' }}>{t('v4_see_path')}</Link>
-                </div>
-              </section>
-            ) : (
-              <section className="card mt-3 p-8 text-center">
-                <LuSparkles className="mx-auto text-3xl text-accent" aria-hidden />
-                <h1 className="h-display mt-3 text-3xl">{t('v4_first_title')}</h1>
-                <p className="mx-auto mt-2 max-w-md text-ink-2">{t('v4_first_sub')}</p>
-                <Link to="/kurs-olustur" className="btn btn-primary btn-xl mt-6"><LuPlus /> {t('nav_new')}</Link>
-              </section>
-            )}
-          </div>
+          {/* Kaldığın yer — lacivert bant */}
+          {cont ? (
+            <PageHero
+              eyebrow={t('v5_d_eyebrow')}
+              title={next?.moduleTitle ?? cont.title}
+              sub={cont.title}
+              actions={<>
+                <Link to={next ? `/kurs/${cont.id}/m/${next.moduleIdx}` : `/kurs/${cont.id}`} className="btn btn-pink btn-lg"><LuPlay /> {t('v4_continue')}</Link>
+                <Link to={`/kurs/${cont.id}`} className="btn btn-lg border border-on-night/25 bg-transparent text-on-night hover:bg-on-night/10">{t('v4_see_path')}</Link>
+              </>}
+              aside={<div className="hidden sm:block"><Ring value={cont.percent / 100} size={120} stroke={10} color="var(--c-on-night-gold)"><span className="font-display text-3xl font-bold text-on-night">{cont.percent}%</span></Ring></div>}
+            />
+          ) : (
+            <PageHero eyebrow={t('v4_next_up')} title={t('v4_first_title')} sub={t('v4_first_sub')} icon={<LuSparkles />}
+              actions={<Link to="/kurs-olustur" className="btn btn-pink btn-lg"><LuPlus /> {t('nav_new')}</Link>} />
+          )}
+
+          {/* Gerçek verili istatistik kutuları */}
+          <ul className="grid grid-cols-2 gap-3 md:grid-cols-4">
+            {stats.map((s) => (
+              <li key={s.label} className="stat-tile">
+                <span className={cx('stat-ic', s.cls)} aria-hidden>{s.icon}</span>
+                <span className="min-w-0"><span className="block font-display text-2xl font-bold tabular-nums leading-none">{s.value}</span><span className="mt-1 block truncate text-xs font-semibold text-ink-3">{s.label}</span></span>
+              </li>
+            ))}
+          </ul>
 
           {cog.data && !cog.data.profile && (
             <Link to="/profil-testi" className="card-i flex items-center gap-4 border-accent/50 bg-accent-soft p-4">
@@ -167,8 +170,8 @@ export default function Dashboard() {
           )}
 
           <section aria-labelledby="today-h">
-            <div className="mb-3 flex items-baseline justify-between">
-              <h2 id="today-h" className="text-xl font-extrabold tracking-tight">{t('p_today')}</h2>
+            <div className="mb-3 flex items-end justify-between gap-3">
+              <div><h2 id="today-h" className="h-display text-2xl">{t('p_today')}</h2><p className="text-sm text-ink-3">{t('v5_today_sub')}</p></div>
               {steps.length > 0 && <span className="text-sm font-bold text-ink-3">{t('p_min', { n: steps.reduce((a, s) => a + s.minutes, 0) })}</span>}
             </div>
             {path.data ? <Today steps={steps} /> : <div className="space-y-3">{[0, 1].map((i) => <div key={i} className="h-[4.5rem] animate-pulse rounded-[20px] bg-surface-2" />)}</div>}
@@ -176,7 +179,7 @@ export default function Dashboard() {
 
           <section id="kurslar" className="scroll-mt-20" aria-labelledby="courses-h">
             <div className="mb-3 flex flex-wrap items-center justify-between gap-3">
-              <h2 id="courses-h" className="text-xl font-extrabold tracking-tight">{t('d_courses')} <span className="ml-1 text-base font-bold text-ink-3">{d.courses.length}</span></h2>
+              <h2 id="courses-h" className="h-display text-2xl">{t('d_courses')} <span className="ml-1 text-base font-bold text-ink-3">{d.courses.length}</span></h2>
               <div className="flex items-center gap-2">
                 {d.courses.length > 0 && (
                   <div className="seg" role="tablist" aria-label={t('d_view')}>
@@ -192,13 +195,13 @@ export default function Dashboard() {
             ) : view === 'table' ? (
               <CourseTable rows={d.courses} />
             ) : (
-              <div className="grid gap-3 sm:grid-cols-2">{d.courses.map((c) => <CourseTile key={c.id} c={c} />)}</div>
+              <ul className="grid gap-4 sm:grid-cols-2 2xl:grid-cols-3">{d.courses.map((c) => <CourseTile key={c.id} c={c} />)}</ul>
             )}
           </section>
         </div>
 
         {/* Sağ ray */}
-        <aside className="space-y-4 lg:sticky lg:top-6 lg:self-start">
+        <aside className="space-y-4 xl:sticky xl:top-24 xl:self-start">
           <StreakCard streak={d.streak} longest={d.longestStreak} days={d.heatmap} />
           <DailyGoalCard goal={d.dailyGoal} days={d.heatmap} />
           <Link to="/profil" className="card-i flex items-center gap-4 p-5">

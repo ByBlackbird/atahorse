@@ -55,21 +55,21 @@ export default function Profile() {
   return (
     <Shell>
       {/* Başlık */}
-      <div className="card flex flex-wrap items-center gap-6 p-6">
-        <Ring value={d.level.progress} size={92} stroke={6}>
-          <div><div className="text-[10px] uppercase tracking-wider text-ink-3">Lv</div><div className="text-2xl font-semibold">{d.level.level}</div></div>
+      <div className="hero-night flex flex-wrap items-center gap-6 p-6 md:p-8">
+        <Ring value={d.level.progress} size={104} stroke={8} color="var(--c-on-night-gold)">
+          <div className="text-on-night"><div className="text-[10px] uppercase tracking-wider opacity-70">Lv</div><div className="font-display text-3xl font-bold">{d.level.level}</div></div>
         </Ring>
         <div className="min-w-0 flex-1">
-          <h1 className="h-display text-2xl">{d.user.fullName || d.user.username}</h1>
-          <p className="text-sm text-ink-3">@{d.user.username} · {t('pr_member_since', { d: fmtDate(d.user.createdAt, lang) })}</p>
-          <div className="mt-3 flex flex-wrap gap-2">
+          <h1 className="h-display text-3xl md:text-4xl">{d.user.fullName || d.user.username}</h1>
+          <p className="hero-sub mt-1 text-sm">@{d.user.username} · {t('pr_member_since', { d: fmtDate(d.user.createdAt, lang) })}</p>
+          <div className="mt-4 flex flex-wrap gap-2">
             <span className="chip chip-gold">{d.xp} XP</span>
             <span className="chip"><LuFlame className={d.streak ? 'text-gold' : ''} /> {t('streak_n', { n: d.streak })}</span>
             {d.profileName && <span className="chip chip-brand"><LuSparkles /> {d.profileName}</span>}
             <span className="chip">{d.user.plan === 'premium' ? t('pr_plan_premium') : t('pr_plan_free')}</span>
           </div>
         </div>
-        {d.user.plan !== 'premium' && <button className="btn btn-gold btn-sm" onClick={() => openUpgrade('manual')}>{t('pr_upgrade')}</button>}
+        {d.user.plan !== 'premium' && <button className="btn btn-pink" onClick={() => openUpgrade('manual')}>{t('pr_upgrade')}</button>}
       </div>
 
       {/* İstatistikler */}

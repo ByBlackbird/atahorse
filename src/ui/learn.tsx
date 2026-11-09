@@ -1,7 +1,8 @@
 // Öğrenme yüzeyinin ortak parçaları (v4): seri, günlük hedef, seviye.
 // Yormayan oyunlaştırma: can/ceza yok; hedefi kullanıcı seçer (10–50 XP); kaçırılan gün suçlamaz, davet eder.
 import { useState } from 'react';
-import { LuFlame, LuTarget, LuCheck, LuZap, LuPencil } from 'react-icons/lu';
+import { LuFlame, LuTarget, LuCheck, LuZap, LuPencil, LuLock, LuStar, LuChevronRight } from 'react-icons/lu';
+import type { ReactNode } from 'react';
 import { trpc } from '../lib/trpc';
 import { useI18n } from '../i18n/index';
 import { Bar, Ring, cx } from './kit';
@@ -76,5 +77,40 @@ export function DailyGoalCard({ goal, days }: { goal: number; days: { day: strin
         </div>
       )}
     </section>
+  );
+}
+
+export type LessonState = 'done' | 'current' | 'open' | 'locked';
+
+/**
+ * Kurs içeriği satırı (v5): dairesel patika düğümleri yerine düz müfredat listesi.
+ * Neden: durum (tamam/şimdi/açık/kilitli) satırın solunda, başlık ve süre ortada, eylem sağda —
+ * oyun haritası değil, okunur bir içindekiler. Tek dokunuş hedefi tüm satırdır (≥56px).
+ */
+export function LessonRow({ n, title, meta, state, quiz, onOpen, action }: {
+  n: number; title: string; meta?: string; state: LessonState; quiz?: boolean; onOpen?: () => void; action?: ReactNode;
+}) {
+  const { t } = useI18n();
+  const Lead = state === 'done' ? <LuCheck aria-hidden /> : state === 'locked' ? <LuLock aria-hidden /> : quiz ? <LuStar aria-hidden /> : <span>{n}</span>;
+  const body = (
+    <>
+      <span className="lesson-lead" aria-hidden>{Lead}</span>
+      <span className="min-w-0 flex-1">
+        <span className={cx('block truncate font-semibold', state === 'locked' && 'text-ink-3')}>{title}</span>
+        {meta && <span className="block text-xs text-ink-3">{meta}</span>}
+      </span>
+      {action ?? (state === 'current'
+        ? <span className="btn btn-sm btn-pink pointer-events-none shrink-0">{quiz ? t('v4_quiz_go') : t('v4_start')}</span>
+        : state === 'done' ? <span className="shrink-0 text-xs font-semibold text-ink-3">{t('v4_done')}</span>
+        : state === 'open' ? <LuChevronRight className="shrink-0 text-ink-3" aria-hidden /> : null)}
+    </>
+  );
+  const label = `${title}${state === 'locked' ? ` — ${t('v4_locked')}` : state === 'done' ? ` — ${t('v4_done')}` : ''}`;
+  return (
+    <li>
+      {onOpen
+        ? <button type="button" className="lesson-row" data-state={state} onClick={onOpen} aria-label={label} aria-current={state === 'current' ? 'step' : undefined}>{body}</button>
+        : <div className="lesson-row" data-state={state}>{body}</div>}
+    </li>
   );
 }

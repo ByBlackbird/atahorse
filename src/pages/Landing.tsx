@@ -2,9 +2,11 @@
 // Sahte kullanıcı sayısı / yorum yok: kanıt = çalışan örnek ders + gerçek bekleme listesi.
 import { useEffect, useState, type FormEvent, type ReactNode } from 'react';
 import {
-  LuArrowRight, LuBookOpen, LuHeadphones, LuPresentation, LuCheck, LuX, LuGraduationCap, LuShieldCheck, LuSparkles,
-  LuNetwork, LuChevronDown, LuPlay, LuPause, LuLayers, LuRepeat, LuLanguages, LuCircleCheck, LuQuote,
+  LuArrowRight, LuBookOpen, LuHeadphones, LuPresentation, LuCheck, LuX, LuShieldCheck, LuSparkles,
+  LuNetwork, LuChevronDown, LuPlay, LuPause, LuRepeat, LuCircleCheck, LuQuote,
+  LuSearch, LuFlame, LuTarget, LuRoute, LuLeaf, LuCode, LuLandmark, LuCoins, LuBrain, LuMusic,
 } from 'react-icons/lu';
+import { useNavigate } from '../lib/router';
 import { Link } from '../lib/router';
 import { getRef } from '../lib/ref';
 import { trpc, errCode } from '../lib/trpc';
@@ -13,39 +15,7 @@ import { useMe } from '../ui/providers';
 import { ErrorBox, Logo, Spinner, cx } from '../ui/kit';
 import { Shell, LangSelect } from '../app/Shell';
 import { PRINCIPLES } from '../../shared/engine/science';
-import { PROFILES } from '../../shared/engine/profiles';
-import { METHODS } from '../../shared/engine/methods';
-import type { Locale } from '../../shared/types';
-
-/* ---------------- zihin haritası imzası ---------------- */
-const ART: Record<Locale, string[]> = {
-  tr: ['Fotosentez', 'Işık evresi', 'Calvin döngüsü', 'Klorofil', 'Glikoz', 'Karbon döngüsü', 'ATP'],
-  en: ['Photosynthesis', 'Light reactions', 'Calvin cycle', 'Chlorophyll', 'Glucose', 'Carbon cycle', 'ATP'],
-  ru: ['Фотосинтез', 'Световая фаза', 'Цикл Кальвина', 'Хлорофилл', 'Глюкоза', 'Цикл углерода', 'АТФ'],
-};
-
-function MindMapArt({ lang }: { lang: Locale }) {
-  const L = ART[lang];
-  const nodes = [
-    { x: 300, y: 190, w: 140, label: L[0]!, root: true },
-    { x: 130, y: 90, w: 128, label: L[1]! },
-    { x: 470, y: 92, w: 128, label: L[2]! },
-    { x: 120, y: 300, w: 112, label: L[3]! },
-    { x: 480, y: 296, w: 108, label: L[4]! },
-    { x: 300, y: 350, w: 128, label: L[5]! },
-  ];
-  return (
-    <svg viewBox="0 0 600 420" className="h-full w-full" role="img" aria-label={L[0]}>
-      {nodes.slice(1).map((n) => <line key={n.label} x1={300} y1={190} x2={n.x} y2={n.y} stroke="var(--c-line-strong)" strokeWidth="1.5" />)}
-      {nodes.map((n) => (
-        <g key={n.label} transform={`translate(${n.x - n.w / 2},${n.y - 17})`}>
-          <rect width={n.w} height={34} rx={17} fill={n.root ? 'var(--c-brand)' : 'var(--c-surface)'} stroke={n.root ? 'var(--c-brand)' : 'var(--c-line-strong)'} />
-          <text x={n.w / 2} y={22} textAnchor="middle" fontSize="13" fontWeight={600} fill={n.root ? 'var(--c-brand-ink)' : 'var(--c-ink)'} fontFamily="Inter, sans-serif">{n.label}</text>
-        </g>
-      ))}
-    </svg>
-  );
-}
+import { LessonRow } from '../ui/learn';
 
 /* ---------------- canlı örnek ders: aynı konu, üç kapı ---------------- */
 type Mode = 'read' | 'listen' | 'slides';
@@ -207,221 +177,265 @@ function Waitlist() {
 }
 
 /* ---------------- sayfa ---------------- */
-function Section({ id, eyebrow, title, sub, children, tone }: { id?: string; eyebrow: string; title: string; sub?: string; children: ReactNode; tone?: 'surface' }) {
+function Section({ id, eyebrow, title, sub, children, center }: { id?: string; eyebrow: string; title: string; sub?: string; children: ReactNode; center?: boolean }) {
   return (
-    <section id={id} className={cx(tone === 'surface' && 'border-y border-line bg-surface')}>
+    <section id={id}>
       <div className="wrap py-16 md:py-24">
-        <p className="eyebrow">{eyebrow}</p>
-        <h2 className="h-display t-title mt-3 max-w-3xl">{title}</h2>
-        {sub && <p className="t-callout mt-4 max-w-2xl text-ink-2">{sub}</p>}
+        <div className={cx(center && 'mx-auto max-w-2xl text-center')}>
+          <p className="eyebrow !text-brand">{eyebrow}</p>
+          <h2 className={cx('h-display t-title mt-3', !center && 'max-w-3xl')}>{title}</h2>
+          {center && <span className="mx-auto mt-4 block h-1 w-16 rounded-full bg-brand" aria-hidden />}
+          {sub && <p className={cx('t-callout mt-4 text-ink-2', !center && 'max-w-2xl')}>{sub}</p>}
+        </div>
         <div className="mt-10 md:mt-12">{children}</div>
       </div>
     </section>
   );
 }
 
+/** Konu arama kutusu (Nuton): yazılan konu saklanır, kayıttan sonra kurs oluşturmada hazır gelir. */
+function TopicSearch({ big }: { big?: boolean }) {
+  const { t } = useI18n();
+  const { me } = useMe();
+  const navigate = useNavigate();
+  const [q, setQ] = useState('');
+  const go = (topic: string) => {
+    const v = topic.trim();
+    if (v) { try { localStorage.setItem('ah-topic', v.slice(0, 120)); } catch { /* gizli pencere */ } }
+    navigate(me ? `/kurs-olustur${v ? `?konu=${encodeURIComponent(v)}` : ''}` : '/kayit');
+  };
+  const chips = [1, 2, 3, 4, 5].map((n) => t(`v5_topic_${n}`));
+  return (
+    <div>
+      <form onSubmit={(e) => { e.preventDefault(); go(q); }} className={cx('glass flex items-center gap-2 p-2', big ? 'max-w-xl' : '')} role="search">
+        <LuSearch className="ml-3 shrink-0 text-xl text-ink-3" aria-hidden />
+        <label htmlFor="topic-q" className="sr-only">{t('v5_search_label')}</label>
+        <input id="topic-q" className="min-w-0 flex-1 bg-transparent px-1 py-2.5 text-[16px] outline-none placeholder:text-ink-3" placeholder={t('v5_search_ph')} value={q} onChange={(e) => setQ(e.target.value)} maxLength={120} />
+        <button type="submit" className="btn btn-pink shrink-0">{t('v5_search_go')} <LuArrowRight /></button>
+      </form>
+      <div className="mt-4 flex flex-wrap items-center gap-2">
+        <span className="text-sm font-semibold text-ink-3">{t('v5_try')}</span>
+        {chips.map((c) => <button key={c} type="button" onClick={() => go(c)} className="chip !min-h-8 cursor-pointer transition-colors duration-200 hover:!border-brand hover:!text-brand">{c}</button>)}
+      </div>
+    </div>
+  );
+}
+
+/** Hero sağ tarafı: ürünün kendisinden parçalar (cam kartlar) — gerçek ekran öğeleri, sahte metrik yok. */
+function HeroCollage() {
+  const { t } = useI18n();
+  return (
+    <div className="relative mx-auto w-full max-w-xl lg:mx-0">
+      <DemoCard />
+      <div className="glass anim-rise absolute -left-10 -top-24 hidden w-56 p-4 md:block" style={{ animationDelay: '200ms' }} aria-hidden>
+        <p className="flex items-center gap-2 text-sm font-bold"><LuFlame className="text-gold" /> {t('v5_card_streak')}</p>
+        <div className="mt-3 flex gap-1.5">{[1, 1, 1, 1, 0, 0, 0].map((on, i) => <span key={i} className={cx('h-6 w-6 rounded-full', on ? 'bg-gold' : 'bg-surface-3')} />)}</div>
+      </div>
+      <div className="glass anim-rise absolute -bottom-8 -right-4 hidden w-60 p-4 md:block" style={{ animationDelay: '320ms' }} aria-hidden>
+        <p className="flex items-center gap-2 text-sm font-bold"><LuTarget className="text-brand" /> {t('v4_goal')}</p>
+        <div className="mt-3 h-2.5 overflow-hidden rounded-full bg-surface-3"><div className="h-full w-2/3 rounded-full bg-brand" /></div>
+        <p className="mt-2 text-xs font-semibold text-ink-3">20 / 30 XP</p>
+      </div>
+    </div>
+  );
+}
+
+const SAMPLE_ICONS = [LuLeaf, LuCode, LuLandmark, LuCoins, LuBrain, LuMusic];
+
 export default function Landing() {
   const { t, lang } = useI18n();
   const { me } = useMe();
   const start = me ? '/panel' : '/kayit';
-  const facts = [
-    { icon: <LuLayers />, text: t('l_fact_modes') },
-    { icon: <LuSparkles />, text: t('l_fact_engine') },
-    { icon: <LuRepeat />, text: t('l_fact_fsrs') },
-    { icon: <LuLanguages />, text: t('l_fact_langs') },
+  const features = [
+    { icon: <LuSparkles />, title: t('v5_f1_t'), body: t('v5_f1_d') },
+    { icon: <LuRoute />, title: t('v5_f2_t'), body: t('v5_f2_d') },
+    { icon: <LuPresentation />, title: t('v5_f3_t'), body: t('v5_f3_d') },
+    { icon: <LuRepeat />, title: t('v5_f4_t'), body: t('v5_f4_d') },
+    { icon: <LuFlame />, title: t('v5_f5_t'), body: t('v5_f5_d') },
+    { icon: <LuShieldCheck />, title: t('v5_f6_t'), body: t('v5_f6_d') },
   ];
   const steps = [1, 2, 3].map((n) => ({ n, title: t(`l_how${n}_t`), body: t(`l_how${n}_d`) }));
   const modes = [
     { icon: <LuBookOpen />, title: t('l_mode_read'), body: t('l_mode_read_d') },
     { icon: <LuHeadphones />, title: t('l_mode_pod'), body: t('l_mode_pod_d') },
-    { icon: <LuPresentation />, title: t('l_mode_slide'), body: t('l_mode_slide_d') },
+    { icon: <LuPresentation />, title: t('s_mode_slides'), body: t('v5_mode_visual_d') },
+    { icon: <LuNetwork />, title: t('l_feat_map_t'), body: t('l_feat_map_d') },
   ];
-  const journey = [1, 2, 3, 4].map((n) => ({ n, title: t(`l_jr${n}_t`), body: t(`l_jr${n}_d`) }));
+  const samples = [1, 2, 3, 4, 5, 6].map((n) => ({ n, title: t(`v5_s${n}_t`), units: t(`v5_s${n}_u`) }));
   const faqs = [1, 2, 3, 4, 5].map((n) => ({ q: t(`l_faq${n}_q`), a: t(`l_faq${n}_a`) }));
   const headerNav = (
     <>
+      <a href="#ozellikler" className="btn btn-ghost btn-sm">{t('v5_nav_features')}</a>
       <a href="#nasil" className="btn btn-ghost btn-sm">{t('nav_how')}</a>
       <a href="#bilim" className="btn btn-ghost btn-sm">{t('nav_science')}</a>
-      <a href="#sss" className="btn btn-ghost btn-sm">{t('nav_faq')}</a>
+      <a href="#fiyat" className="btn btn-ghost btn-sm">{t('v5_nav_pricing')}</a>
     </>
   );
 
   return (
     <Shell bare headerNav={headerNav}>
-      {/* HERO */}
-      <section className="dotgrid border-b border-line">
-        <div className="wrap grid items-center gap-12 py-14 md:py-20 lg:grid-cols-[1fr_1.05fr] lg:py-28">
+      {/* HERO — aurora zemin, büyük başlık, konu arama, ürün parçaları */}
+      <section>
+        <div className="wrap grid items-center gap-14 pb-20 pt-12 md:pt-16 lg:grid-cols-[1.05fr_1fr] lg:pb-28 lg:pt-20">
           <div className="anim-rise">
-            <p className="eyebrow">{t('l_eyebrow')}</p>
-            <h1 className="h-display t-large mt-4">{t('l_title')}</h1>
-            <p className="mt-6 max-w-xl text-lg leading-relaxed text-ink-2">{t('l_sub')}</p>
-            <div className="mt-8 flex flex-wrap gap-3">
-              <Link to={start} className="btn btn-primary btn-lg">{me ? t('nav_dashboard') : t('l_cta')} <LuArrowRight /></Link>
-              <a href="#bekleme-listesi" className="btn btn-outline btn-lg">{t('l_wl_cta')}</a>
-            </div>
-            <p className="t-footnote mt-4 text-ink-3">{t('l_note')}</p>
+            <span className="chip chip-pink !min-h-8 !px-3"><span className="h-2 w-2 rounded-full bg-pink" aria-hidden /> {t('v5_badge')}</span>
+            <h1 className="h-display mt-5 text-[clamp(2.75rem,6.4vw,5rem)]">{t('v5_title_a')} <span className="text-brand">{t('v5_title_b')}</span></h1>
+            <p className="mt-6 max-w-xl text-lg leading-relaxed text-ink-2">{t('v5_sub')}</p>
+            <div className="mt-8"><TopicSearch big /></div>
+            <p className="t-footnote mt-5 flex items-center gap-2 text-ink-3"><LuCheck className="text-ok" aria-hidden /> {t('l_note')}</p>
             <div className="mt-6 sm:hidden"><LangSelect compact /></div>
           </div>
-          <DemoCard />
+          <HeroCollage />
         </div>
       </section>
 
-      {/* GERÇEK ÜRÜN GERÇEKLERİ */}
-      <section className="border-b border-line bg-surface">
-        <ul className="wrap grid grid-cols-2 gap-x-6 gap-y-4 py-6 md:grid-cols-4">
-          {facts.map((f) => (
-            <li key={f.text} className="flex items-center gap-2.5 text-sm font-semibold text-ink-2"><span className="text-lg text-gold">{f.icon}</span>{f.text}</li>
-          ))}
-        </ul>
+      {/* ÖZELLİKLER (Luma) — yuvarlak simgeli 3×2 ızgara */}
+      <section id="ozellikler" className="border-y border-line bg-surface">
+        <div className="wrap py-16 md:py-24">
+          <div className="mx-auto max-w-2xl text-center">
+            <p className="eyebrow !text-brand">{t('v5_feat_k')}</p>
+            <h2 className="h-display t-title mt-3">{t('v5_feat_t')}</h2>
+            <span className="mx-auto mt-4 block h-1 w-16 rounded-full bg-brand" aria-hidden />
+          </div>
+          <ul className="mt-12 grid gap-x-10 gap-y-10 sm:grid-cols-2 lg:grid-cols-3">
+            {features.map((f) => (
+              <li key={f.title} className="flex gap-4">
+                <span className="grid h-12 w-12 shrink-0 place-items-center rounded-full bg-night text-xl text-on-night">{f.icon}</span>
+                <span>
+                  <span className="block text-lg font-semibold">{f.title}</span>
+                  <span className="mt-1 block text-[15px] leading-relaxed text-ink-2">{f.body}</span>
+                </span>
+              </li>
+            ))}
+          </ul>
+        </div>
       </section>
 
-      {/* NASIL ÇALIŞIR — sıralı adımlar */}
+      {/* NASIL ÇALIŞIR */}
       <Section id="nasil" eyebrow={t('l_how_k')} title={t('l_how_t')}>
-        <ol className="grid gap-4 md:grid-cols-3">
+        <ol className="grid gap-5 md:grid-cols-3">
           {steps.map((s) => (
-            <li key={s.n} className="card p-6">
-              <span className="grid h-10 w-10 place-items-center rounded-full bg-brand text-sm font-bold text-brand-ink">{s.n}</span>
-              <h3 className="t-headline mt-5">{s.title}</h3>
+            <li key={s.n} className="glass p-7">
+              <span className="font-display text-5xl font-bold text-brand">{String(s.n).padStart(2, '0')}</span>
+              <h3 className="mt-4 text-xl font-semibold">{s.title}</h3>
               <p className="mt-2 text-[15px] leading-relaxed text-ink-2">{s.body}</p>
             </li>
           ))}
         </ol>
       </Section>
 
-      {/* İÇİNDE NE VAR — bento */}
-      <Section eyebrow={t('l_feat_k')} title={t('l_feat_t')} sub={t('l_modes_s')} tone="surface">
-        <div className="grid gap-4 md:grid-cols-3">
-          {modes.map((m) => (
-            <article key={m.title} className="card p-6">
-              <div className="grid h-11 w-11 place-items-center rounded-xl bg-brand-soft text-xl text-brand">{m.icon}</div>
-              <h3 className="t-headline mt-5">{m.title}</h3>
-              <p className="mt-2 text-[15px] leading-relaxed text-ink-2">{m.body}</p>
-            </article>
-          ))}
-          <article className="card flex flex-col overflow-hidden md:col-span-2">
-            <div className="flex items-start gap-3 p-6 pb-0">
-              <div className="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-brand-soft text-xl text-brand"><LuNetwork /></div>
-              <div><h3 className="t-headline">{t('l_feat_map_t')}</h3><p className="mt-1 text-[15px] text-ink-2">{t('l_feat_map_d')}</p></div>
-            </div>
-            <div className="dotgrid mt-4 min-h-64 flex-1 border-t border-line"><MindMapArt lang={lang} /></div>
-          </article>
-          <div className="grid gap-4">
-            <article className="card p-6">
-              <div className="grid h-11 w-11 place-items-center rounded-xl bg-gold-soft text-xl text-gold-ink"><LuSparkles /></div>
-              <h3 className="t-headline mt-5">{t('l_feat_ai_t')}</h3>
-              <p className="mt-2 text-[15px] leading-relaxed text-ink-2">{t('l_feat_ai_d')}</p>
-            </article>
-            <article className="card p-6">
-              <div className="grid h-11 w-11 place-items-center rounded-xl bg-brand-soft text-xl text-brand"><LuGraduationCap /></div>
-              <h3 className="t-headline mt-5">{t('l_meb_t')}</h3>
-              <p className="mt-2 text-[15px] leading-relaxed text-ink-2">{t('l_meb_s')}</p>
-            </article>
-          </div>
-          <article className="card flex flex-col justify-between p-6 md:col-span-3 md:flex-row md:items-center md:gap-10">
-            <div className="max-w-md">
-              <div className="grid h-11 w-11 place-items-center rounded-xl bg-gold-soft text-xl text-gold-ink"><LuShieldCheck /></div>
-              <h3 className="t-headline mt-5">{t('l_feat_cert_t')}</h3>
-              <p className="mt-2 text-[15px] leading-relaxed text-ink-2">{t('l_feat_cert_d')}</p>
-              <p className="mt-2 text-[15px] leading-relaxed text-ink-2">{t('l_proof_s')}</p>
-            </div>
-            <div className="mt-6 flex-1 rounded-2xl border border-line-strong p-6 md:mt-0" aria-label={t('l_sample_cert')}>
-              <div className="flex items-center justify-between"><Logo className="h-6" /><span className="chip">{t('l_sample_cert')}</span></div>
-              <div className="py-6 text-center">
-                <p className="eyebrow">{t('c_title')}</p>
-                <p className="h-display mt-3 text-2xl text-ink-3">{t('l_sample_name')}</p>
-                <p className="mt-2 text-sm font-semibold">{t('l_demo_topic')}</p>
-              </div>
-              <div className="flex items-center justify-between border-t border-line pt-3 text-xs text-ink-3"><span>{t('c_code')}: ATA-····</span><span className="inline-flex items-center gap-1"><LuShieldCheck /> QR</span></div>
-            </div>
-          </article>
-        </div>
+      {/* ÖRNEK KURSLAR (Luma kurs kartları) — tıklayınca o konuyla başlar */}
+      <Section eyebrow={t('v5_samples_k')} title={t('v5_samples_t')} sub={t('v5_samples_s')}>
+        <ul className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          {samples.map((c, i) => {
+            const Icon = SAMPLE_ICONS[i];
+            return (
+              <li key={c.n} data-k={(i % 6) + 1}>
+                <Link to={start} onClick={() => { try { localStorage.setItem('ah-topic', c.title); } catch { /* gizli pencere */ } }} className="card-i group block overflow-hidden">
+                  <div className="bg-k grid h-36 place-items-center">
+                    <span className="grid h-16 w-16 place-items-center rounded-2xl bg-surface/20 text-3xl transition-transform duration-200 group-hover:scale-110"><Icon aria-hidden /></span>
+                  </div>
+                  <div className="p-5">
+                    <h3 className="text-lg font-semibold leading-snug">{c.title}</h3>
+                    <p className="mt-1 text-sm text-ink-3">{c.units}</p>
+                    <p className="mt-4 flex items-center justify-between border-t border-line pt-3 text-sm font-semibold text-brand">{t('v5_samples_go')} <LuArrowRight className="transition-transform duration-200 group-hover:translate-x-1" /></p>
+                  </div>
+                </Link>
+              </li>
+            );
+          })}
+        </ul>
       </Section>
+
+      {/* DÖRT KAPI + KURS YOLU — ürünün içi */}
+      <section className="border-y border-line bg-surface">
+        <div className="wrap grid items-center gap-12 py-16 md:py-24 lg:grid-cols-2">
+          <div>
+            <p className="eyebrow !text-brand">{t('l_feat_k')}</p>
+            <h2 className="h-display t-title mt-3">{t('v5_modes_t')}</h2>
+            <p className="t-callout mt-4 text-ink-2">{t('l_modes_s')}</p>
+            <ul className="mt-8 grid gap-4 sm:grid-cols-2">
+              {modes.map((m) => (
+                <li key={m.title} className="flex gap-3">
+                  <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-brand-soft text-lg text-brand">{m.icon}</span>
+                  <span><span className="block font-semibold">{m.title}</span><span className="block text-sm text-ink-2">{m.body}</span></span>
+                </li>
+              ))}
+            </ul>
+          </div>
+          {/* Kurs içeriği önizlemesi (gerçek LessonRow bileşeni) */}
+          <div className="glass relative overflow-hidden p-6 md:p-8" data-k="1" aria-label={t('v5_path_label')}>
+            <div className="band-k rounded-2xl p-5">
+              <p className="text-xs font-bold uppercase tracking-[0.14em] opacity-85">{t('v4_unit', { n: 2 })}</p>
+              <p className="h-display mt-1 text-2xl">{t('v5_path_unit')}</p>
+            </div>
+            <ol className="lesson-list mt-5">
+              {(['done', 'done', 'current', 'open', 'locked'] as const).map((st, i) => (
+                <LessonRow key={i} n={i + 1} state={st} quiz={i === 4} title={t(`v5_path_l${i + 1}` as 'v5_path_l1')}
+                  meta={i === 4 ? undefined : t('v5_lesson_n', { n: i + 1 })} />
+              ))}
+            </ol>
+          </div>
+        </div>
+      </section>
 
       {/* BİLİM */}
       <Section id="bilim" eyebrow={t('l_sci_k')} title={t('l_sci_t')} sub={t('l_sci_s')}>
-        <ol className="grid gap-px overflow-hidden rounded-2xl border border-line bg-line sm:grid-cols-2 lg:grid-cols-4">
+        <ol className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {PRINCIPLES.map((p, i) => (
-            <li key={p.id} className="bg-surface p-6">
-              <div className="flex items-baseline gap-2.5">
-                <span className="font-display text-sm font-semibold text-gold-ink">{String(i + 1).padStart(2, '0')}</span>
-                <h3 className="t-headline">{p.name[lang]}</h3>
-              </div>
+            <li key={p.id} className="glass p-6">
+              <span className="font-display text-3xl font-bold text-brand">{String(i + 1).padStart(2, '0')}</span>
+              <h3 className="mt-3 text-lg font-semibold">{p.name[lang]}</h3>
               <p className="mt-2 text-[15px] text-ink-2">{p.how[lang]}</p>
               <p className="t-footnote mt-3 italic text-ink-3">{p.evidence}</p>
             </li>
           ))}
         </ol>
-        <div className="mt-6 flex gap-3 rounded-2xl bg-surface-2 p-5">
+        <div className="glass mt-6 flex gap-3 p-5">
           <LuCircleCheck className="mt-0.5 shrink-0 text-lg text-brand" />
           <p className="text-[15px] leading-relaxed text-ink-2">{t('l_honest')}</p>
         </div>
       </Section>
 
-      {/* MOTOR */}
-      <Section eyebrow={t('l_engine_k')} title={t('l_engine_t')} sub={t('l_engine_s')} tone="surface">
-        <div className="grid gap-4 lg:grid-cols-[1.4fr_1fr]">
-          <div className="grid gap-3 sm:grid-cols-2">
-            {Object.values(PROFILES).map((p) => (
-              <div key={p.key} className="card p-5">
-                <h3 className="t-headline">{p.name[lang]}</h3>
-                <p className="mt-1.5 text-[15px] text-ink-2">{p.tagline[lang]}</p>
-                <p className="mt-3"><span className="chip">{t(`modality_${p.modality}`)} · {t(`reasoning_${p.reasoning}`)}</span></p>
-              </div>
-            ))}
-          </div>
-          <div className="card p-6">
-            <h3 className="eyebrow">{t('n_method')}</h3>
-            <ul className="mt-2 divide-y divide-line">
-              {Object.values(METHODS).map((m) => (
-                <li key={m.key} className="py-3.5">
-                  <p className="font-semibold">{m.name[lang]}</p>
-                  <p className="mt-0.5 text-[15px] text-ink-2">{m.short[lang]}</p>
-                </li>
-              ))}
+      {/* FİYAT (Luma) — fiyat yazılmaz: henüz test edilmedi */}
+      <Section id="fiyat" eyebrow={t('v5_nav_pricing')} title={t('v5_price_t')} sub={t('v5_price_s')} center>
+        <div className="mx-auto grid max-w-4xl gap-5 md:grid-cols-2">
+          <div className="card flex flex-col p-7">
+            <p className="text-sm font-bold uppercase tracking-[0.14em] text-ink-3">{t('v5_free')}</p>
+            <p className="h-display mt-3 text-4xl">{t('v5_free_price')}</p>
+            <ul className="mt-6 space-y-3 text-[15px]">
+              {[1, 2, 3, 4].map((n) => <li key={n} className="flex gap-2.5"><LuCheck className="mt-0.5 shrink-0 text-ok" aria-hidden />{t(`v5_free_${n}`)}</li>)}
             </ul>
+            <Link to={start} className="btn btn-outline btn-lg mt-8 w-full">{t('l_cta')}</Link>
+          </div>
+          <div className="relative flex flex-col overflow-hidden rounded-[16px] bg-night p-7 text-on-night">
+            <span className="chip chip-pink absolute right-5 top-5">{t('v5_soon')}</span>
+            <p className="text-sm font-bold uppercase tracking-[0.14em] text-on-night-2">Premium</p>
+            <p className="h-display mt-3 text-4xl">{t('v5_premium_price')}</p>
+            <ul className="mt-6 space-y-3 text-[15px]">
+              {[1, 2, 3, 4].map((n) => <li key={n} className="flex gap-2.5"><LuCheck className="mt-0.5 shrink-0 text-on-night-gold" aria-hidden />{t(`v5_prem_${n}`)}</li>)}
+            </ul>
+            <a href="#bekleme-listesi" className="btn btn-pink btn-lg mt-8 w-full">{t('l_wl_cta')}</a>
           </div>
         </div>
-      </Section>
-
-      {/* YOLCULUK — zaman çizelgesi (gerçek aşamalar) */}
-      <Section eyebrow={t('l_jr_k')} title={t('l_jr_t')} sub={t('l_jr_s')}>
-        <ol className="relative grid gap-6 md:grid-cols-4 md:gap-4">
-          <span aria-hidden className="absolute left-[19px] top-2 bottom-2 w-px bg-line-strong md:left-0 md:right-0 md:top-[19px] md:bottom-auto md:h-px md:w-auto" />
-          {journey.map((j) => {
-            const now = j.n === 3;
-            const next = j.n === 4;
-            return (
-              <li key={j.n} className="relative flex gap-4 md:flex-col">
-                <span className={cx('relative z-10 grid h-10 w-10 shrink-0 place-items-center rounded-full border-2 text-sm font-bold',
-                  now ? 'border-brand bg-brand text-brand-ink' : next ? 'border-dashed border-line-strong bg-bg text-ink-3' : 'border-brand bg-surface text-brand')}>
-                  {next ? <LuArrowRight /> : <LuCheck />}
-                </span>
-                <div>
-                  <p className="t-headline flex flex-wrap items-center gap-2">{j.title}{now && <span className="chip chip-gold">{t('l_jr_now')}</span>}</p>
-                  <p className="mt-1.5 text-[15px] leading-relaxed text-ink-2">{j.body}</p>
-                </div>
-              </li>
-            );
-          })}
-        </ol>
       </Section>
 
       {/* KURUCUDAN + BEKLEME LİSTESİ */}
       <section id="bekleme-listesi" className="border-y border-line bg-surface">
         <div className="wrap grid gap-12 py-16 md:py-24 lg:grid-cols-2 lg:gap-16">
           <div className="flex flex-col">
-            <p className="eyebrow">{t('l_fd_k')}</p>
+            <p className="eyebrow !text-brand">{t('l_fd_k')}</p>
             <figure className="mt-5">
-              <LuQuote className="text-3xl text-gold" aria-hidden />
-              <blockquote className="h-display mt-4 text-2xl leading-snug md:text-[1.75rem]">{t('l_fd_q')}</blockquote>
+              <LuQuote className="text-3xl text-pink" aria-hidden />
+              <blockquote className="h-display mt-4 text-2xl leading-snug md:text-3xl">{t('l_fd_q')}</blockquote>
               <figcaption className="mt-6 flex items-center gap-3">
                 <img src="/assets/apple-touch-icon.png" alt="" className="h-11 w-11 rounded-full" />
                 <span><span className="block font-semibold">Işıl Can</span><span className="t-footnote block text-ink-3">{t('l_fd_role')}</span></span>
               </figcaption>
             </figure>
           </div>
-          <div className="card elev-1 p-6 md:p-8">
-            <p className="eyebrow">{t('l_wl_k')}</p>
+          <div className="glass p-6 md:p-8">
+            <p className="eyebrow !text-pink">{t('l_wl_k')}</p>
             <h2 className="h-display t-title mt-3">{t('l_wl_t')}</h2>
             <p className="mt-3 text-[15px] leading-relaxed text-ink-2">{t('l_wl_s')}</p>
             <div className="mt-6"><Waitlist /></div>
@@ -429,34 +443,45 @@ export default function Landing() {
         </div>
       </section>
 
-      {/* SSS — aşamalı açılım */}
-      <Section id="sss" eyebrow={t('l_faq_k')} title={t('l_faq_t')}>
-        <div className="max-w-3xl divide-y divide-line border-y border-line">
+      {/* SSS */}
+      <Section id="sss" eyebrow={t('l_faq_k')} title={t('l_faq_t')} center>
+        <div className="mx-auto max-w-3xl divide-y divide-line overflow-hidden rounded-[16px] border border-line bg-surface">
           {faqs.map((f) => (
             <details key={f.q} className="disclosure group">
-              <summary className="px-1 text-[17px]">{f.q}<LuChevronDown className="chev shrink-0 text-ink-3" aria-hidden /></summary>
-              <p className="px-1 pb-5 text-[15px] leading-relaxed text-ink-2">{f.a}</p>
+              <summary className="px-5 text-[17px]">{f.q}<LuChevronDown className="chev shrink-0 text-ink-3" aria-hidden /></summary>
+              <p className="px-5 pb-5 text-[15px] leading-relaxed text-ink-2">{f.a}</p>
             </details>
           ))}
         </div>
       </Section>
 
-      {/* KAPANIŞ */}
-      <section className="bg-night text-on-night">
-        <div className="wrap flex flex-col items-center py-20 text-center md:py-24">
-          <Logo variant="dark" className="h-9" />
-          <p className="h-display mt-8 max-w-2xl text-2xl md:text-3xl">{t('l_close')}</p>
-          <Link to={start} className="btn btn-gold btn-lg mt-8">{me ? t('nav_dashboard') : t('l_cta')} <LuArrowRight /></Link>
-        </div>
-      </section>
-      <footer className="border-t border-line">
-        <div className="wrap flex flex-col gap-4 py-8 text-sm text-ink-3 md:flex-row md:items-center md:justify-between">
-          <span>© {new Date().getFullYear()} {t('l_footer')} · {t('l_ft_rights')}</span>
-          <nav className="flex flex-wrap gap-x-1" aria-label="footer">
-            <Link to="/dogrula" className="btn btn-ghost btn-sm">{t('nav_verify')}</Link>
-            <a href="#bekleme-listesi" className="btn btn-ghost btn-sm">{t('l_wl_k')}</a>
-            <Link to="/giris" className="btn btn-ghost btn-sm">{t('nav_login')}</Link>
-          </nav>
+      {/* KAPANIŞ + ALTBİLGİ (Luma lacivert) */}
+      <footer className="bg-night text-on-night">
+        <div className="wrap py-16 md:py-20">
+          <div className="flex flex-col items-start justify-between gap-8 border-b border-on-night/15 pb-12 md:flex-row md:items-center">
+            <p className="h-display max-w-xl text-3xl md:text-4xl">{t('l_close')}</p>
+            <Link to={start} className="btn btn-pink btn-lg">{me ? t('nav_dashboard') : t('l_cta')} <LuArrowRight /></Link>
+          </div>
+          <div className="grid gap-10 pt-12 md:grid-cols-[1.4fr_1fr_1fr]">
+            <div>
+              <Logo variant="dark" className="h-8" />
+              <p className="mt-4 max-w-sm text-sm leading-relaxed text-on-night-2">{t('v5_footer_about')}</p>
+            </div>
+            <nav aria-label={t('v5_footer_product')} className="flex flex-col gap-2 text-sm">
+              <p className="mb-1 font-semibold">{t('v5_footer_product')}</p>
+              <a href="#ozellikler" className="text-on-night-2 transition-colors hover:text-on-night">{t('v5_nav_features')}</a>
+              <a href="#nasil" className="text-on-night-2 transition-colors hover:text-on-night">{t('nav_how')}</a>
+              <a href="#fiyat" className="text-on-night-2 transition-colors hover:text-on-night">{t('v5_nav_pricing')}</a>
+              <a href="#sss" className="text-on-night-2 transition-colors hover:text-on-night">{t('nav_faq')}</a>
+            </nav>
+            <nav aria-label={t('v5_footer_account')} className="flex flex-col gap-2 text-sm">
+              <p className="mb-1 font-semibold">{t('v5_footer_account')}</p>
+              <Link to="/kayit" className="text-on-night-2 transition-colors hover:text-on-night">{t('l_cta')}</Link>
+              <Link to="/giris" className="text-on-night-2 transition-colors hover:text-on-night">{t('nav_login')}</Link>
+              <Link to="/dogrula" className="text-on-night-2 transition-colors hover:text-on-night">{t('nav_verify')}</Link>
+            </nav>
+          </div>
+          <p className="mt-12 text-xs text-on-night-2">© {new Date().getFullYear()} {t('l_footer')} · {t('l_ft_rights')}</p>
         </div>
       </footer>
     </Shell>

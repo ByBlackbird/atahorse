@@ -11,6 +11,27 @@ export function Logo({ className = 'h-7', variant }: { className?: string; varia
   return <img src={dark ? '/assets/wordmark-gold.png' : '/assets/wordmark-navy-gold.png'} alt="ATAhorse.ai" className={cx(className, 'w-auto select-none')} draggable={false} />;
 }
 
+/**
+ * Amblem (at başı) — uygulama içinde yazılı logo yerine kullanılır.
+ * Kural: yazılı logo yalnız tanıtım yüzeylerinde (ana sayfa üst çubuğu ve alt bilgisi). Uygulama, giriş ve
+ * sertifikada amblem + gerekirse arayüz yazı tipinde "Atahorse" adı → logo, çevresindeki tipografiyle çatışmaz.
+ */
+export function Mark({ className = 'h-8', variant }: { className?: string; variant?: 'light' | 'dark' }) {
+  const { theme } = useTheme();
+  const dark = variant ? variant === 'dark' : theme === 'ink';
+  return <img src={dark ? '/assets/emblem-gold.png' : '/assets/emblem-ink.png'} alt="" className={cx(className, 'w-auto select-none')} draggable={false} />;
+}
+
+/** Amblem + ad: uygulama kenar çubuğu gibi adın görünmesi gereken dar yerler için. */
+export function BrandLockup({ variant, className }: { variant?: 'light' | 'dark'; className?: string }) {
+  return (
+    <span className={cx('inline-flex items-center gap-2.5', className)}>
+      <Mark className="h-8" variant={variant} />
+      <span className="font-display text-[22px] font-bold leading-none tracking-tight">Atahorse</span>
+    </span>
+  );
+}
+
 export function Ring({ value, size = 56, stroke = 5, color = 'var(--c-gold)', children, label }: { value: number; size?: number; stroke?: number; color?: string; children?: ReactNode; label?: string }) {
   const r = (size - stroke) / 2;
   const c = 2 * Math.PI * r;
@@ -53,6 +74,27 @@ export function ErrorBox({ children, className }: { children: ReactNode; classNa
     <div role="alert" className={cx('flex items-start gap-2 rounded-xl border border-bad/30 bg-bad-soft px-3.5 py-2.5 text-sm text-bad', className)}>
       <LuTriangleAlert className="mt-0.5 shrink-0" /> <span>{children}</span>
     </div>
+  );
+}
+
+/**
+ * İç sayfa girişi (v5): lacivert bant, küçük üst başlık, büyük başlık, açıklama, eylemler.
+ * Tüm iç sayfalar aynı girişle açılır → kullanıcı nerede olduğunu her ekranda aynı yerden okur.
+ */
+export function PageHero({ eyebrow, title, sub, icon, actions, aside, className }: {
+  eyebrow?: ReactNode; title: ReactNode; sub?: ReactNode; icon?: ReactNode; actions?: ReactNode; aside?: ReactNode; className?: string;
+}) {
+  return (
+    <header className={cx('hero-night flex flex-wrap items-center gap-6 p-6 md:p-8', className)}>
+      {icon && <span className="grid h-14 w-14 shrink-0 place-items-center rounded-2xl bg-brand text-2xl text-brand-ink" aria-hidden>{icon}</span>}
+      <div className="min-w-0 flex-1">
+        {eyebrow && <p className="text-xs font-bold uppercase tracking-[0.14em] text-on-night-gold">{eyebrow}</p>}
+        <h1 className="h-display mt-1.5 text-3xl md:text-4xl">{title}</h1>
+        {sub && <p className="hero-sub mt-2 max-w-2xl">{sub}</p>}
+        {actions && <div className="mt-5 flex flex-wrap gap-3">{actions}</div>}
+      </div>
+      {aside}
+    </header>
   );
 }
 

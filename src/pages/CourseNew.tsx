@@ -1,11 +1,11 @@
 import { openUpgrade } from '../lib/upgrade-bus';
 import { useEffect, useMemo, useState } from 'react';
-import { LuArrowRight, LuCheck, LuGraduationCap, LuPencilLine, LuInfo, LuTarget } from 'react-icons/lu';
+import { LuArrowRight, LuCheck, LuGraduationCap, LuPencilLine, LuInfo, LuTarget, LuSparkles } from 'react-icons/lu';
 import { useNavigate } from '../lib/router';
 import { trpc, errCode } from '../lib/trpc';
 import { useErr, useI18n } from '../i18n/index';
 import { Shell } from '../app/Shell';
-import { Bar, ErrorBox, Field, Spinner, cx } from '../ui/kit';
+import { Bar, ErrorBox, PageHero, Field, Spinner, cx } from '../ui/kit';
 import { LOCALES, METHOD_KEYS, type Level, type Locale, type MethodKey } from '../../shared/types';
 import { METHODS } from '../../shared/engine/methods';
 import type { MebGrade } from '../../shared/engine/meb';
@@ -54,7 +54,12 @@ export default function CourseNew() {
   const dash = trpc.profile.dashboard.useQuery();
   const { data: me } = trpc.auth.me.useQuery();
   const [tab, setTab] = useState<'free' | 'meb'>('free');
-  const [topic, setTopic] = useState('');
+  // Açılış sayfasında yazılan konu (?konu= ya da kayıt öncesi saklanan) — kullanıcı tekrar yazmasın
+  const [topic, setTopic] = useState(() => {
+    const q = new URLSearchParams(window.location.search).get('konu');
+    if (q) return q.slice(0, 120);
+    try { return localStorage.getItem('ah-topic')?.slice(0, 120) ?? ''; } catch { return ''; }
+  });
   const [level, setLevel] = useState<Level>('beginner');
   const [locale, setLocale] = useState<Locale>(lang);
   const [method, setMethod] = useState<MethodKey | ''>('');
@@ -76,7 +81,7 @@ export default function CourseNew() {
   useEffect(() => { setUnit(subj?.units[0] ?? ''); }, [subj]);
   useEffect(() => { if (tab === 'meb') setLocale('tr'); }, [tab]);
 
-  const create = trpc.course.create.useMutation({ onSuccess: (r) => setJobId(r.jobId) });
+  const create = trpc.course.create.useMutation({ onSuccess: (r) => { setJobId(r.jobId); try { localStorage.removeItem('ah-topic'); } catch { /* yok */ } } });
   const used = dash.data?.courses.length ?? 0;
   const left = engine.data && me?.plan !== 'premium' && me?.role !== 'admin' ? Math.max(0, engine.data.freeLimit - used) : null;
 
@@ -94,8 +99,7 @@ export default function CourseNew() {
   return (
     <Shell>
       <div className="mx-auto max-w-3xl">
-        <h1 className="h-display text-3xl">{t('n_title')}</h1>
-        <p className="mt-1 text-ink-2">{t('n_sub')}</p>
+        <PageHero icon={<LuSparkles />} title={t('n_title')} sub={t('n_sub')} />
 
         <div className="seg mt-6" role="tablist">
           <button role="tab" aria-pressed={tab === 'free'} onClick={() => setTab('free')}><LuPencilLine /> {t('n_tab_free')}</button>
