@@ -1,0 +1,53 @@
+HAIZ — GÜNCELLEME 45 · Kurucu Paneli: Trafik, Canlı, Kampanya, SEO  (+ 44'ün 404 düzeltmesi dahil)
+==================================================================================================
+44'ü henüz yüklemediyseniz sorun değil: api/lib/vite.ts bu pakette var. 44'ü ayrıca yüklemeyin.
+
+YÜKLENECEK DOSYALAR (14) — GitHub'da aynı yollara, tek commit:
+  Yeni:
+    contracts/traffic.ts
+    api/lib/siteEvents.ts
+    api/founderTraffic.ts
+    src/lib/track.ts
+    src/components/kurucu/TrafficTabs.tsx
+  Değişen:
+    api/lib/vite.ts            (Güncelleme 44 — Google 404 düzeltmesi)
+    api/boot.ts                (ziyaret kaydı ucu: POST /api/e)
+    api/founderRouter.ts       (traffic · live · campaigns · seo)
+    api/leadRouter.ts          (başvuru ↔ ziyaret oturumu eşlemesi)
+    api/lib/migrate.ts         (site_events tablosu + leads.sid sütunu — açılışta kendiliğinden kurulur)
+    db/schema.ts
+    src/App.tsx                (sayfa görüntüleme kaydı)
+    src/pages/Danismanlik.tsx  (başvuru formu oturum kimliğini gönderir)
+    src/pages/Kurucu.tsx       (yeni sekmeler + Özet'te trafik şeridi)
+
+Render: yeni ortam değişkeni GEREKMEZ. Veritabanı değişikliği açılışta otomatik.
+
+KURUCU PANELİNDE YENİ (/kurucu)
+  Özet      → Şu an sitede · 7 gün oturum · başvuru · görüntüleme
+  Trafik    → Oturum, tekil ziyaretçi, başvuru, dönüşüm oranı, sayfa görüntüleme, oturum başına sayfa,
+              tek sayfada çıkış, yeni üye — hepsi önceki döneme göre ▲/▼ (Bugün / 7 / 30 / 90 gün)
+              Saatlik/günlük grafik · Dönüşüm hunisi (oturum → danışmanlık → paket → başvuru → imza)
+              Kanallar · Açılış sayfaları · Yönlendiren siteler · En çok görüntülenen · Çıkış sayfaları · Cihaz · Konum
+  Canlı     → Şu an sitede kaç kişi, hangi sayfada, nereden geldi; son 30 dakikanın hareketleri (15 sn'de yenilenir)
+  Kampanya  → UTM kampanyalarına göre oturum / başvuru / imza · reklamdan gelen ziyaret
+              Kampanya bağlantısı oluşturucu (Instagram, LinkedIn, Google Ads, e-posta)
+              "Başvurular nereden geldi" listesi (her başvurunun kanalı, kampanyası, açılış sayfası, aşaması)
+  SEO       → Teknik SEO puanı ve kontroller (başlık, açıklama, canonical, JSON-LD, robots, site haritası,
+              sayfalar 200 mü, olmayan sayfa 404 mü) · organik arama trafiği · Search Console / PageSpeed bağlantıları
+
+GİZLİLİK (KVKK)
+  Çerez yok. IP adresi saklanmaz (günlük değişen özetle tekil sayılır). Yalnız halka açık sayfalar sayılır;
+  uygulama içi ekranlar sayılmaz. Botlar sayılmaz. Kurucu Paneli'ni açtığınız tarayıcı kendiliğinden sayım dışı kalır
+  (Trafik sekmesindeki kutudan değiştirilir).
+
+DENEME (yükleme + Render "Live" sonrası)
+  1) Telefondan (Wi-Fi kapalı) https://haiz.org/danismanlik?utm_source=instagram&utm_medium=social&utm_campaign=deneme açın.
+  2) Bilgisayarda /kurucu → Canlı: "Şu an sitede 1" görünmeli. Kampanya: "deneme" satırı görünmeli.
+  3) SEO sekmesi → "Sayfalar 200 dönüyor" TAMAM olmalı (44 düzeltmesi).
+  Sayılar yükleme anından itibaren birikir; geçmiş ziyaretler yoktur.
+
+ONAY BEKLEYEN (SEO sekmesinde EKSİK / İYİLEŞTİR olarak görünür)
+  - Her sayfaya kendi başlığı / açıklaması / canonical (sunucu tarafı)
+  - Site haritasına 15 paket sayfası, /login'in çıkarılması
+  - Danışmanlık için Service / FAQ yapılandırılmış verisi
+  - Search Console sorgu verisinin panele çekilmesi (Google hizmet hesabı anahtarı — yalnız Render ortamına)
