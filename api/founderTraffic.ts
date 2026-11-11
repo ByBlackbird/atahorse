@@ -24,7 +24,7 @@ function startOfTodayTR(): number {
   return Date.UTC(y, m - 1, d) - TR_OFFSET;
 }
 
-interface Session {
+export interface Session {
   sid: string;
   vid: string;
   start: number;
@@ -43,7 +43,7 @@ interface Session {
   lead: boolean;
 }
 
-function buildSessions(rows: Ev[]): Map<string, Session> {
+export function buildSessions(rows: Ev[]): Map<string, Session> {
   const out = new Map<string, Session>();
   const sorted = [...rows].sort((a, b) => +new Date(a.createdAt) - +new Date(b.createdAt));
   for (const r of sorted) {

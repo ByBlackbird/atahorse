@@ -1030,3 +1030,35 @@ export const siteEvents = mysqlTable(
   },
   (t) => ({ createdIdx: index("se_created_idx").on(t.createdAt), sidIdx: index("se_sid_idx").on(t.sid) }),
 );
+
+/**
+ * Başvuru zaman çizelgesi (Shopify sipariş "Timeline" karşılığı):
+ * kind: mail (bildirim e-postası) | stage (aşama değişti) | followup (teklif takibi) | comment (kurucu notu) | case (süreç açıldı)
+ */
+export const leadEvents = mysqlTable(
+  "lead_events",
+  {
+    id: serial("id").primaryKey(),
+    leadId: bigint("leadId", { mode: "number", unsigned: true }).notNull(),
+    kind: varchar("kind", { length: 12 }).notNull(),
+    body: varchar("body", { length: 1000 }).notNull(),
+    userId: bigint("userId", { mode: "number", unsigned: true }),
+    createdAt: timestamp("createdAt").defaultNow().notNull(),
+  },
+  (t) => ({ leadIdx: index("le_lead_idx").on(t.leadId) }),
+);
+
+/** Başvuru zaman çizelgesi: kurucu notu ve sistem kayıtları (aşama değişimi, takip) */
+export const leadNotes = mysqlTable(
+  "lead_notes",
+  {
+    id: serial("id").primaryKey(),
+    leadId: bigint("leadId", { mode: "number", unsigned: true }).notNull(),
+    /** note | stage | followup */
+    kind: varchar("kind", { length: 12 }).notNull(),
+    body: varchar("body", { length: 1000 }).notNull(),
+    userId: bigint("userId", { mode: "number", unsigned: true }),
+    createdAt: timestamp("createdAt").defaultNow().notNull(),
+  },
+  (t) => ({ leadIdx: index("ln_lead_idx").on(t.leadId) }),
+);

@@ -94,6 +94,8 @@ export default function App() {
       <Route path="/takip/:kod" element={<Takip />} />
       <Route path="/sistem" element={<Sistem />} />
       <Route path="/kurucu" element={<Kurucu />} />
+      <Route path="/kurucu/:bolum" element={<Kurucu />} />
+      <Route path="/kurucu/:bolum/:id" element={<Kurucu />} />
       <Route path="/isler" element={<Isler />} />
       <Route path="/analitik" element={<Analitik />} />
       <Route path="/santiye/:id/foy" element={<Foy />} />

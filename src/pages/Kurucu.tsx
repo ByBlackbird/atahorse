@@ -1,15 +1,16 @@
 import { useEffect, useState } from "react";
-import { Link, Navigate } from "react-router";
+import { Link, Navigate, useParams } from "react-router";
 import { toast } from "sonner";
 import { trpc } from "@/providers/trpc";
 import { useAuth } from "@/hooks/useAuth";
 import { RequireCompany } from "@/components/RequireCompany";
 import { fmtTL } from "@contracts/patron";
 import { fmtBytes, QUOTA_NUMBERS_CONFIRMED } from "@contracts/quotas";
-import { ERROR_SOURCE_LABEL, FEEDBACK_KINDS, FEEDBACK_STATUS_LABEL, fmtMinutes, WEEKLY_CAPACITY_HOURS } from "@contracts/founder";
+import { ERROR_SOURCE_LABEL, FEEDBACK_KINDS, FEEDBACK_STATUS_LABEL, fmtMinutes, FOUNDER_SECTIONS, WEEKLY_CAPACITY_HOURS } from "@contracts/founder";
 import { APPROVAL_LABEL, CASE_STATUS_LABEL, type ApprovalState, type CaseStatus } from "@contracts/consulting";
 import { FUNNEL_ORDER, LEAD_STAGE_LABEL } from "@contracts/funnel";
-import { Activity, BarChart3, Bug, Clock, Inbox, LifeBuoy, Megaphone, Plus, Search, Trash2, Users, Wallet } from "lucide-react";
+import { Plus, Trash2 } from "lucide-react";
+import { AnaSayfa, BasvuruDetay, BasvurularPage, DanismanlikMusterileri, UrunlerPage } from "@/components/kurucu/CommerceTabs";
 import { CanliTab, KampanyaTab, SeoTab, TrafikTab } from "@/components/kurucu/TrafficTabs";
 import { defaultFounderOptOut } from "@/lib/track";
 
@@ -23,19 +24,6 @@ const dateTimeTR = (d: string | Date | null) => (d ? new Date(d).toLocaleString(
 const todayYmd = () => new Date().toLocaleDateString("sv-SE", { timeZone: "Europe/Istanbul" });
 const inputCls = "chamfer-sm h-11 w-full border border-border bg-background px-3 text-[16px] outline-none focus:border-foreground md:text-[14px]";
 
-const TABS = [
-  { id: "ozet", label: "Özet", icon: Inbox },
-  { id: "trafik", label: "Trafik", icon: BarChart3 },
-  { id: "canli", label: "Canlı", icon: Activity },
-  { id: "kampanya", label: "Kampanya", icon: Megaphone },
-  { id: "seo", label: "SEO", icon: Search },
-  { id: "uyelik", label: "Üyelikler", icon: Users },
-  { id: "para", label: "Para", icon: Wallet },
-  { id: "yardim", label: "Yardım", icon: LifeBuoy },
-  { id: "hata", label: "Hatalar", icon: Bug },
-  { id: "danismanlik", label: "Danışmanlık", icon: Clock },
-] as const;
-type TabId = (typeof TABS)[number]["id"];
 
 function Stat({ label, value, sub, tone }: { label: string; value: string; sub?: string; tone?: "good" | "bad" | "warn" }) {
   const cls = tone === "bad" ? "border-destructive/50 bg-destructive/[0.06]" : tone === "good" ? "border-mint bg-mint-soft" : tone === "warn" ? "border-primary bg-primary/15" : "border-border bg-card";
@@ -90,70 +78,6 @@ function MoneyChart({ d }: { d: Ov["money"] }) {
         <span className="flex items-center gap-1.5"><i className="h-2.5 w-2.5 bg-foreground" /> Giden (Patron paneli)</span>
       </div>
     </div>
-  );
-}
-
-/** Özet: son 7 gün site trafiği (Trafik sekmesinin kısa hali) */
-function TrafficStrip({ go }: { go: (t: TabId) => void }) {
-  const t = trpc.founder.traffic.useQuery({ days: 7 });
-  const live = trpc.founder.live.useQuery(undefined, { refetchInterval: 30_000 });
-  const s = t.data?.summary;
-  return (
-    <div className="mt-3 grid grid-cols-2 gap-3 lg:grid-cols-4">
-      <button onClick={() => go("canli")} className={`chamfer min-h-[44px] border p-4 text-left hover:border-foreground/40 ${live.data?.activeNow ? "border-mint bg-mint-soft" : "border-border bg-card"}`}>
-        <div className="label-caps !text-[10px]">Şu an sitede</div>
-        <div className="mt-1 font-display text-[18px] font-bold tnum">{live.data?.activeNow ?? "—"}</div>
-        <div className="mt-0.5 text-[11.5px] text-muted-foreground">bugün {live.data?.today.sessions ?? "—"} oturum</div>
-      </button>
-      {[
-        { label: "7 gün oturum", v: s ? String(s.sessions) : "—", sub: s ? `${s.visitors} tekil ziyaretçi` : "" },
-        { label: "7 gün başvuru", v: s ? String(s.leads) : "—", sub: s ? `dönüşüm %${s.conv.toLocaleString("tr-TR")}` : "" },
-        { label: "7 gün sayfa görüntüleme", v: s ? String(s.views) : "—", sub: s ? `oturum başına ${s.pagesPerSession.toLocaleString("tr-TR")}` : "" },
-      ].map((x) => (
-        <button key={x.label} onClick={() => go("trafik")} className="chamfer min-h-[44px] border border-border bg-card p-4 text-left hover:border-foreground/40">
-          <div className="label-caps !text-[10px]">{x.label}</div>
-          <div className="mt-1 font-display text-[18px] font-bold tnum">{x.v}</div>
-          <div className="mt-0.5 text-[11.5px] text-muted-foreground">{x.sub}</div>
-        </button>
-      ))}
-    </div>
-  );
-}
-
-function OzetTab({ d, go }: { d: Ov; go: (t: TabId) => void }) {
-  const cur = d.money.incoming[d.money.incoming.length - 1];
-  const cap = d.capacity;
-  const capTone = cap.rule.tone === "red" ? "bad" : cap.rule.tone === "amber" ? "warn" : "good";
-  return (
-    <>
-      <div className="mt-6 grid grid-cols-2 gap-3 lg:grid-cols-4">
-        <Stat label="Şirket" value={String(d.members.companies)} sub={`son 30 gün +${d.members.newCompanies30}`} />
-        <Stat label="Ücretli / deneme" value={`${d.members.premiumPaid} / ${d.members.trial}`} sub={`${d.members.users} kullanıcı`} />
-        <Stat label="Aylık tekrarlayan gelir" value={fmtTL(d.money.mrr)} sub={`bu ay tahsil ${fmtTL(cur.amount)}`} tone={d.money.mrr > 0 ? "good" : undefined} />
-        <Stat label="Danışmanlık kapasitesi" value={`%${cap.current.pct}`} sub={`${fmtMinutes(cap.current.minutes)} / ${cap.capacityHours} sa · ${cap.rule.label}`} tone={capTone} />
-      </div>
-      <TrafficStrip go={go} />
-      <div className="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-3">
-        <button onClick={() => go("para")} className="chamfer min-h-[44px] border border-border bg-card p-4 text-left hover:border-foreground/40">
-          <div className="label-caps !text-[10px]">Onay bekleyen ödeme</div>
-          <div className="mt-1 font-display text-[18px] font-bold tnum">{d.money.pendingCount} · {fmtTL(d.money.pendingAmount)}</div>
-          <div className="mt-0.5 text-[11.5px] text-muted-foreground">Onay Sistem Durumu ekranında</div>
-        </button>
-        <button onClick={() => go("yardim")} className={`chamfer min-h-[44px] border p-4 text-left hover:border-foreground/40 ${d.openFeedback ? "border-primary bg-primary/15" : "border-border bg-card"}`}>
-          <div className="label-caps !text-[10px]">Açık yardım talebi</div>
-          <div className="mt-1 font-display text-[18px] font-bold tnum">{d.openFeedback}</div>
-          <div className="mt-0.5 text-[11.5px] text-muted-foreground">Cevap kullanıcıya bildirim olarak gider</div>
-        </button>
-        <button onClick={() => go("hata")} className={`chamfer min-h-[44px] border p-4 text-left hover:border-foreground/40 ${d.errors7 ? "border-destructive/50 bg-destructive/[0.06]" : "border-border bg-card"}`}>
-          <div className="label-caps !text-[10px]">Son 7 gün sunucu hatası</div>
-          <div className={`mt-1 font-display text-[18px] font-bold tnum ${d.errors7 ? "text-destructive" : ""}`}>{d.errors7}</div>
-          <div className="mt-0.5 text-[11.5px] text-muted-foreground">Yetki ve form hataları sayılmaz</div>
-        </button>
-      </div>
-      <p className="mt-4 text-[13px] text-muted-foreground">
-        {cap.rule.advice} Aktif danışmanlık dosyası: {d.activeCases}.
-      </p>
-    </>
   );
 }
 
@@ -451,7 +375,7 @@ function FunnelCard({ f }: { f: Ov["funnel"] }) {
         {f.dueNow > 0 && (
           <>
             {" "}
-            <Link to="/talepler" className="font-semibold text-destructive underline underline-offset-2">
+            <Link to="/kurucu/basvurular" className="font-semibold text-destructive underline underline-offset-2">
               Bekleyen takip: {f.dueNow}
             </Link>
           </>
@@ -529,56 +453,71 @@ function DanismanlikTab({ d }: { d: Ov }) {
   );
 }
 
-/** /kurucu — yalnız site yöneticisi */
+/**
+ * /kurucu/:bolum — yalnız site yöneticisi. Bölümler yan menüden açılır (Shopify yönetim düzeni):
+ * Ana sayfa · Başvurular (+ ayrıntı) · Ürünler · Müşteriler · Analitik · Canlı görünüm · Pazarlama · SEO · Ödemeler
+ * · Danışmanlık dosyaları · Yardım talepleri · Hatalar
+ */
 export default function Kurucu() {
   const { user, isLoading } = useAuth();
   const isAdmin = user?.role === "admin";
+  const { bolum = "", id } = useParams();
   const q = trpc.founder.overview.useQuery(undefined, { enabled: isAdmin, refetchInterval: 5 * 60_000 });
-  const [tab, setTab] = useState<TabId>("ozet");
-  // Kurucunun kendi ziyaretleri trafik sayımını şişirmesin (Trafik sekmesinden değiştirilebilir)
+  const [musteri, setMusteri] = useState<"danismanlik" | "yazilim">("danismanlik");
+  // Kurucunun kendi ziyaretleri trafik sayımını şişirmesin (Analitik ekranından değiştirilebilir)
   useEffect(() => {
     if (isAdmin) defaultFounderOptOut();
   }, [isAdmin]);
   if (!isLoading && user && !isAdmin) return <Navigate to="/panel" replace />;
+  const known = FOUNDER_SECTIONS.some((s) => s.id === bolum);
+  if (!known) return <Navigate to="/kurucu" replace />;
   const d = q.data;
+  const leadId = bolum === "basvurular" && id ? Number(id) : null;
+  const title = FOUNDER_SECTIONS.find((s) => s.id === bolum)?.label ?? "";
+  const needsOverview = ["", "urunler", "musteriler", "odemeler", "dosyalar"].includes(bolum);
+
   return (
     <RequireCompany>
-    <div className="mx-auto max-w-[1100px] pb-16">
-      <p className="label-caps">KURUCU PANELİ</p>
-      <h1 className="mt-1 font-display text-2xl font-bold tracking-tight md:text-3xl">HAIZ tek ekranda</h1>
-      <p className="mt-1 text-[13px] text-muted-foreground">Site trafiği, canlı ziyaret, kampanyalar, SEO, üyelikler, gelen ve giden para, yardım talepleri, hata kayıtları ve danışmanlık süresi.</p>
-
-      <div className="-mx-1 mt-5 flex gap-1 overflow-x-auto px-1 pb-1" role="tablist" aria-label="Bölümler">
-        {TABS.map((t) => {
-          const badge = d && (t.id === "yardim" ? d.openFeedback : t.id === "hata" ? d.errors7 : 0);
-          return (
-            <button
-              key={t.id}
-              role="tab"
-              aria-selected={tab === t.id}
-              onClick={() => setTab(t.id)}
-              className={`chamfer-sm inline-flex min-h-[44px] shrink-0 items-center gap-1.5 border px-3.5 text-[13px] font-semibold ${tab === t.id ? "border-foreground bg-foreground text-background" : "border-border bg-card hover:bg-secondary"}`}
-            >
-              <t.icon className="h-4 w-4" /> {t.label}
-              {badge ? <span className={`ml-0.5 min-w-5 px-1 text-center text-[11px] tnum ${tab === t.id ? "bg-primary text-foreground" : "bg-foreground text-background"}`}>{badge}</span> : null}
-            </button>
-          );
-        })}
+      <div className="mx-auto max-w-[1180px] pb-16">
+        {bolum && !leadId && (
+          <>
+            <p className="label-caps">KURUCU PANELİ</p>
+            <h1 className="mt-1 font-display text-2xl font-bold tracking-tight md:text-3xl">{title}</h1>
+          </>
+        )}
+        {q.error && needsOverview && <p className="mt-4 text-[13px] text-destructive">{q.error.message}</p>}
+        {needsOverview && q.isLoading && <div className="chamfer mt-6 h-40 animate-pulse bg-secondary" />}
+        {isAdmin && (
+          <>
+            {bolum === "" && d && <AnaSayfa d={d} />}
+            {bolum === "basvurular" && (leadId ? <BasvuruDetay id={leadId} /> : <BasvurularPage />)}
+            {bolum === "urunler" && d && <UrunlerPage d={d} />}
+            {bolum === "musteriler" && (
+              <>
+                <div className="mt-4 flex gap-1" role="tablist" aria-label="Müşteri türü">
+                  {([
+                    ["danismanlik", "Danışmanlık"],
+                    ["yazilim", "Yazılım üyeleri"],
+                  ] as const).map(([k, label]) => (
+                    <button key={k} role="tab" aria-selected={musteri === k} onClick={() => setMusteri(k)} className={`chamfer-sm min-h-[44px] border px-3.5 text-[13px] font-semibold ${musteri === k ? "border-foreground bg-foreground text-background" : "border-border bg-card hover:bg-secondary"}`}>
+                      {label}
+                    </button>
+                  ))}
+                </div>
+                {musteri === "danismanlik" ? <DanismanlikMusterileri /> : d && <UyelikTab d={d} />}
+              </>
+            )}
+            {bolum === "analitik" && <TrafikTab />}
+            {bolum === "canli" && <CanliTab />}
+            {bolum === "pazarlama" && <KampanyaTab />}
+            {bolum === "seo" && <SeoTab />}
+            {bolum === "odemeler" && d && <ParaTab d={d} />}
+            {bolum === "dosyalar" && d && <DanismanlikTab d={d} />}
+            {bolum === "yardim" && <YardimTab />}
+            {bolum === "hatalar" && <HataTab />}
+          </>
+        )}
       </div>
-
-      {q.error && <p className="mt-4 text-[13px] text-destructive">{q.error.message}</p>}
-      {q.isLoading && <div className="chamfer mt-6 h-40 animate-pulse bg-secondary" />}
-      {d && tab === "ozet" && <OzetTab d={d} go={setTab} />}
-      {tab === "trafik" && isAdmin && <TrafikTab />}
-      {tab === "canli" && isAdmin && <CanliTab />}
-      {tab === "kampanya" && isAdmin && <KampanyaTab />}
-      {tab === "seo" && isAdmin && <SeoTab />}
-      {d && tab === "uyelik" && <UyelikTab d={d} />}
-      {d && tab === "para" && <ParaTab d={d} />}
-      {tab === "yardim" && isAdmin && <YardimTab />}
-      {tab === "hata" && isAdmin && <HataTab />}
-      {d && tab === "danismanlik" && <DanismanlikTab d={d} />}
-    </div>
     </RequireCompany>
   );
 }

@@ -589,6 +589,24 @@ export const STATEMENTS: string[] = [
     INDEX se_created_idx (createdAt),
     INDEX se_sid_idx (sid)
   )`,
+  `CREATE TABLE IF NOT EXISTS lead_events (
+    id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    leadId BIGINT UNSIGNED NOT NULL,
+    kind VARCHAR(12) NOT NULL,
+    body VARCHAR(1000) NOT NULL,
+    userId BIGINT UNSIGNED NULL,
+    createdAt TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    INDEX le_lead_idx (leadId)
+  )`,
+  `CREATE TABLE IF NOT EXISTS lead_notes (
+    id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    leadId BIGINT UNSIGNED NOT NULL,
+    kind VARCHAR(12) NOT NULL,
+    body VARCHAR(1000) NOT NULL,
+    userId BIGINT UNSIGNED NULL,
+    createdAt TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    INDEX ln_lead_idx (leadId)
+  )`,
   `CREATE TABLE IF NOT EXISTS app_meta (
     metaKey VARCHAR(64) NOT NULL PRIMARY KEY,
     metaValue VARCHAR(255) NOT NULL,

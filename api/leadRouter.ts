@@ -3,12 +3,12 @@ import { TRPCError } from "@trpc/server";
 import { desc, eq } from "drizzle-orm";
 import { adminQuery, createRouter, publicQuery } from "./middleware";
 import { getDb } from "./queries/connection";
-import { leads } from "@db/schema";
+import { leadNotes, leads } from "@db/schema";
 import { explainMailError, sendLeadNotification } from "./lib/mailer";
 import { clientIp, rateLimit } from "./lib/codes";
 import { logAppError } from "./lib/usage";
 import { recordEvent } from "./lib/siteEvents";
-import { FOLLOW_UP_DAYS, LEAD_STAGES, LOST_REASONS, statusFromStage, type LostReason } from "@contracts/funnel";
+import { FOLLOW_UP_DAYS, LEAD_STAGE_LABEL, LEAD_STAGES, LOST_REASONS, statusFromStage, type LostReason } from "@contracts/funnel";
 import { emptyToNull, formatCompanyName, formatPersonName, formatPhoneTR, normalizeEmail } from "@contracts/normalize";
 
 export const leadRouter = createRouter({
@@ -107,7 +107,7 @@ export const leadRouter = createRouter({
         lostNote: z.string().trim().max(255).optional(),
       }),
     )
-    .mutation(async ({ input }) => {
+    .mutation(async ({ ctx, input }) => {
       if (input.stage === "kayip" && !input.lostReason) {
         throw new TRPCError({ code: "BAD_REQUEST", message: "Kaybedilen başvuru için bir neden seçin." });
       }
@@ -122,15 +122,30 @@ export const leadRouter = createRouter({
           lostNote: input.stage === "kayip" ? input.lostNote || null : null,
         })
         .where(eq(leads.id, input.id));
+      const reason = input.stage === "kayip" ? LOST_REASONS.find((r) => r.id === input.lostReason)?.label : null;
+      await getDb()
+        .insert(leadNotes)
+        .values({
+          leadId: input.id,
+          kind: "stage",
+          body: `Aşama: ${LEAD_STAGE_LABEL[input.stage]}${reason ? ` — neden: ${reason}` : ""}${input.stage === "kayip" && input.lostNote ? ` (${input.lostNote})` : ""}`,
+          userId: ctx.user.id,
+        })
+        .catch(() => undefined);
       return { ok: true };
     }),
 
   /** Teklif takibi yapıldı (3./7./14. gün) */
-  followUpDone: adminQuery.input(z.object({ id: z.number() })).mutation(async ({ input }) => {
+  followUpDone: adminQuery.input(z.object({ id: z.number() })).mutation(async ({ ctx, input }) => {
     const db = getDb();
     const l = await db.query.leads.findFirst({ where: eq(leads.id, input.id), columns: { followUps: true } });
     if (!l) throw new TRPCError({ code: "NOT_FOUND", message: "Başvuru bulunamadı." });
-    await db.update(leads).set({ followUps: Math.min(l.followUps + 1, FOLLOW_UP_DAYS.length) }).where(eq(leads.id, input.id));
+    const n = Math.min(l.followUps + 1, FOLLOW_UP_DAYS.length);
+    await db.update(leads).set({ followUps: n }).where(eq(leads.id, input.id));
+    await db
+      .insert(leadNotes)
+      .values({ leadId: input.id, kind: "followup", body: `Teklif takibi yapıldı (${FOLLOW_UP_DAYS[n - 1]}. gün)`, userId: ctx.user.id })
+      .catch(() => undefined);
     return { ok: true };
   }),
 });

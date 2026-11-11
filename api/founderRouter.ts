@@ -36,6 +36,7 @@ import { AI_MONTHLY_QUOTA, periodOf, quotaPct, STORAGE_QUOTA_BYTES } from "@cont
 import { capacityRule, FEEDBACK_KIND_IDS, WEEKLY_CAPACITY_HOURS, weekStartOf } from "@contracts/founder";
 import { todayTR } from "../contracts/workflow";
 import { campaignReport, liveReport, seoReport, trafficReport } from "./founderTraffic";
+import { addLeadNote, badges, contactsList, leadDetail, leadsList, productsReport } from "./founderLeads";
 import { env } from "./lib/env";
 
 const ymd = z.string().regex(/^\d{4}-\d{2}-\d{2}$/, "Tarih YYYY-AA-GG olmalı");
@@ -230,6 +231,23 @@ export const founderRouter = createRouter({
       retention: { cohort: cohort.length, retained, pct: cohort.length ? Math.round((retained / cohort.length) * 100) : null },
     };
   }),
+
+  // ---- Yan menü rozetleri · Başvurular · Ürünler · Müşteriler (Shopify Orders / Products / Customers karşılığı)
+  badges: adminQuery.query(() => badges()),
+  leads: adminQuery.query(() => leadsList()),
+  lead: adminQuery.input(z.object({ id: z.number() })).query(async ({ input }) => {
+    const d = await leadDetail(input.id);
+    if (!d) throw new TRPCError({ code: "NOT_FOUND", message: "Başvuru bulunamadı." });
+    return d;
+  }),
+  leadNote: adminQuery
+    .input(z.object({ id: z.number(), body: z.string().trim().min(1, "Notu yazın.").max(1000) }))
+    .mutation(async ({ ctx, input }) => {
+      await addLeadNote(input.id, input.body, ctx.user.id);
+      return { ok: true };
+    }),
+  products: adminQuery.input(z.object({ days: z.union([z.literal(30), z.literal(90), z.literal(365)]) })).query(({ input }) => productsReport(input.days)),
+  contacts: adminQuery.query(() => contactsList()),
 
   // ---- Site trafiği · canlı · kampanya · SEO
   traffic: adminQuery.input(z.object({ days: z.union([z.literal(1), z.literal(7), z.literal(30), z.literal(90)]) })).query(({ input }) => trafficReport(input.days)),
