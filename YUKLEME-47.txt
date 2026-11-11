@@ -1,0 +1,61 @@
+HAIZ — GÜNCELLEME 47 · Kurucu Paneli (Shopify düzeni) + süreç e-postası hatası  (44+45+46+47 tek pakette)
+=================================================================================
+44, 45, 46 yüklemediyseniz yüklemeyin: hepsi bu pakette. Yalnız bunu yükleyin.
+
+YÜKLENECEK DOSYALAR (21) — GitHub'da aynı yollara, tek commit:
+  Yeni:
+    contracts/traffic.ts
+    api/lib/siteEvents.ts
+    api/founderTraffic.ts
+    api/founderLeads.ts
+    src/lib/track.ts
+    src/components/kurucu/TrafficTabs.tsx
+    src/components/kurucu/CommerceTabs.tsx
+  Değişen:
+    api/lib/vite.ts                 (44 — Google 404 düzeltmesi)
+    api/consultingRouter.ts         (47 — takip kodu e-postası gitmezse nedeni gösterilir ve Hatalar'a yazılır)
+    api/boot.ts
+    api/founderRouter.ts
+    api/leadRouter.ts               (aşama ve takip zaman çizelgesine yazılır)
+    api/lib/migrate.ts              (site_events + lead_notes tabloları, leads.sid — açılışta kendiliğinden)
+    db/schema.ts
+    contracts/founder.ts
+    contracts/funnel.ts             ("250 saattir" yerine "10 gündür yanıt bekliyor")
+    src/App.tsx                     (/kurucu/:bölüm adresleri + ziyaret kaydı)
+    src/components/AuthLayout.tsx   (yan menü: Shopify düzeni + bekleyen iş rozetleri)
+    src/pages/Kurucu.tsx
+    src/pages/Leads.tsx             (başvurudan "Danışmanlık dosyası aç" + e-posta sonucu ekranda)
+    src/pages/Danismanlik.tsx
+
+Render: yeni ortam değişkeni gerekmez.
+
+YAN MENÜ (yalnız siz görürsünüz)
+  KURUCU PANELİ
+    Ana sayfa          /kurucu                 Selamlama, dönem seçimi, metrik şeridi (çizgi grafikli, ▲/▼),
+                                               Yapılacaklar, Son başvurular, Abonelik, Huni, Kanallar, Kapasite
+    Başvurular  [rozet] /kurucu/basvurular     Shopify "Siparişler": durum sekmeleri, arama, tablo
+      Başvuru #…        /kurucu/basvurular/12  Shopify "Sipariş ayrıntısı": mesaj, paket, Ofis Endeksi sonucu,
+                                               aşama + takip, dosya aç, zaman çizelgesi + not, kişi kartı
+                                               (e-posta / ara / WhatsApp), Dönüşüm özeti (kanal, kampanya,
+                                               açılış sayfası, cihaz, konum, ilk ziyaret→başvuru süresi), ▲▼ ile gezinme
+    Ürünler            /kurucu/urunler         Premium fiyat + ücretli şirket + gelir; 15 paket için görüntüleme,
+                                               ziyaretçi, başvuru, açık, imza, dönüşüm
+    Müşteriler         /kurucu/musteriler      Danışmanlık kişileri (başvuru sayısı, imza, son durum) · Yazılım üyeleri
+    Analitik · Canlı görünüm · Pazarlama · SEO · Ödemeler (rozet: onay bekleyen ödeme)
+  OPERASYON
+    Danışmanlık dosyaları · Yardım talepleri [rozet] · Hatalar [rozet] · Sistem Durumu
+
+Rozetler dakikada bir yenilenir; kırmızı = 24 saati geçen başvuru, takip günü gelen teklif ya da hata.
+"Danışmanlık" (/talepler) menüden kalktı; dosya açma ve yönetme Başvuru ayrıntısındaki
+"Danışmanlık dosyası aç" ve Danışmanlık dosyaları ekranındaki "Talepler ve süreç" düğmesiyle açılır.
+
+DENEME
+  1) Yükleme + Render "Live" sonrası sayfayı yenileyin (Ctrl+F5): yan menüde KURUCU PANELİ ve OPERASYON grupları görünmeli.
+  2) Başvurular → bir satıra tıklayın → not yazıp Kaydet → zaman çizelgesinde görünmeli.
+  3) Telefondan haiz.org/danismanlik açın → Canlı görünüm: 1 kişi.
+  Trafik ve kaynak sayıları yüklemeden sonra birikir; eski başvurularda "Kaynak bilgisi yok" yazar.
+
+47 — SÜREÇ E-POSTASI
+  Eskiden süreç açılırken takip kodu e-postası gitmezse ekranda hiçbir şey yazmıyordu.
+  Artık: başarılıysa "e-postayla gönderildi", başarısızsa NEDENİYLE kırmızı uyarı çıkar ve
+  Kurucu Paneli › Hatalar'a "consulting.mailRefCode · MAIL_FAIL" kaydı düşer.

@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link, Navigate, useSearchParams } from "react-router";
+import { toast } from "sonner";
 import { trpc } from "@/providers/trpc";
 import { useAuth } from "@/hooks/useAuth";
 import { RequireCompany } from "@/components/RequireCompany";
@@ -78,6 +79,9 @@ function NewCaseForm({ seed, onDone, onCancel }: { seed: NewCaseSeed; onDone: (i
   const create = trpc.consulting.admin.create.useMutation({
     onSuccess: async (r) => {
       await Promise.all([utils.consulting.admin.list.invalidate(), utils.lead.list.invalidate()]);
+      if (r.mailed) toast.success(`Süreç açıldı, takip kodu ${r.refCode} e-postayla gönderildi.`);
+      else if (r.mailError) toast.error(`Süreç açıldı (${r.refCode}) ama e-posta gitmedi: ${r.mailError}`, { duration: 15000 });
+      else toast.success(`Süreç açıldı: ${r.refCode}`);
       onDone(r.id);
     },
   });
@@ -175,7 +179,10 @@ function CaseDetail({ id, onClose }: { id: number; onClose: () => void }) {
   const addNote = trpc.consulting.admin.addNote.useMutation({ onSuccess: async () => { setNoteTitle(""); setNoteBody(""); await refresh(); } });
   const removeEvent = trpc.consulting.admin.removeEvent.useMutation({ onSuccess: refresh });
   const update = trpc.consulting.admin.update.useMutation({ onSuccess: refresh });
-  const sendCode = trpc.consulting.admin.sendCode.useMutation();
+  const sendCode = trpc.consulting.admin.sendCode.useMutation({
+    onSuccess: () => toast.success("Takip kodu e-postayla gönderildi."),
+    onError: (e) => toast.error(e.message, { duration: 15000 }),
+  });
   const remove = trpc.consulting.admin.remove.useMutation({
     onSuccess: async () => {
       await utils.consulting.admin.list.invalidate();
